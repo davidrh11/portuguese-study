@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Casa — Vocabulário Português</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e10;
+    --surface: #1a1a1f;
+    --surface2: #222228;
+    --border: #2e2e38;
+    --yellow: #e8c547;
+    --blue: #4a9eff;
+    --text: #e8e8f0;
+    --muted: #7070a0;
+    --green: #4adf8a;
+    --red: #ff6b6b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', sans-serif; min-height: 100vh; }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .logo { font-family: 'IBM Plex Mono', monospace; font-size: 1.2rem; color: var(--yellow); letter-spacing: 0.05em; }
+  .logo span { color: var(--muted); }
+
+  /* ── CATEGORY BAR ── */
+  .category-bar {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 0 2rem; display: flex; gap: 0.25rem;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .category-bar::-webkit-scrollbar { display: none; }
+  .cat-btn {
+    background: none; border: none; color: var(--muted);
+    font-family: 'IBM Plex Sans', sans-serif; font-size: 0.8rem; font-weight: 600;
+    padding: 0.75rem 1rem; cursor: pointer; border-bottom: 2px solid transparent;
+    white-space: nowrap; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .cat-btn:hover { color: var(--text); }
+  .cat-btn.active { color: var(--yellow); border-bottom-color: var(--yellow); }
+
+  /* ── MODE BUTTONS ── */
+  .mode-bar { display: flex; gap: 0.5rem; }
+  .mode-btn {
+    background: var(--surface); border: 1px solid var(--border); color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem;
+    padding: 0.5rem 1.5rem; cursor: pointer; border-radius: 4px; transition: all 0.2s;
+  }
+  .mode-btn:hover { color: var(--text); border-color: var(--muted); }
+  .mode-btn.active { background: var(--yellow); color: #0e0e10; border-color: var(--yellow); font-weight: 600; }
+
+  main { padding: 1.5rem 2rem 3rem; max-width: 1200px; margin: 0 auto; }
+
+  .section-heading {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.12em; margin: 1.5rem 0 0.75rem;
+    border-left: 3px solid var(--yellow); padding-left: 0.75rem;
+  }
+
+  /* ── TABELA ── */
+  #mode-tabela { display: none; }
+  #mode-tabela.active { display: block; }
+
+  .table-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem; margin-top: 0.5rem;
+  }
+  .table-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1rem 1.1rem;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .table-card .pt-word {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.95rem;
+    color: var(--yellow); font-weight: 600; line-height: 1.3;
+    cursor: pointer; display: inline-block;
+    border-bottom: 1px dashed transparent; transition: border-color 0.15s, color 0.15s;
+  }
+  .table-card .pt-word:hover { border-bottom-color: var(--yellow); }
+  .table-card .pt-word.playing { color: var(--blue); }
+  .table-card .en-word { font-size: 0.8rem; color: var(--muted); margin-top: 0.3rem; }
+
+  /* ── SHARED FLASHCARD CHROME ── */
+  #mode-flashcard { display: none; }
+  #mode-flashcard.active { display: flex; flex-direction: column; align-items: center; }
+
+  .fc-topbar {
+    display: flex; align-items: center; gap: 0.75rem;
+    margin-top: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap; justify-content: center;
+  }
+  .fc-topbar-btn {
+    background: none; border: 1px solid var(--border); color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem;
+    padding: 0.4rem 1rem; border-radius: 4px; cursor: pointer; transition: all 0.2s;
+  }
+  .fc-topbar-btn:hover { border-color: var(--muted); color: var(--text); }
+
+  /* deck toggle */
+  .deck-toggle {
+    display: flex; gap: 0; border: 1px solid var(--border); border-radius: 4px; overflow: hidden;
+  }
+  .deck-btn {
+    background: none; border: none; color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem;
+    padding: 0.4rem 0.9rem; cursor: pointer; transition: all 0.2s;
+    border-right: 1px solid var(--border);
+  }
+  .deck-btn:last-child { border-right: none; }
+  .deck-btn:hover { color: var(--text); }
+  .deck-btn.active { background: var(--surface2); color: var(--yellow); }
+
+  .fc-counter { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; color: var(--muted); }
+
+  /* ── CARD SHARED ── */
+  .fc-card {
+    width: 100%; max-width: 480px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 1.75rem 2rem 1.5rem; user-select: none;
+  }
+
+  .fc-hints {
+    font-size: 0.72rem; color: var(--muted); letter-spacing: 0.08em;
+    text-transform: uppercase; margin-bottom: 1.25rem; min-height: 1rem;
+  }
+
+  .fc-divider { width: 100%; height: 1px; background: var(--border); margin-bottom: 1.25rem; }
+
+  .fc-answer-wrap { text-align: center; margin-bottom: 1rem; cursor: pointer; }
+  .fc-pt-answer {
+    font-family: 'IBM Plex Mono', monospace; font-size: 1.8rem; font-weight: 600;
+    color: var(--yellow); transition: filter 0.25s; display: inline-block;
+  }
+  .fc-pt-answer.blurred { filter: blur(8px); }
+
+  .fc-speak-pill {
+    background: var(--surface2); border: 1px solid var(--border); color: var(--blue);
+    padding: 0.4rem 1.1rem; border-radius: 99px; cursor: pointer; margin-bottom: 1.25rem;
+    transition: all 0.2s; font-size: 1rem;
+  }
+  .fc-speak-pill:hover, .fc-speak-pill.playing { background: var(--blue); color: #0e0e10; border-color: var(--blue); }
+
+  .fc-cat-hint {
+    font-size: 0.72rem; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.08em; margin-bottom: 1rem; font-style: italic;
+  }
+
+  .fc-nav { display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem; }
+  .fc-nav-btn {
+    background: var(--surface); border: 1px solid var(--border); color: var(--text);
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem;
+    padding: 0.6rem 1.3rem; cursor: pointer; border-radius: 4px; transition: all 0.2s;
+  }
+  .fc-nav-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+
+  /* ── E→P SPECIFIC ── */
+  .fc-en-prompt {
+    font-size: 1.4rem; color: var(--text); font-weight: 300;
+    text-align: center; margin-bottom: 1.25rem;
+  }
+
+  /* ── IMG→P SPECIFIC ── */
+  .fc-img-area {
+    width: 220px; height: 160px;
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
+    overflow: hidden; display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.25rem; position: relative;
+  }
+  .fc-img-area img {
+    width: 100%; height: 100%; object-fit: cover;
+    opacity: 0; transition: opacity 0.4s;
+  }
+  .fc-img-area img.loaded { opacity: 1; }
+  .fc-img-area .img-loading {
+    position: absolute; font-size: 0.75rem; color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.05em;
+  }
+
+  /* English shown (unblurred) in img mode */
+  .fc-en-small {
+    font-size: 0.85rem; color: var(--muted); margin-bottom: 0.75rem;
+    font-style: italic;
+  }
+
+  /* ── QUIZ ── */
+  #mode-quiz { display: none; }
+  #mode-quiz.active { display: flex; flex-direction: column; align-items: center; }
+
+  .quiz-header {
+    width: 100%; max-width: 480px;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 1.5rem; margin-bottom: 0.75rem;
+  }
+  .quiz-score { font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; color: var(--muted); }
+  .quiz-score .correct { color: var(--green); }
+  .quiz-score .wrong   { color: var(--red); }
+  .quiz-progress {
+    width: 100%; max-width: 480px; height: 3px;
+    background: var(--border); border-radius: 2px; margin-bottom: 1.5rem; overflow: hidden;
+  }
+  .quiz-progress-bar { height: 100%; background: var(--yellow); border-radius: 2px; transition: width 0.4s ease; }
+  .quiz-card {
+    width: 100%; max-width: 480px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 2rem; display: flex; flex-direction: column; align-items: center;
+  }
+  .quiz-question {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem;
+  }
+  .quiz-word {
+    font-family: 'IBM Plex Mono', monospace; font-size: 1.6rem; color: var(--yellow);
+    font-weight: 600; text-align: center; margin-bottom: 1.75rem; line-height: 1.3;
+  }
+  .quiz-options { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .quiz-option {
+    background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif; font-size: 0.9rem;
+    padding: 0.85rem 1rem; border-radius: 6px; cursor: pointer; text-align: center; transition: all 0.15s;
+  }
+  .quiz-option:hover:not(:disabled) { border-color: var(--yellow); color: var(--yellow); }
+  .quiz-option.correct { background: rgba(74,223,138,0.12); border-color: var(--green); color: var(--green); }
+  .quiz-option.wrong   { background: rgba(255,107,107,0.12); border-color: var(--red);   color: var(--red); }
+  .quiz-option:disabled { cursor: default; }
+  .quiz-feedback { margin-top: 1rem; font-size: 0.9rem; font-weight: 600; height: 1.4rem; }
+  .quiz-feedback.correct { color: var(--green); }
+  .quiz-feedback.wrong   { color: var(--red); }
+  .quiz-next-btn {
+    margin-top: 1rem; background: var(--yellow); border: none; color: #0e0e10;
+    font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 0.9rem;
+    padding: 0.65rem 2rem; border-radius: 4px; cursor: pointer; display: none;
+  }
+  .quiz-next-btn:hover { opacity: 0.85; }
+  .quiz-next-btn.visible { display: block; }
+  .quiz-results {
+    width: 100%; max-width: 480px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 3rem 2rem; text-align: center; display: none;
+  }
+  .quiz-results.visible { display: block; }
+  .quiz-results h2 { font-family: 'IBM Plex Mono', monospace; font-size: 1.2rem; color: var(--yellow); margin-bottom: 1rem; }
+  .quiz-results .final-score { font-size: 3.5rem; font-weight: 700; color: var(--green); font-family: 'IBM Plex Mono', monospace; margin-bottom: 0.5rem; }
+  .quiz-results p { color: var(--muted); margin-bottom: 2rem; font-size: 0.9rem; }
+  .quiz-restart-btn {
+    background: var(--yellow); border: none; color: #0e0e10;
+    font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 0.9rem;
+    padding: 0.75rem 2.5rem; border-radius: 4px; cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">a casa <span>// vocabulário</span></div>
+  <div class="mode-bar">
+    <button class="mode-btn active" onclick="setMode('tabela')">Tabela</button>
+    <button class="mode-btn" onclick="setMode('flashcard')">Flashcards</button>
+    <button class="mode-btn" onclick="setMode('quiz')">Quiz</button>
+  </div>
+</header>
+
+<div class="category-bar" id="categoryBar"></div>
+
+<main>
+  <!-- TABELA -->
+  <div id="mode-tabela" class="active"></div>
+
+  <!-- FLASHCARD -->
+  <div id="mode-flashcard">
+    <div class="fc-topbar">
+      <!-- Deck toggle -->
+      <div class="deck-toggle">
+        <button class="deck-btn active" id="deckEP" onclick="setDeck('ep')">E → PT</button>
+        <button class="deck-btn" id="deckImg" onclick="setDeck('img')">🖼 → PT</button>
+      </div>
+      <button class="fc-topbar-btn" onclick="shuffleFC()">⇄ Baralhar</button>
+      <button class="fc-topbar-btn" onclick="resetFC()">↺ Reiniciar</button>
+      <span class="fc-counter" id="fcCounter">1 / 1</span>
+    </div>
+
+    <!-- E→P card -->
+    <div class="fc-card" id="cardEP">
+      <div class="fc-hints" id="fcHints">clique na palavra para revelar</div>
+      <div class="fc-en-prompt" id="fcEnPrompt"></div>
+      <div class="fc-divider"></div>
+      <div class="fc-answer-wrap" onclick="revealAnswer()">
+        <span class="fc-pt-answer blurred" id="fcPtAnswer"></span>
+      </div>
+      <button class="fc-speak-pill" id="fcSpeakPill" onclick="speakCurrent()">🔊</button>
+      <div class="fc-cat-hint" id="fcCatHint"></div>
+      <div class="fc-nav">
+        <button class="fc-nav-btn" onclick="fcNavigate(-1)">← Anterior</button>
+        <button class="fc-nav-btn" onclick="fcNavigate(1)">Próximo →</button>
+      </div>
+    </div>
+
+    <!-- Img→P card -->
+    <div class="fc-card" id="cardImg" style="display:none;">
+      <div class="fc-hints" id="imgHints">clique na palavra para revelar</div>
+      <!-- Image as hint -->
+      <div class="fc-img-area" id="imgArea">
+        <span class="img-loading" id="imgLoading">a carregar…</span>
+        <img id="imgEl" src="" alt="" onload="this.classList.add('loaded'); document.getElementById('imgLoading').style.display='none';" onerror="document.getElementById('imgLoading').textContent='—';">
+      </div>
+      <!-- English shown unblurred -->
+      <div class="fc-en-small" id="imgEnWord"></div>
+      <div class="fc-divider"></div>
+      <!-- Blurred PT -->
+      <div class="fc-answer-wrap" onclick="revealImgAnswer()">
+        <span class="fc-pt-answer blurred" id="imgPtAnswer"></span>
+      </div>
+      <button class="fc-speak-pill" id="imgSpeakPill" onclick="speakCurrentImg()">🔊</button>
+      <div class="fc-cat-hint" id="imgCatHint"></div>
+      <div class="fc-nav">
+        <button class="fc-nav-btn" onclick="fcNavigate(-1)">← Anterior</button>
+        <button class="fc-nav-btn" onclick="fcNavigate(1)">Próximo →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="mode-quiz">
+    <div class="quiz-header" id="quizHeader">
+      <div class="quiz-score" id="quizScore">✓ <span class="correct">0</span> &nbsp;✗ <span class="wrong">0</span></div>
+      <div class="fc-counter" id="quizCounter">0 / 0</div>
+    </div>
+    <div class="quiz-progress" id="quizProgressWrap">
+      <div class="quiz-progress-bar" id="quizProgressBar" style="width:0%"></div>
+    </div>
+    <div class="quiz-card" id="quizCard">
+      <div class="quiz-question">O que é isto em inglês?</div>
+      <div class="quiz-word" id="quizWord"></div>
+      <div class="quiz-options" id="quizOptions"></div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+      <button class="quiz-next-btn" id="quizNextBtn" onclick="nextQuizQuestion()">Próxima →</button>
+    </div>
+    <div class="quiz-results" id="quizResults">
+      <h2>Resultado Final</h2>
+      <div class="final-score" id="finalScore">0/0</div>
+      <p id="finalMsg"></p>
+      <button class="quiz-restart-btn" onclick="startQuiz()">Tentar novamente</button>
+    </div>
+  </div>
+</main>
+
+<script>
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+
+// ── VOCABULARY ───────────────────────────────────────────────────
+// img: search term used for Wikimedia Commons image lookup
+const CATEGORIES = [
+  {
+    id: "divisoes", label: "Divisões",
+    words: [
+      { pt: "a sala de estar",  en: "living room",   img: "Living_room" },
+      { pt: "a cozinha",        en: "kitchen",        img: "Kitchen" },
+      { pt: "o quarto",         en: "bedroom",        img: "Bedroom" },
+      { pt: "a casa de banho",  en: "bathroom",       img: "Bathroom" },
+      { pt: "a garagem",        en: "garage",         img: "Garage" },
+      { pt: "o sótão",          en: "attic",          img: "Attic" },
+      { pt: "a cave",           en: "basement",       img: "Basement" },
+      { pt: "o corredor",       en: "hallway",        img: "Hallway" }
+    ]
+  },
+  {
+    id: "eletrodomesticos", label: "Eletrodomésticos",
+    words: [
+      { pt: "o liquidificador", en: "blender",        img: "Blender" },
+      { pt: "o forno",          en: "oven",           img: "Kitchen_oven" },
+      { pt: "o triturador",     en: "food processor", img: "Food_processor" },
+      { pt: "o fogão",          en: "stove",          img: "Gas_stove" },
+      { pt: "a torradeira",     en: "toaster",        img: "Toaster" },
+      { pt: "o micro-ondas",    en: "microwave",      img: "Microwave_oven" },
+      { pt: "o frigorífico",    en: "fridge",         img: "Refrigerator" },
+      { pt: "o congelador",     en: "freezer",        img: "Chest_freezer" }
+    ]
+  },
+  {
+    id: "sala", label: "Sala de Estar",
+    words: [
+      { pt: "o sofá",           en: "sofa",           img: "Sofa" },
+      { pt: "a mesa de centro", en: "coffee table",   img: "Coffee_table" },
+      { pt: "a televisão",      en: "television",     img: "Flat_panel_television" },
+      { pt: "a estante",        en: "bookshelf",      img: "Bookcase" },
+      { pt: "a poltrona",       en: "armchair",       img: "Armchair" },
+      { pt: "o candeeiro",      en: "lamp",           img: "Floor_lamp" },
+      { pt: "o tapete",         en: "rug",            img: "Area_rug" },
+      { pt: "as cortinas",      en: "curtains",       img: "Window_curtains" }
+    ]
+  },
+  {
+    id: "quarto", label: "Quarto",
+    words: [
+      { pt: "a cama",               en: "bed",        img: "Bed" },
+      { pt: "o roupeiro",           en: "wardrobe",   img: "Wardrobe_closet" },
+      { pt: "a cómoda",             en: "dresser",    img: "Chest_of_drawers" },
+      { pt: "a mesa de cabeceira",  en: "nightstand", img: "Nightstand" },
+      { pt: "o cobertor",           en: "blanket",    img: "Blanket" },
+      { pt: "a secretária",         en: "desk",       img: "Writing_desk" },
+      { pt: "a almofada",           en: "pillow",     img: "Pillow" },
+      { pt: "a cadeira",            en: "chair",      img: "Chair" }
+    ]
+  },
+  {
+    id: "utensilios", label: "Utensílios",
+    words: [
+      { pt: "a espátula",       en: "spatula",        img: "Spatula" },
+      { pt: "a faca",           en: "knife",          img: "Kitchen_knife" },
+      { pt: "o garfo",          en: "fork",           img: "Fork" },
+      { pt: "a colher",         en: "spoon",          img: "Spoon" },
+      { pt: "a pinça",          en: "tongs",          img: "Kitchen_tongs" },
+      { pt: "a concha",         en: "ladle",          img: "Ladle_spoon" },
+      { pt: "o descascador",    en: "peeler",         img: "Vegetable_peeler" },
+      { pt: "o ralador",        en: "grater",         img: "Cheese_grater" }
+    ]
+  }
+];
+
+const ALL_WORDS = CATEGORIES.flatMap(c =>
+  c.words.map(w => ({ ...w, category: c.label, catId: c.id }))
+);
+
+// ── IMAGE LOADING (Wikimedia Commons) ────────────────────────────
+const imgCache = {};
+
+async function loadWikiImage(term) {
+  if (imgCache[term] !== undefined) return imgCache[term];
+  try {
+    const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(term)}`;
+    const r = await fetch(url);
+    const d = await r.json();
+    const src = d.thumbnail?.source || d.originalimage?.source || '';
+    imgCache[term] = src;
+    return src;
+  } catch {
+    imgCache[term] = '';
+    return '';
+  }
+}
+
+// ── TTS ──────────────────────────────────────────────────────────
+let currentAudio = null;
+
+async function speakText(text, btnEl) {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (btnEl) btnEl.classList.add('playing');
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
+    });
+    if (!res.ok) throw new Error();
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    currentAudio = new Audio(url);
+    currentAudio.onended = () => { if (btnEl) btnEl.classList.remove('playing'); };
+    currentAudio.onerror  = () => { if (btnEl) btnEl.classList.remove('playing'); };
+    await currentAudio.play();
+  } catch(e) {
+    if (btnEl) btnEl.classList.remove('playing');
+  }
+}
+
+// ── STATE ────────────────────────────────────────────────────────
+let currentMode = 'tabela';
+let activeCatId = 'all';
+let activeDeck  = 'ep';   // 'ep' or 'img'
+let fcWords     = [...ALL_WORDS];
+let fcIndex     = 0;
+let fcRevealed  = false;
+let imgRevealed = false;
+let quizWords = [], quizIndex = 0, quizCorrect = 0, quizWrong = 0, quizAnswered = false;
+
+// ── INIT ─────────────────────────────────────────────────────────
+function init() {
+  buildCategoryBar();
+  renderTabela();
+}
+
+function buildCategoryBar() {
+  const bar = document.getElementById('categoryBar');
+  bar.innerHTML = '';
+  const all = document.createElement('button');
+  all.className = 'cat-btn active'; all.textContent = 'Tudo';
+  all.onclick = () => selectCat('all');
+  bar.appendChild(all);
+  CATEGORIES.forEach(c => {
+    const b = document.createElement('button');
+    b.className = 'cat-btn'; b.textContent = c.label; b.dataset.id = c.id;
+    b.onclick = () => selectCat(c.id);
+    bar.appendChild(b);
+  });
+}
+
+function selectCat(id) {
+  activeCatId = id;
+  document.querySelectorAll('.cat-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.id === id || (id === 'all' && b.textContent === 'Tudo'))
+  );
+  if (currentMode === 'tabela') renderTabela();
+  else if (currentMode === 'flashcard') initFC();
+  else startQuiz();
+}
+
+function getActiveWords() {
+  if (activeCatId === 'all') return ALL_WORDS;
+  const cat = CATEGORIES.find(c => c.id === activeCatId);
+  return cat ? cat.words.map(w => ({ ...w, category: cat.label, catId: cat.id })) : ALL_WORDS;
+}
+
+function setMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-btn').forEach((b, i) =>
+    b.classList.toggle('active', ['tabela','flashcard','quiz'][i] === mode)
+  );
+  ['tabela','flashcard','quiz'].forEach(m =>
+    document.getElementById('mode-' + m).classList.toggle('active', m === mode)
+  );
+  if (mode === 'tabela') renderTabela();
+  else if (mode === 'flashcard') initFC();
+  else startQuiz();
+}
+
+// ── DECK TOGGLE ──────────────────────────────────────────────────
+function setDeck(deck) {
+  activeDeck = deck;
+  document.getElementById('deckEP').classList.toggle('active', deck === 'ep');
+  document.getElementById('deckImg').classList.toggle('active', deck === 'img');
+  document.getElementById('cardEP').style.display  = deck === 'ep'  ? '' : 'none';
+  document.getElementById('cardImg').style.display = deck === 'img' ? '' : 'none';
+  renderFC();
+}
+
+// ── TABELA ───────────────────────────────────────────────────────
+function renderTabela() {
+  const container = document.getElementById('mode-tabela');
+  container.innerHTML = '';
+  const words = getActiveWords();
+
+  const addGroup = (label, gw) => {
+    if (label) {
+      const h = document.createElement('div');
+      h.className = 'section-heading'; h.textContent = label;
+      container.appendChild(h);
+    }
+    const grid = document.createElement('div');
+    grid.className = 'table-grid';
+    gw.forEach(w => grid.appendChild(makeTableCard(w)));
+    container.appendChild(grid);
+  };
+
+  if (activeCatId === 'all') {
+    CATEGORIES.forEach(cat => {
+      const gw = words.filter(w => w.catId === cat.id);
+      if (gw.length) addGroup(cat.label, gw);
+    });
+  } else {
+    addGroup(null, words);
+  }
+}
+
+function makeTableCard(word) {
+  const card = document.createElement('div');
+  card.className = 'table-card';
+  const ptEl = document.createElement('span');
+  ptEl.className = 'pt-word'; ptEl.textContent = word.pt;
+  ptEl.onclick = () => speakText(word.pt, ptEl);
+  const enEl = document.createElement('div');
+  enEl.className = 'en-word'; enEl.textContent = word.en;
+  card.appendChild(ptEl);
+  card.appendChild(enEl);
+  return card;
+}
+
+// ── FLASHCARD ────────────────────────────────────────────────────
+function initFC() {
+  fcWords = [...getActiveWords()];
+  fcIndex = 0;
+  renderFC();
+}
+
+function renderFC() {
+  if (!fcWords.length) return;
+  const w = fcWords[fcIndex];
+  document.getElementById('fcCounter').textContent = `${fcIndex + 1} / ${fcWords.length}`;
+
+  if (activeDeck === 'ep') {
+    fcRevealed = false;
+    document.getElementById('fcEnPrompt').textContent = w.en;
+    document.getElementById('fcPtAnswer').textContent = w.pt;
+    document.getElementById('fcPtAnswer').classList.add('blurred');
+    document.getElementById('fcCatHint').textContent  = w.category || '';
+    document.getElementById('fcHints').textContent    = 'clique na palavra para revelar';
+    document.getElementById('fcSpeakPill').classList.remove('playing');
+  } else {
+    imgRevealed = false;
+    document.getElementById('imgEnWord').textContent  = w.en;
+    document.getElementById('imgPtAnswer').textContent = w.pt;
+    document.getElementById('imgPtAnswer').classList.add('blurred');
+    document.getElementById('imgCatHint').textContent  = w.category || '';
+    document.getElementById('imgHints').textContent   = 'clique na palavra para revelar';
+    document.getElementById('imgSpeakPill').classList.remove('playing');
+
+    // Load image
+    const imgEl = document.getElementById('imgEl');
+    const loadingEl = document.getElementById('imgLoading');
+    imgEl.classList.remove('loaded');
+    imgEl.src = '';
+    loadingEl.style.display = '';
+    loadingEl.textContent = 'a carregar…';
+    loadWikiImage(w.img).then(src => {
+      if (src) { imgEl.src = src; }
+      else { loadingEl.textContent = '—'; }
+    });
+  }
+}
+
+function revealAnswer() {
+  if (fcRevealed) return;
+  fcRevealed = true;
+  document.getElementById('fcPtAnswer').classList.remove('blurred');
+  document.getElementById('fcHints').textContent = '';
+}
+
+function revealImgAnswer() {
+  if (imgRevealed) return;
+  imgRevealed = true;
+  document.getElementById('imgPtAnswer').classList.remove('blurred');
+  document.getElementById('imgHints').textContent = '';
+}
+
+function fcNavigate(dir) {
+  fcIndex = (fcIndex + dir + fcWords.length) % fcWords.length;
+  renderFC();
+}
+
+function shuffleFC() {
+  fcWords = [...getActiveWords()].sort(() => Math.random() - 0.5);
+  fcIndex = 0; renderFC();
+}
+
+function resetFC() {
+  fcWords = [...getActiveWords()];
+  fcIndex = 0; renderFC();
+}
+
+function speakCurrent()    { const w = fcWords[fcIndex]; if (w) speakText(w.pt, document.getElementById('fcSpeakPill')); }
+function speakCurrentImg() { const w = fcWords[fcIndex]; if (w) speakText(w.pt, document.getElementById('imgSpeakPill')); }
+
+// ── QUIZ ─────────────────────────────────────────────────────────
+function startQuiz() {
+  quizWords = [...getActiveWords()].sort(() => Math.random() - 0.5);
+  quizIndex = 0; quizCorrect = 0; quizWrong = 0; quizAnswered = false;
+  document.getElementById('quizResults').classList.remove('visible');
+  document.getElementById('quizCard').style.display = '';
+  document.getElementById('quizHeader').style.display = '';
+  document.getElementById('quizProgressWrap').style.display = '';
+  renderQuizQ();
+}
+
+function renderQuizQ() {
+  if (quizIndex >= quizWords.length) { showQuizResults(); return; }
+  const w = quizWords[quizIndex];
+  quizAnswered = false;
+  document.getElementById('quizCounter').textContent = `${quizIndex + 1} / ${quizWords.length}`;
+  document.getElementById('quizProgressBar').style.width = `${(quizIndex / quizWords.length) * 100}%`;
+  document.getElementById('quizWord').textContent = w.pt;
+  document.getElementById('quizFeedback').textContent = '';
+  document.getElementById('quizFeedback').className = 'quiz-feedback';
+  document.getElementById('quizNextBtn').classList.remove('visible');
+  updateQuizScore();
+
+  const pool = ALL_WORDS.filter(x => x.en !== w.en);
+  const options = [
+    ...pool.sort(() => Math.random() - 0.5).slice(0, 3).map(x => x.en),
+    w.en
+  ].sort(() => Math.random() - 0.5);
+
+  const optDiv = document.getElementById('quizOptions');
+  optDiv.innerHTML = '';
+  options.forEach(opt => {
+    const b = document.createElement('button');
+    b.className = 'quiz-option'; b.textContent = opt;
+    b.onclick = () => answerQuiz(opt, w.en, b);
+    optDiv.appendChild(b);
+  });
+}
+
+function answerQuiz(chosen, correct, btn) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const fb = document.getElementById('quizFeedback');
+  document.querySelectorAll('.quiz-option').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === correct) b.classList.add('correct');
+  });
+  if (chosen === correct) {
+    quizCorrect++;
+    fb.textContent = 'Correto! ✓'; fb.className = 'quiz-feedback correct';
+  } else {
+    quizWrong++;
+    btn.classList.add('wrong');
+    fb.textContent = `Errado — ${correct}`; fb.className = 'quiz-feedback wrong';
+  }
+  updateQuizScore();
+  document.getElementById('quizNextBtn').classList.add('visible');
+  speakText(quizWords[quizIndex].pt);
+}
+
+function nextQuizQuestion() { quizIndex++; renderQuizQ(); }
+
+function updateQuizScore() {
+  document.getElementById('quizScore').innerHTML =
+    `✓ <span class="correct">${quizCorrect}</span> &nbsp;✗ <span class="wrong">${quizWrong}</span>`;
+}
+
+function showQuizResults() {
+  document.getElementById('quizCard').style.display = 'none';
+  document.getElementById('quizHeader').style.display = 'none';
+  document.getElementById('quizProgressWrap').style.display = 'none';
+  document.getElementById('quizResults').classList.add('visible');
+  const total = quizWords.length;
+  document.getElementById('finalScore').textContent = `${quizCorrect}/${total}`;
+  const pct = Math.round((quizCorrect / total) * 100);
+  document.getElementById('finalMsg').textContent =
+    pct === 100 ? 'Perfeito! Excelente trabalho!' :
+    pct >= 80   ? 'Muito bem!' :
+    pct >= 60   ? 'Bom trabalho, continua a praticar.' :
+                  'Continua a estudar — vai melhorar!';
+  document.getElementById('quizProgressBar').style.width = '100%';
+}
+
+init();
+</script>
+</body>
+</html>
