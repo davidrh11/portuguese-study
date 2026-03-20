@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Números 0–100</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f11;
+    --surface: #16181c;
+    --border: #2a2d35;
+    --accent: #e8c547;
+    --accent2: #4a9eff;
+    --text: #d4d6da;
+    --muted: #5a5f6e;
+    --highlight: #1e2128;
+    --gender: #e8c547;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+    padding: 2rem;
+  }
+
+  header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  h1 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .subtitle {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+
+  .controls {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .mode-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-right: 0.25rem;
+  }
+
+  button {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    border-radius: 2px;
+  }
+  button:hover  { border-color: var(--accent); color: var(--accent); }
+  button.active { border-color: var(--accent); color: var(--accent); background: #1e1c0e; }
+  button:disabled { opacity: 0.3; cursor: default; }
+
+  /* ── TABLE ── */
+  .section-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin: 2rem 0 0.75rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+  }
+
+  thead th {
+    text-align: left;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    padding: 0.4rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  tbody tr {
+    border-bottom: 1px solid #1c1e24;
+    transition: background 0.1s;
+    cursor: pointer;
+  }
+  tbody tr:hover { background: var(--highlight); }
+
+  td { padding: 0.45rem 0.75rem; vertical-align: middle; }
+  td.num  { color: var(--muted); width: 3.5rem; font-size: 0.75rem; }
+  td.pt   { color: var(--text); font-weight: 600; min-width: 12rem; }
+  td.pt .fem { color: var(--gender); font-weight: 600; }
+  td.note { color: var(--muted); font-size: 0.72rem; font-family: 'IBM Plex Sans', sans-serif; }
+  td.aud  { width: 2rem; text-align: right; padding-right: 0.5rem; }
+
+  .row-playing { background: #131820 !important; }
+
+  /* quiz hidden */
+  .quiz-mode td.pt .hidden {
+    color: transparent; background: #2a2d35; border-radius: 2px;
+    padding: 0 4px; transition: color 0.15s, background 0.15s;
+  }
+  .quiz-mode td.pt .hidden.revealed { color: var(--text); background: transparent; }
+  .quiz-mode td.pt .hidden.fem { color: transparent; }
+  .quiz-mode td.pt .hidden.fem.revealed { color: var(--gender); }
+
+  /* speaker icon — inline text, no button chrome */
+  .spk {
+    font-size: 0.75rem;
+    color: var(--muted);
+    opacity: 0;
+    transition: opacity 0.15s, color 0.15s;
+    user-select: none;
+  }
+  tbody tr:hover .spk { opacity: 1; }
+  .spk.playing { opacity: 1; color: var(--accent2); }
+
+  /* ── FLASHCARD ── */
+  #flashcard-view {
+    display: none;
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .flash-counter {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.1em;
+  }
+
+  .flashcard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.1s;
+    position: relative;
+    user-select: none;
+    gap: 0.75rem;
+  }
+
+  .flashcard:hover { border-color: var(--accent2); transform: translateY(-1px); }
+
+  .flash-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .flash-answer {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text);
+    filter: blur(8px);
+    opacity: 0.25;
+    transition: filter 0.25s, opacity 0.25s;
+    margin-top: 0.5rem;
+  }
+
+  .flashcard.flipped .flash-answer {
+    filter: blur(0);
+    opacity: 1;
+  }
+
+  .flash-answer.has-gender { color: var(--gender); }
+
+  .flash-hint {
+    position: absolute;
+    bottom: 0.75rem;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    transition: opacity 0.2s;
+  }
+
+  .flashcard.flipped .flash-hint { opacity: 0; }
+
+  .flash-nav {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+    align-items: center;
+  }
+
+  .speak-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--accent2);
+    font-size: 1.1rem;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    padding: 0;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .speak-btn:hover { border-color: var(--accent2); background: #0d1a2e; }
+  .speak-btn.playing { border-color: var(--accent2); background: #0d1a2e; animation: pulse 0.8s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+  .voice-status {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 0.6rem;
+  }
+
+  .fc-done {
+    padding: 2rem 0;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .fc-done h2 {
+    font-size: 1rem;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .fc-done p { font-size: 0.8rem; color: var(--muted); margin-bottom: 1.25rem; }
+
+  /* legend */
+  .legend {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.7rem;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-accent { background: var(--gender); }
+  .dot-muted  { background: var(--muted); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Números</h1>
+  <span class="subtitle">0 – 100 · Português Europeu</span>
+</header>
+
+<div class="controls">
+  <span class="mode-label">Modo:</span>
+  <button class="active" id="btn-study"     onclick="setMode('study')">Estudo</button>
+  <button              id="btn-quiz"      onclick="setMode('quiz')">Quiz</button>
+  <button              id="btn-flashcard" onclick="setMode('flashcard')">Flashcards</button>
+  <button id="btn-reveal" onclick="revealAll()" style="display:none">Revelar Tudo</button>
+</div>
+
+<div id="table-container"></div>
+<div id="flashcard-view">
+  <div class="flash-counter" id="flashCounter"></div>
+  <div class="flashcard" id="flashcard" onclick="flipCard()">
+    <div class="flash-num" id="flashNum"></div>
+    <div class="flash-answer" id="flashAnswer"></div>
+    <div class="flash-hint" id="flashHint">clique para revelar</div>
+  </div>
+  <div class="flash-nav">
+    <button onclick="flashNav(-1)">← Anterior</button>
+    <button class="speak-btn" id="speakFront" onclick="speakCurrent('front')" title="Ouvir número">🔊</button>
+    <button onclick="shuffleFlash()">Baralhar</button>
+    <button class="speak-btn" id="speakBack" onclick="speakCurrent('back')" title="Ouvir resposta">🔊</button>
+    <button onclick="flashNav(1)">Próximo →</button>
+  </div>
+  <div class="voice-status" id="voiceStatus"></div>
+</div>
+
+<div class="legend" id="legend">
+  <div class="legend-item"><div class="dot dot-accent"></div>forma feminina</div>
+  <div class="legend-item"><div class="dot dot-muted"></div>invariável</div>
+</div>
+
+<script>
+const numbers = [
+  [0,   'zero',           null,           ''],
+  [1,   'um',             'uma',          ''],
+  [2,   'dois',           'duas',         ''],
+  [3,   'três',           null,           ''],
+  [4,   'quatro',         null,           ''],
+  [5,   'cinco',          null,           ''],
+  [6,   'seis',           null,           ''],
+  [7,   'sete',           null,           ''],
+  [8,   'oito',           null,           ''],
+  [9,   'nove',           null,           ''],
+  [10,  'dez',            null,           ''],
+  [11,  'onze',           null,           ''],
+  [12,  'doze',           null,           ''],
+  [13,  'treze',          null,           ''],
+  [14,  'catorze',        null,           'também: quatorze'],
+  [15,  'quinze',         null,           ''],
+  [16,  'dezasseis',      null,           ''],
+  [17,  'dezassete',      null,           ''],
+  [18,  'dezoito',        null,           ''],
+  [19,  'dezanove',       null,           ''],
+  [20,  'vinte',          null,           ''],
+  [21,  'vinte e um',     'vinte e uma',  ''],
+  [22,  'vinte e dois',   'vinte e duas', ''],
+  [30,  'trinta',         null,           ''],
+  [31,  'trinta e um',    'trinta e uma', ''],
+  [40,  'quarenta',       null,           ''],
+  [50,  'cinquenta',      null,           ''],
+  [60,  'sessenta',       null,           ''],
+  [70,  'setenta',        null,           ''],
+  [80,  'oitenta',        null,           ''],
+  [90,  'noventa',        null,           ''],
+  [100, 'cem',            null,           'cento quando seguido de mais (ex: cento e um)'],
+];
+
+// ── AUDIO (ElevenLabs via Cloudflare Worker) ─────────────────────────
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+
+let currentBtn   = null;
+let currentAudio = null;
+
+function initVoice() {
+  const status = document.getElementById('voiceStatus');
+  if (status) status.textContent = 'Voz: ElevenLabs (pt-PT)';
+}
+
+async function speak(text, btnId) {
+  const btn = btnId ? document.getElementById(btnId) : null;
+
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (currentBtn)   { currentBtn.classList.remove('playing'); currentBtn = null; }
+
+  if (btn) { btn.classList.add('playing'); currentBtn = btn; }
+
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
+    });
+    if (!res.ok) throw new Error('Worker error ' + res.status);
+    const blob  = await res.blob();
+    const url   = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    currentAudio = audio;
+    audio.onended = audio.onerror = () => {
+      if (btn) btn.classList.remove('playing');
+      if (currentBtn === btn) currentBtn = null;
+      URL.revokeObjectURL(url);
+    };
+    audio.play();
+  } catch (err) {
+    console.error('TTS error:', err);
+    if (btn) btn.classList.remove('playing');
+    if (currentBtn === btn) currentBtn = null;
+  }
+}
+
+function speakStr(masc, fem) {
+  return fem ? masc + '. ' + fem : masc;
+}
+
+// ── MODE ─────────────────────────────────────────────────────────────
+let mode = 'study';
+
+function setMode(m) {
+  mode = m;
+  ['study','quiz','flashcard'].forEach(id =>
+    document.getElementById('btn-' + id).classList.toggle('active', id === m)
+  );
+  document.getElementById('btn-reveal').style.display      = m === 'quiz'      ? 'inline-block' : 'none';
+  document.getElementById('table-container').style.display = m === 'flashcard' ? 'none'         : 'block';
+  document.getElementById('flashcard-view').style.display  = m === 'flashcard' ? 'block'        : 'none';
+  document.getElementById('legend').style.display          = m === 'flashcard' ? 'none'         : 'flex';
+
+  if (m === 'flashcard') initFlashcards();
+  else render();
+}
+
+// ── TABLE ────────────────────────────────────────────────────────────
+function revealAll() {
+  document.querySelectorAll('.hidden').forEach(el => el.classList.add('revealed'));
+}
+
+function rowClick(tr, masc, fem) {
+  if (mode === 'quiz') {
+    tr.querySelectorAll('.hidden').forEach(h => h.classList.toggle('revealed'));
+  } else {
+    speak(speakStr(masc, fem), null);
+    tr.classList.add('row-playing');
+    setTimeout(() => tr.classList.remove('row-playing'), 800);
+  }
+}
+
+function render() {
+  const container = document.getElementById('table-container');
+  const sections = [
+    { title: '0 – 19 · Unidades e Teens',  rows: numbers.filter(r => r[0] <= 19) },
+    { title: '20 – 29 · Vinte e…',          rows: numbers.filter(r => r[0] >= 20 && r[0] < 30) },
+    { title: '30 – 100 · Dezenas',           rows: numbers.filter(r => r[0] >= 30) },
+  ];
+
+  let html = '';
+  sections.forEach(sec => {
+    html += `<div class="section-title">${sec.title}</div>
+<table><thead><tr><th>#</th><th>Português</th><th>Nota</th><th></th></tr></thead><tbody>`;
+
+    sec.rows.forEach(([n, masc, fem, note]) => {
+      const hasGender = fem !== null;
+      const s = speakStr(masc, fem).replace(/'/g, "\\'");
+      const mEsc = masc.replace(/'/g, "\\'");
+      const fEsc = fem ? fem.replace(/'/g, "\\'") : '';
+
+      let ptCell;
+      if (mode === 'study') {
+        ptCell = hasGender
+          ? `${masc} / <span class="fem">${fem}</span>`
+          : masc;
+      } else {
+        ptCell = hasGender
+          ? `<span class="hidden">${masc}</span> / <span class="hidden fem">${fem}</span>`
+          : `<span class="hidden">${masc}</span>`;
+      }
+
+      const noteHtml = note
+        ? (mode === 'study'
+            ? note
+            : `<span class="hidden" style="font-family:'IBM Plex Sans',sans-serif">${note}</span>`)
+        : '';
+
+      html += `<tr onclick="rowClick(this,'${mEsc}','${fEsc}')">
+  <td class="num">${n}</td>
+  <td class="pt">${ptCell}</td>
+  <td class="note">${noteHtml}</td>
+  <td class="aud"><span class="spk">🔊</span></td>
+</tr>`;
+    });
+
+    html += `</tbody></table>`;
+  });
+
+  container.innerHTML = html;
+  container.className = mode === 'quiz' ? 'quiz-mode' : '';
+}
+
+// ── FLASHCARDS ───────────────────────────────────────────────────────
+let fcDeck = [];
+let fcIdx  = 0;
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function speakCurrent(side) {
+  const [n, masc, fem] = fcDeck[fcIdx];
+  if (side === 'front') {
+    speak(String(n), 'speakFront');
+  } else {
+    speak(fem ? masc + '. ' + fem : masc, 'speakBack');
+  }
+}
+
+function renderFlash() {
+  const [n, masc, fem] = fcDeck[fcIdx];
+  const hasGender = fem !== null;
+  document.getElementById('flashCounter').textContent = `${fcIdx + 1} / ${fcDeck.length}`;
+  document.getElementById('flashNum').textContent = n;
+  const ans = document.getElementById('flashAnswer');
+  ans.textContent = hasGender ? `${masc} / ${fem}` : masc;
+  ans.className = 'flash-answer' + (hasGender ? ' has-gender' : '');
+  document.getElementById('flashcard').classList.remove('flipped');
+  document.getElementById('flashHint').textContent = 'clique para revelar';
+}
+
+function flipCard() {
+  const card = document.getElementById('flashcard');
+  card.classList.toggle('flipped');
+  document.getElementById('flashHint').textContent = card.classList.contains('flipped') ? '' : 'clique para revelar';
+}
+
+function flashNav(dir) {
+  fcIdx = (fcIdx + dir + fcDeck.length) % fcDeck.length;
+  renderFlash();
+}
+
+function shuffleFlash() {
+  fcDeck = shuffle([...numbers]);
+  fcIdx = 0;
+  renderFlash();
+}
+
+function initFlashcards() {
+  fcDeck = shuffle([...numbers]);
+  fcIdx  = 0;
+  renderFlash();
+}
+
+render();
+initVoice();
+</script>
+</body>
+</html>

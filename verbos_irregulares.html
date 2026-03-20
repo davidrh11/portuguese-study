@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verbos Irregulares</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f11;
+    --surface: #16181c;
+    --border: #2a2d35;
+    --accent: #e8c547;
+    --accent2: #4a9eff;
+    --text: #d4d6da;
+    --muted: #5a5f6e;
+    --highlight: #1e2128;
+    --irregular: #e8c547;
+    --regular: #6b7280;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+    padding: 2rem;
+  }
+
+  header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.5rem;
+  }
+
+  h1 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .subtitle {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .controls {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .mode-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-right: 0.25rem;
+  }
+
+  button {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    border-radius: 2px;
+  }
+
+  button:hover { border-color: var(--accent); color: var(--accent); }
+  button.active { border-color: var(--accent); color: var(--accent); background: #1e1a08; }
+
+  /* GRID VIEW */
+  .grid-view { display: block; }
+  .quiz-view { display: none; }
+  .flash-view { display: none; }
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+  }
+
+  thead th {
+    padding: 0.6rem 0.8rem;
+    text-align: center;
+    color: var(--accent);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    white-space: nowrap;
+  }
+
+  thead th:first-child { text-align: left; color: var(--muted); }
+
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr:hover { background: var(--highlight); }
+
+  tbody td {
+    padding: 0.55rem 0.8rem;
+    text-align: center;
+    color: var(--regular);
+    transition: color 0.1s, background 0.1s;
+  }
+
+  tbody td.speakable {
+    cursor: pointer;
+  }
+
+  tbody td.speakable:hover {
+    color: var(--accent2);
+    background: #0d1a2e;
+  }
+
+  tbody td.speakable:active {
+    background: #0a1522;
+  }
+
+  tbody td:first-child {
+    color: var(--muted);
+    text-align: left;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  td.irr {
+    color: var(--irregular);
+    font-weight: 600;
+  }
+
+  td.irr::after {
+    content: '';
+  }
+
+  /* QUIZ */
+  .quiz-view {
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .quiz-progress {
+    display: flex;
+    gap: 0.3rem;
+    margin-bottom: 2rem;
+  }
+
+  .pip {
+    height: 3px;
+    flex: 1;
+    background: var(--border);
+    border-radius: 2px;
+    transition: background 0.3s;
+  }
+  .pip.done { background: var(--accent); }
+
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2.5rem;
+    border-radius: 4px;
+    text-align: center;
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .quiz-prompt {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .quiz-verb {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  .quiz-subject {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1rem;
+    color: var(--accent2);
+  }
+
+  .quiz-input {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.2rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.6rem 1rem;
+    text-align: center;
+    border-radius: 2px;
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+    max-width: 220px;
+    margin: 0 auto;
+  }
+
+  .quiz-input:focus { border-color: var(--accent2); }
+  .quiz-input.correct { border-color: #4caf50; color: #4caf50; }
+  .quiz-input.wrong { border-color: #f44336; color: #f44336; }
+
+  .quiz-feedback {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.9rem;
+    min-height: 1.4rem;
+    transition: opacity 0.2s;
+  }
+
+  .quiz-buttons {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+
+  .quiz-buttons button {
+    padding: 0.5rem 1.5rem;
+    font-size: 0.75rem;
+  }
+
+  .quiz-score {
+    text-align: center;
+    padding: 3rem;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .score-number {
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .score-label { color: var(--muted); font-size: 0.8rem; margin-top: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* FLASHCARDS */
+  .flash-view {
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .flash-counter {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.1em;
+  }
+
+  .flashcard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.1s;
+    position: relative;
+    user-select: none;
+    gap: 0.75rem;
+  }
+
+  .flashcard:hover { border-color: var(--accent2); transform: translateY(-1px); }
+
+  .flash-verb {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .flash-subject {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1rem;
+    color: var(--accent2);
+  }
+
+  /* Answer always in DOM (Speechify can read it), visually blurred until flipped */
+  .flash-answer {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text);
+    filter: blur(8px);
+    opacity: 0.25;
+    transition: filter 0.25s, opacity 0.25s;
+    margin-top: 0.5rem;
+  }
+
+  .flashcard.flipped .flash-answer {
+    filter: blur(0);
+    opacity: 1;
+  }
+
+  .flash-answer.irr-form { color: var(--irregular); }
+
+  .flash-hint {
+    position: absolute;
+    bottom: 0.75rem;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    transition: opacity 0.2s;
+  }
+
+  .flashcard.flipped .flash-hint { opacity: 0; }
+
+  .flash-nav {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+    align-items: center;
+  }
+
+  .speak-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--accent2);
+    font-size: 1.1rem;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    padding: 0;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .speak-btn:hover { border-color: var(--accent2); background: #0d1a2e; }
+  .speak-btn.playing { border-color: var(--accent2); background: #0d1a2e; animation: pulse 0.8s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+  .voice-status {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 0.6rem;
+  }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    font-size: 0.68rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .legend span { display: flex; align-items: center; gap: 0.4rem; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-irr { background: var(--irregular); }
+  .dot-reg { background: var(--regular); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Verbos Irregulares</h1>
+  <div class="subtitle">Presente do Indicativo · 10 verbos</div>
+</header>
+
+<div class="controls">
+  <span class="mode-label">Modo:</span>
+  <button class="active" onclick="setMode('grid')">Tabela</button>
+  <button onclick="setMode('flash')">Flashcards</button>
+  <button onclick="setMode('quiz')">Quiz</button>
+</div>
+
+<!-- GRID VIEW -->
+<div class="grid-view" id="gridView">
+  <div class="table-wrapper">
+    <table id="mainTable"></table>
+  </div>
+  <div class="legend">
+    <span><div class="dot dot-irr"></div> Forma irregular</span>
+    <span><div class="dot dot-reg"></div> Regular / previsível</span>
+  </div>
+</div>
+
+<!-- FLASHCARD VIEW -->
+<div class="flash-view" id="flashView">
+  <div class="flash-counter" id="flashCounter"></div>
+  <div class="flashcard" id="flashcard" onclick="flipCard()">
+    <div class="flash-verb" id="flashVerb"></div>
+    <div class="flash-subject" id="flashSubject"></div>
+    <div class="flash-answer" id="flashAnswer"></div>
+    <div class="flash-hint" id="flashHint">clique para revelar</div>
+  </div>
+  <div class="flash-nav">
+    <button onclick="flashNav(-1)">← Anterior</button>
+    <button class="speak-btn" id="speakFront" onclick="speakCurrent('front')" title="Ouvir verbo">🔊</button>
+    <button onclick="shuffleFlash()">Baralhar</button>
+    <button class="speak-btn" id="speakBack" onclick="speakCurrent('back')" title="Ouvir conjugação">🔊</button>
+    <button onclick="flashNav(1)">Próximo →</button>
+  </div>
+  <div class="voice-status" id="voiceStatus"></div>
+</div>
+
+<!-- QUIZ VIEW -->
+<div class="quiz-view" id="quizView">
+  <div class="quiz-progress" id="quizProgress"></div>
+  <div class="quiz-card" id="quizCard">
+    <div>
+      <div class="quiz-prompt">Como se conjuga:</div>
+      <div class="quiz-verb" id="qVerb"></div>
+      <div class="quiz-subject" id="qSubject"></div>
+    </div>
+    <input class="quiz-input" id="qInput" type="text" placeholder="resposta..." autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')checkAnswer()">
+    <div class="quiz-feedback" id="qFeedback"></div>
+    <div class="quiz-buttons">
+      <button onclick="checkAnswer()">Verificar</button>
+      <button onclick="skipQuestion()">Saltar →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const verbs = ['ver','ler','fazer','dizer','trazer','saber','poder','perder','querer','pôr'];
+const subjects = ['eu','tu','você/ele/ela','nós','vocês/eles/elas'];
+const subjectKeys = ['eu','tu','vce','nos','vces'];
+
+// Forms: null = regular (derived predictably), actual string = the form
+// Bold/irregular ones from image
+const forms = {
+  ver:    { eu:'vejo', tu:'vês', vce:'vê', nos:'vemos', vces:'veem' },
+  ler:    { eu:'leio', tu:'lês', vce:'lê', nos:'lemos', vces:'leem' },
+  fazer:  { eu:'faço', tu:'fazes', vce:'faz', nos:'fazemos', vces:'fazem' },
+  dizer:  { eu:'digo', tu:'dizes', vce:'diz', nos:'dizemos', vces:'dizem' },
+  trazer: { eu:'trago', tu:'trazes', vce:'traz', nos:'trazemos', vces:'trazem' },
+  saber:  { eu:'sei', tu:'sabes', vce:'sabe', nos:'sabemos', vces:'sabem' },
+  poder:  { eu:'posso', tu:'podes', vce:'pode', nos:'podemos', vces:'podem' },
+  perder: { eu:'perco', tu:'perdes', vce:'perde', nos:'perdemos', vces:'perdem' },
+  querer: { eu:'quero', tu:'queres', vce:'quer', nos:'queremos', vces:'querem' },
+  pôr:    { eu:'ponho', tu:'pões', vce:'põe', nos:'pomos', vces:'põem' },
+};
+
+// Which forms are "irregular" (highlighted in image)
+const irregular = {
+  ver:    { eu:true, tu:true, vce:true, vces:true },
+  ler:    { eu:true, tu:true, vce:true, vces:true },
+  fazer:  { eu:true, vce:true },
+  dizer:  { eu:true, vce:true },
+  trazer: { eu:true, vce:true },
+  saber:  { eu:true },
+  poder:  { eu:true },
+  perder: { eu:true },
+  querer: { vce:true },
+  pôr:    { eu:true, tu:true, vce:true, nos:true, vces:true },
+};
+
+// Build table
+function buildTable() {
+  const table = document.getElementById('mainTable');
+  let html = '<thead><tr><th></th>';
+  verbs.forEach(v => html += `<th class="speakable" style="cursor:pointer" onclick="speak('${v}', null)" title="Ouvir">${v}</th>`);
+  html += '</tr></thead><tbody>';
+
+  subjectKeys.forEach((sk, i) => {
+    html += `<tr><td>${subjects[i]}</td>`;
+    verbs.forEach(v => {
+      const isIrr = irregular[v] && irregular[v][sk];
+      const form = forms[v][sk];
+      const subj = subjects[i].split('/')[0].trim();
+      html += `<td class="${isIrr ? 'irr ' : ''}speakable" onclick="speak('${subj} ${form}', null)" title="Ouvir">${form}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  table.innerHTML = html;
+}
+
+// Build flashcard deck
+let flashDeck = [];
+let flashIdx = 0;
+
+function buildFlashDeck() {
+  flashDeck = [];
+  verbs.forEach(v => {
+    subjectKeys.forEach(sk => {
+      flashDeck.push({ verb: v, sk, subject: subjects[subjectKeys.indexOf(sk)], form: forms[v][sk], isIrr: !!(irregular[v] && irregular[v][sk]) });
+    });
+  });
+}
+
+// ── TTS ────────────────────────────────────────────────────────────────────
+// ElevenLabs via Cloudflare Worker — pt-PT voice, natural quality
+
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+
+let currentAudio = null;
+
+function initVoice() {
+  const status = document.getElementById('voiceStatus');
+  if (status) status.textContent = 'Voz: ElevenLabs pt-PT';
+}
+
+async function speak(text, btnId) {
+  const btn = btnId ? document.getElementById(btnId) : null;
+
+  // Stop any currently playing audio
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio = null;
+  }
+
+  if (btn) btn.classList.add('playing');
+
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
+    });
+
+    if (!res.ok) throw new Error(`Worker error: ${res.status}`);
+
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    currentAudio = new Audio(url);
+    currentAudio.onended = () => {
+      if (btn) btn.classList.remove('playing');
+      URL.revokeObjectURL(url);
+      currentAudio = null;
+    };
+    currentAudio.onerror = () => {
+      if (btn) btn.classList.remove('playing');
+      currentAudio = null;
+    };
+    currentAudio.play();
+  } catch (err) {
+    console.error('TTS error:', err);
+    if (btn) btn.classList.remove('playing');
+  }
+}
+
+function speakCurrent(side) {
+  const c = flashDeck[flashIdx];
+  if (side === 'front') {
+    // Read infinitive
+    speak(c.verb, 'speakFront');
+  } else {
+    // Read "eu faço", "tu fazes", etc.
+    // Use the display subject but strip the slash alternatives for cleaner reading
+    const subj = c.subject.split('/')[0].trim();
+    speak(`${subj} ${c.form}`, 'speakBack');
+  }
+}
+
+// ── END TTS ─────────────────────────────────────────────────────────────────
+
+function renderFlash() {
+  const c = flashDeck[flashIdx];
+  document.getElementById('flashCounter').textContent = `${flashIdx + 1} / ${flashDeck.length}`;
+  document.getElementById('flashVerb').textContent = c.verb;
+  document.getElementById('flashSubject').textContent = c.subject;
+  // Answer includes subject pronoun for Speechify: "eu faço"
+  document.getElementById('flashAnswer').textContent = `${c.subject} ${c.form}`;
+  document.getElementById('flashAnswer').className = 'flash-answer' + (c.isIrr ? ' irr-form' : '');
+  document.getElementById('flashcard').classList.remove('flipped');
+  document.getElementById('flashHint').textContent = 'clique para revelar';
+}
+
+function flipCard() {
+  const card = document.getElementById('flashcard');
+  card.classList.toggle('flipped');
+  document.getElementById('flashHint').textContent = card.classList.contains('flipped') ? '' : 'clique para revelar';
+}
+
+function flashNav(dir) {
+  flashIdx = (flashIdx + dir + flashDeck.length) % flashDeck.length;
+  renderFlash();
+}
+
+function shuffleFlash() {
+  for (let i = flashDeck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [flashDeck[i], flashDeck[j]] = [flashDeck[j], flashDeck[i]];
+  }
+  flashIdx = 0;
+  renderFlash();
+}
+
+// Quiz
+let quizDeck = [];
+let quizIdx = 0;
+let quizScore = 0;
+let quizAnswered = false;
+
+function buildQuizDeck() {
+  quizDeck = [];
+  verbs.forEach(v => {
+    subjectKeys.forEach(sk => {
+      quizDeck.push({ verb: v, sk, subject: subjects[subjectKeys.indexOf(sk)], form: forms[v][sk] });
+    });
+  });
+  // Shuffle
+  for (let i = quizDeck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [quizDeck[i], quizDeck[j]] = [quizDeck[j], quizDeck[i]];
+  }
+  quizIdx = 0;
+  quizScore = 0;
+}
+
+function renderQuiz() {
+  if (quizIdx >= quizDeck.length) {
+    showScore();
+    return;
+  }
+  const c = quizDeck[quizIdx];
+  document.getElementById('qVerb').textContent = c.verb;
+  document.getElementById('qSubject').textContent = c.subject;
+  document.getElementById('qInput').value = '';
+  document.getElementById('qInput').className = 'quiz-input';
+  document.getElementById('qFeedback').textContent = '';
+  document.getElementById('qInput').disabled = false;
+  document.getElementById('qInput').focus();
+  quizAnswered = false;
+
+  // Progress pips
+  const prog = document.getElementById('quizProgress');
+  prog.innerHTML = quizDeck.map((_, i) => `<div class="pip${i < quizIdx ? ' done' : ''}"></div>`).join('');
+}
+
+function normalize(s) {
+  return s.trim().toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '');
+}
+
+function checkAnswer() {
+  if (quizAnswered) { nextQuiz(); return; }
+  const c = quizDeck[quizIdx];
+  const input = document.getElementById('qInput');
+  const val = input.value;
+  const correct = normalize(val) === normalize(c.form);
+
+  if (correct) {
+    input.className = 'quiz-input correct';
+    document.getElementById('qFeedback').style.color = '#4caf50';
+    document.getElementById('qFeedback').textContent = '✓ Correto!';
+    quizScore++;
+  } else {
+    input.className = 'quiz-input wrong';
+    document.getElementById('qFeedback').style.color = '#f44336';
+    document.getElementById('qFeedback').textContent = `✗  ${c.form}`;
+  }
+  input.disabled = true;
+  quizAnswered = true;
+}
+
+function skipQuestion() {
+  if (!quizAnswered) {
+    const c = quizDeck[quizIdx];
+    document.getElementById('qFeedback').style.color = '#f44336';
+    document.getElementById('qFeedback').textContent = `→  ${c.form}`;
+    document.getElementById('qInput').disabled = true;
+    quizAnswered = true;
+  } else {
+    nextQuiz();
+  }
+}
+
+function nextQuiz() {
+  quizIdx++;
+  renderQuiz();
+}
+
+function showScore() {
+  document.getElementById('quizCard').innerHTML = `
+    <div class="quiz-score">
+      <div class="score-number">${quizScore}/${quizDeck.length}</div>
+      <div class="score-label">respostas corretas</div>
+      <div style="margin-top:2rem;">
+        <button onclick="startQuiz()" style="padding:0.6rem 2rem;font-size:0.8rem;">Recomeçar</button>
+      </div>
+    </div>`;
+}
+
+function startQuiz() {
+  document.getElementById('quizCard').innerHTML = `
+    <div>
+      <div class="quiz-prompt">Como se conjuga:</div>
+      <div class="quiz-verb" id="qVerb"></div>
+      <div class="quiz-subject" id="qSubject"></div>
+    </div>
+    <input class="quiz-input" id="qInput" type="text" placeholder="resposta..." autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')checkAnswer()">
+    <div class="quiz-feedback" id="qFeedback"></div>
+    <div class="quiz-buttons">
+      <button onclick="checkAnswer()">Verificar</button>
+      <button onclick="skipQuestion()">Saltar →</button>
+    </div>`;
+  buildQuizDeck();
+  renderQuiz();
+}
+
+// Mode switcher
+function setMode(mode) {
+  document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('gridView').style.display = mode === 'grid' ? 'block' : 'none';
+  document.getElementById('flashView').style.display = mode === 'flash' ? 'block' : 'none';
+  document.getElementById('quizView').style.display = mode === 'quiz' ? 'block' : 'none';
+
+  if (mode === 'flash') renderFlash();
+  if (mode === 'quiz') startQuiz();
+}
+
+// Init
+buildTable();
+buildFlashDeck();
+initVoice();
+</script>
+</body>
+</html>
