@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A1.1 · Unidade 1 · Comunicar na Sala de Aula</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --border: #2a2a2a;
+    --yellow: #e8c547;
+    --blue: #4a9eff;
+    --text: #e0e0e0;
+    --muted: #888;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+  }
+
+  header {
+    padding: 2rem 2rem 1rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .level-badge {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--bg);
+    background: var(--yellow);
+    padding: 0.2rem 0.6rem;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+  }
+
+  header h1 {
+    font-family: var(--mono);
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--muted);
+    flex: 1;
+  }
+
+  header h1 span {
+    color: var(--yellow);
+  }
+
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+  }
+
+  .tab {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    letter-spacing: 0.03em;
+  }
+
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--yellow); border-bottom-color: var(--yellow); }
+
+  .view { display: none; padding: 2rem; }
+  .view.active { display: block; }
+
+  /* ── TABELA ── */
+  .section-title {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin: 2rem 0 0.75rem;
+  }
+
+  .section-title:first-child { margin-top: 0; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+  }
+
+  th {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    text-align: left;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  td:first-child {
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    color: var(--yellow);
+    width: 42%;
+    white-space: nowrap;
+  }
+
+  td:nth-child(2) {
+    color: var(--text);
+    width: 38%;
+  }
+
+  td:nth-child(3) {
+    color: var(--muted);
+    font-size: 0.85rem;
+    width: 20%;
+  }
+
+  tbody tr:hover { background: var(--surface); }
+
+  .speak-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--blue);
+    font-size: 0.8rem;
+    padding: 0.2rem 0.5rem;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    white-space: nowrap;
+  }
+  .speak-btn:hover { border-color: var(--blue); }
+
+  .note-block {
+    background: var(--surface);
+    border-left: 3px solid var(--yellow);
+    padding: 1rem 1.25rem;
+    margin-top: 1.5rem;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .note-block .note-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--yellow);
+    margin-bottom: 0.4rem;
+  }
+
+  .note-block p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  .note-block .pt {
+    font-family: var(--mono);
+    color: var(--yellow);
+  }
+
+  .note-block .en {
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* ── FLASHCARDS ── */
+  .flashcard-wrap {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .progress-bar {
+    height: 2px;
+    background: var(--border);
+    margin-bottom: 2rem;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--yellow);
+    transition: width 0.3s ease;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+    cursor: pointer;
+    position: relative;
+    text-align: center;
+    user-select: none;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: var(--yellow); }
+
+  .card-category {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--blue);
+    position: absolute;
+    top: 1.25rem;
+    left: 1.5rem;
+  }
+
+  .card-counter {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--muted);
+    position: absolute;
+    top: 1.25rem;
+    right: 1.5rem;
+  }
+
+  .card-front {
+    font-size: 1.3rem;
+    color: var(--text);
+    line-height: 1.4;
+    font-style: italic;
+  }
+
+  .card-back {
+    text-align: center;
+    margin-top: 1.25rem;
+  }
+
+  .card-back .pt-answer {
+    font-family: var(--mono);
+    font-size: 1.5rem;
+    color: var(--yellow);
+    line-height: 1.3;
+    filter: blur(6px);
+    transition: filter 0.3s ease;
+    cursor: pointer;
+  }
+
+  .card-back .note {
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 0.4rem;
+    filter: blur(6px);
+    transition: filter 0.3s ease;
+  }
+
+  .card.revealed .card-back .pt-answer,
+  .card.revealed .card-back .note { filter: blur(0); }
+
+  .card.revealed .card-front { font-size: 1rem; color: var(--muted); font-style: normal; }
+
+  .reveal-hint {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 1rem;
+    letter-spacing: 0.05em;
+  }
+
+  .card-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.75rem;
+    flex-wrap: wrap;
+  }
+
+  .nav-btn {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .nav-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+  .nav-btn.audio-btn { color: var(--blue); border-color: var(--blue); }
+  .nav-btn.audio-btn:hover { background: rgba(74,158,255,0.08); }
+
+  /* ── QUIZ ── */
+  .quiz-wrap { max-width: 600px; margin: 0 auto; }
+
+  .quiz-q {
+    font-family: var(--mono);
+    font-size: 1.2rem;
+    color: var(--yellow);
+    margin-bottom: 1.5rem;
+    text-align: center;
+    min-height: 60px;
+  }
+
+  .quiz-prompt {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 0.75rem;
+    font-family: var(--mono);
+  }
+
+  .quiz-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .quiz-opt {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.9rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text);
+    transition: all 0.15s;
+    text-align: center;
+    font-family: var(--sans);
+  }
+
+  .quiz-opt:hover:not(:disabled) { border-color: var(--yellow); }
+  .quiz-opt.correct { border-color: #4caf8a; background: rgba(76,175,138,0.1); color: #4caf8a; }
+  .quiz-opt.wrong { border-color: #e05c5c; background: rgba(224,92,92,0.1); color: #e05c5c; }
+  .quiz-opt:disabled { cursor: default; }
+
+  .quiz-feedback {
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    min-height: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .quiz-feedback.ok { color: #4caf8a; }
+  .quiz-feedback.bad { color: #e05c5c; }
+
+  .quiz-score {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .quiz-next {
+    display: block;
+    margin: 0 auto;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    padding: 0.6rem 2rem;
+    background: var(--yellow);
+    color: var(--bg);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .quiz-next:disabled { opacity: 0.3; cursor: default; }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="level-badge">A1.1</span>
+  <h1>Unidade 1 · <span>Comunicar na Sala de Aula</span> &nbsp;·&nbsp; Aula 1 — 10 de março</h1>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('tabela')">Tabela</button>
+  <button class="tab" onclick="switchTab('flashcards')">Flashcards</button>
+  <button class="tab" onclick="switchTab('quiz')">Quiz</button>
+</div>
+
+<!-- ══════════════ TABELA ══════════════ -->
+<div id="tabela" class="view active">
+
+  <div class="section-title">Comunicar na Sala de Aula — Classroom Phrases</div>
+  <table>
+    <thead><tr><th>Português</th><th>English</th><th>Context</th><th></th></tr></thead>
+    <tbody>
+      <tr><td>Tenho uma pergunta!</td><td>I have a question!</td><td>raising hand</td><td><button class="speak-btn" onclick="speak('Tenho uma pergunta!')">🔊</button></td></tr>
+      <tr><td>Não compreendo.</td><td>I don't understand.</td><td>asking for clarification</td><td><button class="speak-btn" onclick="speak('Não compreendo.')">🔊</button></td></tr>
+      <tr><td>O que significa?</td><td>What does it mean?</td><td>unknown word/phrase</td><td><button class="speak-btn" onclick="speak('O que significa?')">🔊</button></td></tr>
+      <tr><td>Pode repetir?</td><td>Can you repeat?</td><td>didn't catch it</td><td><button class="speak-btn" onclick="speak('Pode repetir?')">🔊</button></td></tr>
+      <tr><td>Como se diz "hello"?</td><td>How do you say "hello"?</td><td>asking for translation</td><td><button class="speak-btn" onclick="speak('Como se diz hello?')">🔊</button></td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Pedir Desculpa — Apologising</div>
+  <table>
+    <thead><tr><th>Português</th><th>English</th><th>Notes</th><th></th></tr></thead>
+    <tbody>
+      <tr><td>Desculpe, ainda não falo português.</td><td>Sorry, I still don't speak Portuguese.</td><td>formal/polite register</td><td><button class="speak-btn" onclick="speak('Desculpe, ainda não falo português.')">🔊</button></td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Palavra do Dia — Word of the Day</div>
+  <table>
+    <thead><tr><th>Português</th><th>English</th><th>Gender</th><th></th></tr></thead>
+    <tbody>
+      <tr><td>Obrigadíssimo</td><td>Many thanks / Thank you very much</td><td>masculine</td><td><button class="speak-btn" onclick="speak('Obrigadíssimo')">🔊</button></td></tr>
+      <tr><td>Obrigadíssima</td><td>Many thanks / Thank you very much</td><td>feminine</td><td><button class="speak-btn" onclick="speak('Obrigadíssima')">🔊</button></td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Expressão — Diz-se Assim</div>
+  <table>
+    <thead><tr><th>Expressão</th><th>English</th><th>Usage</th><th></th></tr></thead>
+    <tbody>
+      <tr><td>Mais vale feito que perfeito.</td><td>Done is better than perfect.</td><td>said when finishing something</td><td><button class="speak-btn" onclick="speak('Mais vale feito que perfeito.')">🔊</button></td></tr>
+    </tbody>
+  </table>
+
+  <div class="note-block">
+    <div class="note-label">Grammar Note — Obrigado/a</div>
+    <p>The ending changes to match the speaker's gender, not the listener's.<br>
+    Man says: <span class="pt">Obrigado</span> · Woman says: <span class="pt">Obrigada</span><br>
+    The superlative <span class="pt">-íssimo/a</span> intensifies: <span class="pt">Obrigadíssimo/a</span> = extremely grateful.</p>
+  </div>
+
+  <div class="note-block">
+    <div class="note-label">Grammar Note — Como se diz?</div>
+    <p><span class="pt">Diz-se</span> is the reflexive construction of <span class="pt">dizer</span> (to say), used impersonally. Literally: "One says it thus." The expression <span class="pt">Diz-se assim!</span> = "That's how you say it!"</p>
+  </div>
+
+</div>
+
+<!-- ══════════════ FLASHCARDS ══════════════ -->
+<div id="flashcards" class="view">
+<div class="flashcard-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="fc-progress" style="width:0%"></div></div>
+  <div class="card" id="fc-card" onclick="revealCard()">
+    <span class="card-category" id="fc-cat"></span>
+    <span class="card-counter" id="fc-counter"></span>
+    <div class="card-front" id="fc-front"></div>
+    <div id="fc-back"></div>
+  </div>
+  <p class="reveal-hint" id="fc-hint">click card to reveal português</p>
+  <div class="card-nav">
+    <button class="nav-btn" onclick="prevCard()">← Anterior</button>
+    <button class="nav-btn audio-btn" onclick="speakCurrent()">🔊</button>
+    <button class="nav-btn" onclick="shuffleCards()">Baralhar</button>
+    <button class="nav-btn" onclick="nextCard()">Próximo →</button>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════ QUIZ ══════════════ -->
+<div id="quiz" class="view">
+<div class="quiz-wrap">
+  <div class="quiz-score" id="quiz-score">Score: 0 / 0</div>
+  <div class="quiz-q" id="quiz-q"></div>
+  <div class="quiz-prompt" id="quiz-prompt"></div>
+  <div class="quiz-options" id="quiz-opts"></div>
+  <div class="quiz-feedback" id="quiz-fb"></div>
+  <button class="quiz-next" id="quiz-next" onclick="nextQuiz()">Próximo →</button>
+</div>
+</div>
+
+<script>
+// ── TTS ──────────────────────────────────────────────
+// Step 1: Paste your Cloudflare Worker URL below.
+// It will look like: https://your-worker.your-name.workers.dev
+// Leave as empty string to fall back to browser TTS.
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+
+const audioCache = {};
+
+async function speak(text) {
+  if (WORKER_URL) {
+    try {
+      // Check cache first
+      if (audioCache[text]) {
+        audioCache[text].currentTime = 0;
+        audioCache[text].play();
+        return;
+      }
+      const res = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text })
+      });
+      if (!res.ok) throw new Error("Worker error");
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      audioCache[text] = audio;
+      audio.play();
+      return;
+    } catch (e) {
+      console.warn("Worker TTS failed, falling back to browser:", e);
+    }
+  }
+  // Fallback: browser Web Speech API
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = 'pt-PT'; utt.rate = 0.9;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(utt);
+}
+
+const CARDS = [
+  { cat: 'Sala de Aula', pt: 'Tenho uma pergunta!', en: 'I have a question!', note: 'raise your hand' },
+  { cat: 'Sala de Aula', pt: 'Não compreendo.', en: 'I don\'t understand.', note: '' },
+  { cat: 'Sala de Aula', pt: 'O que significa?', en: 'What does it mean?', note: 'for unknown words' },
+  { cat: 'Sala de Aula', pt: 'Pode repetir?', en: 'Can you repeat?', note: '' },
+  { cat: 'Sala de Aula', pt: 'Como se diz "hello"?', en: 'How do you say "hello"?', note: 'ask for any word' },
+  { cat: 'Pedir Desculpa', pt: 'Desculpe, ainda não falo português.', en: 'Sorry, I still don\'t speak Portuguese.', note: 'formal/polite' },
+  { cat: 'Palavra do Dia', pt: 'Obrigadíssimo', en: 'Many thanks (m)', note: 'speaker is male' },
+  { cat: 'Palavra do Dia', pt: 'Obrigadíssima', en: 'Many thanks (f)', note: 'speaker is female' },
+  { cat: 'Expressão', pt: 'Mais vale feito que perfeito.', en: 'Done is better than perfect.', note: 'said when finishing something' },
+];
+
+let deck = [...CARDS];
+let cur = 0;
+
+function switchTab(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  if (id === 'flashcards') loadCard();
+  if (id === 'quiz') startQuiz();
+}
+
+function loadCard() {
+  const card = document.getElementById('fc-card');
+  card.classList.remove('revealed');
+  document.getElementById('fc-hint').style.opacity = '1';
+  const c = deck[cur];
+  document.getElementById('fc-cat').textContent = c.cat;
+  document.getElementById('fc-counter').textContent = `${cur+1} / ${deck.length}`;
+  document.getElementById('fc-front').textContent = c.en;
+  document.getElementById('fc-back').innerHTML =
+    `<div class="pt-answer">${c.pt}</div>${c.note ? `<div class="note">${c.note}</div>` : ''}`;
+  document.getElementById('fc-progress').style.width = `${((cur+1)/deck.length)*100}%`;
+}
+
+function revealCard() {
+  const card = document.getElementById('fc-card');
+  card.classList.add('revealed');
+  document.getElementById('fc-hint').style.opacity = '0';
+}
+
+function nextCard() { cur = (cur+1) % deck.length; loadCard(); }
+function prevCard() { cur = (cur-1+deck.length) % deck.length; loadCard(); }
+function shuffleCards() {
+  deck = deck.sort(() => Math.random()-0.5);
+  cur = 0; loadCard();
+}
+
+function speakCurrent() { speak(deck[cur].pt); }
+
+// ── QUIZ
+const QUIZ_POOL = CARDS.map(c => ({
+  question: c.pt,
+  answer: c.en,
+  cat: c.cat
+}));
+
+let qDeck = [], qIdx = 0, score = 0, total = 0, answered = false;
+
+function startQuiz() {
+  qDeck = [...QUIZ_POOL].sort(() => Math.random()-0.5);
+  qIdx = 0; score = 0; total = 0; answered = false;
+  loadQuiz();
+}
+
+function loadQuiz() {
+  answered = false;
+  document.getElementById('quiz-fb').textContent = '';
+  document.getElementById('quiz-fb').className = 'quiz-feedback';
+  document.getElementById('quiz-next').disabled = true;
+
+  const item = qDeck[qIdx % qDeck.length];
+  document.getElementById('quiz-q').textContent = item.question;
+  document.getElementById('quiz-prompt').textContent = 'Choose the correct English translation:';
+
+  // build options: 1 correct + 3 random wrong
+  const others = QUIZ_POOL.filter(x => x.answer !== item.answer)
+    .sort(() => Math.random()-0.5).slice(0,3).map(x => x.answer);
+  const opts = [item.answer, ...others].sort(() => Math.random()-0.5);
+
+  const container = document.getElementById('quiz-opts');
+  container.innerHTML = '';
+  opts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = opt;
+    btn.onclick = () => checkAnswer(btn, opt, item.answer);
+    container.appendChild(btn);
+  });
+
+  document.getElementById('quiz-score').textContent = `Score: ${score} / ${total}`;
+}
+
+function checkAnswer(btn, chosen, correct) {
+  if (answered) return;
+  answered = true; total++;
+  const fb = document.getElementById('quiz-fb');
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    fb.textContent = 'Correto! ✓'; fb.className = 'quiz-feedback ok'; score++;
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = `Errado. A resposta: "${correct}"`; fb.className = 'quiz-feedback bad';
+    document.querySelectorAll('.quiz-opt').forEach(b => {
+      if (b.textContent === correct) b.classList.add('correct');
+    });
+  }
+  document.querySelectorAll('.quiz-opt').forEach(b => b.disabled = true);
+  document.getElementById('quiz-next').disabled = false;
+  document.getElementById('quiz-score').textContent = `Score: ${score} / ${total}`;
+}
+
+function nextQuiz() {
+  qIdx++;
+  if (qIdx >= qDeck.length) {
+    qDeck = [...QUIZ_POOL].sort(() => Math.random()-0.5);
+    qIdx = 0;
+  }
+  loadQuiz();
+}
+
+// init flashcards on load
+loadCard();
+</script>
+</body>
+</html>
