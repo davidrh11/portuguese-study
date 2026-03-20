@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7 Verbos Essenciais — Passado</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f11; --surface: #16181c; --border: #2a2d35;
+    --yellow: #e8c547; --blue: #4a9eff; --text: #d4d6da; --muted: #5a5f6e;
+    --highlight: #1e2128; --green: #4caf8a; --red: #e05c5c;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; padding: 2rem; }
+
+  header {
+    display: flex; align-items: baseline; gap: 1.5rem;
+    margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; flex-wrap: wrap;
+  }
+  h1 { font-family: var(--mono); font-size: 1.3rem; font-weight: 700; color: var(--blue); letter-spacing: 0.05em; }
+  .subtitle { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .back-link {
+    font-family: var(--mono); font-size: 0.7rem; color: var(--muted);
+    text-decoration: none; border: 1px solid var(--border); padding: 0.3rem 0.7rem;
+    border-radius: 3px; transition: all 0.2s; margin-left: auto;
+  }
+  .back-link:hover { color: var(--yellow); border-color: var(--yellow); }
+
+  .controls { display: flex; gap: 0.75rem; margin-bottom: 2rem; flex-wrap: wrap; align-items: center; }
+  .mode-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+  button {
+    font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 0.4rem 0.9rem; border: 1px solid var(--border); background: var(--surface);
+    color: var(--muted); cursor: pointer; transition: all 0.15s; border-radius: 2px;
+  }
+  button:hover { border-color: var(--yellow); color: var(--yellow); }
+  button.active { border-color: var(--yellow); color: var(--yellow); background: #1e1c0e; }
+
+  /* TABLE */
+  .table-view { display: block; }
+  .table-wrapper { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 0.82rem; }
+  thead th {
+    padding: 0.6rem 0.8rem; text-align: center; color: var(--blue);
+    font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+    border-bottom: 1px solid var(--border); background: var(--surface); white-space: nowrap;
+  }
+  thead th:first-child { text-align: left; color: var(--muted); }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr:hover { background: var(--highlight); }
+  tbody td { padding: 0.55rem 0.8rem; text-align: center; color: var(--yellow); font-weight: 600; }
+  tbody td:first-child { color: var(--muted); text-align: left; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 400; white-space: nowrap; }
+  td.speakable { cursor: pointer; }
+  td.speakable:hover { color: var(--blue); background: rgba(74,158,255,0.06); }
+
+  .note-block {
+    background: var(--surface); border-left: 3px solid var(--blue);
+    padding: 1rem 1.25rem; margin: 1.5rem 0; border-radius: 0 4px 4px 0;
+    font-size: 0.85rem; line-height: 1.7;
+  }
+  .note-block .note-label { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--blue); margin-bottom: 0.5rem; }
+  .note-block .pt { font-family: var(--mono); color: var(--yellow); }
+  .note-block .en { color: var(--muted); font-style: italic; }
+
+  .ex-section { margin-top: 2rem; }
+  .ex-title { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--blue); margin-bottom: 1rem; border-left: 3px solid var(--blue); padding-left: 0.75rem; }
+  .ex-item {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+    padding: 0.9rem 1.1rem; margin-bottom: 0.6rem; cursor: pointer; transition: border-color 0.2s;
+  }
+  .ex-item:hover { border-color: var(--yellow); }
+  .ex-pt { font-family: var(--mono); font-size: 0.9rem; color: var(--text); margin-bottom: 0.3rem; }
+  .ex-en { font-size: 0.82rem; color: var(--muted); font-style: italic; }
+  .ex-num { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); margin-right: 0.5rem; }
+
+  .legend { display: flex; gap: 1.5rem; margin-top: 1.5rem; }
+  .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; color: var(--muted); font-family: var(--mono); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--yellow); border-radius: 50%; }
+
+  /* FLASHCARDS */
+  .flash-view { display: none; max-width: 520px; margin: 0 auto; text-align: center; }
+  .fc-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; gap: 0.5rem; flex-wrap: wrap; }
+  .fc-counter { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+  .fc-topbar-right { display: flex; gap: 0.5rem; }
+  .fc-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    min-height: 320px; display: flex; flex-direction: column;
+    align-items: center; padding: 1.5rem 2rem 1.5rem; text-align: center;
+  }
+  .fc-hints { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 1.25rem; }
+  .fc-tense-badge {
+    font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--blue); background: rgba(74,158,255,0.1); border: 1px solid rgba(74,158,255,0.25);
+    padding: 0.2rem 0.6rem; border-radius: 2px; margin-bottom: 0.75rem;
+  }
+  .fc-verb-label { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em; }
+  .fc-verb { font-family: var(--mono); font-size: 1.4rem; color: var(--yellow); font-weight: 700; margin-bottom: 0.3rem; }
+  .fc-subject { font-family: var(--mono); font-size: 1rem; color: var(--blue); margin-bottom: 1.25rem; }
+  .fc-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1.25rem; }
+  .fc-pt-answer {
+    font-family: var(--mono); font-size: 1.8rem; font-weight: 700; color: var(--yellow);
+    filter: blur(8px); transition: filter 0.3s; cursor: pointer; margin-bottom: 1.25rem;
+  }
+  .fc-pt-answer.revealed { filter: blur(0); }
+  .fc-speak-pill {
+    background: #1a1a1f; border: 1px solid var(--border); color: var(--blue);
+    padding: 0.35rem 1.2rem; border-radius: 99px; cursor: pointer;
+    transition: all 0.2s; font-size: 1rem; margin-bottom: 1.5rem;
+  }
+  .fc-speak-pill:hover, .fc-speak-pill.playing { background: var(--blue); color: #0e0f11; border-color: var(--blue); }
+  .fc-nav { display: flex; gap: 1rem; margin-top: auto; }
+  .fc-nav-btn {
+    font-family: var(--mono); font-size: 0.82rem; background: var(--surface);
+    border: 1px solid var(--border); color: var(--text); padding: 0.55rem 1.25rem;
+    border-radius: 4px; cursor: pointer; transition: all 0.15s;
+  }
+  .fc-nav-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+  .fc-progress { margin-top: 0.75rem; height: 2px; background: var(--border); border-radius: 1px; overflow: hidden; }
+  .fc-progress-fill { height: 100%; background: var(--yellow); transition: width 0.3s; }
+
+  /* QUIZ */
+  .quiz-view { display: none; max-width: 520px; margin: 0 auto; }
+  .quiz-score-bar { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); display: flex; justify-content: space-between; margin-bottom: 1.5rem; }
+  .quiz-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2rem; text-align: center; margin-bottom: 1.25rem; }
+  .quiz-prompt-label { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  .quiz-tense { font-family: var(--mono); font-size: 0.65rem; color: var(--blue); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  .quiz-verb { font-family: var(--mono); font-size: 1.8rem; color: var(--yellow); font-weight: 700; margin-bottom: 0.3rem; }
+  .quiz-subject { font-family: var(--mono); font-size: 1rem; color: var(--blue); }
+  .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem; }
+  .quiz-opt {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+    padding: 0.85rem 1rem; cursor: pointer; font-family: var(--mono); font-size: 1rem;
+    color: var(--text); text-align: center; transition: all 0.15s;
+  }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--yellow); }
+  .quiz-opt.correct { border-color: var(--green); background: rgba(76,175,138,0.1); color: var(--green); }
+  .quiz-opt.wrong   { border-color: var(--red);   background: rgba(224,92,92,0.1);  color: var(--red); }
+  .quiz-opt:disabled { cursor: default; }
+  .quiz-feedback { text-align: center; font-family: var(--mono); font-size: 0.85rem; min-height: 1.4rem; margin-bottom: 1rem; }
+  .quiz-feedback.ok  { color: var(--green); }
+  .quiz-feedback.bad { color: var(--red); }
+  .quiz-next {
+    display: block; margin: 0 auto; font-family: var(--mono); font-size: 0.85rem;
+    padding: 0.6rem 2rem; background: var(--yellow); color: var(--bg);
+    border: none; border-radius: 4px; cursor: pointer; font-weight: 600; text-transform: uppercase;
+  }
+  .quiz-next:disabled { opacity: 0.3; cursor: default; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>7 Verbos Essenciais</h1>
+  <span class="subtitle">Pretérito Perfeito — Past Tense</span>
+  <a class="back-link" href="verbos-essenciais-presente.html">← Presente</a>
+</header>
+
+<div class="controls">
+  <span class="mode-label">Modo:</span>
+  <button class="active" id="btnTabela" onclick="setMode('tabela')">Tabela</button>
+  <button id="btnFlash" onclick="setMode('flash')">Flashcards</button>
+  <button id="btnQuiz" onclick="setMode('quiz')">Quiz</button>
+</div>
+
+<div class="table-view" id="tableView">
+  <div class="table-wrapper">
+    <table id="mainTable"></table>
+  </div>
+
+  <div class="note-block">
+    <div class="note-label">Nota — SER e IR no Passado</div>
+    <p><span class="pt">Ser</span> and <span class="pt">ir</span> share identical past forms: <span class="pt">fui / foi</span>. Context always makes the meaning clear. <span class="pt">Ontem fui ao mercado</span> <span class="en">(Yesterday I went to the market)</span> vs. <span class="pt">Ele foi médico</span> <span class="en">(He was a doctor)</span>. This is not a mistake in the language — it is how Portuguese works. Trust context.</p>
+  </div>
+
+  <div class="ex-section" id="exSection"></div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="dot"></div>todas as formas são irregulares — memorizar</div>
+  </div>
+</div>
+
+<div class="flash-view" id="flashView">
+  <div class="fc-topbar">
+    <span class="fc-counter" id="fcCounter">1 / 1</span>
+    <div class="fc-topbar-right">
+      <button onclick="shuffleFC()">⇄ Baralhar</button>
+      <button onclick="resetFC()">↺ Reiniciar</button>
+    </div>
+  </div>
+  <div class="fc-card">
+    <div class="fc-hints" id="fcHints">clique na forma para revelar · 🔊 para ouvir</div>
+    <div class="fc-tense-badge">Pretérito Perfeito</div>
+    <div class="fc-verb-label">Infinitivo</div>
+    <div class="fc-verb" id="fcVerb"></div>
+    <div class="fc-subject" id="fcSubject"></div>
+    <div class="fc-divider"></div>
+    <div class="fc-pt-answer" id="fcAnswer" onclick="revealFC()"></div>
+    <button class="fc-speak-pill" id="fcSpeakPill" onclick="speakCurrent()">🔊</button>
+    <div class="fc-nav">
+      <button class="fc-nav-btn" onclick="fcMove(-1)">← Anterior</button>
+      <button class="fc-nav-btn" onclick="fcMove(1)">Próximo →</button>
+    </div>
+  </div>
+  <div class="fc-progress"><div class="fc-progress-fill" id="fcProgressFill"></div></div>
+</div>
+
+<div class="quiz-view" id="quizView">
+  <div class="quiz-score-bar">
+    <span>Pretérito Perfeito</span>
+    <span>Score: <span id="quizScore" style="color:var(--text)">0 / 0</span></span>
+  </div>
+  <div class="quiz-card">
+    <div class="quiz-tense">Passado</div>
+    <div class="quiz-prompt-label">Como se conjuga:</div>
+    <div class="quiz-verb" id="quizVerb"></div>
+    <div class="quiz-subject" id="quizSubject"></div>
+  </div>
+  <div class="quiz-options" id="quizOptions"></div>
+  <div class="quiz-feedback" id="quizFeedback"></div>
+  <button class="quiz-next" id="quizNext" onclick="nextQuiz()" disabled>Próximo →</button>
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+
+const VERBS = [
+  { inf: 'ser',   en: 'to be (perm.)', eu: 'fui',    voce: 'foi'    },
+  { inf: 'estar', en: 'to be (temp.)', eu: 'estive',  voce: 'esteve' },
+  { inf: 'ir',    en: 'to go',         eu: 'fui',     voce: 'foi'    },
+  { inf: 'ter',   en: 'to have',       eu: 'tive',    voce: 'teve'   },
+  { inf: 'fazer', en: 'to do/make',    eu: 'fiz',     voce: 'fez'    },
+  { inf: 'dar',   en: 'to give',       eu: 'dei',     voce: 'deu'    },
+  { inf: 'dizer', en: 'to say',        eu: 'disse',   voce: 'disse'  },
+];
+
+const SUBJECTS = [
+  { key: 'eu',   label: 'eu' },
+  { key: 'voce', label: 'você' },
+];
+
+const EXAMPLES = [
+  { pt: 'Eu <b>fui</b> dar uma volta ontem.', en: 'I went for a walk yesterday.' },
+  { pt: 'Eu <b>estive</b> em casa ontem.', en: 'I stayed at home yesterday.' },
+  { pt: 'Eu <b>tive</b> um dia puxado no trabalho.', en: 'I had a tough day at work.' },
+  { pt: 'Eu <b>fiz</b> isso ontem, não se preocupe.', en: "I did that yesterday, don't worry." },
+  { pt: 'Eu ainda não <b>disse</b> nada.', en: "I haven't said anything yet." },
+  { pt: 'Eu <b>dei</b> uma ajuda ao meu colega.', en: 'I gave my colleague a hand.' },
+  { pt: 'Você <b>foi</b> ao mercado hoje?', en: 'Did you go to the market today?' },
+  { pt: 'Ele <b>disse</b> que não sabia.', en: "He said he didn't know." },
+];
+
+// ── AUDIO ─────────────────────────────────────────────────────────
+let currentAudio = null;
+async function speak(text, btnEl) {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (btnEl) btnEl.classList.add('playing');
+  try {
+    const res = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) });
+    if (!res.ok) throw new Error();
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    currentAudio = new Audio(url);
+    currentAudio.onended = () => { if (btnEl) btnEl.classList.remove('playing'); URL.revokeObjectURL(url); currentAudio = null; };
+    currentAudio.onerror = () => { if (btnEl) btnEl.classList.remove('playing'); currentAudio = null; };
+    currentAudio.play();
+  } catch(e) { if (btnEl) btnEl.classList.remove('playing'); }
+}
+
+// ── TABLE ─────────────────────────────────────────────────────────
+function buildTable() {
+  const table = document.getElementById('mainTable');
+  let html = '<thead><tr><th></th>';
+  VERBS.forEach(v => html += `<th>${v.inf}<br><span style="font-size:0.6rem;color:var(--muted);font-weight:400">${v.en}</span></th>`);
+  html += '</tr></thead><tbody>';
+  SUBJECTS.forEach(s => {
+    html += `<tr><td>${s.label}</td>`;
+    VERBS.forEach(v => {
+      const form = v[s.key];
+      html += `<td class="speakable" onclick="speak('${s.label} ${form}', null)">${form}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  table.innerHTML = html;
+  table.querySelectorAll('thead th:not(:first-child)').forEach((th, i) => {
+    th.style.cursor = 'pointer';
+    th.addEventListener('click', () => speak(VERBS[i].inf, null));
+  });
+}
+
+function buildExamples() {
+  const section = document.getElementById('exSection');
+  section.innerHTML = `<div class="ex-title">Exemplos em Contexto — Passado</div>`;
+  EXAMPLES.forEach((ex, i) => {
+    const div = document.createElement('div');
+    div.className = 'ex-item';
+    div.innerHTML = `<div class="ex-pt"><span class="ex-num">${i + 1}.</span>${ex.pt}</div><div class="ex-en">${ex.en}</div>`;
+    const ptText = div.querySelector('.ex-pt').textContent;
+    div.addEventListener('click', () => speak(ptText, null));
+    section.appendChild(div);
+  });
+}
+
+// ── FLASHCARDS ─────────────────────────────────────────────────────
+let fcDeck = [], fcIdx = 0, fcRevealed = false;
+
+function buildFCDeck() {
+  fcDeck = [];
+  VERBS.forEach(v => {
+    SUBJECTS.forEach(s => {
+      fcDeck.push({ verb: v.inf, subject: s.label, form: v[s.key] });
+    });
+  });
+}
+
+function renderFC() {
+  const c = fcDeck[fcIdx];
+  fcRevealed = false;
+  document.getElementById('fcCounter').textContent = `${fcIdx + 1} / ${fcDeck.length}`;
+  document.getElementById('fcProgressFill').style.width = `${((fcIdx + 1) / fcDeck.length) * 100}%`;
+  document.getElementById('fcVerb').textContent = c.verb;
+  document.getElementById('fcSubject').textContent = c.subject;
+  const ansEl = document.getElementById('fcAnswer');
+  ansEl.textContent = c.form;
+  ansEl.className = 'fc-pt-answer';
+  document.getElementById('fcHints').textContent = 'clique na forma para revelar · 🔊 para ouvir';
+  document.getElementById('fcSpeakPill').classList.remove('playing');
+}
+
+function revealFC() {
+  if (fcRevealed) return;
+  fcRevealed = true;
+  document.getElementById('fcAnswer').classList.add('revealed');
+  document.getElementById('fcHints').textContent = '';
+}
+
+function fcMove(dir) { fcIdx = (fcIdx + dir + fcDeck.length) % fcDeck.length; renderFC(); }
+function shuffleFC() { fcDeck = [...fcDeck].sort(() => Math.random() - 0.5); fcIdx = 0; renderFC(); }
+function resetFC()   { buildFCDeck(); fcIdx = 0; renderFC(); }
+function speakCurrent() { const c = fcDeck[fcIdx]; speak(`${c.subject} ${c.form}`, document.getElementById('fcSpeakPill')); }
+
+// ── QUIZ ───────────────────────────────────────────────────────────
+let quizDeck = [], quizIdx = 0, quizCorrect = 0, quizTotal = 0, quizAnswered = false;
+const ALL_COMBOS = VERBS.flatMap(v => SUBJECTS.map(s => ({ verb: v.inf, subject: s.label, form: v[s.key] })));
+
+function initQuiz() {
+  quizDeck = [...ALL_COMBOS].sort(() => Math.random() - 0.5);
+  quizIdx = 0; quizCorrect = 0; quizTotal = 0; quizAnswered = false;
+  renderQuiz();
+}
+
+function renderQuiz() {
+  if (quizIdx >= quizDeck.length) { quizDeck = [...ALL_COMBOS].sort(() => Math.random() - 0.5); quizIdx = 0; }
+  quizAnswered = false;
+  const item = quizDeck[quizIdx];
+  document.getElementById('quizVerb').textContent = item.verb;
+  document.getElementById('quizSubject').textContent = item.subject;
+  document.getElementById('quizFeedback').textContent = '';
+  document.getElementById('quizFeedback').className = 'quiz-feedback';
+  document.getElementById('quizNext').disabled = true;
+  document.getElementById('quizScore').textContent = `${quizCorrect} / ${quizTotal}`;
+
+  const pool = ALL_COMBOS.filter(x => x.form !== item.form);
+  const wrongs = pool.sort(() => Math.random() - 0.5).slice(0, 3).map(x => x.form);
+  const opts = [item.form, ...wrongs].sort(() => Math.random() - 0.5);
+
+  const container = document.getElementById('quizOptions');
+  container.innerHTML = '';
+  opts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt'; btn.textContent = opt;
+    btn.onclick = () => checkQuiz(btn, opt, item.form, item);
+    container.appendChild(btn);
+  });
+}
+
+function checkQuiz(btn, chosen, correct, item) {
+  if (quizAnswered) return;
+  quizAnswered = true; quizTotal++;
+  document.querySelectorAll('.quiz-opt').forEach(b => { b.disabled = true; if (b.textContent === correct) b.classList.add('correct'); });
+  if (chosen === correct) { quizCorrect++; document.getElementById('quizFeedback').textContent = 'Correto! ✓'; document.getElementById('quizFeedback').className = 'quiz-feedback ok'; }
+  else { btn.classList.add('wrong'); document.getElementById('quizFeedback').textContent = `Errado — ${correct}`; document.getElementById('quizFeedback').className = 'quiz-feedback bad'; }
+  speak(`${item.subject} ${item.form}`, null);
+  document.getElementById('quizNext').disabled = false;
+  document.getElementById('quizScore').textContent = `${quizCorrect} / ${quizTotal}`;
+}
+
+function nextQuiz() { quizIdx++; renderQuiz(); }
+
+function setMode(mode) {
+  ['tabela','flash','quiz'].forEach(m => {
+    const id = 'btn' + m.charAt(0).toUpperCase() + m.slice(1);
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('active', m === mode);
+  });
+  document.getElementById('tableView').style.display = mode === 'tabela' ? 'block' : 'none';
+  document.getElementById('flashView').style.display = mode === 'flash'  ? 'block' : 'none';
+  document.getElementById('quizView').style.display  = mode === 'quiz'   ? 'block' : 'none';
+  if (mode === 'flash') renderFC();
+  if (mode === 'quiz')  initQuiz();
+}
+
+buildTable();
+buildExamples();
+buildFCDeck();
+renderFC();
+</script>
+<script>
+(function(){
+  try {
+    var d = JSON.parse(localStorage.getItem('pt-study-last-visited') || '{}');
+    d['verbos-essenciais-passado.html'] = Date.now();
+    localStorage.setItem('pt-study-last-visited', JSON.stringify(d));
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>

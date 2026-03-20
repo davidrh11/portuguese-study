@@ -7,107 +7,202 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0f0f0f; --surface: #1a1a1a; --border: #2a2a2a;
-    --yellow: #e8c547; --blue: #4a9eff;
+    --bg: #0f0f0f; --surface: #1a1a1a; --surface2: #222; --border: #2a2a2a;
+    --yellow: #e8c547; --blue: #4a9eff; --green: #4caf8a; --red: #e05c5c;
     --text: #e0e0e0; --muted: #888;
-    --mono: 'IBM Plex Mono', monospace;
-    --sans: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; padding: 3rem 2rem 4rem; max-width: 700px; margin: 0 auto; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; padding: 3rem 2rem 5rem; max-width: 680px; margin: 0 auto; }
 
   header { margin-bottom: 3rem; }
-  header h1 { font-family: var(--mono); font-size: 1.1rem; font-weight: 400; color: var(--muted); margin-bottom: 0.25rem; }
+  header h1 { font-family: var(--mono); font-size: 1.1rem; font-weight: 400; color: var(--muted); margin-bottom: 0.3rem; }
   header h1 span { color: var(--yellow); }
-  header p { font-size: 0.85rem; color: var(--muted); }
+  header p { font-size: 0.82rem; color: var(--muted); }
 
-  .level { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--blue); margin-bottom: 1rem; }
+  /* GROUP HEADERS */
+  .group-label {
+    font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase;
+    letter-spacing: 0.14em; color: var(--blue); margin: 2.5rem 0 0.75rem;
+    border-left: 3px solid var(--blue); padding-left: 0.65rem;
+  }
+  .group-label:first-child { margin-top: 0; }
 
-  .guide-list { display: flex; flex-direction: column; gap: 0.75rem; }
+  /* CARDS */
+  .guide-list { display: flex; flex-direction: column; gap: 0.6rem; }
 
   a.guide-card {
-    display: flex; align-items: center; gap: 1.25rem;
+    display: grid;
+    grid-template-columns: 2rem 1fr auto;
+    align-items: center;
+    gap: 1.1rem;
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: 6px; padding: 1.25rem 1.5rem;
+    border-radius: 6px; padding: 1.1rem 1.25rem;
     text-decoration: none; color: inherit;
     transition: border-color 0.2s;
+    position: relative;
   }
   a.guide-card:hover { border-color: var(--yellow); }
 
-  .guide-num {
-    font-family: var(--mono); font-size: 0.7rem; color: var(--muted);
-    width: 2rem; flex-shrink: 0; text-align: right;
-  }
+  .guide-num { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); text-align: right; }
 
-  .guide-info { flex: 1; }
-  .guide-info strong { display: block; font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 0.2rem; }
-  .guide-info span { font-size: 0.85rem; color: var(--muted); }
+  .guide-info strong { display: block; font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 0.2rem; }
+  .guide-info span   { font-size: 0.8rem; color: var(--muted); }
 
-  .guide-arrow { font-size: 1rem; color: var(--border); transition: color 0.2s; }
+  .guide-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.4rem; }
+
+  .guide-arrow { font-size: 0.9rem; color: var(--border); transition: color 0.2s; }
   a.guide-card:hover .guide-arrow { color: var(--yellow); }
 
-  footer { margin-top: 3rem; font-family: var(--mono); font-size: 0.7rem; color: var(--muted); border-top: 1px solid var(--border); padding-top: 1.5rem; }
+  /* LAST STUDIED */
+  .last-studied {
+    font-family: var(--mono); font-size: 0.6rem;
+    color: var(--muted); white-space: nowrap;
+  }
+  .last-studied.today   { color: var(--green); }
+  .last-studied.recent  { color: var(--yellow); }
+  .last-studied.stale   { color: var(--red); opacity: 0.7; }
+  .last-studied.never   { color: var(--muted); opacity: 0.5; }
+
+  /* STREAK BAR — subtle bottom indicator */
+  .streak-bar {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    background: var(--border); border-radius: 0 0 6px 6px; overflow: hidden;
+  }
+  .streak-fill { height: 100%; background: var(--green); transition: width 0.4s ease; }
+
+  footer { margin-top: 4rem; font-family: var(--mono); font-size: 0.65rem; color: var(--muted); border-top: 1px solid var(--border); padding-top: 1.5rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+  .footer-stat { color: var(--text); }
 </style>
 </head>
 <body>
 
 <header>
   <h1>Português Europeu · <span>Study Guides</span></h1>
-  <p>A1.1 — Light Language</p>
+  <p>A1 — Lighthouse Language School</p>
 </header>
 
-<div class="level">Guides</div>
+<div id="indexContent"></div>
 
-<div class="guide-list">
+<footer>
+  <span>davidrh11.github.io/portuguese-study</span>
+  <span id="footerStats"></span>
+</footer>
 
-  <a class="guide-card" href="aula1_comunicar_sala_de_aula.html">
-    <span class="guide-num">01</span>
-    <div class="guide-info">
-      <strong>Classroom Phrases</strong>
-      <span>Essential phrases for communicating in class</span>
-    </div>
-    <span class="guide-arrow">→</span>
-  </a>
+<script>
+const GUIDES = [
+  {
+    group: 'Phrases',
+    items: [
+      { num: '01', file: 'aula1_comunicar_sala_de_aula.html', title: 'Classroom Phrases',  desc: 'Essential phrases for communicating in class' },
+      { num: '06', file: 'frases-do-dia.html',                title: 'Frases do Dia a Dia', desc: 'Everyday phrases — introductions, plans, restaurant, time' },
+    ]
+  },
+  {
+    group: 'Grammar',
+    items: [
+      { num: '03', file: 'verbos_irregulares.html',              title: 'Irregular Verbs — Present',      desc: '10 common verbs: present indicative, all conjugations' },
+      { num: '07', file: 'verbos-essenciais-presente.html',      title: '7 Essential Verbs — Present',    desc: 'ser, estar, ir, ter, fazer, dar, dizer — eu & você' },
+      { num: '08', file: 'verbos-essenciais-passado.html',       title: '7 Essential Verbs — Past',       desc: 'Same 7 verbs in pretérito perfeito — eu & você' },
+    ]
+  },
+  {
+    group: 'Vocabulary',
+    items: [
+      { num: '02', file: 'numeros.html',          title: 'Numbers',       desc: 'Cardinal numbers 0–100, masculine and feminine forms' },
+      { num: '04', file: 'casa-vocabulario.html', title: 'Around the House', desc: 'Rooms, furniture, appliances, utensils — with images' },
+      { num: '05', file: 'common-words.html',     title: 'Common Words',  desc: '100 most frequently used Portuguese words + example sentences' },
+    ]
+  }
+];
 
-  <a class="guide-card" href="numeros.html">
-    <span class="guide-num">02</span>
-    <div class="guide-info">
-      <strong>Numbers</strong>
-      <span>Cardinal numbers 0–100, masculine and feminine forms</span>
-    </div>
-    <span class="guide-arrow">→</span>
-  </a>
+// ── LAST STUDIED (localStorage) ────────────────────────────────────
+const LS_KEY = 'pt-study-last-visited';
 
-  <a class="guide-card" href="verbos_irregulares.html">
-    <span class="guide-num">03</span>
-    <div class="guide-info">
-      <strong>Irregular Verbs</strong>
-      <span>Present indicative conjugations for 10 common verbs, from Aula 1</span>
-    </div>
-    <span class="guide-arrow">→</span>
-  </a>
+function getStudyData() {
+  try { return JSON.parse(localStorage.getItem(LS_KEY) || '{}'); } catch { return {}; }
+}
 
-  <a class="guide-card" href="casa-vocabulario.html">
-    <span class="guide-num">04</span>
-    <div class="guide-info">
-      <strong>Around the House</strong>
-      <span>Household vocabulary — rooms, furniture, appliances and kitchen utensils, with pictures</span>
-    </div>
-    <span class="guide-arrow">→</span>
-  </a>
+function formatLastStudied(ts) {
+  if (!ts) return { text: 'not yet studied', cls: 'never' };
+  const now = Date.now();
+  const diff = now - ts;
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor(diff / 3600000);
+  const mins = Math.floor(diff / 60000);
 
-  <a class="guide-card" href="common-words.html">
-    <span class="guide-num">05</span>
-    <div class="guide-info">
-      <strong>Common Words</strong>
-      <span>The 100 most frequently used Portuguese words, with example sentences</span>
-    </div>
-    <span class="guide-arrow">→</span>
-  </a>
+  if (mins < 60)  return { text: `${mins}m ago`, cls: 'today' };
+  if (hours < 24) return { text: `${hours}h ago`, cls: 'today' };
+  if (days === 1) return { text: 'yesterday',    cls: 'recent' };
+  if (days <= 3)  return { text: `${days}d ago`,  cls: 'recent' };
+  if (days <= 7)  return { text: `${days}d ago`,  cls: 'stale' };
+  return { text: `${days}d ago`, cls: 'stale' };
+}
 
-</div>
+// Streak = fraction of all guides studied in last 7 days (0–1)
+function calcStreakFill(ts) {
+  if (!ts) return 0;
+  const days = (Date.now() - ts) / 86400000;
+  if (days < 1) return 1;
+  if (days < 3) return 0.6;
+  if (days < 7) return 0.25;
+  return 0;
+}
 
-<footer>davidrh11.github.io/portuguese-study</footer>
+function buildIndex() {
+  const data = getStudyData();
+  const container = document.getElementById('indexContent');
+  container.innerHTML = '';
 
+  let totalStudied = 0;
+  const allItems = GUIDES.flatMap(g => g.items);
+
+  GUIDES.forEach(group => {
+    const groupLabel = document.createElement('div');
+    groupLabel.className = 'group-label';
+    groupLabel.textContent = group.group;
+    container.appendChild(groupLabel);
+
+    const list = document.createElement('div');
+    list.className = 'guide-list';
+
+    group.items.forEach(item => {
+      const ts = data[item.file];
+      if (ts) totalStudied++;
+      const { text, cls } = formatLastStudied(ts);
+      const fill = calcStreakFill(ts);
+
+      const a = document.createElement('a');
+      a.className = 'guide-card';
+      a.href = item.file;
+      a.innerHTML = `
+        <span class="guide-num">${item.num}</span>
+        <div class="guide-info">
+          <strong>${item.title}</strong>
+          <span>${item.desc}</span>
+        </div>
+        <div class="guide-right">
+          <span class="guide-arrow">→</span>
+          <span class="last-studied ${cls}">${text}</span>
+        </div>
+        <div class="streak-bar"><div class="streak-fill" style="width:${fill * 100}%"></div></div>
+      `;
+      list.appendChild(a);
+    });
+
+    container.appendChild(list);
+  });
+
+  // Footer stats
+  const studied7d = allItems.filter(i => {
+    const ts = data[i.file];
+    return ts && (Date.now() - ts) < 7 * 86400000;
+  }).length;
+  document.getElementById('footerStats').innerHTML =
+    `<span class="footer-stat">${studied7d} / ${allItems.length}</span> guides studied this week`;
+}
+
+buildIndex();
+</script>
 </body>
 </html>

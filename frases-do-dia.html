@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frases do Dia a Dia</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --surface2: #222;
+    --border: #2a2a2a;
+    --yellow: #e8c547;
+    --blue: #4a9eff;
+    --green: #4caf8a;
+    --red: #e05c5c;
+    --text: #e0e0e0;
+    --muted: #888;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+  header {
+    padding: 1.5rem 2rem 1rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: baseline; gap: 1.5rem; flex-wrap: wrap;
+  }
+  .level-badge {
+    font-family: var(--mono); font-size: 0.75rem; font-weight: 600;
+    color: var(--bg); background: var(--yellow);
+    padding: 0.2rem 0.6rem; border-radius: 3px; letter-spacing: 0.05em;
+  }
+  header h1 { font-family: var(--mono); font-size: 1rem; font-weight: 400; color: var(--muted); flex: 1; }
+  header h1 span { color: var(--yellow); }
+
+  /* CATEGORY BAR */
+  .cat-bar {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 0 2rem; display: flex; gap: 0; overflow-x: auto; scrollbar-width: none;
+  }
+  .cat-bar::-webkit-scrollbar { display: none; }
+  .cat-btn {
+    background: none; border: none; color: var(--muted);
+    font-family: var(--mono); font-size: 0.75rem;
+    padding: 0.75rem 1.1rem; cursor: pointer;
+    border-bottom: 2px solid transparent; white-space: nowrap;
+    transition: all 0.2s; letter-spacing: 0.03em;
+  }
+  .cat-btn:hover { color: var(--text); }
+  .cat-btn.active { color: var(--yellow); border-bottom-color: var(--yellow); }
+
+  /* MODE TABS */
+  .tabs {
+    display: flex; border-bottom: 1px solid var(--border); padding: 0 2rem;
+  }
+  .tab {
+    font-family: var(--mono); font-size: 0.8rem; padding: 0.75rem 1.25rem;
+    cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent;
+    transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--yellow); border-bottom-color: var(--yellow); }
+
+  .view { display: none; padding: 1.5rem 2rem 3rem; }
+  .view.active { display: block; }
+
+  /* REGISTER TAGS */
+  .tag {
+    font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.06em;
+    padding: 0.1rem 0.4rem; border-radius: 2px; white-space: nowrap;
+  }
+  .tag-formal   { color: var(--blue);  background: rgba(74,158,255,0.1);  border: 1px solid rgba(74,158,255,0.25); }
+  .tag-informal { color: var(--green); background: rgba(76,175,138,0.1);  border: 1px solid rgba(76,175,138,0.25); }
+  .tag-colloq   { color: #c97cf0;      background: rgba(201,124,240,0.1); border: 1px solid rgba(201,124,240,0.25); }
+  .tag-a2       { color: var(--red);   background: rgba(224,92,92,0.08);  border: 1px solid rgba(224,92,92,0.2); }
+
+  /* TABELA */
+  .section-title {
+    font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--blue); margin: 2rem 0 0.75rem;
+  }
+  .section-title:first-child { margin-top: 0; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin-bottom: 0.5rem; }
+  th {
+    font-family: var(--mono); font-size: 0.65rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted);
+    text-align: left; padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);
+  }
+  td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--surface); }
+
+  td.pt-cell {
+    font-family: var(--mono); font-size: 0.88rem; color: var(--yellow);
+    width: 40%; cursor: pointer;
+  }
+  td.pt-cell:hover { text-decoration: underline; text-decoration-color: var(--yellow); text-underline-offset: 3px; }
+  td.en-cell { color: var(--text); width: 42%; }
+  td.tag-cell { width: 18%; }
+
+  .note-block {
+    background: var(--surface); border-left: 3px solid var(--blue);
+    padding: 0.85rem 1.1rem; margin: 1rem 0 1.5rem; border-radius: 0 4px 4px 0;
+    font-size: 0.82rem; color: var(--muted); line-height: 1.6;
+  }
+  .note-block strong { color: var(--yellow); font-family: var(--mono); font-weight: 600; }
+
+  /* FLASHCARDS */
+  .fc-wrap { max-width: 580px; margin: 0 auto; }
+
+  .fc-topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;
+  }
+  .fc-counter { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+  .fc-topbar-right { display: flex; gap: 0.5rem; }
+  .fc-ctrl {
+    font-family: var(--mono); font-size: 0.78rem;
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); padding: 0.4rem 0.9rem; border-radius: 4px; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .fc-ctrl:hover { border-color: var(--yellow); color: var(--yellow); }
+
+  .fc-progress { height: 2px; background: var(--border); border-radius: 1px; margin-bottom: 1.5rem; overflow: hidden; }
+  .fc-progress-fill { height: 100%; background: var(--yellow); transition: width 0.3s; }
+
+  .fc-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    min-height: 320px; display: flex; flex-direction: column;
+    align-items: center; padding: 1.5rem 2rem 1.5rem; text-align: center;
+    transition: border-color 0.2s;
+  }
+
+  .fc-hints {
+    font-family: var(--mono); font-size: 0.62rem; color: var(--muted);
+    letter-spacing: 0.06em; margin-bottom: 1.25rem; width: 100%; text-align: center;
+  }
+
+  .fc-cat-tag {
+    font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--blue); margin-bottom: 1rem;
+  }
+
+  .fc-en-prompt {
+    font-size: 1.25rem; color: var(--text); font-weight: 300;
+    line-height: 1.5; margin-bottom: 1.25rem; padding: 0 0.5rem;
+  }
+
+  .fc-register { margin-bottom: 1.25rem; }
+
+  .fc-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1.25rem; }
+
+  .fc-pt-answer {
+    font-family: var(--mono); font-size: 1.35rem; color: var(--yellow);
+    filter: blur(7px); transition: filter 0.3s; cursor: pointer;
+    line-height: 1.4; margin-bottom: 1.25rem; padding: 0 0.5rem;
+  }
+  .fc-pt-answer.revealed { filter: blur(0); }
+
+  .fc-speak-pill {
+    background: var(--surface2); border: 1px solid var(--border); color: var(--blue);
+    padding: 0.35rem 1.2rem; border-radius: 99px; cursor: pointer;
+    transition: all 0.2s; font-size: 1rem; margin-bottom: 1.5rem;
+  }
+  .fc-speak-pill:hover, .fc-speak-pill.playing { background: var(--blue); color: #0f0f0f; border-color: var(--blue); }
+
+  .fc-nav { display: flex; gap: 1rem; }
+  .fc-nav-btn {
+    font-family: var(--mono); font-size: 0.82rem;
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); padding: 0.55rem 1.25rem; border-radius: 4px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .fc-nav-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+
+  /* QUIZ */
+  .quiz-wrap { max-width: 560px; margin: 0 auto; }
+  .quiz-score-bar {
+    font-family: var(--mono); font-size: 0.75rem; color: var(--muted);
+    display: flex; justify-content: space-between; margin-bottom: 1.5rem;
+  }
+  .quiz-q-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem; text-align: center; margin-bottom: 1.25rem;
+  }
+  .quiz-label { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); margin-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  .quiz-phrase { font-family: var(--mono); font-size: 1.25rem; color: var(--yellow); line-height: 1.4; }
+  .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem; }
+  .quiz-opt {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.85rem 1rem; cursor: pointer;
+    font-size: 0.85rem; color: var(--text); text-align: center;
+    transition: all 0.15s; font-family: var(--sans); line-height: 1.4;
+  }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--yellow); }
+  .quiz-opt.correct { border-color: var(--green); background: rgba(76,175,138,0.1); color: var(--green); }
+  .quiz-opt.wrong   { border-color: var(--red);   background: rgba(224,92,92,0.1);  color: var(--red); }
+  .quiz-opt:disabled { cursor: default; }
+  .quiz-feedback { text-align: center; font-family: var(--mono); font-size: 0.82rem; min-height: 1.4rem; margin-bottom: 1rem; }
+  .quiz-feedback.ok  { color: var(--green); }
+  .quiz-feedback.bad { color: var(--red); }
+  .quiz-next {
+    display: block; margin: 0 auto; font-family: var(--mono); font-size: 0.85rem;
+    padding: 0.6rem 2rem; background: var(--yellow); color: var(--bg);
+    border: none; border-radius: 4px; cursor: pointer; font-weight: 600;
+  }
+  .quiz-next:disabled { opacity: 0.3; cursor: default; }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="level-badge">A1</span>
+  <h1>Frases do Dia a Dia · <span>Everyday Phrases</span></h1>
+</header>
+
+<div class="cat-bar" id="catBar"></div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('tabela', this)">Tabela</button>
+  <button class="tab" onclick="switchTab('flashcards', this)">Flashcards</button>
+  <button class="tab" onclick="switchTab('quiz', this)">Quiz</button>
+</div>
+
+<!-- TABELA -->
+<div id="tabela" class="view active">
+  <div id="tabelaContent"></div>
+</div>
+
+<!-- FLASHCARDS -->
+<div id="flashcards" class="view">
+  <div class="fc-wrap">
+    <div class="fc-topbar">
+      <span class="fc-counter" id="fcCounter">1 / 1</span>
+      <div class="fc-topbar-right">
+        <button class="fc-ctrl" onclick="shuffleFC()">⇄ Baralhar</button>
+        <button class="fc-ctrl" onclick="resetFC()">↺ Reiniciar</button>
+      </div>
+    </div>
+    <div class="fc-progress"><div class="fc-progress-fill" id="fcProgressFill" style="width:0%"></div></div>
+    <div class="fc-card" id="fcCard">
+      <div class="fc-hints" id="fcHints">clique na frase para revelar · 🔊 para ouvir</div>
+      <div class="fc-cat-tag" id="fcCatTag"></div>
+      <div class="fc-en-prompt" id="fcEnPrompt"></div>
+      <div class="fc-register" id="fcRegister"></div>
+      <div class="fc-divider"></div>
+      <div class="fc-pt-answer" id="fcPtAnswer" onclick="revealFC()"></div>
+      <button class="fc-speak-pill" id="fcSpeakPill" onclick="speakCurrent()">🔊</button>
+      <div class="fc-nav">
+        <button class="fc-nav-btn" onclick="fcMove(-1)">← Anterior</button>
+        <button class="fc-nav-btn" onclick="fcMove(1)">Próximo →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="view">
+  <div class="quiz-wrap">
+    <div class="quiz-score-bar">
+      <span>Categoria: <span id="quizCatLabel" style="color:var(--text)">Tudo</span></span>
+      <span>Score: <span id="quizScore" style="color:var(--text)">0 / 0</span></span>
+    </div>
+    <div class="quiz-q-card">
+      <div class="quiz-label">Como se diz em português?</div>
+      <div class="quiz-phrase" id="quizPhrase"></div>
+    </div>
+    <div class="quiz-options" id="quizOptions"></div>
+    <div class="quiz-feedback" id="quizFeedback"></div>
+    <button class="quiz-next" id="quizNext" onclick="nextQuiz()" disabled>Próximo →</button>
+  </div>
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+
+// ── DATA ─────────────────────────────────────────────────────────
+const CATEGORIES = [
+  {
+    id: 'apresentacao', label: 'Apresentação',
+    phrases: [
+      { pt: 'Sou o Dave / Chamo-me Dave.', en: "I'm Dave. / My name is Dave.", register: 'informal', note: null },
+      { pt: 'Como está?', en: 'How are you doing?', register: 'formal', note: null },
+      { pt: 'Tudo bem?', en: 'How are you?', register: 'informal', note: null },
+      { pt: 'De onde é?', en: 'Where are you from?', register: 'formal', note: null },
+      { pt: 'Sou de…', en: "I'm from…", register: 'informal', note: null },
+      { pt: 'Estou bem, obrigado.', en: "I'm fine, thank you.", register: 'informal', note: null },
+      { pt: 'Ainda bem.', en: "I'm glad.", register: 'informal', note: 'Literally "still good" — a warm, common response' },
+      { pt: 'Disse isto bem?', en: 'Did I say this correctly?', register: 'informal', note: null },
+      { pt: 'Mais devagar, por favor.', en: 'Speak more slowly, please.', register: 'informal', note: 'Essential — use it without embarrassment' },
+      { pt: 'Prazer em conhecê-lo / conhecê-la.', en: 'Nice to meet you.', register: 'formal', note: '-lo for men, -la for women' },
+      { pt: 'Há quanto tempo está em Portugal?', en: 'How long have you been in Portugal?', register: 'formal', note: null },
+      { pt: 'Estou em Portugal há 6 meses.', en: 'I have been in Portugal for 6 months.', register: 'informal', note: 'há + time = "for X time" (up to now)' },
+    ]
+  },
+  {
+    id: 'casual', label: 'Conversa Casual',
+    phrases: [
+      { pt: 'Então, …', en: 'Well… / So…', register: 'informal', note: 'Ubiquitous conversation filler — you will hear this constantly' },
+      { pt: 'Sim / Pode ser.', en: 'Yes. / Sure.', register: 'informal', note: 'Pode ser is softer, more common than a flat "sim"' },
+      { pt: 'Não percebi.', en: "I didn't understand.", register: 'informal', note: 'More natural than "não compreendi" in everyday speech' },
+      { pt: 'Exato.', en: 'Exactly.', register: 'informal', note: null },
+      { pt: 'Que giro!', en: "That's cool / nice!", register: 'colloq', note: 'Very Portuguese — Brazilians say "que legal"' },
+      { pt: 'A sério?', en: 'Really?', register: 'informal', note: null },
+      { pt: 'Não sei.', en: "I don't know.", register: 'informal', note: null },
+      { pt: 'Não sabia / Não fazia ideia.', en: "I didn't know / I had no idea.", register: 'informal', note: null },
+      { pt: 'Pois.', en: 'I see. / Right. / Hmm.', register: 'colloq', note: 'The most Portuguese word. Pure acknowledgment — no direct English equivalent' },
+      { pt: 'Já viste isto?', en: 'Have you seen this?', register: 'informal', note: null },
+      { pt: 'O que vais fazer hoje?', en: 'What are you doing today?', register: 'informal', note: null },
+      { pt: 'Precisa de alguma coisa?', en: 'Do you need anything?', register: 'formal', note: null },
+      { pt: 'Onde estão os ovos?', en: 'Where can I find the eggs?', register: 'informal', note: 'Supermarket essential' },
+      { pt: 'Eu vou a pé até lá.', en: 'I will walk there.', register: 'informal', note: null },
+    ]
+  },
+  {
+    id: 'planos', label: 'Convites e Planos',
+    phrases: [
+      { pt: 'Tens planos para hoje?', en: 'Do you have plans for today?', register: 'informal', note: null },
+      { pt: 'Queres ir beber um café?', en: 'Would you like to get a coffee?', register: 'informal', note: 'Core Lisbon social ritual' },
+      { pt: 'Queres ir almoçar / jantar hoje?', en: 'Would you like to have lunch / dinner?', register: 'informal', note: null },
+      { pt: 'A que horas?', en: 'What time?', register: 'informal', note: null },
+      { pt: 'Onde é que combinamos?', en: 'Where shall we meet?', register: 'informal', note: null },
+      { pt: 'Queres juntar-te a nós?', en: 'Do you want to join us?', register: 'informal', note: null },
+      { pt: 'Pode ser mais tarde?', en: 'Can it be later?', register: 'informal', note: null },
+      { pt: 'Hoje não posso.', en: "I can't today.", register: 'informal', note: null },
+      { pt: 'Fica para outro dia.', en: "Let's leave it for another day.", register: 'informal', note: null },
+      { pt: 'Combinado!', en: 'Deal! / Agreed!', register: 'informal', note: null },
+      { pt: 'Manda mensagem quando chegares.', en: 'Text me when you arrive.', register: 'informal', note: 'chegares = future personal infinitive — A2 grammar, but use it now as a chunk' },
+      { pt: 'Parece-me bem.', en: 'Sounds good.', register: 'informal', note: null },
+      { pt: 'Estou lá às 17h.', en: "I'll be there at 5pm.", register: 'informal', note: null },
+    ]
+  },
+  {
+    id: 'restaurante', label: 'Restaurante',
+    phrases: [
+      { pt: 'Tem uma mesa para dois, por favor?', en: 'Do you have a table for two, please?', register: 'formal', note: null },
+      { pt: 'Posso sentar-me ali no bar?', en: 'Can I sit there by the bar?', register: 'formal', note: null },
+      { pt: 'Podemos ficar na esplanada?', en: 'Can we sit outside?', register: 'formal', note: 'esplanada = outdoor terrace — very common in Lisbon' },
+      { pt: 'Queria uma água, por favor.', en: 'I would like a water, please.', register: 'formal', note: 'queria (conditional) is the polite ordering form — not "quero"' },
+      { pt: 'Queria o menu, por favor.', en: 'The menu, please.', register: 'formal', note: null },
+      { pt: 'Queria a carta dos vinhos, por favor.', en: 'The wine menu, please.', register: 'formal', note: null },
+      { pt: 'Queria um copo de vinho tinto / branco.', en: 'I would like a glass of red / white wine.', register: 'formal', note: null },
+      { pt: 'Queria uma garrafa deste vinho, por favor.', en: 'I would like a bottle of this wine, please.', register: 'formal', note: null },
+      { pt: 'O que recomenda?', en: 'What do you recommend?', register: 'formal', note: null },
+      { pt: 'Sem gelo, por favor.', en: 'No ice, please.', register: 'formal', note: null },
+      { pt: 'Sem açúcar, por favor.', en: 'No sugar, please.', register: 'formal', note: null },
+      { pt: 'Podia trazer mais pão?', en: 'Could you bring more bread?', register: 'formal', note: 'podia (imperfect) = even more polite than queria' },
+      { pt: 'Podia ser sem…?', en: 'Could it be without…?', register: 'formal', note: null },
+      { pt: 'Estava ótimo / delicioso.', en: 'It was great / delicious.', register: 'informal', note: null },
+      { pt: 'Queria pagar com cartão.', en: "I'll pay by card.", register: 'formal', note: null },
+      { pt: 'Fique com o troco.', en: 'Keep the change.', register: 'formal', note: null },
+    ]
+  },
+  {
+    id: 'cortesia', label: 'Cortesia',
+    phrases: [
+      { pt: 'Até à próxima.', en: 'See you next time.', register: 'informal', note: null },
+      { pt: 'Até amanhã.', en: 'See you tomorrow.', register: 'informal', note: null },
+      { pt: 'Boa semana.', en: 'Have a great week.', register: 'informal', note: null },
+      { pt: 'Bom fim de semana.', en: 'Have a great weekend.', register: 'informal', note: null },
+      { pt: 'Com licença.', en: 'Excuse me (passing).', register: 'formal', note: 'For passing someone / getting attention — not for apologies' },
+      { pt: 'Tenha um bom dia.', en: 'Have a nice day.', register: 'formal', note: null },
+      { pt: 'De nada.', en: "You're welcome.", register: 'informal', note: null },
+    ]
+  },
+  {
+    id: 'tempo', label: 'Tempo e Pressa',
+    phrases: [
+      { pt: 'Só um momento, por favor.', en: 'Just a moment, please.', register: 'formal', note: null },
+      { pt: 'Desculpe, estou atrasado. Chego dentro de 5min.', en: "Sorry, I'm late. I'll be there in 5 minutes.", register: 'informal', note: null },
+      { pt: 'Demoro 10 minutos.', en: "I'll take 10 minutes.", register: 'informal', note: 'demorar = to take time / to be slow' },
+      { pt: 'Desculpe, estou com pressa.', en: "Sorry, I'm in a hurry.", register: 'informal', note: null },
+      { pt: 'Vou já.', en: "I'm coming / I'll be right there.", register: 'informal', note: null },
+      { pt: 'Estou a caminho.', en: "I'm on my way.", register: 'informal', note: null },
+      { pt: 'Ainda tenho tempo.', en: 'I still have time.', register: 'informal', note: null },
+      { pt: 'Não tenho tempo.', en: "I don't have time.", register: 'informal', note: null },
+    ]
+  }
+];
+
+const ALL_PHRASES = CATEGORIES.flatMap(c => c.phrases.map(p => ({ ...p, category: c.label, catId: c.id })));
+
+// ── AUDIO ─────────────────────────────────────────────────────────
+const audioCache = {};
+let currentAudio = null;
+
+async function speakText(text, btnEl) {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (btnEl) btnEl.classList.add('playing');
+  try {
+    if (audioCache[text]) {
+      audioCache[text].currentTime = 0;
+      audioCache[text].onended = () => { if (btnEl) btnEl.classList.remove('playing'); };
+      audioCache[text].play();
+      return;
+    }
+    const res = await fetch(WORKER_URL, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
+    });
+    if (!res.ok) throw new Error();
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    audioCache[text] = audio;
+    currentAudio = audio;
+    audio.onended = () => { if (btnEl) btnEl.classList.remove('playing'); };
+    audio.play();
+  } catch(e) {
+    if (btnEl) btnEl.classList.remove('playing');
+  }
+}
+
+// ── REGISTER TAGS ─────────────────────────────────────────────────
+function registerTag(r) {
+  const map = {
+    formal:   ['formal',   'tag-formal'],
+    informal: ['informal', 'tag-informal'],
+    colloq:   ['coloquial','tag-colloq'],
+  };
+  const [label, cls] = map[r] || ['', ''];
+  return label ? `<span class="tag ${cls}">${label}</span>` : '';
+}
+
+// ── STATE ─────────────────────────────────────────────────────────
+let activeCatId = 'all';
+let activeTab = 'tabela';
+let fcDeck = [], fcIdx = 0, fcRevealed = false;
+let quizDeck = [], quizIdx = 0, quizCorrect = 0, quizTotal = 0, quizAnswered = false;
+
+// ── CATEGORY BAR ──────────────────────────────────────────────────
+function buildCatBar() {
+  const bar = document.getElementById('catBar');
+  bar.innerHTML = '';
+  const allBtn = document.createElement('button');
+  allBtn.className = 'cat-btn active'; allBtn.textContent = 'Tudo';
+  allBtn.onclick = () => selectCat('all', allBtn);
+  bar.appendChild(allBtn);
+  CATEGORIES.forEach(c => {
+    const b = document.createElement('button');
+    b.className = 'cat-btn'; b.textContent = c.label; b.dataset.id = c.id;
+    b.onclick = () => selectCat(c.id, b);
+    bar.appendChild(b);
+  });
+}
+
+function selectCat(id, btn) {
+  activeCatId = id;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (activeTab === 'tabela') renderTabela();
+  else if (activeTab === 'flashcards') initFC();
+  else initQuiz();
+}
+
+function getActiveWords() {
+  if (activeCatId === 'all') return ALL_PHRASES;
+  const cat = CATEGORIES.find(c => c.id === activeCatId);
+  return cat ? cat.phrases.map(p => ({ ...p, category: cat.label, catId: cat.id })) : ALL_PHRASES;
+}
+
+// ── TABELA ─────────────────────────────────────────────────────────
+function renderTabela() {
+  const container = document.getElementById('tabelaContent');
+  container.innerHTML = '';
+  const words = getActiveWords();
+
+  const renderSection = (label, phrases) => {
+    if (label) {
+      const h = document.createElement('div');
+      h.className = 'section-title'; h.textContent = label;
+      container.appendChild(h);
+    }
+    const table = document.createElement('table');
+    table.innerHTML = `<thead><tr><th>Português</th><th>English</th><th>Registo</th></tr></thead>`;
+    const tbody = document.createElement('tbody');
+    phrases.forEach(p => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="pt-cell">${p.pt}</td>
+        <td class="en-cell">${p.en}</td>
+        <td class="tag-cell">${registerTag(p.register)}</td>
+      `;
+      tr.querySelector('.pt-cell').addEventListener('click', () => speakText(p.pt, null));
+      if (p.note) {
+        const noteRow = document.createElement('tr');
+        noteRow.innerHTML = `<td colspan="3" style="padding:0 1rem 0.75rem; border-bottom:1px solid var(--border)"><div class="note-block">${p.note}</div></td>`;
+        tr.addEventListener('click', (e) => {
+          if (e.target.classList.contains('pt-cell')) return;
+          noteRow.style.display = noteRow.style.display === 'none' ? '' : 'none';
+        });
+        noteRow.style.display = 'none';
+        tbody.appendChild(tr);
+        tbody.appendChild(noteRow);
+      } else {
+        tbody.appendChild(tr);
+      }
+    });
+    table.appendChild(tbody);
+    container.appendChild(table);
+  };
+
+  if (activeCatId === 'all') {
+    CATEGORIES.forEach(cat => {
+      const phrases = words.filter(p => p.catId === cat.id);
+      if (phrases.length) renderSection(cat.label, phrases);
+    });
+  } else {
+    renderSection(null, words);
+  }
+}
+
+// ── FLASHCARDS ─────────────────────────────────────────────────────
+function initFC() {
+  fcDeck = [...getActiveWords()];
+  fcIdx = 0; fcRevealed = false;
+  renderFC();
+}
+
+function renderFC() {
+  const w = fcDeck[fcIdx];
+  fcRevealed = false;
+  document.getElementById('fcCounter').textContent = `${fcIdx + 1} / ${fcDeck.length}`;
+  document.getElementById('fcProgressFill').style.width = `${((fcIdx + 1) / fcDeck.length) * 100}%`;
+  document.getElementById('fcCatTag').textContent = w.category || '';
+  document.getElementById('fcEnPrompt').textContent = w.en;
+  document.getElementById('fcRegister').innerHTML = registerTag(w.register);
+  document.getElementById('fcPtAnswer').textContent = w.pt;
+  document.getElementById('fcPtAnswer').classList.remove('revealed');
+  document.getElementById('fcHints').textContent = 'clique na frase para revelar · 🔊 para ouvir';
+  document.getElementById('fcSpeakPill').classList.remove('playing');
+}
+
+function revealFC() {
+  if (fcRevealed) return;
+  fcRevealed = true;
+  document.getElementById('fcPtAnswer').classList.add('revealed');
+  document.getElementById('fcHints').textContent = '';
+}
+
+function fcMove(dir) {
+  fcIdx = (fcIdx + dir + fcDeck.length) % fcDeck.length;
+  renderFC();
+}
+function shuffleFC() { fcDeck = [...getActiveWords()].sort(() => Math.random() - 0.5); fcIdx = 0; renderFC(); }
+function resetFC()   { fcDeck = [...getActiveWords()]; fcIdx = 0; renderFC(); }
+function speakCurrent() { speakText(fcDeck[fcIdx].pt, document.getElementById('fcSpeakPill')); }
+
+// ── QUIZ ───────────────────────────────────────────────────────────
+function initQuiz() {
+  quizDeck = [...getActiveWords()].sort(() => Math.random() - 0.5);
+  quizIdx = 0; quizCorrect = 0; quizTotal = 0; quizAnswered = false;
+  document.getElementById('quizCatLabel').textContent = activeCatId === 'all' ? 'Tudo' : CATEGORIES.find(c => c.id === activeCatId)?.label || '';
+  renderQuiz();
+}
+
+function renderQuiz() {
+  if (quizIdx >= quizDeck.length) {
+    quizDeck = [...getActiveWords()].sort(() => Math.random() - 0.5);
+    quizIdx = 0;
+  }
+  quizAnswered = false;
+  const item = quizDeck[quizIdx];
+  document.getElementById('quizPhrase').textContent = item.en;
+  document.getElementById('quizFeedback').textContent = '';
+  document.getElementById('quizFeedback').className = 'quiz-feedback';
+  document.getElementById('quizNext').disabled = true;
+  document.getElementById('quizScore').textContent = `${quizCorrect} / ${quizTotal}`;
+
+  const pool = ALL_PHRASES.filter(x => x.pt !== item.pt);
+  const wrongs = pool.sort(() => Math.random() - 0.5).slice(0, 3).map(x => x.pt);
+  const opts = [item.pt, ...wrongs].sort(() => Math.random() - 0.5);
+
+  const container = document.getElementById('quizOptions');
+  container.innerHTML = '';
+  opts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt'; btn.textContent = opt;
+    btn.onclick = () => checkQuiz(btn, opt, item.pt);
+    container.appendChild(btn);
+  });
+}
+
+function checkQuiz(btn, chosen, correct) {
+  if (quizAnswered) return;
+  quizAnswered = true; quizTotal++;
+  const fb = document.getElementById('quizFeedback');
+  document.querySelectorAll('.quiz-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === correct) b.classList.add('correct');
+  });
+  if (chosen === correct) {
+    quizCorrect++;
+    fb.textContent = 'Correto! ✓'; fb.className = 'quiz-feedback ok';
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = 'Errado.'; fb.className = 'quiz-feedback bad';
+  }
+  document.getElementById('quizNext').disabled = false;
+  document.getElementById('quizScore').textContent = `${quizCorrect} / ${quizTotal}`;
+  speakText(quizDeck[quizIdx].pt, null);
+}
+
+function nextQuiz() { quizIdx++; renderQuiz(); }
+
+// ── TAB SWITCHING ──────────────────────────────────────────────────
+function switchTab(id, tabEl) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  tabEl.classList.add('active');
+  activeTab = id;
+  if (id === 'tabela') renderTabela();
+  else if (id === 'flashcards') initFC();
+  else initQuiz();
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+buildCatBar();
+renderTabela();
+initFC();
+</script>
+<script>
+(function(){
+  try {
+    var d = JSON.parse(localStorage.getItem('pt-study-last-visited') || '{}');
+    d['frases-do-dia.html'] = Date.now();
+    localStorage.setItem('pt-study-last-visited', JSON.stringify(d));
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>
