@@ -117,9 +117,13 @@
   .fc-pt-answer {
     font-family: var(--mono); font-size: 1.8rem; font-weight: 700; color: var(--yellow);
     filter: blur(8px); transition: filter 0.3s; cursor: pointer; margin-bottom: 1.25rem;
+  
+    background: var(--border);
+    border-radius: 4px;
+    padding: 0.1rem 0.4rem;
   }
   .fc-pt-answer.irr { color: var(--yellow); }
-  .fc-pt-answer.revealed { filter: blur(0); }
+  .fc-pt-answer.revealed { filter: blur(0); background: transparent; }
 
   .fc-speak-pill {
     background: #1a1a1f; border: 1px solid var(--border); color: var(--blue);

@@ -149,7 +149,11 @@
     font-family: 'IBM Plex Mono', monospace; font-size: 1.8rem; font-weight: 600;
     color: var(--yellow); transition: filter 0.25s; display: inline-block;
   }
-  .fc-pt-answer.blurred { filter: blur(8px); }
+  .fc-pt-answer.blurred { filter: blur(8px); 
+    background: var(--border);
+    border-radius: 4px;
+    padding: 0.1rem 0.4rem;
+  }
 
   .fc-speak-pill {
     background: var(--surface2); border: 1px solid var(--border); color: var(--blue);

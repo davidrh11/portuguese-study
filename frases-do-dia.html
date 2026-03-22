@@ -165,8 +165,12 @@
     font-family: var(--mono); font-size: 1.35rem; color: var(--yellow);
     filter: blur(7px); transition: filter 0.3s; cursor: pointer;
     line-height: 1.4; margin-bottom: 1.25rem; padding: 0 0.5rem;
+  
+    background: var(--border);
+    border-radius: 4px;
+    padding: 0.1rem 0.4rem;
   }
-  .fc-pt-answer.revealed { filter: blur(0); }
+  .fc-pt-answer.revealed { filter: blur(0); background: transparent; }
 
   .fc-speak-pill {
     background: var(--surface2); border: 1px solid var(--border); color: var(--blue);

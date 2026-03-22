@@ -204,11 +204,19 @@
     opacity: 0.25;
     transition: filter 0.25s, opacity 0.25s;
     margin-top: 0.5rem;
+  
+    background: var(--border);
+    border-radius: 4px;
+    padding: 0.1rem 0.4rem;
   }
 
   .flashcard.flipped .flash-answer {
     filter: blur(0);
     opacity: 1;
+  
+    background: var(--border);
+    border-radius: 4px;
+    padding: 0.1rem 0.4rem;
   }
 
   .flash-answer.has-gender { color: var(--gender); }

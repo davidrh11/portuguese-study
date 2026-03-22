@@ -188,7 +188,7 @@
     filter: blur(7px); transition: filter 0.3s; cursor: pointer; line-height: 1.2;
     margin-bottom: 1.25rem;
   }
-  .fc-pt-word.revealed { filter: blur(0); }
+  .fc-pt-word.revealed { filter: blur(0); background: transparent; }
 
   /* Speak button — centered on card between answer and example */
   .fc-card-speak {
@@ -205,14 +205,22 @@
     font-style: italic; font-size: 0.85rem; color: var(--text);
     filter: blur(5px); transition: filter 0.3s; cursor: pointer;
     margin-bottom: 0.25rem;
+  
+    background: var(--border);
+    border-radius: 3px;
+    padding: 0.05rem 0.3rem;
   }
-  .fc-ex-pt.revealed { filter: blur(0); }
+  .fc-ex-pt.revealed { filter: blur(0); background: transparent; }
   .fc-ex-en {
     font-size: 0.78rem; color: var(--muted);
     filter: blur(5px); transition: filter 0.3s;
     margin-bottom: 1.25rem;
+  
+    background: var(--border);
+    border-radius: 3px;
+    padding: 0.05rem 0.3rem;
   }
-  .fc-ex-en.revealed { filter: blur(0); }
+  .fc-ex-en.revealed { filter: blur(0); background: transparent; }
 
   /* Prev / Next inside card, centered at bottom */
   .fc-card-nav {
