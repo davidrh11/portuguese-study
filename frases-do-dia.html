@@ -6,17 +6,23 @@
 <title>Frases do Dia a Dia</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0f0f0f;
-    --surface: #1a1a1a;
-    --surface2: #222;
-    --border: #2a2a2a;
-    --yellow: #e8c547;
-    --blue: #4a9eff;
-    --green: #4caf8a;
-    --red: #e05c5c;
-    --text: #e0e0e0;
-    --muted: #888;
+    :root {
+    --bg: #f9f6f0;
+    --surface: #ffffff;
+    --surface2: #f2ede6;
+    --border: #e0d8cc;
+    --border2: #ccc4b4;
+    --green: #2d7a50;
+    --green-light: #eef5f1;
+    --green-mid: #9acbb0;
+    --red: #a03428;
+    --red-light: #fdf2f1;
+    --red-mid: #dba09a;
+    --yellow: #b07d2a;
+    --blue: #2d7a50;
+    --text: #2e2820;
+    --muted: #8a7a68;
+    --muted2: #b0a090;
     --mono: 'IBM Plex Mono', monospace;
     --sans: 'IBM Plex Sans', sans-serif;
   }
@@ -30,7 +36,7 @@
   }
   .level-badge {
     font-family: var(--mono); font-size: 0.75rem; font-weight: 600;
-    color: var(--bg); background: var(--yellow);
+    color: #ffffff; background: var(--green);
     padding: 0.2rem 0.6rem; border-radius: 3px; letter-spacing: 0.05em;
   }
   header h1 { font-family: var(--mono); font-size: 1rem; font-weight: 400; color: var(--muted); flex: 1; }
@@ -50,7 +56,7 @@
     transition: all 0.2s; letter-spacing: 0.03em;
   }
   .cat-btn:hover { color: var(--text); }
-  .cat-btn.active { color: var(--yellow); border-bottom-color: var(--yellow); }
+  .cat-btn.active { color: var(--green); border-bottom-color: var(--green); }
 
   /* MODE TABS */
   .tabs {
@@ -62,7 +68,7 @@
     transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none;
   }
   .tab:hover { color: var(--text); }
-  .tab.active { color: var(--yellow); border-bottom-color: var(--yellow); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
 
   .view { display: none; padding: 1.5rem 2rem 3rem; }
   .view.active { display: block; }
@@ -73,14 +79,14 @@
     padding: 0.1rem 0.4rem; border-radius: 2px; white-space: nowrap;
   }
   .tag-formal   { color: var(--blue);  background: rgba(74,158,255,0.1);  border: 1px solid rgba(74,158,255,0.25); }
-  .tag-informal { color: var(--green); background: rgba(76,175,138,0.1);  border: 1px solid rgba(76,175,138,0.25); }
+  .tag-informal { color: #1a5c38; background: rgba(76,175,138,0.1);  border: 1px solid rgba(76,175,138,0.25); }
   .tag-colloq   { color: #c97cf0;      background: rgba(201,124,240,0.1); border: 1px solid rgba(201,124,240,0.25); }
-  .tag-a2       { color: var(--red);   background: rgba(224,92,92,0.08);  border: 1px solid rgba(224,92,92,0.2); }
+  .tag-a2       { color: #8b2018;   background: rgba(224,92,92,0.08);  border: 1px solid rgba(224,92,92,0.2); }
 
   /* TABELA */
   .section-title {
     font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--blue); margin: 2rem 0 0.75rem;
+    text-transform: uppercase; color: #8b2018; margin: 2rem 0 0.75rem;
   }
   .section-title:first-child { margin-top: 0; }
 
@@ -92,7 +98,7 @@
   }
   td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
   tr:last-child td { border-bottom: none; }
-  tbody tr:hover { background: var(--surface); }
+  tbody tr:hover { background: var(--surface2); }
 
   td.pt-cell {
     font-family: var(--mono); font-size: 0.88rem; color: var(--yellow);
@@ -103,7 +109,7 @@
   td.tag-cell { width: 18%; }
 
   .note-block {
-    background: var(--surface); border-left: 3px solid var(--blue);
+    background: var(--surface); border-left: 3px solid var(--red);
     padding: 0.85rem 1.1rem; margin: 1rem 0 1.5rem; border-radius: 0 4px 4px 0;
     font-size: 0.82rem; color: var(--muted); line-height: 1.6;
   }
@@ -124,10 +130,10 @@
     color: var(--text); padding: 0.4rem 0.9rem; border-radius: 4px; cursor: pointer;
     transition: all 0.15s;
   }
-  .fc-ctrl:hover { border-color: var(--yellow); color: var(--yellow); }
+  .fc-ctrl:hover { border-color: var(--green); color: var(--yellow); }
 
   .fc-progress { height: 2px; background: var(--border); border-radius: 1px; margin-bottom: 1.5rem; overflow: hidden; }
-  .fc-progress-fill { height: 100%; background: var(--yellow); transition: width 0.3s; }
+  .fc-progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
 
   .fc-card {
     background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
@@ -167,7 +173,7 @@
     padding: 0.35rem 1.2rem; border-radius: 99px; cursor: pointer;
     transition: all 0.2s; font-size: 1rem; margin-bottom: 1.5rem;
   }
-  .fc-speak-pill:hover, .fc-speak-pill.playing { background: var(--blue); color: #0f0f0f; border-color: var(--blue); }
+  .fc-speak-pill:hover, .fc-speak-pill.playing { background: var(--green); color: #ffffff; border-color: var(--blue); }
 
   .fc-nav { display: flex; gap: 1rem; }
   .fc-nav-btn {
@@ -176,7 +182,7 @@
     color: var(--text); padding: 0.55rem 1.25rem; border-radius: 4px;
     cursor: pointer; transition: all 0.15s;
   }
-  .fc-nav-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+  .fc-nav-btn:hover { border-color: var(--green); color: var(--yellow); }
 
   /* QUIZ */
   .quiz-wrap { max-width: 560px; margin: 0 auto; }
@@ -189,7 +195,7 @@
     border-radius: 8px; padding: 2rem; text-align: center; margin-bottom: 1.25rem;
   }
   .quiz-label { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); margin-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; }
-  .quiz-phrase { font-family: var(--mono); font-size: 1.25rem; color: var(--yellow); line-height: 1.4; }
+  .quiz-phrase { font-family: var(--mono); font-size: 1.25rem; color: var(--green); line-height: 1.4; }
   .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem; }
   .quiz-opt {
     background: var(--surface); border: 1px solid var(--border);
@@ -197,16 +203,16 @@
     font-size: 0.85rem; color: var(--text); text-align: center;
     transition: all 0.15s; font-family: var(--sans); line-height: 1.4;
   }
-  .quiz-opt:hover:not(:disabled) { border-color: var(--yellow); }
-  .quiz-opt.correct { border-color: var(--green); background: rgba(76,175,138,0.1); color: var(--green); }
-  .quiz-opt.wrong   { border-color: var(--red);   background: rgba(224,92,92,0.1);  color: var(--red); }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--green); }
+  .quiz-opt.correct { border-color: #1a5c38; background: rgba(76,175,138,0.1); color: #1a5c38; }
+  .quiz-opt.wrong   { border-color: #8b2018;   background: rgba(224,92,92,0.1);  color: #8b2018; }
   .quiz-opt:disabled { cursor: default; }
   .quiz-feedback { text-align: center; font-family: var(--mono); font-size: 0.82rem; min-height: 1.4rem; margin-bottom: 1rem; }
-  .quiz-feedback.ok  { color: var(--green); }
-  .quiz-feedback.bad { color: var(--red); }
+  .quiz-feedback.ok  { color: #1a5c38; }
+  .quiz-feedback.bad { color: #8b2018; }
   .quiz-next {
     display: block; margin: 0 auto; font-family: var(--mono); font-size: 0.85rem;
-    padding: 0.6rem 2rem; background: var(--yellow); color: var(--bg);
+    padding: 0.6rem 2rem; background: var(--green); color: #ffffff;
     border: none; border-radius: 4px; cursor: pointer; font-weight: 600;
   }
   .quiz-next:disabled { opacity: 0.3; cursor: default; }
@@ -215,8 +221,29 @@
 <body>
 
 <header>
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;width:100%;">
+<div style="flex:1;">
   <span class="level-badge">A1</span>
   <h1>Frases do Dia a Dia · <span>Everyday Phrases</span></h1>
+</div>
+  <!-- Portuguese Flag -->
+  <svg style="flex-shrink:0;width:48px;height:32px;border-radius:3px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.15);margin-top:2px;" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="19.2" height="32" fill="#006600"/>
+    <rect x="19.2" y="0" width="28.8" height="32" fill="#FF0000"/>
+    <circle cx="19.2" cy="16" r="7" fill="none" stroke="#FFCC00" stroke-width="1.2"/>
+    <circle cx="19.2" cy="16" r="4.5" fill="none" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="19.2" y1="11.5" x2="19.2" y2="20.5" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="14.7" y1="16" x2="23.7" y2="16" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="16" y1="12.8" x2="22.4" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <line x1="22.4" y1="12.8" x2="16" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <rect x="17" y="13.5" width="4.4" height="5" fill="white" rx="0.5"/>
+    <circle cx="19.2" cy="16" r="0.8" fill="#003399"/>
+    <circle cx="17.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="17.7" cy="17.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="17.5" r="0.5" fill="#003399"/>
+  </svg>
+</div>
 </header>
 
 <div class="cat-bar" id="catBar"></div>

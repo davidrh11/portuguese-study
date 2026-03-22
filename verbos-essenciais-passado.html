@@ -6,11 +6,25 @@
 <title>7 Verbos Essenciais — Passado</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0e0f11; --surface: #16181c; --border: #2a2d35;
-    --yellow: #e8c547; --blue: #4a9eff; --text: #d4d6da; --muted: #5a5f6e;
-    --highlight: #1e2128; --green: #4caf8a; --red: #e05c5c;
-    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+    :root {
+    --bg: #f9f6f0;
+    --surface: #ffffff;
+    --surface2: #f2ede6;
+    --border: #e0d8cc;
+    --border2: #ccc4b4;
+    --green: #2d7a50;
+    --green-light: #eef5f1;
+    --green-mid: #9acbb0;
+    --red: #a03428;
+    --red-light: #fdf2f1;
+    --red-mid: #dba09a;
+    --yellow: #b07d2a;
+    --blue: #2d7a50;
+    --text: #2e2820;
+    --muted: #8a7a68;
+    --muted2: #b0a090;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; padding: 2rem; }
@@ -26,7 +40,7 @@
     text-decoration: none; border: 1px solid var(--border); padding: 0.3rem 0.7rem;
     border-radius: 3px; transition: all 0.2s; margin-left: auto;
   }
-  .back-link:hover { color: var(--yellow); border-color: var(--yellow); }
+  .back-link:hover { color: var(--yellow); border-color: var(--green); }
 
   .controls { display: flex; gap: 0.75rem; margin-bottom: 2rem; flex-wrap: wrap; align-items: center; }
   .mode-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
@@ -35,8 +49,8 @@
     padding: 0.4rem 0.9rem; border: 1px solid var(--border); background: var(--surface);
     color: var(--muted); cursor: pointer; transition: all 0.15s; border-radius: 2px;
   }
-  button:hover { border-color: var(--yellow); color: var(--yellow); }
-  button.active { border-color: var(--yellow); color: var(--yellow); background: #1e1c0e; }
+  button:hover { border-color: var(--green); color: var(--yellow); }
+  button.active { border-color: var(--green); color: var(--yellow); background: var(--green-light); }
 
   /* TABLE */
   .table-view { display: block; }
@@ -49,14 +63,14 @@
   }
   thead th:first-child { text-align: left; color: var(--muted); }
   tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
-  tbody tr:hover { background: var(--highlight); }
-  tbody td { padding: 0.55rem 0.8rem; text-align: center; color: var(--yellow); font-weight: 600; }
+  tbody tr:hover { background: var(--surface2); }
+  tbody td { padding: 0.55rem 0.8rem; text-align: center; color: var(--green); font-weight: 600; }
   tbody td:first-child { color: var(--muted); text-align: left; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 400; white-space: nowrap; }
   td.speakable { cursor: pointer; }
   td.speakable:hover { color: var(--blue); background: rgba(74,158,255,0.06); }
 
   .note-block {
-    background: var(--surface); border-left: 3px solid var(--blue);
+    background: var(--surface); border-left: 3px solid var(--red);
     padding: 1rem 1.25rem; margin: 1.5rem 0; border-radius: 0 4px 4px 0;
     font-size: 0.85rem; line-height: 1.7;
   }
@@ -65,19 +79,19 @@
   .note-block .en { color: var(--muted); font-style: italic; }
 
   .ex-section { margin-top: 2rem; }
-  .ex-title { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--blue); margin-bottom: 1rem; border-left: 3px solid var(--blue); padding-left: 0.75rem; }
+  .ex-title { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: #8b2018; margin-bottom: 1rem; border-left: 3px solid var(--red); padding-left: 0.75rem; }
   .ex-item {
     background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
     padding: 0.9rem 1.1rem; margin-bottom: 0.6rem; cursor: pointer; transition: border-color 0.2s;
   }
-  .ex-item:hover { border-color: var(--yellow); }
+  .ex-item:hover { border-color: var(--green); }
   .ex-pt { font-family: var(--mono); font-size: 0.9rem; color: var(--text); margin-bottom: 0.3rem; }
   .ex-en { font-size: 0.82rem; color: var(--muted); font-style: italic; }
   .ex-num { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); margin-right: 0.5rem; }
 
   .legend { display: flex; gap: 1.5rem; margin-top: 1.5rem; }
   .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; color: var(--muted); font-family: var(--mono); }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--yellow); border-radius: 50%; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); border-radius: 50%; }
 
   /* FLASHCARDS */
   .flash-view { display: none; max-width: 520px; margin: 0 auto; text-align: center; }
@@ -109,16 +123,16 @@
     padding: 0.35rem 1.2rem; border-radius: 99px; cursor: pointer;
     transition: all 0.2s; font-size: 1rem; margin-bottom: 1.5rem;
   }
-  .fc-speak-pill:hover, .fc-speak-pill.playing { background: var(--blue); color: #0e0f11; border-color: var(--blue); }
+  .fc-speak-pill:hover, .fc-speak-pill.playing { background: var(--green); color: #ffffff; border-color: var(--blue); }
   .fc-nav { display: flex; gap: 1rem; margin-top: auto; }
   .fc-nav-btn {
     font-family: var(--mono); font-size: 0.82rem; background: var(--surface);
     border: 1px solid var(--border); color: var(--text); padding: 0.55rem 1.25rem;
     border-radius: 4px; cursor: pointer; transition: all 0.15s;
   }
-  .fc-nav-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+  .fc-nav-btn:hover { border-color: var(--green); color: var(--yellow); }
   .fc-progress { margin-top: 0.75rem; height: 2px; background: var(--border); border-radius: 1px; overflow: hidden; }
-  .fc-progress-fill { height: 100%; background: var(--yellow); transition: width 0.3s; }
+  .fc-progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
 
   /* QUIZ */
   .quiz-view { display: none; max-width: 520px; margin: 0 auto; }
@@ -134,16 +148,16 @@
     padding: 0.85rem 1rem; cursor: pointer; font-family: var(--mono); font-size: 1rem;
     color: var(--text); text-align: center; transition: all 0.15s;
   }
-  .quiz-opt:hover:not(:disabled) { border-color: var(--yellow); }
-  .quiz-opt.correct { border-color: var(--green); background: rgba(76,175,138,0.1); color: var(--green); }
-  .quiz-opt.wrong   { border-color: var(--red);   background: rgba(224,92,92,0.1);  color: var(--red); }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--green); }
+  .quiz-opt.correct { border-color: #1a5c38; background: rgba(76,175,138,0.1); color: #1a5c38; }
+  .quiz-opt.wrong   { border-color: #8b2018;   background: rgba(224,92,92,0.1);  color: #8b2018; }
   .quiz-opt:disabled { cursor: default; }
   .quiz-feedback { text-align: center; font-family: var(--mono); font-size: 0.85rem; min-height: 1.4rem; margin-bottom: 1rem; }
-  .quiz-feedback.ok  { color: var(--green); }
-  .quiz-feedback.bad { color: var(--red); }
+  .quiz-feedback.ok  { color: #1a5c38; }
+  .quiz-feedback.bad { color: #8b2018; }
   .quiz-next {
     display: block; margin: 0 auto; font-family: var(--mono); font-size: 0.85rem;
-    padding: 0.6rem 2rem; background: var(--yellow); color: var(--bg);
+    padding: 0.6rem 2rem; background: var(--green); color: #ffffff;
     border: none; border-radius: 4px; cursor: pointer; font-weight: 600; text-transform: uppercase;
   }
   .quiz-next:disabled { opacity: 0.3; cursor: default; }
@@ -152,9 +166,30 @@
 <body>
 
 <header>
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;width:100%;">
+<div style="flex:1;">
   <h1>7 Verbos Essenciais</h1>
   <span class="subtitle">Pretérito Perfeito — Past Tense</span>
   <a class="back-link" href="verbos-essenciais-presente.html">← Presente</a>
+</div>
+  <!-- Portuguese Flag -->
+  <svg style="flex-shrink:0;width:48px;height:32px;border-radius:3px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.15);margin-top:2px;" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="19.2" height="32" fill="#006600"/>
+    <rect x="19.2" y="0" width="28.8" height="32" fill="#FF0000"/>
+    <circle cx="19.2" cy="16" r="7" fill="none" stroke="#FFCC00" stroke-width="1.2"/>
+    <circle cx="19.2" cy="16" r="4.5" fill="none" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="19.2" y1="11.5" x2="19.2" y2="20.5" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="14.7" y1="16" x2="23.7" y2="16" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="16" y1="12.8" x2="22.4" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <line x1="22.4" y1="12.8" x2="16" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <rect x="17" y="13.5" width="4.4" height="5" fill="white" rx="0.5"/>
+    <circle cx="19.2" cy="16" r="0.8" fill="#003399"/>
+    <circle cx="17.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="17.7" cy="17.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="17.5" r="0.5" fill="#003399"/>
+  </svg>
+</div>
 </header>
 
 <div class="controls">

@@ -6,25 +6,76 @@
 <title>Portuguese Study Guides</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0f0f0f; --surface: #1a1a1a; --surface2: #222; --border: #2a2a2a;
-    --yellow: #e8c547; --blue: #4a9eff; --green: #4caf8a; --red: #e05c5c;
-    --text: #e0e0e0; --muted: #888;
-    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+    :root {
+    --bg: #f9f6f0;
+    --surface: #ffffff;
+    --surface2: #f2ede6;
+    --border: #e0d8cc;
+    --border2: #ccc4b4;
+    --green: #2d7a50;
+    --green-light: #eef5f1;
+    --green-mid: #9acbb0;
+    --red: #a03428;
+    --red-light: #fdf2f1;
+    --red-mid: #dba09a;
+    --yellow: #b07d2a;
+    --blue: #2d7a50;
+    --text: #2e2820;
+    --muted: #8a7a68;
+    --muted2: #b0a090;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; padding: 3rem 2rem 5rem; max-width: 680px; margin: 0 auto; }
 
-  header { margin-bottom: 3rem; }
-  header h1 { font-family: var(--mono); font-size: 1.1rem; font-weight: 400; color: var(--muted); margin-bottom: 0.3rem; }
-  header h1 span { color: var(--yellow); }
-  header p { font-size: 0.82rem; color: var(--muted); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    padding: 3rem 2rem 5rem;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  header {
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .header-text h1 {
+    font-family: var(--mono);
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
+  .header-text h1 span { color: #1a5c38; }
+  .header-text p { font-size: 0.82rem; color: var(--muted2); }
+
+  /* Portuguese flag SVG */
+  .pt-flag {
+    flex-shrink: 0;
+    width: 48px;
+    height: 32px;
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    margin-top: 2px;
+  }
 
   /* GROUP HEADERS */
   .group-label {
-    font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase;
-    letter-spacing: 0.14em; color: var(--blue); margin: 2.5rem 0 0.75rem;
-    border-left: 3px solid var(--blue); padding-left: 0.65rem;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #1a5c38;
+    margin: 2.5rem 0 0.75rem;
+    border-left: 3px solid var(--green);
+    padding-left: 0.65rem;
   }
   .group-label:first-child { margin-top: 0; }
 
@@ -36,50 +87,113 @@
     grid-template-columns: 2rem 1fr auto;
     align-items: center;
     gap: 1.1rem;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 6px; padding: 1.1rem 1.25rem;
-    text-decoration: none; color: inherit;
-    transition: border-color 0.2s;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.1rem 1.25rem;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
     position: relative;
   }
-  a.guide-card:hover { border-color: var(--yellow); }
+  a.guide-card:hover {
+    border-color: var(--green-mid);
+    box-shadow: 0 2px 8px rgba(45,122,80,0.08);
+  }
 
-  .guide-num { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); text-align: right; }
+  .guide-num {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--muted2);
+    text-align: right;
+  }
 
-  .guide-info strong { display: block; font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 0.2rem; }
-  .guide-info span   { font-size: 0.8rem; color: var(--muted); }
+  .guide-info strong {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.2rem;
+  }
+  .guide-info span { font-size: 0.8rem; color: var(--muted); }
 
-  .guide-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.4rem; }
+  .guide-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.4rem;
+  }
 
-  .guide-arrow { font-size: 0.9rem; color: var(--border); transition: color 0.2s; }
-  a.guide-card:hover .guide-arrow { color: var(--yellow); }
+  .guide-arrow { font-size: 0.9rem; color: var(--border2); transition: color 0.2s; }
+  a.guide-card:hover .guide-arrow { color: #1a5c38; }
 
   /* LAST STUDIED */
   .last-studied {
-    font-family: var(--mono); font-size: 0.6rem;
-    color: var(--muted); white-space: nowrap;
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--muted2);
+    white-space: nowrap;
   }
-  .last-studied.today   { color: var(--green); }
-  .last-studied.recent  { color: var(--yellow); }
-  .last-studied.stale   { color: var(--red); opacity: 0.7; }
-  .last-studied.never   { color: var(--muted); opacity: 0.5; }
+  .last-studied.today  { color: #1a5c38; }
+  .last-studied.recent { color: #b07d2a; }
+  .last-studied.stale  { color: #8b2018; opacity: 0.8; }
+  .last-studied.never  { color: var(--muted2); opacity: 0.6; }
 
-  /* STREAK BAR — subtle bottom indicator */
+  /* STREAK BAR */
   .streak-bar {
     position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
     background: var(--border); border-radius: 0 0 6px 6px; overflow: hidden;
   }
   .streak-fill { height: 100%; background: var(--green); transition: width 0.4s ease; }
 
-  footer { margin-top: 4rem; font-family: var(--mono); font-size: 0.65rem; color: var(--muted); border-top: 1px solid var(--border); padding-top: 1.5rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
-  .footer-stat { color: var(--text); }
+  footer {
+    margin-top: 4rem;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--muted2);
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-stat { color: #1a5c38; }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Português Europeu · <span>Study Guides</span></h1>
-  <p>A1 — Lighthouse Language School</p>
+  <div class="header-text">
+    <h1>Português Europeu · <span>Study Guides</span></h1>
+    <p>A1 — Lighthouse Language School</p>
+  </div>
+
+  <!-- Portuguese Flag SVG -->
+  <svg class="pt-flag" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
+    <!-- Green stripe (2/5 width) -->
+    <rect x="0" y="0" width="19.2" height="32" fill="#006600"/>
+    <!-- Red stripe (3/5 width) -->
+    <rect x="19.2" y="0" width="28.8" height="32" fill="#FF0000"/>
+    <!-- Yellow shield outline circle -->
+    <circle cx="19.2" cy="16" r="7" fill="none" stroke="#FFCC00" stroke-width="1.2"/>
+    <!-- Armillary sphere simplified: inner circle -->
+    <circle cx="19.2" cy="16" r="4.5" fill="none" stroke="#FFCC00" stroke-width="0.8"/>
+    <!-- Cross lines on sphere -->
+    <line x1="19.2" y1="11.5" x2="19.2" y2="20.5" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="14.7" y1="16" x2="23.7" y2="16" stroke="#FFCC00" stroke-width="0.8"/>
+    <!-- Diagonal bands -->
+    <line x1="16" y1="12.8" x2="22.4" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <line x1="22.4" y1="12.8" x2="16" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <!-- Shield (quinas) - simplified white rectangle -->
+    <rect x="17" y="13.5" width="4.4" height="5" fill="white" rx="0.5"/>
+    <!-- 5 blue dots representing quinas -->
+    <circle cx="19.2" cy="16" r="0.8" fill="#003399"/>
+    <circle cx="17.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="17.7" cy="17.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="17.5" r="0.5" fill="#003399"/>
+  </svg>
 </header>
 
 <div id="indexContent"></div>
@@ -94,29 +208,28 @@ const GUIDES = [
   {
     group: 'Phrases',
     items: [
-      { num: '01', file: 'aula1_comunicar_sala_de_aula.html', title: 'Classroom Phrases',  desc: 'Essential phrases for communicating in class' },
+      { num: '01', file: 'aula1_comunicar_sala_de_aula.html', title: 'Classroom Phrases',   desc: 'Essential phrases for communicating in class' },
       { num: '06', file: 'frases-do-dia.html',                title: 'Frases do Dia a Dia', desc: 'Everyday phrases — introductions, plans, restaurant, time' },
     ]
   },
   {
     group: 'Grammar',
     items: [
-      { num: '03', file: 'verbos_irregulares.html',              title: 'Irregular Verbs — Present',      desc: '10 common verbs: present indicative, all conjugations' },
-      { num: '07', file: 'verbos-essenciais-presente.html',      title: '7 Essential Verbs — Present',    desc: 'ser, estar, ir, ter, fazer, dar, dizer — eu & você' },
-      { num: '08', file: 'verbos-essenciais-passado.html',       title: '7 Essential Verbs — Past',       desc: 'Same 7 verbs in pretérito perfeito — eu & você' },
+      { num: '03', file: 'verbos_irregulares.html',         title: 'Irregular Verbs — Present',   desc: '10 common verbs: present indicative, all conjugations' },
+      { num: '07', file: 'verbos-essenciais-presente.html', title: '7 Essential Verbs — Present', desc: 'ser, estar, ir, ter, fazer, dar, dizer — eu & você' },
+      { num: '08', file: 'verbos-essenciais-passado.html',  title: '7 Essential Verbs — Past',    desc: 'Same 7 verbs in pretérito perfeito — eu & você' },
     ]
   },
   {
     group: 'Vocabulary',
     items: [
-      { num: '02', file: 'numeros.html',          title: 'Numbers',       desc: 'Cardinal numbers 0–100, masculine and feminine forms' },
+      { num: '02', file: 'numeros.html',          title: 'Numbers',          desc: 'Cardinal numbers 0–100, masculine and feminine forms' },
       { num: '04', file: 'casa-vocabulario.html', title: 'Around the House', desc: 'Rooms, furniture, appliances, utensils — with images' },
-      { num: '05', file: 'common-words.html',     title: 'Common Words',  desc: '100 most frequently used Portuguese words + example sentences' },
+      { num: '05', file: 'common-words.html',     title: 'Common Words',     desc: '100 most frequently used Portuguese words + example sentences' },
     ]
   }
 ];
 
-// ── LAST STUDIED (localStorage) ────────────────────────────────────
 const LS_KEY = 'pt-study-last-visited';
 
 function getStudyData() {
@@ -125,21 +238,18 @@ function getStudyData() {
 
 function formatLastStudied(ts) {
   if (!ts) return { text: 'not yet studied', cls: 'never' };
-  const now = Date.now();
-  const diff = now - ts;
-  const days = Math.floor(diff / 86400000);
+  const diff = Date.now() - ts;
+  const mins  = Math.floor(diff / 60000);
   const hours = Math.floor(diff / 3600000);
-  const mins = Math.floor(diff / 60000);
-
-  if (mins < 60)  return { text: `${mins}m ago`, cls: 'today' };
+  const days  = Math.floor(diff / 86400000);
+  if (mins < 60)  return { text: `${mins}m ago`,  cls: 'today' };
   if (hours < 24) return { text: `${hours}h ago`, cls: 'today' };
-  if (days === 1) return { text: 'yesterday',    cls: 'recent' };
+  if (days === 1) return { text: 'yesterday',     cls: 'recent' };
   if (days <= 3)  return { text: `${days}d ago`,  cls: 'recent' };
   if (days <= 7)  return { text: `${days}d ago`,  cls: 'stale' };
   return { text: `${days}d ago`, cls: 'stale' };
 }
 
-// Streak = fraction of all guides studied in last 7 days (0–1)
 function calcStreakFill(ts) {
   if (!ts) return 0;
   const days = (Date.now() - ts) / 86400000;
@@ -152,9 +262,6 @@ function calcStreakFill(ts) {
 function buildIndex() {
   const data = getStudyData();
   const container = document.getElementById('indexContent');
-  container.innerHTML = '';
-
-  let totalStudied = 0;
   const allItems = GUIDES.flatMap(g => g.items);
 
   GUIDES.forEach(group => {
@@ -168,7 +275,6 @@ function buildIndex() {
 
     group.items.forEach(item => {
       const ts = data[item.file];
-      if (ts) totalStudied++;
       const { text, cls } = formatLastStudied(ts);
       const fill = calcStreakFill(ts);
 
@@ -193,7 +299,6 @@ function buildIndex() {
     container.appendChild(list);
   });
 
-  // Footer stats
   const studied7d = allItems.filter(i => {
     const ts = data[i.file];
     return ts && (Date.now() - ts) < 7 * 86400000;

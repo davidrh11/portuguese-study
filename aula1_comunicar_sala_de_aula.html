@@ -6,14 +6,23 @@
 <title>A1.1 · Unidade 1 · Comunicar na Sala de Aula</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0f0f0f;
-    --surface: #1a1a1a;
-    --border: #2a2a2a;
-    --yellow: #e8c547;
-    --blue: #4a9eff;
-    --text: #e0e0e0;
-    --muted: #888;
+    :root {
+    --bg: #f9f6f0;
+    --surface: #ffffff;
+    --surface2: #f2ede6;
+    --border: #e0d8cc;
+    --border2: #ccc4b4;
+    --green: #2d7a50;
+    --green-light: #eef5f1;
+    --green-mid: #9acbb0;
+    --red: #a03428;
+    --red-light: #fdf2f1;
+    --red-mid: #dba09a;
+    --yellow: #b07d2a;
+    --blue: #2d7a50;
+    --text: #2e2820;
+    --muted: #8a7a68;
+    --muted2: #b0a090;
     --mono: 'IBM Plex Mono', monospace;
     --sans: 'IBM Plex Sans', sans-serif;
   }
@@ -41,7 +50,7 @@
     font-size: 0.75rem;
     font-weight: 600;
     color: var(--bg);
-    background: var(--yellow);
+    background: var(--green);
     padding: 0.2rem 0.6rem;
     border-radius: 3px;
     letter-spacing: 0.05em;
@@ -82,7 +91,7 @@
   }
 
   .tab:hover { color: var(--text); }
-  .tab.active { color: var(--yellow); border-bottom-color: var(--yellow); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
 
   .view { display: none; padding: 2rem; }
   .view.active { display: block; }
@@ -145,7 +154,7 @@
     width: 20%;
   }
 
-  tbody tr:hover { background: var(--surface); }
+  tbody tr:hover { background: var(--surface2); }
 
   td.pt-click {
     cursor: pointer;
@@ -159,7 +168,7 @@
 
   .note-block {
     background: var(--surface);
-    border-left: 3px solid var(--yellow);
+    border-left: 3px solid var(--green);
     padding: 1rem 1.25rem;
     margin-top: 1.5rem;
     border-radius: 0 4px 4px 0;
@@ -170,7 +179,7 @@
     font-size: 0.65rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--yellow);
+    color: var(--green);
     margin-bottom: 0.4rem;
   }
 
@@ -206,7 +215,7 @@
 
   .progress-fill {
     height: 100%;
-    background: var(--yellow);
+    background: var(--green);
     transition: width 0.3s ease;
   }
 
@@ -227,7 +236,7 @@
     transition: border-color 0.2s;
   }
 
-  .card:hover { border-color: var(--yellow); }
+  .card:hover { border-color: var(--green); }
 
   .card-category {
     font-family: var(--mono);
@@ -264,7 +273,7 @@
   .card-back .pt-answer {
     font-family: var(--mono);
     font-size: 1.5rem;
-    color: var(--yellow);
+    color: var(--green);
     line-height: 1.3;
     filter: blur(6px);
     transition: filter 0.3s ease;
@@ -315,7 +324,7 @@
     transition: all 0.15s;
   }
 
-  .nav-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+  .nav-btn:hover { border-color: var(--green); color: var(--yellow); }
   .nav-btn.audio-btn { color: var(--blue); border-color: var(--blue); }
   .nav-btn.audio-btn:hover { background: rgba(74,158,255,0.08); }
 
@@ -325,7 +334,7 @@
   .quiz-q {
     font-family: var(--mono);
     font-size: 1.2rem;
-    color: var(--yellow);
+    color: var(--green);
     margin-bottom: 1.5rem;
     text-align: center;
     min-height: 60px;
@@ -359,7 +368,7 @@
     font-family: var(--sans);
   }
 
-  .quiz-opt:hover:not(:disabled) { border-color: var(--yellow); }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--green); }
   .quiz-opt.correct { border-color: #4caf8a; background: rgba(76,175,138,0.1); color: #4caf8a; }
   .quiz-opt.wrong { border-color: #e05c5c; background: rgba(224,92,92,0.1); color: #e05c5c; }
   .quiz-opt:disabled { cursor: default; }
@@ -389,7 +398,7 @@
     font-family: var(--mono);
     font-size: 0.85rem;
     padding: 0.6rem 2rem;
-    background: var(--yellow);
+    background: var(--green);
     color: var(--bg);
     border: none;
     border-radius: 4px;
@@ -403,8 +412,29 @@
 <body>
 
 <header>
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;width:100%;">
+<div style="flex:1;">
   <span class="level-badge">A1.1</span>
   <h1>Unidade 1 · <span>Comunicar na Sala de Aula</span> &nbsp;·&nbsp; Aula 1 — 10 de março</h1>
+</div>
+  <!-- Portuguese Flag -->
+  <svg style="flex-shrink:0;width:48px;height:32px;border-radius:3px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.15);margin-top:2px;" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="19.2" height="32" fill="#006600"/>
+    <rect x="19.2" y="0" width="28.8" height="32" fill="#FF0000"/>
+    <circle cx="19.2" cy="16" r="7" fill="none" stroke="#FFCC00" stroke-width="1.2"/>
+    <circle cx="19.2" cy="16" r="4.5" fill="none" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="19.2" y1="11.5" x2="19.2" y2="20.5" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="14.7" y1="16" x2="23.7" y2="16" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="16" y1="12.8" x2="22.4" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <line x1="22.4" y1="12.8" x2="16" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <rect x="17" y="13.5" width="4.4" height="5" fill="white" rx="0.5"/>
+    <circle cx="19.2" cy="16" r="0.8" fill="#003399"/>
+    <circle cx="17.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="17.7" cy="17.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="17.5" r="0.5" fill="#003399"/>
+  </svg>
+</div>
 </header>
 
 <div class="tabs">

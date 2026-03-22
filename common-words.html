@@ -6,18 +6,23 @@
 <title>100 Palavras Mais Comuns</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0f0f0f;
-    --surface: #1a1a1a;
-    --surface2: #222;
-    --border: #2a2a2a;
-    --border2: #333;
-    --yellow: #e8c547;
-    --blue: #4a9eff;
-    --green: #4caf8a;
-    --red: #e05c5c;
-    --text: #e0e0e0;
-    --muted: #888;
+    :root {
+    --bg: #f9f6f0;
+    --surface: #ffffff;
+    --surface2: #f2ede6;
+    --border: #e0d8cc;
+    --border2: #ccc4b4;
+    --green: #2d7a50;
+    --green-light: #eef5f1;
+    --green-mid: #9acbb0;
+    --red: #a03428;
+    --red-light: #fdf2f1;
+    --red-mid: #dba09a;
+    --yellow: #b07d2a;
+    --blue: #2d7a50;
+    --text: #2e2820;
+    --muted: #8a7a68;
+    --muted2: #b0a090;
     --mono: 'IBM Plex Mono', monospace;
     --sans: 'IBM Plex Sans', sans-serif;
   }
@@ -31,7 +36,7 @@
   }
   .level-badge {
     font-family: var(--mono); font-size: 0.75rem; font-weight: 600;
-    color: var(--bg); background: var(--yellow);
+    color: #ffffff; background: var(--green);
     padding: 0.2rem 0.6rem; border-radius: 3px; letter-spacing: 0.05em;
   }
   header h1 { font-family: var(--mono); font-size: 1rem; font-weight: 400; color: var(--muted); flex: 1; }
@@ -47,7 +52,7 @@
     letter-spacing: 0.03em;
   }
   .tab:hover { color: var(--text); }
-  .tab.active { color: var(--yellow); border-bottom-color: var(--yellow); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
 
   .view { display: none; padding: 1.5rem 2rem; }
   .view.active { display: block; }
@@ -95,7 +100,7 @@
     text-align: right; padding-right: 0.75rem; vertical-align: middle;
   }
   .pt-word {
-    font-family: var(--mono); font-size: 0.95rem; color: var(--yellow); font-weight: 600;
+    font-family: var(--mono); font-size: 0.95rem; color: var(--green); font-weight: 600;
     cursor: pointer;
   }
   .pt-word:hover { text-decoration: underline; }
@@ -144,9 +149,9 @@
     color: var(--text); padding: 0.5rem 1rem; border-radius: 4px;
     cursor: pointer; font-family: var(--mono); font-size: 0.8rem; transition: all 0.15s;
   }
-  .fc-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+  .fc-btn:hover { border-color: var(--green); color: var(--yellow); }
   .fc-btn:disabled { opacity: 0.3; cursor: default; }
-  .fc-mode-btn { color: var(--yellow); border-color: var(--yellow); letter-spacing: 0.05em; }
+  .fc-mode-btn { color: var(--yellow); border-color: var(--green); letter-spacing: 0.05em; }
 
   /* Card — flex column, content packed toward center */
   .fc-card {
@@ -179,7 +184,7 @@
 
   /* Portuguese answer — blurred until clicked */
   .fc-pt-word {
-    font-family: var(--mono); font-size: 2rem; color: var(--yellow); font-weight: 600;
+    font-family: var(--mono); font-size: 2rem; color: var(--green); font-weight: 600;
     filter: blur(7px); transition: filter 0.3s; cursor: pointer; line-height: 1.2;
     margin-bottom: 1.25rem;
   }
@@ -219,7 +224,7 @@
     margin-top: 0.75rem; height: 2px; background: var(--border);
     border-radius: 1px; overflow: hidden;
   }
-  .fc-progress-fill { height: 100%; background: var(--yellow); transition: width 0.3s; }
+  .fc-progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
 
   /* ── QUIZ ── */
   .quiz-wrap { max-width: 560px; margin: 0 auto; }
@@ -233,7 +238,7 @@
     border-radius: 8px; padding: 2rem; text-align: center; margin-bottom: 1.5rem;
   }
   .quiz-label { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); margin-bottom: 0.75rem; }
-  .quiz-word { font-family: var(--mono); font-size: 2rem; color: var(--yellow); font-weight: 600; }
+  .quiz-word { font-family: var(--mono); font-size: 2rem; color: var(--green); font-weight: 600; }
   .quiz-ex { font-size: 0.82rem; color: var(--muted); margin-top: 0.75rem; font-style: italic; }
   .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem; }
   .quiz-opt {
@@ -242,16 +247,16 @@
     font-size: 0.88rem; color: var(--text); transition: all 0.15s;
     text-align: center; font-family: var(--sans);
   }
-  .quiz-opt:hover:not(:disabled) { border-color: var(--yellow); }
-  .quiz-opt.correct { border-color: var(--green); background: rgba(76,175,138,0.1); color: var(--green); }
-  .quiz-opt.wrong { border-color: var(--red); background: rgba(224,92,92,0.1); color: var(--red); }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--green); }
+  .quiz-opt.correct { border-color: #1a5c38; background: rgba(76,175,138,0.1); color: #1a5c38; }
+  .quiz-opt.wrong { border-color: #8b2018; background: rgba(224,92,92,0.1); color: #8b2018; }
   .quiz-opt:disabled { cursor: default; }
   .quiz-feedback { text-align: center; font-family: var(--mono); font-size: 0.85rem; min-height: 1.5rem; margin-bottom: 1rem; }
-  .quiz-feedback.ok { color: var(--green); }
-  .quiz-feedback.bad { color: var(--red); }
+  .quiz-feedback.ok { color: #1a5c38; }
+  .quiz-feedback.bad { color: #8b2018; }
   .quiz-next {
     display: block; margin: 0 auto; font-family: var(--mono); font-size: 0.85rem;
-    padding: 0.6rem 2rem; background: var(--yellow); color: var(--bg);
+    padding: 0.6rem 2rem; background: var(--green); color: #ffffff;
     border: none; border-radius: 4px; cursor: pointer; font-weight: 600;
   }
   .quiz-next:disabled { opacity: 0.3; cursor: default; }
@@ -260,7 +265,7 @@
   .quiz-done p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
   .quiz-restart {
     font-family: var(--mono); font-size: 0.85rem; padding: 0.6rem 2rem;
-    background: var(--yellow); color: var(--bg); border: none;
+    background: var(--green); color: #ffffff; border: none;
     border-radius: 4px; cursor: pointer; font-weight: 600;
   }
 </style>
@@ -268,8 +273,29 @@
 <body>
 
 <header>
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;width:100%;">
+<div style="flex:1;">
   <span class="level-badge">VOCAB</span>
   <h1>100 Palavras Mais Comuns · <span>Most Common Portuguese Words</span></h1>
+</div>
+  <!-- Portuguese Flag -->
+  <svg style="flex-shrink:0;width:48px;height:32px;border-radius:3px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.15);margin-top:2px;" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="19.2" height="32" fill="#006600"/>
+    <rect x="19.2" y="0" width="28.8" height="32" fill="#FF0000"/>
+    <circle cx="19.2" cy="16" r="7" fill="none" stroke="#FFCC00" stroke-width="1.2"/>
+    <circle cx="19.2" cy="16" r="4.5" fill="none" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="19.2" y1="11.5" x2="19.2" y2="20.5" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="14.7" y1="16" x2="23.7" y2="16" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="16" y1="12.8" x2="22.4" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <line x1="22.4" y1="12.8" x2="16" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <rect x="17" y="13.5" width="4.4" height="5" fill="white" rx="0.5"/>
+    <circle cx="19.2" cy="16" r="0.8" fill="#003399"/>
+    <circle cx="17.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="17.7" cy="17.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="17.5" r="0.5" fill="#003399"/>
+  </svg>
+</div>
 </header>
 
 <div class="tabs">
