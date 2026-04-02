@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verbos Regulares em -AR · Presente</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0;
+    --surface: #ffffff;
+    --surface2: #f0ece4;
+    --border: #ddd8ce;
+    --green: #2d7a50;
+    --red: #a03428;
+    --text: #1a1a1a;
+    --muted: #6b6560;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 1.5rem 2rem 1rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    background: var(--surface);
+  }
+
+  .header-left {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .level-badge {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--surface);
+    background: var(--green);
+    padding: 0.2rem 0.6rem;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+  }
+
+  header h1 {
+    font-family: var(--mono);
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--muted);
+  }
+
+  header h1 span {
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  /* Portuguese flag SVG */
+  .flag {
+    flex-shrink: 0;
+  }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    background: var(--surface);
+  }
+
+  .tab {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    letter-spacing: 0.03em;
+  }
+
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  .view { display: none; padding: 2rem; }
+  .view.active { display: block; }
+
+  /* ── TABELA ── */
+  .tabela-wrap {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--green);
+    margin: 2rem 0 0.75rem;
+    font-weight: 600;
+  }
+
+  .section-label:first-child { margin-top: 0; }
+
+  /* Conjugation pattern box */
+  .pattern-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+
+  .pattern-header {
+    background: var(--green);
+    color: var(--surface);
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.6rem 1rem;
+    letter-spacing: 0.05em;
+  }
+
+  .pattern-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  .pattern-row {
+    display: contents;
+  }
+
+  .pattern-cell {
+    padding: 0.55rem 1rem;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .pattern-cell:nth-child(odd) {
+    border-right: 1px solid var(--border);
+  }
+
+  .pattern-cell:nth-last-child(-n+2) {
+    border-bottom: none;
+  }
+
+  .pronoun {
+    color: var(--muted);
+    font-size: 0.75rem;
+    min-width: 5rem;
+  }
+
+  .ending {
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  .stem {
+    color: var(--text);
+  }
+
+  /* Use-case note blocks */
+  .use-block {
+    background: var(--surface);
+    border-left: 3px solid var(--green);
+    border-radius: 0 6px 6px 0;
+    padding: 0.85rem 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .use-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--green);
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+
+  .use-examples {
+    font-size: 0.85rem;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .use-examples .pt {
+    font-family: var(--mono);
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .use-examples .en {
+    color: var(--muted);
+    font-style: italic;
+    font-size: 0.8rem;
+  }
+
+  /* Verb table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+
+  th {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    text-align: left;
+    padding: 0.5rem 0.85rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 0.65rem 0.85rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  td.pt-word {
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    color: var(--green);
+    font-weight: 600;
+    width: 40%;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  td.pt-word:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--green);
+    text-underline-offset: 3px;
+  }
+
+  td.en-word {
+    color: var(--text);
+    width: 30%;
+  }
+
+  td.ex-cell {
+    color: var(--muted);
+    font-size: 0.82rem;
+    width: 30%;
+    max-width: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.2s;
+    padding-top: 0;
+    padding-bottom: 0;
+    max-height: 0;
+  }
+
+  tr.expanded td.ex-cell {
+    max-width: none;
+    opacity: 1;
+    max-height: none;
+    padding: 0.65rem 0.85rem;
+  }
+
+  .ex-pt {
+    display: block;
+    color: var(--text);
+    font-style: italic;
+    margin-bottom: 0.2rem;
+    font-size: 0.83rem;
+  }
+
+  .ex-en {
+    display: block;
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+
+  tbody tr { cursor: pointer; transition: background 0.15s; }
+  tbody tr:hover { background: var(--surface2); }
+
+  .expand-hint {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+    opacity: 0.8;
+  }
+
+  /* ── FLASHCARDS ── */
+  .fc-wrap {
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .fc-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .fc-controls {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .fc-btn {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    padding: 0.4rem 0.9rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .fc-btn:hover { border-color: var(--green); color: var(--green); }
+
+  .fc-mode-toggle {
+    display: flex;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .fc-mode-btn {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    border-right: 1px solid var(--border);
+  }
+
+  .fc-mode-btn:last-child { border-right: none; }
+  .fc-mode-btn.active { background: var(--green); color: var(--surface); }
+  .fc-mode-btn:hover:not(.active) { color: var(--green); }
+
+  .fc-counter {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .fc-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 2rem 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 320px;
+    text-align: center;
+    gap: 0;
+  }
+
+  .fc-hints-row {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    width: 100%;
+  }
+
+  .fc-hint-item {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .fc-en-prompt {
+    font-size: 1.2rem;
+    color: var(--text);
+    font-weight: 300;
+    margin-bottom: 1.25rem;
+    line-height: 1.4;
+    min-height: 2rem;
+  }
+
+  .fc-divider {
+    width: 2.5rem;
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 1.25rem;
+  }
+
+  .fc-answer-area {
+    cursor: pointer;
+    margin-bottom: 1rem;
+  }
+
+  .fc-pt-answer {
+    font-family: var(--mono);
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: var(--green);
+    display: inline-block;
+    transition: filter 0.25s;
+    line-height: 1.3;
+  }
+
+  .fc-pt-answer.blurred {
+    filter: blur(7px);
+    background: var(--border);
+    border-radius: 4px;
+  }
+
+  .fc-speak-pill {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--green);
+    padding: 0.35rem 1.2rem;
+    border-radius: 99px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    transition: all 0.2s;
+    line-height: 1;
+  }
+
+  .fc-speak-pill:hover,
+  .fc-speak-pill.playing {
+    background: var(--green);
+    color: var(--surface);
+    border-color: var(--green);
+  }
+
+  .fc-example {
+    font-size: 0.83rem;
+    font-style: italic;
+    color: var(--text);
+    cursor: pointer;
+    transition: filter 0.25s;
+    margin-bottom: 0.2rem;
+    line-height: 1.5;
+  }
+
+  .fc-example.blurred {
+    filter: blur(5px);
+    background: var(--border);
+    border-radius: 4px;
+  }
+
+  .fc-example-en {
+    font-size: 0.77rem;
+    color: var(--muted);
+    transition: filter 0.25s;
+    margin-bottom: 1rem;
+  }
+
+  .fc-example-en.blurred {
+    filter: blur(5px);
+    background: var(--border);
+    border-radius: 4px;
+  }
+
+  .fc-nav {
+    display: flex;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+
+  .fc-nav-btn {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    padding: 0.5rem 1.2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .fc-nav-btn:hover { border-color: var(--green); color: var(--green); }
+
+  /* ── QUIZ ── */
+  .quiz-wrap {
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .quiz-score {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .quiz-q {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.75rem 1.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .quiz-label {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .quiz-word {
+    font-family: var(--mono);
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--green);
+    margin-bottom: 0.5rem;
+  }
+
+  .quiz-context {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .quiz-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+    margin-bottom: 1rem;
+  }
+
+  .quiz-opt {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.85rem 1rem;
+    cursor: pointer;
+    font-size: 0.88rem;
+    color: var(--text);
+    font-family: var(--sans);
+    transition: all 0.15s;
+    text-align: center;
+  }
+
+  .quiz-opt:hover:not(:disabled) { border-color: var(--green); color: var(--green); }
+  .quiz-opt.correct { border-color: var(--green); background: rgba(45,122,80,0.08); color: var(--green); font-weight: 600; }
+  .quiz-opt.wrong { border-color: var(--red); background: rgba(160,52,40,0.08); color: var(--red); }
+  .quiz-opt:disabled { cursor: default; }
+
+  .quiz-feedback {
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 0.83rem;
+    min-height: 1.4rem;
+    margin-bottom: 0.75rem;
+    color: var(--muted);
+  }
+
+  .quiz-feedback.ok { color: var(--green); font-weight: 600; }
+  .quiz-feedback.bad { color: var(--red); }
+
+  .quiz-next {
+    display: block;
+    margin: 0 auto;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    padding: 0.6rem 2rem;
+    background: var(--green);
+    color: var(--surface);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: opacity 0.15s;
+  }
+
+  .quiz-next:disabled { opacity: 0.3; cursor: default; }
+  .quiz-next:hover:not(:disabled) { opacity: 0.85; }
+
+  .quiz-results {
+    text-align: center;
+    padding: 2.5rem 0;
+  }
+
+  .quiz-final-score {
+    font-family: var(--mono);
+    font-size: 3rem;
+    font-weight: 600;
+    color: var(--green);
+    margin-bottom: 0.4rem;
+  }
+
+  .quiz-final-msg {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .quiz-restart {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    padding: 0.6rem 2rem;
+    background: var(--green);
+    color: var(--surface);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <span class="level-badge">A1.1</span>
+    <h1>Unidade 5 · <span>Verbos Regulares em -AR</span> &nbsp;·&nbsp; Presente do Indicativo</h1>
+  </div>
+  <!-- Portuguese flag SVG -->
+  <svg class="flag" width="40" height="27" viewBox="0 0 40 27" xmlns="http://www.w3.org/2000/svg">
+    <rect width="16" height="27" fill="#006600"/>
+    <rect x="16" width="24" height="27" fill="#FF0000"/>
+    <ellipse cx="16" cy="13.5" rx="6" ry="6" fill="#FFFF00" stroke="#006600" stroke-width="0.5"/>
+    <ellipse cx="16" cy="13.5" rx="3.5" ry="4.5" fill="white" stroke="#003399" stroke-width="0.8"/>
+    <line x1="12.5" y1="13.5" x2="19.5" y2="13.5" stroke="#003399" stroke-width="0.6"/>
+  </svg>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('tabela', this)">Tabela</button>
+  <button class="tab" onclick="switchTab('flashcards', this)">Flashcards</button>
+  <button class="tab" onclick="switchTab('quiz', this)">Quiz</button>
+</div>
+
+<!-- ══════════════ TABELA ══════════════ -->
+<div id="tabela" class="view active">
+<div class="tabela-wrap">
+
+  <div class="section-label">O Padrão — The Pattern</div>
+
+  <div class="pattern-box">
+    <div class="pattern-header">falar → fal- + ending</div>
+    <div class="pattern-grid">
+      <div class="pattern-cell"><span class="pronoun">eu</span> fal<span class="ending">o</span></div>
+      <div class="pattern-cell"><span class="pronoun">nós</span> fal<span class="ending">amos</span></div>
+      <div class="pattern-cell"><span class="pronoun">tu</span> fal<span class="ending">as</span></div>
+      <div class="pattern-cell"><span class="pronoun">vocês / eles / elas</span> fal<span class="ending">am</span></div>
+      <div class="pattern-cell"><span class="pronoun">você / ele / ela</span> fal<span class="ending">a</span></div>
+      <div class="pattern-cell" style="background:var(--surface2);"><span style="font-family:var(--mono);font-size:0.72rem;color:var(--muted);">Remove -ar, add ending</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">Quando Usar — When to Use It</div>
+
+  <div class="use-block">
+    <div class="use-label">Ações habituais — Habitual actions</div>
+    <div class="use-examples">
+      <span class="pt">Eu levanto-me sempre às 8h00.</span><br>
+      <span class="en">I always get up at 8am.</span><br>
+      <span class="pt">O Sr. Ramos compra o jornal todos os dias.</span><br>
+      <span class="en">Mr. Ramos buys the newspaper every day.</span>
+    </div>
+  </div>
+
+  <div class="use-block">
+    <div class="use-label">Constatar um facto — Stating a fact</div>
+    <div class="use-examples">
+      <span class="pt">Em Lisboa as lojas fecham às 19h00.</span><br>
+      <span class="en">In Lisbon, shops close at 7pm.</span><br>
+      <span class="pt">A Ana fala inglês muito bem.</span><br>
+      <span class="en">Ana speaks English very well.</span>
+    </div>
+  </div>
+
+  <div class="use-block">
+    <div class="use-label">Ações num futuro próximo — Near future</div>
+    <div class="use-examples">
+      <span class="pt">Telefono-te amanhã.</span><br>
+      <span class="en">I'll call you tomorrow.</span><br>
+      <span class="pt">Os exames começam na próxima semana.</span><br>
+      <span class="en">Exams start next week.</span>
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top:2rem;">Verbos Úteis — Useful -AR Verbs</div>
+  <p class="expand-hint">↓ click any row to see an example sentence</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Português</th>
+        <th>English</th>
+        <th>Example</th>
+      </tr>
+    </thead>
+    <tbody id="verbTableBody"></tbody>
+  </table>
+
+</div>
+</div>
+
+<!-- ══════════════ FLASHCARDS ══════════════ -->
+<div id="flashcards" class="view">
+<div class="fc-wrap">
+
+  <div class="fc-topbar">
+    <div class="fc-controls">
+      <div class="fc-mode-toggle">
+        <button class="fc-mode-btn active" id="modeEP" onclick="setFCMode('EP')">E → PT</button>
+        <button class="fc-mode-btn" id="modePE" onclick="setFCMode('PE')">PT → E</button>
+      </div>
+      <button class="fc-btn" onclick="shuffleFC()">⇄ Baralhar</button>
+      <button class="fc-btn" onclick="resetFC()">↺ Reiniciar</button>
+    </div>
+    <span class="fc-counter" id="fcCounter">1 / 1</span>
+  </div>
+
+  <div class="fc-card" id="fcCard">
+    <div class="fc-hints-row">
+      <span class="fc-hint-item">🔊 ouvir resposta</span>
+      <span class="fc-hint-item">clique para revelar</span>
+      <span class="fc-hint-item">clique exemplo para ouvir</span>
+    </div>
+    <div class="fc-en-prompt" id="fcEnPrompt"></div>
+    <div class="fc-divider"></div>
+    <div class="fc-answer-area" onclick="revealAnswer()">
+      <span class="fc-pt-answer blurred" id="fcPtAnswer"></span>
+    </div>
+    <button class="fc-speak-pill" id="fcSpeakPill" onclick="speakCurrent()">🔊</button>
+    <div class="fc-example blurred" id="fcExample" onclick="revealExample()"></div>
+    <div class="fc-example-en blurred" id="fcExampleEn"></div>
+    <div class="fc-nav">
+      <button class="fc-nav-btn" onclick="fcMove(-1)">← Anterior</button>
+      <button class="fc-nav-btn" onclick="fcMove(1)">Próximo →</button>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════ QUIZ ══════════════ -->
+<div id="quiz" class="view">
+<div class="quiz-wrap">
+  <div class="quiz-score" id="quizScore">Score: 0 / 0</div>
+  <div id="quizActive">
+    <div class="quiz-q">
+      <div class="quiz-label" id="quizLabel">What does this verb mean?</div>
+      <div class="quiz-word" id="quizWord"></div>
+      <div class="quiz-context" id="quizContext"></div>
+    </div>
+    <div class="quiz-options" id="quizOptions"></div>
+    <div class="quiz-feedback" id="quizFeedback"></div>
+    <button class="quiz-next" id="quizNext" onclick="nextQuiz()" disabled>Próximo →</button>
+  </div>
+  <div class="quiz-results" id="quizResults" style="display:none">
+    <div class="quiz-final-score" id="quizFinalScore"></div>
+    <div class="quiz-final-msg" id="quizFinalMsg"></div>
+    <button class="quiz-restart" onclick="startQuiz()">Tentar novamente</button>
+  </div>
+</div>
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+
+// ── VERB DATA ────────────────────────────────────────────────────
+// Practical Lisbon-life verbs, not just textbook generics
+const VERBS = [
+  { inf: "falar",     en: "to speak / to talk",    ex_pt: "Falo um pouco de português.",            ex_en: "I speak a little Portuguese." },
+  { inf: "morar",     en: "to live / to reside",   ex_pt: "Moro em Lisboa há um ano.",              ex_en: "I've been living in Lisbon for a year." },
+  { inf: "trabalhar", en: "to work",                ex_pt: "Não trabalho hoje.",                     ex_en: "I'm not working today." },
+  { inf: "comprar",   en: "to buy",                 ex_pt: "Compro pão na padaria todos os dias.",   ex_en: "I buy bread at the bakery every day." },
+  { inf: "almoçar",   en: "to have lunch",          ex_pt: "Normalmente almoço às 13h00.",           ex_en: "I usually have lunch at 1pm." },
+  { inf: "jantar",    en: "to have dinner",         ex_pt: "Jantamos fora às sextas.",               ex_en: "We have dinner out on Fridays." },
+  { inf: "tomar",     en: "to take / to have (food/drink)", ex_pt: "Tomo um café de manhã.",        ex_en: "I have a coffee in the morning." },
+  { inf: "andar",     en: "to walk / to go around", ex_pt: "Ando muito a pé em Lisboa.",            ex_en: "I walk a lot in Lisbon." },
+  { inf: "apanhar",   en: "to take / to catch (transport)", ex_pt: "Apanho o metro para o trabalho.", ex_en: "I take the metro to work." },
+  { inf: "ficar",     en: "to stay / to be (located)", ex_pt: "O restaurante fica ali à esquina.",  ex_en: "The restaurant is right around the corner." },
+  { inf: "fechar",    en: "to close",               ex_pt: "As lojas fecham ao domingo.",            ex_en: "Shops close on Sundays." },
+  { inf: "começar",   en: "to start / to begin",    ex_pt: "A aula começa à uma.",                  ex_en: "Class starts at one." },
+  { inf: "gostar",    en: "to like",                ex_pt: "Gosto muito de Lisboa.",                 ex_en: "I really like Lisbon." },
+  { inf: "precisar",  en: "to need",                ex_pt: "Preciso de ajuda.",                      ex_en: "I need help." },
+  { inf: "perguntar", en: "to ask (a question)",    ex_pt: "Posso perguntar uma coisa?",             ex_en: "Can I ask something?" },
+  { inf: "esperar",   en: "to wait / to hope",      ex_pt: "Espero aqui.",                           ex_en: "I'll wait here." },
+  { inf: "pagar",     en: "to pay",                 ex_pt: "Pago com cartão, por favor.",            ex_en: "I'll pay by card, please." },
+  { inf: "usar",      en: "to use",                 ex_pt: "Uso muito o telefone para traduzir.",    ex_en: "I use my phone a lot to translate." },
+  { inf: "ajudar",    en: "to help",                ex_pt: "Pode ajudar-me?",                        ex_en: "Can you help me?" },
+  { inf: "entrar",    en: "to enter / to go in",    ex_pt: "Pode entrar.",                           ex_en: "You can come in." },
+];
+
+// ── AUDIO ────────────────────────────────────────────────────────
+const audioCache = {};
+let currentAudio = null;
+
+async function speak(text, btnEl) {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (btnEl) btnEl.classList.add('playing');
+  try {
+    if (audioCache[text]) {
+      const audio = new Audio(audioCache[text]);
+      currentAudio = audio;
+      audio.onended = () => { if (btnEl) btnEl.classList.remove('playing'); };
+      audio.play();
+      return;
+    }
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
+    });
+    if (!res.ok) throw new Error('Worker error');
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    audioCache[text] = url;
+    const audio = new Audio(url);
+    currentAudio = audio;
+    audio.onended = () => { if (btnEl) btnEl.classList.remove('playing'); };
+    audio.onerror = () => { if (btnEl) btnEl.classList.remove('playing'); };
+    audio.play();
+  } catch(e) {
+    if (btnEl) btnEl.classList.remove('playing');
+  }
+}
+
+// ── TAB SWITCHING ────────────────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'flashcards') initFC();
+  if (id === 'quiz') startQuiz();
+}
+
+// ── TABELA ───────────────────────────────────────────────────────
+function buildTable() {
+  const tbody = document.getElementById('verbTableBody');
+  tbody.innerHTML = '';
+  VERBS.forEach(v => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="pt-word" onclick="event.stopPropagation(); speak('${v.inf.replace(/'/g,"\\'")}', this)">${v.inf}</td>
+      <td class="en-word">${v.en}</td>
+      <td class="ex-cell">
+        <span class="ex-pt">${v.ex_pt}</span>
+        <span class="ex-en">${v.ex_en}</span>
+      </td>
+    `;
+    tr.addEventListener('click', () => tr.classList.toggle('expanded'));
+    tbody.appendChild(tr);
+  });
+}
+
+buildTable();
+
+// ── FLASHCARDS ───────────────────────────────────────────────────
+let fcDeck = [...VERBS];
+let fcIdx = 0;
+let fcMode = 'EP'; // EP = English front, PE = Portuguese front
+let fcAnswerRevealed = false;
+let fcExampleRevealed = false;
+
+function initFC() {
+  fcDeck = [...VERBS];
+  fcIdx = 0;
+  renderFC();
+}
+
+function setFCMode(mode) {
+  fcMode = mode;
+  document.getElementById('modeEP').classList.toggle('active', mode === 'EP');
+  document.getElementById('modePE').classList.toggle('active', mode === 'PE');
+  fcIdx = 0;
+  renderFC();
+}
+
+function renderFC() {
+  const w = fcDeck[fcIdx];
+  fcAnswerRevealed = false;
+  fcExampleRevealed = false;
+
+  document.getElementById('fcCounter').textContent = `${fcIdx + 1} / ${fcDeck.length}`;
+
+  const promptEl = document.getElementById('fcEnPrompt');
+  const answerEl = document.getElementById('fcPtAnswer');
+  const exEl = document.getElementById('fcExample');
+  const exEnEl = document.getElementById('fcExampleEn');
+
+  if (fcMode === 'EP') {
+    promptEl.textContent = w.en;
+    answerEl.textContent = w.inf;
+  } else {
+    promptEl.textContent = w.inf;
+    answerEl.textContent = w.en;
+  }
+
+  answerEl.classList.add('blurred');
+  exEl.textContent = w.ex_pt;
+  exEl.classList.add('blurred');
+  exEnEl.textContent = w.ex_en;
+  exEnEl.classList.add('blurred');
+  document.getElementById('fcSpeakPill').classList.remove('playing');
+}
+
+function revealAnswer() {
+  if (fcAnswerRevealed) return;
+  fcAnswerRevealed = true;
+  document.getElementById('fcPtAnswer').classList.remove('blurred');
+}
+
+function revealExample() {
+  if (!fcAnswerRevealed) revealAnswer();
+  fcExampleRevealed = true;
+  document.getElementById('fcExample').classList.remove('blurred');
+  document.getElementById('fcExampleEn').classList.remove('blurred');
+  const w = fcDeck[fcIdx];
+  speak(w.ex_pt, null);
+}
+
+function speakCurrent() {
+  const w = fcDeck[fcIdx];
+  const text = fcMode === 'EP' ? w.inf : w.en;
+  speak(fcMode === 'EP' ? w.inf : w.inf, document.getElementById('fcSpeakPill'));
+  // Always speak PT regardless of mode
+  speak(w.inf, document.getElementById('fcSpeakPill'));
+}
+
+function fcMove(dir) {
+  fcIdx = (fcIdx + dir + fcDeck.length) % fcDeck.length;
+  renderFC();
+}
+
+function shuffleFC() {
+  fcDeck = [...VERBS].sort(() => Math.random() - 0.5);
+  fcIdx = 0;
+  renderFC();
+}
+
+function resetFC() {
+  fcDeck = [...VERBS];
+  fcIdx = 0;
+  renderFC();
+}
+
+// ── QUIZ ─────────────────────────────────────────────────────────
+let qDeck = [], qIdx = 0, qScore = 0, qTotal = 0, qAnswered = false;
+
+function startQuiz() {
+  qDeck = [...VERBS].sort(() => Math.random() - 0.5);
+  qIdx = 0; qScore = 0; qTotal = 0; qAnswered = false;
+  document.getElementById('quizActive').style.display = 'block';
+  document.getElementById('quizResults').style.display = 'none';
+  renderQuiz();
+}
+
+function renderQuiz() {
+  if (qIdx >= qDeck.length) { showQuizResults(); return; }
+  qAnswered = false;
+  const w = qDeck[qIdx];
+
+  document.getElementById('quizWord').textContent = w.inf;
+  document.getElementById('quizContext').textContent = w.ex_pt;
+  document.getElementById('quizFeedback').textContent = '';
+  document.getElementById('quizFeedback').className = 'quiz-feedback';
+  document.getElementById('quizNext').disabled = true;
+  document.getElementById('quizScore').textContent = `Score: ${qScore} / ${qTotal}`;
+
+  // 4 options: correct + 3 wrong
+  const wrong = VERBS
+    .filter(x => x.inf !== w.inf)
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 3)
+    .map(x => x.en);
+  const options = [w.en, ...wrong].sort(() => Math.random() - 0.5);
+
+  const container = document.getElementById('quizOptions');
+  container.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = opt;
+    btn.onclick = () => checkAnswer(btn, opt, w);
+    container.appendChild(btn);
+  });
+}
+
+function checkAnswer(btn, chosen, w) {
+  if (qAnswered) return;
+  qAnswered = true;
+  qTotal++;
+
+  const fb = document.getElementById('quizFeedback');
+  const correct = chosen === w.en;
+
+  document.querySelectorAll('.quiz-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === w.en) b.classList.add('correct');
+  });
+
+  if (correct) {
+    qScore++;
+    fb.textContent = 'Correto! ✓';
+    fb.className = 'quiz-feedback ok';
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = `Errado — ${w.en}`;
+    fb.className = 'quiz-feedback bad';
+  }
+
+  // Auto-speak the Portuguese word after each answer
+  speak(w.inf, null);
+
+  document.getElementById('quizScore').textContent = `Score: ${qScore} / ${qTotal}`;
+  document.getElementById('quizNext').disabled = false;
+}
+
+function nextQuiz() {
+  qIdx++;
+  renderQuiz();
+}
+
+function showQuizResults() {
+  document.getElementById('quizActive').style.display = 'none';
+  document.getElementById('quizResults').style.display = 'block';
+  const pct = Math.round((qScore / qTotal) * 100);
+  document.getElementById('quizFinalScore').textContent = `${qScore}/${qTotal}`;
+  document.getElementById('quizFinalMsg').textContent =
+    pct === 100 ? 'Perfeito! Excelente trabalho!' :
+    pct >= 80   ? 'Muito bem! Continua assim.' :
+    pct >= 60   ? 'Bom trabalho — continua a praticar.' :
+                  'Continua a estudar — vai melhorar!';
+}
+
+// Init
+initFC();
+</script>
+</body>
+</html>
