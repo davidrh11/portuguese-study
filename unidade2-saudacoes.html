@@ -366,11 +366,11 @@
   <div class="note-block">
     <div class="note-label">Variante — Contexto 1: Amigos na rua</div>
     <p>
-      <span class="pt">Olá! Tudo bem?</span><br>
-      <span class="pt">Olá! Estou ótimo. E tu?</span><br>
-      <span class="pt">Fixe, ainda bem. Também.</span><br><br>
+      <span class="pt" style="cursor:pointer;" onclick="speak('Olá! Tudo bem?')">Olá! Tudo bem?</span><br>
+      <span class="pt" style="cursor:pointer;" onclick="speak('Olá! Estou ótimo. E tu?')">Olá! Estou ótimo. E tu?</span><br>
+      <span class="pt" style="cursor:pointer;" onclick="speak('Fixe, ainda bem. Também.')">Fixe, ainda bem. Também.</span><br><br>
       <span class="en">Note: <strong>Fixe</strong> = cool / great (informal, very common in Lisbon).
-      <strong>Ainda bem</strong> = glad to hear it.</span>
+      <strong>Ainda bem</strong> = glad to hear it. Click any line to hear it.</span>
     </p>
   </div>
 
@@ -415,10 +415,10 @@
   <div class="note-block" style="border-left-color: var(--red);">
     <div class="note-label" style="color:var(--red);">Variante — Contexto 2: Na Loja</div>
     <p>
-      <span class="pt">Bom dia. Como está?</span><br>
-      <span class="pt">Bom dia. Bem, e o senhor?</span> / <span class="pt">e a senhora?</span><br>
-      <span class="pt">Bem, obrigado.</span><br><br>
-      <span class="en"><strong>E o senhor / a senhora</strong> = And you? (very formal — used with shopkeepers, older strangers). More deferential than <strong>e você</strong>.</span>
+      <span class="pt" style="cursor:pointer;" onclick="speak('Bom dia. Como está?')">Bom dia. Como está?</span><br>
+      <span class="pt" style="cursor:pointer;" onclick="speak('Bom dia. Bem, e o senhor?')">Bom dia. Bem, e o senhor?</span> / <span class="pt" style="cursor:pointer;" onclick="speak('e a senhora?')">e a senhora?</span><br>
+      <span class="pt" style="cursor:pointer;" onclick="speak('Bem, obrigado.')">Bem, obrigado.</span><br><br>
+      <span class="en"><strong>E o senhor / a senhora</strong> = And you? (very formal — used with shopkeepers, older strangers). More deferential than <strong>e você</strong>. Click any line to hear it.</span>
     </p>
   </div>
 
@@ -430,10 +430,10 @@
   <div class="note-block">
     <div class="note-label">Bocadinho — A useful softener</div>
     <p>
-      <span class="pt">Um bocadinho</span> = a little bit. Used to soften any statement.<br>
-      <span class="pt">Estou cansado.</span> <span class="en">(I'm tired)</span> → <span class="pt">Estou um bocadinho cansado.</span> <span class="en">(I'm a little tired)</span><br>
+      <span class="pt" style="cursor:pointer;" onclick="speak('Um bocadinho')">Um bocadinho</span> = a little bit. Used to soften any statement.<br>
+      <span class="pt" style="cursor:pointer;" onclick="speak('Estou cansado.')">Estou cansado.</span> <span class="en">(I'm tired)</span> → <span class="pt" style="cursor:pointer;" onclick="speak('Estou um bocadinho cansado.')">Estou um bocadinho cansado.</span> <span class="en">(I'm a little tired)</span><br>
       Pronunciation: <span class="pron">/ũ cadinhú cansadu/</span> — every unstressed vowel reduces.<br><br>
-      <span class="pt">Mais ou menos</span> = <span class="pt">assim-assim</span> — both mean so-so.<br>
+      <span class="pt" style="cursor:pointer;" onclick="speak('Mais ou menos.')">Mais ou menos</span> = <span class="pt" style="cursor:pointer;" onclick="speak('Assim-assim.')">assim-assim</span> — both mean so-so.<br>
       Pronunciation of <span class="pt">mais ou menos</span>: <span class="pron">/maizômenus/</span>
     </p>
   </div>
@@ -567,13 +567,21 @@ const CARDS = [
 const AUDIO_BASE = "https://davidrh11.github.io/portuguese-study/audio/";
 
 const MY_RECORDINGS = {
-  "Estou um bocadinho cansado.":       AUDIO_BASE + "A_bit_tired.m4a",
-  "Estou um bocadinho cansado/a.":     AUDIO_BASE + "A_bit_tired.m4a",
-  "Vai-se andando.":                   AUDIO_BASE + "Keep_walking.m4a",
-  "Prazer em vê-lo!":                  AUDIO_BASE + "Nice_to_see_you_formal.m4a",
-  "Prazer em vê-lo! Até à próxima!":   AUDIO_BASE + "Nice_to_see_you_formal.m4a",
-  "Gosto em vê-lo!":                   AUDIO_BASE + "Nice_to_see_you_informal.m4a",
-  "Estou de rastos!":                  AUDIO_BASE + "Very_tired.m4a",
+  // Spectrum rows — exact strings from SPECTRUM array
+  "Estou um bocadinho cansado/a.":             AUDIO_BASE + "A_bit_tired.m4a",
+  "Estou um bocadinho cansado/a, mas bem.":    AUDIO_BASE + "A_bit_tired.m4a",
+  // Bocadinho note block
+  "Estou um bocadinho cansado.":               AUDIO_BASE + "A_bit_tired.m4a",
+  // Keep walking — spectrum, dizse table, flashcards
+  "Vai-se andando.":                           AUDIO_BASE + "Keep_walking.m4a",
+  // Formal dialogue line (full sentence)
+  "Ainda bem! Prazer em vê-lo! Até à próxima!": AUDIO_BASE + "Nice_to_see_you_formal.m4a",
+  // Flashcard standalone
+  "Prazer em vê-lo!":                          AUDIO_BASE + "Nice_to_see_you_formal.m4a",
+  // Informal nice to see you
+  "Gosto em vê-lo!":                           AUDIO_BASE + "Nice_to_see_you_informal.m4a",
+  // De rastos — spectrum and dizse
+  "Estou de rastos!":                          AUDIO_BASE + "Very_tired.m4a",
 };
 
 const audioCache = {};
