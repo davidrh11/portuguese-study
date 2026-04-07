@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unidade 2 · Saudações e Primeiras Palavras</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0;
+    --surface: #ffffff;
+    --surface2: #f0ece4;
+    --border: #ddd8ce;
+    --green: #2d7a50;
+    --red: #a03428;
+    --text: #1a1a1a;
+    --muted: #6b6560;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+  /* ── HEADER ── */
+  header {
+    padding: 1.5rem 2rem 1rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+    background: var(--surface);
+  }
+  .header-left { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+  .level-badge {
+    font-family: var(--mono); font-size: 0.7rem; font-weight: 600;
+    color: var(--surface); background: var(--green);
+    padding: 0.2rem 0.6rem; border-radius: 3px; letter-spacing: 0.05em;
+  }
+  header h1 { font-family: var(--mono); font-size: 0.95rem; font-weight: 400; color: var(--muted); }
+  header h1 span { color: var(--green); font-weight: 600; }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex; border-bottom: 1px solid var(--border);
+    padding: 0 2rem; background: var(--surface);
+  }
+  .tab {
+    font-family: var(--mono); font-size: 0.8rem; padding: 0.75rem 1.25rem;
+    cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent;
+    transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none;
+    letter-spacing: 0.03em;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  .view { display: none; padding: 2rem; }
+  .view.active { display: block; }
+
+  /* ── TABELA ── */
+  .tabela-wrap { max-width: 640px; margin: 0 auto; }
+
+  .section-label {
+    font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--green); margin: 2rem 0 0.75rem; font-weight: 600;
+  }
+  .section-label:first-child { margin-top: 0; }
+
+  /* Register tags */
+  .tag {
+    display: inline-block; font-family: var(--mono); font-size: 0.58rem;
+    font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 0.15rem 0.45rem; border-radius: 3px; margin-left: 0.5rem; vertical-align: middle;
+  }
+  .tag-informal { background: rgba(45,122,80,0.1); color: var(--green); border: 1px solid rgba(45,122,80,0.25); }
+  .tag-formal   { background: rgba(160,52,40,0.08); color: var(--red);   border: 1px solid rgba(160,52,40,0.2); }
+  .tag-both     { background: rgba(107,101,96,0.1); color: var(--muted); border: 1px solid var(--border); }
+
+  table {
+    width: 100%; border-collapse: collapse; font-size: 0.9rem; margin-bottom: 0.5rem;
+  }
+  th {
+    font-family: var(--mono); font-size: 0.62rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--muted); text-align: left;
+    padding: 0.5rem 0.85rem; border-bottom: 1px solid var(--border);
+  }
+  td { padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+
+  td.pt-word {
+    font-family: var(--mono); font-size: 0.88rem; color: var(--green); font-weight: 600;
+    width: 46%; cursor: pointer;
+  }
+  td.pt-word:hover { text-decoration: underline; text-decoration-color: var(--green); text-underline-offset: 3px; }
+  td.en-word { color: var(--text); width: 32%; font-size: 0.88rem; }
+  td.ctx-cell { color: var(--muted); font-size: 0.78rem; width: 22%; }
+
+  tbody tr { cursor: pointer; transition: background 0.15s; }
+  tbody tr:hover { background: var(--surface2); }
+
+  .ex-row td {
+    padding: 0 0.85rem 0.65rem 0.85rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .ex-row { display: none; }
+  .ex-row.visible { display: table-row; }
+  .ex-pt { font-style: italic; color: var(--text); font-size: 0.83rem; display: block; margin-bottom: 0.2rem; }
+  .ex-en { color: var(--muted); font-size: 0.78rem; display: block; }
+
+  .expand-hint { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); margin-bottom: 0.75rem; }
+
+  /* Dialogue blocks */
+  .dialogue-block {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    overflow: hidden; margin-bottom: 1rem;
+  }
+  .dialogue-header {
+    background: var(--green); color: var(--surface);
+    font-family: var(--mono); font-size: 0.72rem; font-weight: 600;
+    padding: 0.5rem 1rem; letter-spacing: 0.05em;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .dialogue-header .play-all {
+    background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
+    color: white; font-family: var(--mono); font-size: 0.65rem;
+    padding: 0.2rem 0.6rem; border-radius: 3px; cursor: pointer; transition: all 0.15s;
+  }
+  .dialogue-header .play-all:hover { background: rgba(255,255,255,0.35); }
+
+  .dialogue-line {
+    display: flex; gap: 0.75rem; padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border); align-items: baseline;
+  }
+  .dialogue-line:last-child { border-bottom: none; }
+  .speaker {
+    font-family: var(--mono); font-size: 0.68rem; color: var(--muted);
+    min-width: 4.5rem; flex-shrink: 0; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .line-text {
+    font-size: 0.9rem; color: var(--text); flex: 1; line-height: 1.5; cursor: pointer;
+    transition: color 0.15s;
+  }
+  .line-text:hover { color: var(--green); }
+  .line-text .key { color: var(--green); font-weight: 600; }
+  .line-text .key-formal { color: var(--red); font-weight: 600; }
+
+  /* Response spectrum */
+  .spectrum {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    overflow: hidden; margin-bottom: 1rem;
+  }
+  .spectrum-header {
+    background: var(--surface2); border-bottom: 1px solid var(--border);
+    font-family: var(--mono); font-size: 0.68rem; color: var(--muted);
+    padding: 0.5rem 1rem; text-transform: uppercase; letter-spacing: 0.08em;
+    display: grid; grid-template-columns: 1fr 1fr;
+  }
+  .spectrum-header span:last-child { color: var(--red); text-align: right; }
+  .spectrum-header span:first-child { color: var(--green); }
+
+  .spectrum-row {
+    display: flex; align-items: center; gap: 1rem; padding: 0.65rem 1rem;
+    border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.15s;
+  }
+  .spectrum-row:last-child { border-bottom: none; }
+  .spectrum-row:hover { background: var(--surface2); }
+  .spectrum-pt {
+    font-family: var(--mono); font-size: 0.88rem; font-weight: 600; flex: 1;
+  }
+  .spectrum-en { font-size: 0.8rem; color: var(--muted); min-width: 10rem; }
+  .spectrum-dot {
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+  }
+  .level-5 { background: #2d7a50; color: var(--green); }
+  .level-4 { background: #5a9e6f; color: #5a9e6f; }
+  .level-3 { background: #c49a3a; color: #c49a3a; }
+  .level-2 { background: #c46e3a; color: #c46e3a; }
+  .level-1 { background: #a03428; color: var(--red); }
+
+  /* Note blocks */
+  .note-block {
+    background: var(--surface); border-left: 3px solid var(--green);
+    border-radius: 0 6px 6px 0; padding: 0.85rem 1.1rem; margin-bottom: 0.75rem;
+  }
+  .note-label {
+    font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--green); font-weight: 600; margin-bottom: 0.4rem;
+  }
+  .note-block p { font-size: 0.85rem; color: var(--text); line-height: 1.6; }
+  .note-block .pt { font-family: var(--mono); color: var(--green); font-weight: 600; }
+  .note-block .en { color: var(--muted); font-style: italic; }
+  .note-block .pron { font-family: var(--mono); color: var(--red); font-size: 0.82rem; }
+
+  /* ── FLASHCARDS ── */
+  .fc-wrap { max-width: 520px; margin: 0 auto; }
+  .fc-topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.25rem; gap: 0.75rem; flex-wrap: wrap;
+  }
+  .fc-controls { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+  .fc-btn {
+    font-family: var(--mono); font-size: 0.75rem; padding: 0.4rem 0.9rem;
+    background: var(--surface); border: 1px solid var(--border); color: var(--muted);
+    border-radius: 4px; cursor: pointer; transition: all 0.15s;
+  }
+  .fc-btn:hover { border-color: var(--green); color: var(--green); }
+  .fc-mode-toggle { display: flex; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+  .fc-mode-btn {
+    font-family: var(--mono); font-size: 0.75rem; padding: 0.4rem 0.8rem;
+    background: none; border: none; color: var(--muted); cursor: pointer; transition: all 0.15s;
+    border-right: 1px solid var(--border);
+  }
+  .fc-mode-btn:last-child { border-right: none; }
+  .fc-mode-btn.active { background: var(--green); color: var(--surface); }
+  .fc-counter { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); }
+
+  .fc-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 2rem 2rem 1.5rem; display: flex; flex-direction: column;
+    align-items: center; min-height: 320px; text-align: center;
+  }
+  .fc-hints-row {
+    display: flex; gap: 1.5rem; justify-content: center; margin-bottom: 1.5rem; width: 100%;
+  }
+  .fc-hint-item { font-family: var(--mono); font-size: 0.58rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .fc-cat { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); margin-bottom: 0.75rem; }
+  .fc-en-prompt { font-size: 1.15rem; color: var(--text); font-weight: 300; margin-bottom: 1.25rem; line-height: 1.5; min-height: 2rem; }
+  .fc-divider { width: 2.5rem; height: 1px; background: var(--border); margin-bottom: 1.25rem; }
+  .fc-answer-area { cursor: pointer; margin-bottom: 1rem; }
+  .fc-pt-answer {
+    font-family: var(--mono); font-size: 1.5rem; font-weight: 600; color: var(--green);
+    display: inline-block; transition: filter 0.25s; line-height: 1.4;
+  }
+  .fc-pt-answer.blurred { filter: blur(7px); background: var(--border); border-radius: 4px; }
+  .fc-speak-pill {
+    background: var(--surface2); border: 1px solid var(--border); color: var(--green);
+    padding: 0.35rem 1.2rem; border-radius: 99px; cursor: pointer; font-size: 1rem;
+    margin-bottom: 1rem; transition: all 0.2s; line-height: 1;
+  }
+  .fc-speak-pill:hover, .fc-speak-pill.playing { background: var(--green); color: var(--surface); border-color: var(--green); }
+  .fc-example { font-size: 0.83rem; font-style: italic; color: var(--text); cursor: pointer; transition: filter 0.25s; margin-bottom: 0.2rem; line-height: 1.5; }
+  .fc-example.blurred { filter: blur(5px); background: var(--border); border-radius: 4px; }
+  .fc-example-en { font-size: 0.77rem; color: var(--muted); transition: filter 0.25s; margin-bottom: 1rem; }
+  .fc-example-en.blurred { filter: blur(5px); background: var(--border); border-radius: 4px; }
+  .fc-nav { display: flex; gap: 1rem; margin-top: auto; padding-top: 0.5rem; }
+  .fc-nav-btn {
+    font-family: var(--mono); font-size: 0.8rem; padding: 0.5rem 1.2rem;
+    background: var(--surface); border: 1px solid var(--border); color: var(--text);
+    border-radius: 4px; cursor: pointer; transition: all 0.15s;
+  }
+  .fc-nav-btn:hover { border-color: var(--green); color: var(--green); }
+
+  /* ── QUIZ ── */
+  .quiz-wrap { max-width: 520px; margin: 0 auto; }
+  .quiz-score { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); text-align: center; margin-bottom: 1.25rem; }
+  .quiz-q {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1.75rem 1.5rem; text-align: center; margin-bottom: 1rem;
+  }
+  .quiz-label { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.5rem; }
+  .quiz-word { font-family: var(--mono); font-size: 1.4rem; font-weight: 600; color: var(--green); margin-bottom: 0.4rem; line-height: 1.4; }
+  .quiz-ctx { font-size: 0.78rem; color: var(--muted); font-style: italic; }
+  .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; margin-bottom: 1rem; }
+  .quiz-opt {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+    padding: 0.85rem 0.75rem; cursor: pointer; font-size: 0.85rem; color: var(--text);
+    font-family: var(--sans); transition: all 0.15s; text-align: center;
+  }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--green); color: var(--green); }
+  .quiz-opt.correct { border-color: var(--green); background: rgba(45,122,80,0.08); color: var(--green); font-weight: 600; }
+  .quiz-opt.wrong { border-color: var(--red); background: rgba(160,52,40,0.08); color: var(--red); }
+  .quiz-opt:disabled { cursor: default; }
+  .quiz-feedback { text-align: center; font-family: var(--mono); font-size: 0.83rem; min-height: 1.4rem; margin-bottom: 0.75rem; }
+  .quiz-feedback.ok { color: var(--green); font-weight: 600; }
+  .quiz-feedback.bad { color: var(--red); }
+  .quiz-next {
+    display: block; margin: 0 auto; font-family: var(--mono); font-size: 0.85rem;
+    padding: 0.6rem 2rem; background: var(--green); color: var(--surface);
+    border: none; border-radius: 4px; cursor: pointer; font-weight: 600;
+  }
+  .quiz-next:disabled { opacity: 0.3; cursor: default; }
+  .quiz-results { text-align: center; padding: 2.5rem 0; }
+  .quiz-final-score { font-family: var(--mono); font-size: 3rem; font-weight: 600; color: var(--green); margin-bottom: 0.4rem; }
+  .quiz-final-msg { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+  .quiz-restart { font-family: var(--mono); font-size: 0.85rem; padding: 0.6rem 2rem; background: var(--green); color: var(--surface); border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <span class="level-badge">A1.1</span>
+    <h1>Unidade 2 · <span>Saudações e Primeiras Palavras</span> &nbsp;·&nbsp; 6 de maio</h1>
+  </div>
+  <svg width="40" height="27" viewBox="0 0 40 27" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+    <rect width="16" height="27" fill="#006600"/>
+    <rect x="16" width="24" height="27" fill="#FF0000"/>
+    <ellipse cx="16" cy="13.5" rx="6" ry="6" fill="#FFFF00" stroke="#006600" stroke-width="0.5"/>
+    <ellipse cx="16" cy="13.5" rx="3.5" ry="4.5" fill="white" stroke="#003399" stroke-width="0.8"/>
+    <line x1="12.5" y1="13.5" x2="19.5" y2="13.5" stroke="#003399" stroke-width="0.6"/>
+  </svg>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('tabela', this)">Tabela</button>
+  <button class="tab" onclick="switchTab('flashcards', this)">Flashcards</button>
+  <button class="tab" onclick="switchTab('quiz', this)">Quiz</button>
+</div>
+
+<!-- ══════════════ TABELA ══════════════ -->
+<div id="tabela" class="view active">
+<div class="tabela-wrap">
+
+  <!-- SECTION 1: SAUDAÇÕES -->
+  <div class="section-label">Saudações — Greetings</div>
+  <p class="expand-hint">↓ click any row to see usage notes</p>
+  <table>
+    <thead><tr><th>Português</th><th>English</th><th>Register</th></tr></thead>
+    <tbody id="saudacoesTable"></tbody>
+  </table>
+
+  <!-- SECTION 2: INTRODUCTIONS -->
+  <div class="section-label">Apresentação — Introducing Yourself</div>
+  <div class="note-block">
+    <div class="note-label">Gender with Names</div>
+    <p>
+      The article before a name changes with gender:<br>
+      ♂ <span class="pt">Eu sou o Dave.</span> — <span class="en">I'm Dave. (male)</span><br>
+      ♀ <span class="pt">Eu sou a Ana.</span> — <span class="en">I'm Ana. (female)</span><br>
+      This is standard in European Portuguese — unlike English, names take a definite article.
+    </p>
+  </div>
+
+  <!-- SECTION 3: INFORMAL DIALOGUE -->
+  <div class="section-label">Diálogo Informal — Com Amigos</div>
+  <div class="dialogue-block">
+    <div class="dialogue-header">
+      <span>Tudo bem? <span style="font-weight:300;opacity:0.8;">— between friends</span></span>
+    </div>
+    <div class="dialogue-line">
+      <span class="speaker">Hannah</span>
+      <span class="line-text" onclick="speak('Bom dia, Rui! Tudo bem?')">Bom dia, Rui! <span class="key">Tudo bem</span>?</span>
+    </div>
+    <div class="dialogue-line">
+      <span class="speaker">Rui</span>
+      <span class="line-text" onclick="speak('Bom dia, Hannah. Tudo bem, e tu?')">Bom dia, Hannah. <span class="key">Tudo bem, e tu</span>?</span>
+    </div>
+    <div class="dialogue-line">
+      <span class="speaker">Hannah</span>
+      <span class="line-text" onclick="speak('Também, obrigada.')"><span class="key">Também</span>, obrigada.</span>
+    </div>
+    <div class="dialogue-line">
+      <span class="speaker">Rui</span>
+      <span class="line-text" onclick="speak('Bom trabalho! Até já!')">Bom trabalho! <span class="key">Até já</span>!</span>
+    </div>
+    <div class="dialogue-line">
+      <span class="speaker">Hannah</span>
+      <span class="line-text" onclick="speak('Igualmente! Até já!')"><span class="key">Igualmente</span>! Até já!</span>
+    </div>
+  </div>
+
+  <!-- Whiteboard context: amigos -->
+  <div class="note-block">
+    <div class="note-label">Variante — Contexto 1: Amigos na rua</div>
+    <p>
+      <span class="pt">Olá! Tudo bem?</span><br>
+      <span class="pt">Olá! Estou ótimo. E tu?</span><br>
+      <span class="pt">Fixe, ainda bem. Também.</span><br><br>
+      <span class="en">Note: <strong>Fixe</strong> = cool / great (informal, very common in Lisbon).
+      <strong>Ainda bem</strong> = glad to hear it.</span>
+    </p>
+  </div>
+
+  <!-- SECTION 4: FORMAL DIALOGUE -->
+  <div class="section-label">Diálogo Formal — Com Desconhecidos / Loja</div>
+  <div class="dialogue-block">
+    <div class="dialogue-header" style="background: var(--red);">
+      <span>Como está? <span style="font-weight:300;opacity:0.8;">— formal register</span></span>
+    </div>
+    <div class="dialogue-line">
+      <span class="speaker">Peter</span>
+      <span class="line-text" onclick="speak('Bom dia, Senhora Amélia! Como está?')">Bom dia, Senhora Amélia! <span class="key-formal">Como está</span>?</span>
+    </div>
+    <div class="dialogue-line">
+      <span class="speaker">Sra. Amélia</span>
+      <span class="line-text" onclick="speak('Bom dia, Peter. Estou bem, obrigada. E você, como está?')">Bom dia, Peter. <span class="key-formal">Estou bem</span>, obrigada. E você, <span class="key-formal">como está</span>?</span>
+    </div>
+    <div class="dialogue-line">
+      <span class="speaker">Peter</span>
+      <span class="line-text" onclick="speak('Também estou bem, obrigado!')">Também <span class="key-formal">estou bem</span>, obrigado!</span>
+    </div>
+    <div class="dialogue-line">
+      <span class="speaker">Sra. Amélia</span>
+      <span class="line-text" onclick="speak('Ainda bem! Prazer em vê-lo! Até à próxima!')">Ainda bem! <span class="key-formal">Prazer em vê-lo</span>! Até à próxima!</span>
+    </div>
+    <div class="dialogue-line">
+      <span class="speaker">Peter</span>
+      <span class="line-text" onclick="speak('Igualmente! Até à próxima!')"><span class="key-formal">Igualmente</span>! Até à próxima!</span>
+    </div>
+  </div>
+
+  <div class="note-block" style="border-left-color: var(--red);">
+    <div class="note-label" style="color: var(--red);">Pronúncia — Prazer em vê-lo</div>
+    <p>
+      Sounds like: <span class="pron">/prazêrem vê-lu/</span><br>
+      The final <span class="pt">-o</span> in <span class="pt">vê-lo</span> reduces to <span class="pron">/u/</span> — this is standard European Portuguese vowel reduction. The word is not pronounced as written.<br><br>
+      <span class="pt">Até à próxima</span> → <span class="pron">/pro-ssima/</span> (the x sounds like ss)
+    </p>
+  </div>
+
+  <!-- Whiteboard context: loja -->
+  <div class="note-block" style="border-left-color: var(--red);">
+    <div class="note-label" style="color:var(--red);">Variante — Contexto 2: Na Loja</div>
+    <p>
+      <span class="pt">Bom dia. Como está?</span><br>
+      <span class="pt">Bom dia. Bem, e o senhor?</span> / <span class="pt">e a senhora?</span><br>
+      <span class="pt">Bem, obrigado.</span><br><br>
+      <span class="en"><strong>E o senhor / a senhora</strong> = And you? (very formal — used with shopkeepers, older strangers). More deferential than <strong>e você</strong>.</span>
+    </p>
+  </div>
+
+  <!-- SECTION 5: RESPONSE SPECTRUM -->
+  <div class="section-label">Como Estão? — The Full Spectrum</div>
+  <p class="expand-hint" style="margin-bottom:0.5rem;">Click any row to hear it</p>
+  <div class="spectrum" id="spectrumBlock"></div>
+
+  <div class="note-block">
+    <div class="note-label">Bocadinho — A useful softener</div>
+    <p>
+      <span class="pt">Um bocadinho</span> = a little bit. Used to soften any statement.<br>
+      <span class="pt">Estou cansado.</span> <span class="en">(I'm tired)</span> → <span class="pt">Estou um bocadinho cansado.</span> <span class="en">(I'm a little tired)</span><br>
+      Pronunciation: <span class="pron">/ũ cadinhú cansadu/</span> — every unstressed vowel reduces.<br><br>
+      <span class="pt">Mais ou menos</span> = <span class="pt">assim-assim</span> — both mean so-so.<br>
+      Pronunciation of <span class="pt">mais ou menos</span>: <span class="pron">/maizômenus/</span>
+    </p>
+  </div>
+
+  <!-- SECTION 6: DIZ-SE ASSIM -->
+  <div class="section-label">Diz-se Assim — That's How You Say It</div>
+  <table>
+    <thead><tr><th>Expressão</th><th>Meaning</th><th>Usage</th></tr></thead>
+    <tbody id="dizseTable"></tbody>
+  </table>
+
+</div>
+</div>
+
+<!-- ══════════════ FLASHCARDS ══════════════ -->
+<div id="flashcards" class="view">
+<div class="fc-wrap">
+  <div class="fc-topbar">
+    <div class="fc-controls">
+      <div class="fc-mode-toggle">
+        <button class="fc-mode-btn active" id="modeEP" onclick="setFCMode('EP')">E → PT</button>
+        <button class="fc-mode-btn" id="modePE" onclick="setFCMode('PE')">PT → E</button>
+      </div>
+      <button class="fc-btn" onclick="shuffleFC()">⇄ Baralhar</button>
+      <button class="fc-btn" onclick="resetFC()">↺ Reiniciar</button>
+    </div>
+    <span class="fc-counter" id="fcCounter">1 / 1</span>
+  </div>
+  <div class="fc-card" id="fcCard">
+    <div class="fc-hints-row">
+      <span class="fc-hint-item">🔊 ouvir resposta</span>
+      <span class="fc-hint-item">clique para revelar</span>
+      <span class="fc-hint-item">clique exemplo para ouvir</span>
+    </div>
+    <div class="fc-cat" id="fcCat"></div>
+    <div class="fc-en-prompt" id="fcEnPrompt"></div>
+    <div class="fc-divider"></div>
+    <div class="fc-answer-area" onclick="revealAnswer()">
+      <span class="fc-pt-answer blurred" id="fcPtAnswer"></span>
+    </div>
+    <button class="fc-speak-pill" id="fcSpeakPill" onclick="speakCurrent()">🔊</button>
+    <div class="fc-example blurred" id="fcExample" onclick="revealExample()"></div>
+    <div class="fc-example-en blurred" id="fcExampleEn"></div>
+    <div class="fc-nav">
+      <button class="fc-nav-btn" onclick="fcMove(-1)">← Anterior</button>
+      <button class="fc-nav-btn" onclick="fcMove(1)">Próximo →</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════ QUIZ ══════════════ -->
+<div id="quiz" class="view">
+<div class="quiz-wrap">
+  <div class="quiz-score" id="quizScore">Score: 0 / 0</div>
+  <div id="quizActive">
+    <div class="quiz-q">
+      <div class="quiz-label" id="quizLabel">What does this mean?</div>
+      <div class="quiz-word" id="quizWord"></div>
+      <div class="quiz-ctx" id="quizCtx"></div>
+    </div>
+    <div class="quiz-options" id="quizOptions"></div>
+    <div class="quiz-feedback" id="quizFeedback"></div>
+    <button class="quiz-next" id="quizNext" onclick="nextQuiz()" disabled>Próximo →</button>
+  </div>
+  <div class="quiz-results" id="quizResults" style="display:none">
+    <div class="quiz-final-score" id="quizFinalScore"></div>
+    <div class="quiz-final-msg" id="quizFinalMsg"></div>
+    <button class="quiz-restart" onclick="startQuiz()">Tentar novamente</button>
+  </div>
+</div>
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+
+// ── DATA ─────────────────────────────────────────────────────────
+
+const SAUDACOES = [
+  { pt: "Olá!", en: "Hello! / Hi!", ctx: "both", note: "Universal — works in any situation, any time of day." },
+  { pt: "Bom dia.", en: "Good morning.", ctx: "both", note: "Used until about midday. Works formally and informally." },
+  { pt: "Boa tarde.", en: "Good afternoon.", ctx: "both", note: "From roughly midday to early evening." },
+  { pt: "Boa noite.", en: "Good evening / Good night.", ctx: "both", note: "Both a greeting and a farewell in the evening." },
+  { pt: "Tudo bem?", en: "How are you? / Everything okay?", ctx: "informal", note: "Informal — use with friends, colleagues you know well, neighbours." },
+  { pt: "Como está?", en: "How are you?", ctx: "formal", note: "Formal — use with shopkeepers, older people, anyone you address formally." },
+  { pt: "Como estão?", en: "How are you all?", ctx: "formal", note: "Plural formal — asking a group. Very useful in shops and offices." },
+  { pt: "Até já!", en: "See you soon! / Bye for now!", ctx: "informal", note: "Implies you'll see them again soon — same day or shortly." },
+  { pt: "Até à próxima!", en: "See you next time!", ctx: "formal", note: "More formal farewell — doesn't imply when you'll meet again." },
+  { pt: "Até amanhã!", en: "See you tomorrow!", ctx: "both", note: "Specific — only use when you'll actually see them tomorrow." },
+  { pt: "Igualmente!", en: "Same to you! / Likewise!", ctx: "both", note: "The go-to response to almost any farewell or compliment." },
+  { pt: "Até logo!", en: "See you later!", ctx: "both", note: "General farewell — later today or in the near future." },
+];
+
+const DIZSE = [
+  { pt: "Vai-se andando.", en: "So-so. / One keeps walking.", ctx: "informal", note: "Answer to 'Como está?' or 'Tudo bem?' when you're feeling so-so. Literally 'one keeps on walking' — a very Portuguese philosophical shrug." },
+  { pt: "Ainda bem!", en: "I'm glad! / Good to hear!", ctx: "both", note: "Response when someone says they're well. Also used as 'thank goodness'." },
+  { pt: "Estou de rastos!", en: "I'm exhausted / shattered.", ctx: "informal", note: "Palavra do dia. Literally 'I'm crawling on the ground.' Use when completely drained." },
+  { pt: "Fixe!", en: "Cool! / Great!", ctx: "informal", note: "Very common in Lisbon. General-purpose positive reaction." },
+  { pt: "Bom trabalho!", en: "Good work! / Well done!", ctx: "both", note: "Encouragement — teacher to student, colleague to colleague." },
+];
+
+const SPECTRUM = [
+  { pt: "Estou ótimo/a, obrigado/a!", en: "I'm great, thanks!", level: 5, pron: "" },
+  { pt: "Estou bem, obrigado/a.", en: "I'm well, thanks.", level: 4, pron: "" },
+  { pt: "Vai-se andando.", en: "So-so. / Getting by.", level: 3, pron: "/vai-se andandu/" },
+  { pt: "Estou mais ou menos.", en: "I'm so-so.", level: 3, pron: "/maizômenus/" },
+  { pt: "Estou assim-assim.", en: "I'm so-so. (same meaning)", level: 3, pron: "/assî-assî/" },
+  { pt: "Estou um bocadinho cansado/a.", en: "I'm a little tired.", level: 2, pron: "/ũ cadinhú cansadu/" },
+  { pt: "Estou um bocadinho cansado/a, mas bem.", en: "A little tired, but fine.", level: 2, pron: "" },
+  { pt: "Estou um bocadinho constipado/a, mas bem.", en: "A little congested, but fine.", level: 2, pron: "constipado = having a cold, NOT constipated!" },
+  { pt: "Estou de rastos!", en: "I'm exhausted / shattered!", level: 1, pron: "" },
+];
+
+// Flashcard deck — built from SAUDACOES + DIZSE
+const CARDS = [
+  ...SAUDACOES.map(w => ({ cat: 'Saudações', pt: w.pt, en: w.en, ex_pt: w.note, ex_en: '' })),
+  ...DIZSE.map(w => ({ cat: 'Expressões', pt: w.pt, en: w.en, ex_pt: w.note, ex_en: '' })),
+  // Key phrases as standalone cards
+  { cat: 'Diálogo', pt: 'Tudo bem, e tu?', en: 'Fine, and you? (informal)', ex_pt: 'Bounce the question back to a friend.', ex_en: '' },
+  { cat: 'Diálogo', pt: 'E você, como está?', en: 'And you, how are you? (formal)', ex_pt: 'Bounce the question back formally.', ex_en: '' },
+  { cat: 'Diálogo', pt: 'Prazer em vê-lo!', en: 'Nice to see you! (to a man, formal)', ex_pt: 'Pronunciation: /prazêrem vê-lu/ — the final -o reduces to /u/.', ex_en: '' },
+  { cat: 'Diálogo', pt: 'Prazer em vê-la!', en: 'Nice to see you! (to a woman, formal)', ex_pt: 'Use -la when speaking to a woman.', ex_en: '' },
+  { cat: 'Diálogo', pt: 'E o senhor? / E a senhora?', en: 'And you? (very formal)', ex_pt: 'Use in shops, with elderly strangers. More deferential than "e você".', ex_en: '' },
+  { cat: 'Vocabulário', pt: 'Um bocadinho', en: 'A little bit', ex_pt: 'Softens any statement. Estou um bocadinho cansado.', ex_en: '' },
+  { cat: 'Vocabulário', pt: 'Mais ou menos', en: 'More or less / so-so', ex_pt: 'Pronunciation: /maizômenus/', ex_en: '' },
+];
+
+// ── AUDIO ─────────────────────────────────────────────────────────
+// Recorded by Dave (correct European Portuguese pronunciation)
+// Hosted at: https://davidrh11.github.io/portuguese-study/audio/
+const AUDIO_BASE = "https://davidrh11.github.io/portuguese-study/audio/";
+
+const MY_RECORDINGS = {
+  "Estou um bocadinho cansado.":       AUDIO_BASE + "A_bit_tired.m4a",
+  "Estou um bocadinho cansado/a.":     AUDIO_BASE + "A_bit_tired.m4a",
+  "Vai-se andando.":                   AUDIO_BASE + "Keep_walking.m4a",
+  "Prazer em vê-lo!":                  AUDIO_BASE + "Nice_to_see_you_formal.m4a",
+  "Prazer em vê-lo! Até à próxima!":   AUDIO_BASE + "Nice_to_see_you_formal.m4a",
+  "Gosto em vê-lo!":                   AUDIO_BASE + "Nice_to_see_you_informal.m4a",
+  "Estou de rastos!":                  AUDIO_BASE + "Very_tired.m4a",
+};
+
+const audioCache = {};
+let currentAudio = null;
+
+async function speak(text, btnEl) {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (btnEl) btnEl.classList.add('playing');
+
+  // Check for Dave's recordings first
+  const recordingUrl = MY_RECORDINGS[text];
+  if (recordingUrl) {
+    try {
+      const audio = new Audio(recordingUrl);
+      currentAudio = audio;
+      audio.onended = () => { if (btnEl) btnEl.classList.remove('playing'); };
+      audio.onerror = () => { if (btnEl) btnEl.classList.remove('playing'); };
+      audio.play();
+      return;
+    } catch(e) { /* fall through to ElevenLabs */ }
+  }
+
+  // ElevenLabs fallback for everything else
+  try {
+    if (audioCache[text]) {
+      const audio = new Audio(audioCache[text]);
+      currentAudio = audio;
+      audio.onended = () => { if (btnEl) btnEl.classList.remove('playing'); };
+      audio.play(); return;
+    }
+    const res = await fetch(WORKER_URL, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
+    });
+    if (!res.ok) throw new Error('Worker error');
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    audioCache[text] = url;
+    const audio = new Audio(url);
+    currentAudio = audio;
+    audio.onended = () => { if (btnEl) btnEl.classList.remove('playing'); };
+    audio.onerror = () => { if (btnEl) btnEl.classList.remove('playing'); };
+    audio.play();
+  } catch(e) { if (btnEl) btnEl.classList.remove('playing'); }
+}
+
+// ── TAB ──────────────────────────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'flashcards') initFC();
+  if (id === 'quiz') startQuiz();
+}
+
+// ── TABELA ───────────────────────────────────────────────────────
+function buildSaudacoesTable() {
+  const tbody = document.getElementById('saudacoesTable');
+  SAUDACOES.forEach((w, i) => {
+    const tr = document.createElement('tr');
+    const tagClass = w.ctx === 'informal' ? 'tag-informal' : w.ctx === 'formal' ? 'tag-formal' : 'tag-both';
+    const tagLabel = w.ctx === 'informal' ? 'informal' : w.ctx === 'formal' ? 'formal' : 'both';
+    tr.innerHTML = `
+      <td class="pt-word" onclick="event.stopPropagation(); speak('${w.pt.replace(/'/g,"\\'")}')">${w.pt}</td>
+      <td class="en-word">${w.en}</td>
+      <td class="ctx-cell"><span class="tag ${tagClass}">${tagLabel}</span></td>
+    `;
+    const exRow = document.createElement('tr');
+    exRow.className = 'ex-row';
+    exRow.id = `ex-s-${i}`;
+    exRow.innerHTML = `<td colspan="3"><span class="ex-en">${w.note}</span></td>`;
+
+    tr.addEventListener('click', () => {
+      const ex = document.getElementById(`ex-s-${i}`);
+      ex.classList.toggle('visible');
+    });
+    tbody.appendChild(tr);
+    tbody.appendChild(exRow);
+  });
+}
+
+function buildDizseTable() {
+  const tbody = document.getElementById('dizseTable');
+  DIZSE.forEach((w, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="pt-word" onclick="event.stopPropagation(); speak('${w.pt.replace(/'/g,"\\'")}')">${w.pt}</td>
+      <td class="en-word">${w.en}</td>
+      <td class="ctx-cell"><span class="tag ${w.ctx === 'informal' ? 'tag-informal' : 'tag-both'}">${w.ctx}</span></td>
+    `;
+    const exRow = document.createElement('tr');
+    exRow.className = 'ex-row';
+    exRow.id = `ex-d-${i}`;
+    exRow.innerHTML = `<td colspan="3"><span class="ex-en">${w.note}</span></td>`;
+    tr.addEventListener('click', () => document.getElementById(`ex-d-${i}`).classList.toggle('visible'));
+    tbody.appendChild(tr);
+    tbody.appendChild(exRow);
+  });
+}
+
+function buildSpectrum() {
+  const block = document.getElementById('spectrumBlock');
+  const header = document.createElement('div');
+  header.className = 'spectrum-header';
+  header.innerHTML = '<span>▲ Positivo</span><span>Não-positivo ▼</span>';
+  block.appendChild(header);
+  SPECTRUM.forEach(row => {
+    const div = document.createElement('div');
+    div.className = 'spectrum-row';
+    div.onclick = () => speak(row.pt);
+    div.innerHTML = `
+      <div class="spectrum-dot level-${row.level}"></div>
+      <div class="spectrum-pt">${row.pt}</div>
+      <div class="spectrum-en">${row.en}${row.pron ? `<br><span style="font-family:var(--mono);color:var(--red);font-size:0.72rem;">${row.pron}</span>` : ''}</div>
+    `;
+    block.appendChild(div);
+  });
+}
+
+buildSaudacoesTable();
+buildDizseTable();
+buildSpectrum();
+
+// ── FLASHCARDS ───────────────────────────────────────────────────
+let fcDeck = [...CARDS];
+let fcIdx = 0;
+let fcMode = 'EP';
+let fcAnswerRevealed = false;
+let fcExampleRevealed = false;
+
+function initFC() { fcDeck = [...CARDS]; fcIdx = 0; renderFC(); }
+
+function setFCMode(mode) {
+  fcMode = mode;
+  document.getElementById('modeEP').classList.toggle('active', mode === 'EP');
+  document.getElementById('modePE').classList.toggle('active', mode === 'PE');
+  fcIdx = 0; renderFC();
+}
+
+function renderFC() {
+  const w = fcDeck[fcIdx];
+  fcAnswerRevealed = false; fcExampleRevealed = false;
+  document.getElementById('fcCounter').textContent = `${fcIdx + 1} / ${fcDeck.length}`;
+  document.getElementById('fcCat').textContent = w.cat;
+  const promptEl = document.getElementById('fcEnPrompt');
+  const answerEl = document.getElementById('fcPtAnswer');
+  promptEl.textContent = fcMode === 'EP' ? w.en : w.pt;
+  answerEl.textContent = fcMode === 'EP' ? w.pt : w.en;
+  answerEl.classList.add('blurred');
+  document.getElementById('fcExample').textContent = w.ex_pt;
+  document.getElementById('fcExample').classList.add('blurred');
+  document.getElementById('fcExampleEn').textContent = w.ex_en;
+  document.getElementById('fcExampleEn').classList.add('blurred');
+  document.getElementById('fcSpeakPill').classList.remove('playing');
+}
+
+function revealAnswer() {
+  if (fcAnswerRevealed) return;
+  fcAnswerRevealed = true;
+  document.getElementById('fcPtAnswer').classList.remove('blurred');
+}
+
+function revealExample() {
+  if (!fcAnswerRevealed) revealAnswer();
+  fcExampleRevealed = true;
+  document.getElementById('fcExample').classList.remove('blurred');
+  document.getElementById('fcExampleEn').classList.remove('blurred');
+  speak(fcDeck[fcIdx].pt, null);
+}
+
+function speakCurrent() { speak(fcDeck[fcIdx].pt, document.getElementById('fcSpeakPill')); }
+function fcMove(dir) { fcIdx = (fcIdx + dir + fcDeck.length) % fcDeck.length; renderFC(); }
+function shuffleFC() { fcDeck = [...CARDS].sort(() => Math.random() - 0.5); fcIdx = 0; renderFC(); }
+function resetFC() { fcDeck = [...CARDS]; fcIdx = 0; renderFC(); }
+
+// ── QUIZ ─────────────────────────────────────────────────────────
+let qDeck = [], qIdx = 0, qScore = 0, qTotal = 0, qAnswered = false;
+
+function startQuiz() {
+  qDeck = [...CARDS].sort(() => Math.random() - 0.5);
+  qIdx = 0; qScore = 0; qTotal = 0; qAnswered = false;
+  document.getElementById('quizActive').style.display = 'block';
+  document.getElementById('quizResults').style.display = 'none';
+  renderQuiz();
+}
+
+function renderQuiz() {
+  if (qIdx >= qDeck.length) { showQuizResults(); return; }
+  qAnswered = false;
+  const w = qDeck[qIdx];
+  document.getElementById('quizWord').textContent = w.pt;
+  document.getElementById('quizCtx').textContent = w.cat;
+  document.getElementById('quizFeedback').textContent = '';
+  document.getElementById('quizFeedback').className = 'quiz-feedback';
+  document.getElementById('quizNext').disabled = true;
+  document.getElementById('quizScore').textContent = `Score: ${qScore} / ${qTotal}`;
+
+  const wrong = CARDS.filter(x => x.pt !== w.pt).sort(() => Math.random() - 0.5).slice(0, 3).map(x => x.en);
+  const options = [w.en, ...wrong].sort(() => Math.random() - 0.5);
+  const container = document.getElementById('quizOptions');
+  container.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = opt;
+    btn.onclick = () => checkAnswer(btn, opt, w);
+    container.appendChild(btn);
+  });
+}
+
+function checkAnswer(btn, chosen, w) {
+  if (qAnswered) return;
+  qAnswered = true; qTotal++;
+  const correct = chosen === w.en;
+  document.querySelectorAll('.quiz-opt').forEach(b => { b.disabled = true; if (b.textContent === w.en) b.classList.add('correct'); });
+  const fb = document.getElementById('quizFeedback');
+  if (correct) { qScore++; fb.textContent = 'Correto! ✓'; fb.className = 'quiz-feedback ok'; }
+  else { btn.classList.add('wrong'); fb.textContent = `Errado — ${w.en}`; fb.className = 'quiz-feedback bad'; }
+  speak(w.pt, null);
+  document.getElementById('quizScore').textContent = `Score: ${qScore} / ${qTotal}`;
+  document.getElementById('quizNext').disabled = false;
+}
+
+function nextQuiz() { qIdx++; renderQuiz(); }
+
+function showQuizResults() {
+  document.getElementById('quizActive').style.display = 'none';
+  document.getElementById('quizResults').style.display = 'block';
+  const pct = Math.round((qScore / qTotal) * 100);
+  document.getElementById('quizFinalScore').textContent = `${qScore}/${qTotal}`;
+  document.getElementById('quizFinalMsg').textContent =
+    pct === 100 ? 'Perfeito! Excelente trabalho!' :
+    pct >= 80   ? 'Muito bem! Continua assim.' :
+    pct >= 60   ? 'Bom trabalho — continua a praticar.' :
+                  'Continua a estudar — vai melhorar!';
+}
+
+initFC();
+startQuiz();
+</script>
+</body>
+</html>
