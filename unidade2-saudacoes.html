@@ -702,10 +702,6 @@ function buildSpectrum() {
   });
 }
 
-buildSaudacoesTable();
-buildDizseTable();
-buildSpectrum();
-
 // ── FLASHCARDS ───────────────────────────────────────────────────
 let fcDeck = [...CARDS];
 let fcIdx = 0;
@@ -820,6 +816,10 @@ function showQuizResults() {
                   'Continua a estudar — vai melhorar!';
 }
 
+// ── INIT — all calls here, after all data and function definitions ──
+buildSaudacoesTable();
+buildDizseTable();
+buildSpectrum();
 initFC();
 startQuiz();
 </script>
