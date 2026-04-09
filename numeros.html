@@ -2,318 +2,119 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Números 0–100</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-    :root {
-    --bg: #f9f6f0;
-    --surface: #ffffff;
-    --surface2: #f2ede6;
-    --border: #e0d8cc;
-    --border2: #ccc4b4;
-    --green: #2d7a50;
-    --green-light: #eef5f1;
-    --green-mid: #9acbb0;
-    --red: #a03428;
-    --red-light: #fdf2f1;
-    --red-mid: #dba09a;
-    --yellow: #b07d2a;
-    --blue: #2d7a50;
-    --text: #2e2820;
-    --muted: #8a7a68;
-    --muted2: #b0a090;
-    --mono: 'IBM Plex Mono', monospace;
-    --sans: 'IBM Plex Sans', sans-serif;
+  :root {
+    --bg: #f9f6f0; --surface: #ffffff; --surface2: #f2ede6;
+    --border: #e0d8cc; --border2: #ccc4b4;
+    --green: #2d7a50; --green-light: #eef5f1; --green-mid: #9acbb0;
+    --red: #a03428; --red-light: #fdf2f1; --red-mid: #dba09a;
+    --yellow: #b07d2a; --blue: #2d7a50;
+    --text: #2e2820; --muted: #8a7a68; --muted2: #b0a090;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', sans-serif; min-height: 100vh; padding: 2rem; max-width: 600px; margin: 0 auto; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'IBM Plex Sans', sans-serif;
-    min-height: 100vh;
-    padding: 2rem;
-    max-width: 600px;
-    margin: 0 auto;
-  }
+  header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; flex-wrap: wrap; }
+  .header-text h1 { font-family: 'IBM Plex Mono', monospace; font-size: 1.3rem; font-weight: 700; color: var(--green); letter-spacing: 0.05em; text-transform: uppercase; }
+  .header-text .subtitle { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .pt-flag { flex-shrink: 0; width: 48px; height: 32px; border-radius: 3px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.15); margin-top: 2px; }
 
-  header {
-    display: flex;
-    align-items: baseline;
-    gap: 1.5rem;
-    margin-bottom: 2.5rem;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 1.5rem;
-    flex-wrap: wrap;
-  }
+  .controls { display: flex; gap: 0.75rem; margin-bottom: 2rem; flex-wrap: wrap; align-items: center; }
+  .mode-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+  button { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.4rem 0.9rem; border: 1px solid var(--border); background: var(--surface); color: var(--muted); cursor: pointer; transition: all 0.15s; border-radius: 2px; }
+  button:hover { border-color: var(--green); color: var(--green); }
+  button.active { border-color: var(--green); color: var(--green); background: var(--green-light); }
 
-  h1 {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--accent);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-
-  .subtitle {
-    font-size: 0.75rem;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-
-  .controls {
-    display: flex;
-    gap: 0.75rem;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-
-  .mode-label {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--muted);
-    margin-right: 0.25rem;
-  }
-
-  button {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 0.4rem 0.9rem;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.15s;
-    border-radius: 2px;
-  }
-  button:hover  { border-color: var(--accent); color: var(--accent); }
-  button.active { border-color: var(--accent); color: var(--accent); background: var(--green-light); }
-  button:disabled { opacity: 0.3; cursor: default; }
-
-  /* ── TABLE ── */
-  .section-title {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--muted);
-    margin: 2rem 0 0.75rem;
-    padding-bottom: 0.4rem;
-    border-bottom: 1px solid var(--border);
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.82rem;
-  }
-
-  thead th {
-    text-align: left;
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--muted);
-    padding: 0.4rem 0.75rem;
-    border-bottom: 1px solid var(--border);
-  }
-
-  tbody tr {
-    border-bottom: 1px solid #1c1e24;
-    transition: background 0.1s;
-    cursor: pointer;
-  }
+  /* TABLE */
+  .section-title { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin: 2rem 0 0.75rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem; }
+  thead th { text-align: left; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); padding: 0.4rem 0.75rem; border-bottom: 1px solid var(--border); }
+  tbody tr { border-bottom: 1px solid var(--border2); transition: background 0.1s; cursor: pointer; }
   tbody tr:hover { background: var(--surface2); }
-
   td { padding: 0.45rem 0.75rem; vertical-align: middle; }
-  td.num  { color: var(--muted); width: 3.5rem; font-size: 0.75rem; }
-  td.pt   { color: var(--text); font-weight: 600; min-width: 12rem; }
-  td.pt .fem { color: var(--gender); font-weight: 600; }
+  td.num { color: var(--muted); width: 3.5rem; font-size: 0.75rem; }
+  td.pt { color: var(--text); font-weight: 600; min-width: 12rem; }
+  td.pt .fem { color: var(--green); font-weight: 600; }
   td.note { color: var(--muted); font-size: 0.72rem; font-family: 'IBM Plex Sans', sans-serif; }
-
   tbody tr:hover td.pt { text-decoration: underline; text-decoration-color: var(--green); text-underline-offset: 3px; }
-  .row-playing { background: var(--green-light) !important; }
-
-  /* quiz hidden */
-  .quiz-mode td.pt .hidden {
-    color: transparent; background: #2a2d35; border-radius: 2px;
-    padding: 0 4px; transition: color 0.15s, background 0.15s;
-  }
+  .quiz-mode td.pt .hidden { color: transparent; background: var(--border); border-radius: 2px; padding: 0 4px; transition: color 0.15s, background 0.15s; }
   .quiz-mode td.pt .hidden.revealed { color: var(--text); background: transparent; }
   .quiz-mode td.pt .hidden.fem { color: transparent; }
-  .quiz-mode td.pt .hidden.fem.revealed { color: var(--gender); }
+  .quiz-mode td.pt .hidden.fem.revealed { color: var(--green); }
 
-  /* ── FLASHCARD ── */
-  #flashcard-view {
-    display: none;
-    max-width: 500px;
-    margin: 0 auto;
-    text-align: center;
-  }
-
-  .flash-counter {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--muted);
-    margin-bottom: 1.5rem;
-    letter-spacing: 0.1em;
-  }
-
-  .flashcard {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    min-height: 240px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2.5rem;
-    cursor: pointer;
-    transition: border-color 0.2s, transform 0.1s;
-    position: relative;
-    user-select: none;
-    gap: 0.75rem;
-  }
-
-  .flashcard:hover { border-color: var(--accent2); transform: translateY(-1px); }
-
-  .flash-num {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--accent);
-  }
-
-  .flash-answer {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--text);
-    filter: blur(8px);
-    opacity: 0.25;
-    transition: filter 0.25s, opacity 0.25s;
-    margin-top: 0.5rem;
-  
-    background: var(--border);
-    border-radius: 4px;
-    padding: 0.1rem 0.4rem;
-  }
-
-  .flashcard.flipped .flash-answer {
-    filter: blur(0);
-    opacity: 1;
-  
-    background: var(--border);
-    border-radius: 4px;
-    padding: 0.1rem 0.4rem;
-  }
-
-  .flash-answer.has-gender { color: var(--gender); }
-
-  .flash-hint {
-    position: absolute;
-    bottom: 0.75rem;
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-    transition: opacity 0.2s;
-  }
-
+  /* FLASHCARD */
+  #flashcard-view { display: none; max-width: 500px; margin: 0 auto; text-align: center; }
+  .flash-counter { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--muted); margin-bottom: 1.5rem; letter-spacing: 0.1em; }
+  .flashcard { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; min-height: 240px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2.5rem; cursor: pointer; transition: border-color 0.2s; position: relative; user-select: none; gap: 0.75rem; }
+  .flashcard:hover { border-color: var(--green-mid); }
+  .flash-num { font-family: 'IBM Plex Mono', monospace; font-size: 2rem; font-weight: 700; color: var(--green); }
+  .flash-answer { font-family: 'IBM Plex Mono', monospace; font-size: 1.8rem; font-weight: 700; color: var(--text); filter: blur(8px); opacity: 0.25; transition: filter 0.25s, opacity 0.25s; margin-top: 0.5rem; background: var(--border); border-radius: 4px; padding: 0.1rem 0.4rem; }
+  .flashcard.flipped .flash-answer { filter: blur(0); opacity: 1; background: transparent; }
+  .flash-answer.has-gender { color: var(--green); }
+  .flash-hint { position: absolute; bottom: 0.75rem; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
   .flashcard.flipped .flash-hint { opacity: 0; }
-
-  .flash-nav {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-top: 1.5rem;
-    align-items: center;
-  }
-
-  .speak-btn {
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--accent2);
-    font-size: 1.1rem;
-    width: 2.4rem;
-    height: 2.4rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.15s;
-    padding: 0;
-    letter-spacing: 0;
-    text-transform: none;
-  }
-  .speak-btn:hover { border-color: var(--accent2); background: var(--green-light); }
-  .speak-btn.playing { border-color: var(--accent2); background: var(--green-light); animation: pulse 0.8s infinite; }
+  .flash-nav { display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem; align-items: center; }
+  .speak-btn { background: none; border: 1px solid var(--border); color: var(--green); font-size: 1.1rem; width: 2.4rem; height: 2.4rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s; padding: 0; letter-spacing: 0; text-transform: none; }
+  .speak-btn:hover { border-color: var(--green); background: var(--green-light); }
+  .speak-btn.playing { border-color: var(--green); background: var(--green-light); animation: pulse 0.8s infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
 
-  .voice-status {
-    font-size: 0.62rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-    text-align: center;
-    margin-top: 0.6rem;
-  }
+  /* ESCUTA MODE */
+  #escuta-view { display: none; max-width: 520px; margin: 0 auto; }
+  .escuta-progress { height: 3px; background: var(--border); border-radius: 2px; margin-bottom: 1.5rem; overflow: hidden; }
+  .escuta-progress-fill { height: 100%; background: var(--green); transition: width 0.4s; }
+  .escuta-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2rem; text-align: center; margin-bottom: 1.25rem; }
+  .escuta-label { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 1rem; }
+  .escuta-play-btn { background: var(--green); border: none; color: #fff; font-family: var(--mono); font-size: 0.85rem; padding: 0.7rem 2rem; border-radius: 4px; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; transition: opacity 0.2s; }
+  .escuta-play-btn:hover { opacity: 0.85; }
+  .escuta-play-btn.playing { opacity: 0.6; }
+  .escuta-step-label { font-family: var(--mono); font-size: 0.7rem; color: var(--green); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem; }
 
-  .fc-done {
-    padding: 2rem 0;
-    font-family: 'IBM Plex Mono', monospace;
-  }
-  .fc-done h2 {
-    font-size: 1rem;
-    color: var(--accent);
-    margin-bottom: 0.75rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-  .fc-done p { font-size: 0.8rem; color: var(--muted); margin-bottom: 1.25rem; }
+  /* Step 1: digit grid */
+  .digit-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; margin-bottom: 1rem; }
+  .digit-opt { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 0.75rem 0.5rem; cursor: pointer; font-family: var(--mono); font-size: 1.2rem; font-weight: 600; color: var(--text); text-align: center; transition: all 0.15s; }
+  .digit-opt:hover:not(:disabled) { border-color: var(--green); color: var(--green); }
+  .digit-opt.correct { border-color: var(--green); background: var(--green-light); color: var(--green); }
+  .digit-opt.wrong   { border-color: var(--red);   background: var(--red-light);   color: var(--red); }
+  .digit-opt:disabled { cursor: default; }
 
-  /* legend */
-  .legend {
-    display: flex;
-    gap: 1.5rem;
-    margin-top: 2rem;
-    flex-wrap: wrap;
-  }
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.7rem;
-    color: var(--muted);
-    font-family: 'IBM Plex Mono', monospace;
-  }
+  /* Step 2: spelling grid */
+  .spell-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+  .spell-opt { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 0.75rem 1rem; cursor: pointer; font-family: var(--mono); font-size: 0.88rem; color: var(--text); text-align: center; transition: all 0.15s; }
+  .spell-opt:hover:not(:disabled) { border-color: var(--green); color: var(--green); }
+  .spell-opt.correct { border-color: var(--green); background: var(--green-light); color: var(--green); }
+  .spell-opt.wrong   { border-color: var(--red);   background: var(--red-light);   color: var(--red); }
+  .spell-opt:disabled { cursor: default; }
+
+  .escuta-sentence-reveal { font-family: var(--mono); font-size: 0.9rem; color: var(--green); background: var(--green-light); border: 1px solid var(--green-mid); border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 1rem; display: none; }
+  .escuta-feedback { text-align: center; font-family: var(--mono); font-size: 0.82rem; min-height: 1.4rem; margin-bottom: 0.75rem; }
+  .escuta-feedback.ok  { color: var(--green); }
+  .escuta-feedback.bad { color: var(--red); }
+  .escuta-score { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); text-align: center; margin-bottom: 1rem; }
+  .escuta-next { display: block; margin: 0 auto; font-family: var(--mono); font-size: 0.85rem; padding: 0.6rem 2rem; background: var(--green); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+  .escuta-next:disabled { opacity: 0.3; cursor: default; }
+
+  .legend { display: flex; gap: 1.5rem; margin-top: 2rem; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; color: var(--muted); font-family: 'IBM Plex Mono', monospace; }
   .dot { width: 8px; height: 8px; border-radius: 50%; }
-  .dot-accent { background: var(--gender); }
-  .dot-muted  { background: var(--muted); }
+  .dot-accent { background: var(--green); }
 </style>
 </head>
 <body>
 
 <header>
-<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;width:100%;">
-<div style="flex:1;">
-  <h1>Números</h1>
-  <span class="subtitle">0 – 100 · Português Europeu</span>
-</div>
-  <!-- Portuguese Flag -->
-  <svg style="flex-shrink:0;width:48px;height:32px;border-radius:3px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.15);margin-top:2px;" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
+  <div class="header-text">
+    <h1>Números</h1>
+    <div class="subtitle">0 – 100 · Português Europeu</div>
+  </div>
+  <svg class="pt-flag" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
     <rect x="0" y="0" width="19.2" height="32" fill="#006600"/>
     <rect x="19.2" y="0" width="28.8" height="32" fill="#FF0000"/>
     <circle cx="19.2" cy="16" r="7" fill="none" stroke="#FFCC00" stroke-width="1.2"/>
@@ -329,7 +130,6 @@
     <circle cx="17.7" cy="17.5" r="0.5" fill="#003399"/>
     <circle cx="20.7" cy="17.5" r="0.5" fill="#003399"/>
   </svg>
-</div>
 </header>
 
 <div class="controls">
@@ -337,10 +137,12 @@
   <button class="active" id="btn-study"     onclick="setMode('study')">Estudo</button>
   <button              id="btn-quiz"      onclick="setMode('quiz')">Quiz</button>
   <button              id="btn-flashcard" onclick="setMode('flashcard')">Flashcards</button>
+  <button              id="btn-escuta"    onclick="setMode('escuta')">🎧 Escuta</button>
   <button id="btn-reveal" onclick="revealAll()" style="display:none">Revelar Tudo</button>
 </div>
 
 <div id="table-container"></div>
+
 <div id="flashcard-view">
   <div class="flash-counter" id="flashCounter"></div>
   <div class="flashcard" id="flashcard" onclick="flipCard()">
@@ -355,127 +157,184 @@
     <button class="speak-btn" id="speakBack" onclick="speakCurrent('back')" title="Ouvir resposta">🔊</button>
     <button onclick="flashNav(1)">Próximo →</button>
   </div>
-  <div class="voice-status" id="voiceStatus"></div>
+</div>
+
+<!-- ESCUTA VIEW -->
+<div id="escuta-view">
+  <div class="escuta-score" id="escutaScore">Score: 0 / 0</div>
+  <div class="escuta-progress"><div class="escuta-progress-fill" id="escutaFill" style="width:0%"></div></div>
+  <div class="escuta-card">
+    <div class="escuta-label">Ouve a frase e identifica o número</div>
+    <button class="escuta-play-btn" id="escutaPlayBtn" onclick="escutaPlay()">🔊 Ouvir frase</button>
+
+    <!-- Step 1: pick digit -->
+    <div id="escutaStep1">
+      <div class="escuta-step-label">1 — Qual é o número?</div>
+      <div class="digit-grid" id="digitGrid"></div>
+    </div>
+
+    <!-- Step 2: pick spelling (shown after step 1 correct) -->
+    <div id="escutaStep2" style="display:none">
+      <div class="escuta-step-label">2 — Como se escreve?</div>
+      <div class="spell-grid" id="spellGrid"></div>
+    </div>
+
+    <!-- Sentence reveal -->
+    <div class="escuta-sentence-reveal" id="escutaSentenceReveal"></div>
+
+    <div class="escuta-feedback" id="escutaFeedback"></div>
+  </div>
+  <button class="escuta-next" id="escutaNext" onclick="escutaNext()" disabled>Próximo →</button>
 </div>
 
 <div class="legend" id="legend">
   <div class="legend-item"><div class="dot dot-accent"></div>forma feminina</div>
-  <div class="legend-item"><div class="dot dot-muted"></div>invariável</div>
 </div>
 
 <script>
-const numbers = [
-  [0,   'zero',           null,           ''],
-  [1,   'um',             'uma',          ''],
-  [2,   'dois',           'duas',         ''],
-  [3,   'três',           null,           ''],
-  [4,   'quatro',         null,           ''],
-  [5,   'cinco',          null,           ''],
-  [6,   'seis',           null,           ''],
-  [7,   'sete',           null,           ''],
-  [8,   'oito',           null,           ''],
-  [9,   'nove',           null,           ''],
-  [10,  'dez',            null,           ''],
-  [11,  'onze',           null,           ''],
-  [12,  'doze',           null,           ''],
-  [13,  'treze',          null,           ''],
-  [14,  'catorze',        null,           'também: quatorze'],
-  [15,  'quinze',         null,           ''],
-  [16,  'dezasseis',      null,           ''],
-  [17,  'dezassete',      null,           ''],
-  [18,  'dezoito',        null,           ''],
-  [19,  'dezanove',       null,           ''],
-  [20,  'vinte',          null,           ''],
-  [21,  'vinte e um',     'vinte e uma',  ''],
-  [22,  'vinte e dois',   'vinte e duas', ''],
-  [30,  'trinta',         null,           ''],
-  [31,  'trinta e um',    'trinta e uma', ''],
-  [40,  'quarenta',       null,           ''],
-  [50,  'cinquenta',      null,           ''],
-  [60,  'sessenta',       null,           ''],
-  [70,  'setenta',        null,           ''],
-  [80,  'oitenta',        null,           ''],
-  [90,  'noventa',        null,           ''],
-  [100, 'cem',            null,           'cento quando seguido de mais (ex: cento e um)'],
-];
-
-// ── AUDIO (ElevenLabs via Cloudflare Worker) ─────────────────────────
 const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
 
-let currentBtn   = null;
+const numbers = [
+  [0,'zero',null,''],
+  [1,'um','uma',''],
+  [2,'dois','duas',''],
+  [3,'três',null,''],
+  [4,'quatro',null,''],
+  [5,'cinco',null,''],
+  [6,'seis',null,''],
+  [7,'sete',null,''],
+  [8,'oito',null,''],
+  [9,'nove',null,''],
+  [10,'dez',null,''],
+  [11,'onze',null,''],
+  [12,'doze',null,''],
+  [13,'treze',null,''],
+  [14,'catorze',null,'também: quatorze'],
+  [15,'quinze',null,''],
+  [16,'dezasseis',null,''],
+  [17,'dezassete',null,''],
+  [18,'dezoito',null,''],
+  [19,'dezanove',null,''],
+  [20,'vinte',null,''],
+  [21,'vinte e um','vinte e uma',''],
+  [22,'vinte e dois','vinte e duas',''],
+  [30,'trinta',null,''],
+  [31,'trinta e um','trinta e uma',''],
+  [40,'quarenta',null,''],
+  [50,'cinquenta',null,''],
+  [60,'sessenta',null,''],
+  [70,'setenta',null,''],
+  [80,'oitenta',null,''],
+  [90,'noventa',null,''],
+  [100,'cem',null,'cento quando seguido de mais (ex: cento e um)'],
+];
+
+// ── ESCUTA SENTENCES ─────────────────────────────────────────────
+// Each entry: { sentence, number (digit), word (pt spelling) }
+const ESCUTA_SENTENCES = [
+  // From TPC - prices
+  { s: 'O caderno custa dois euros e noventa e nove cêntimos.', n: 2,  w: 'dois' },
+  { s: 'A borracha é barata. É só noventa e nove cêntimos.', n: 99, w: 'noventa e nove' },
+  { s: 'A caneta custa um euro e vinte cêntimos.', n: 1,  w: 'um' },
+  { s: 'A mesa custa quarenta e sete euros e cinquenta e cinco cêntimos.', n: 47, w: 'quarenta e sete' },
+  { s: 'O livro custa três euros e sessenta e seis cêntimos.', n: 3,  w: 'três' },
+  { s: 'A cadeira custa trinta e oito euros.', n: 38, w: 'trinta e oito' },
+  { s: 'O quadro custa quarenta e oito euros e quinze cêntimos.', n: 48, w: 'quarenta e oito' },
+  { s: 'O ar condicionado custa quarenta e nove euros e noventa e nove cêntimos.', n: 49, w: 'quarenta e nove' },
+  // Arithmetic from class
+  { s: 'Dez mais dez igual a vinte.', n: 20, w: 'vinte' },
+  { s: 'Vinte mais dez igual a trinta.', n: 30, w: 'trinta' },
+  { s: 'Cinquenta menos dez igual a quarenta.', n: 40, w: 'quarenta' },
+  { s: 'Cinquenta mais cinquenta igual a cem.', n: 100, w: 'cem' },
+  { s: 'Quarenta mais trinta igual a setenta.', n: 70, w: 'setenta' },
+  { s: 'Cem menos quarenta igual a sessenta.', n: 60, w: 'sessenta' },
+  // Quantities / everyday
+  { s: 'Tenho quinze minutos para chegar.', n: 15, w: 'quinze' },
+  { s: 'O restaurante tem doze mesas.', n: 12, w: 'doze' },
+  { s: 'Estou em Portugal há seis meses.', n: 6,  w: 'seis' },
+  { s: 'O autocarro demora vinte e dois minutos.', n: 22, w: 'vinte e dois' },
+  { s: 'A loja fecha às oito da noite.', n: 8,  w: 'oito' },
+  { s: 'Preciso de cinquenta euros para o mercado.', n: 50, w: 'cinquenta' },
+  { s: 'O vinho custa onze euros a garrafa.', n: 11, w: 'onze' },
+  { s: 'Há trinta e um dias em março.', n: 31, w: 'trinta e um' },
+  { s: 'O café custa oitenta cêntimos.', n: 80, w: 'oitenta' },
+  { s: 'O metro tem dezasseis paragens nesta linha.', n: 16, w: 'dezasseis' },
+  { s: 'Chego em cinco minutos.', n: 5,  w: 'cinco' },
+  { s: 'Moro aqui há noventa dias.', n: 90, w: 'noventa' },
+  { s: 'A conta do restaurante foi quarenta euros.', n: 40, w: 'quarenta' },
+  { s: 'Comprei três garrafas de vinho.', n: 3,  w: 'três' },
+  { s: 'O bairro tem sessenta e quatro ruas.', n: 64, w: 'sessenta e quatro' },
+  { s: 'Já são dezanove horas.', n: 19, w: 'dezanove' },
+];
+
+// Build a word→number map for spelling options
+const NUM_WORDS = {};
+numbers.forEach(([n, masc, fem]) => {
+  NUM_WORDS[n] = masc;
+  if (fem) NUM_WORDS[n + '_fem'] = fem;
+});
+// Add compound words used in sentences
+const EXTRA_WORDS = {
+  38: 'trinta e oito', 47: 'quarenta e sete', 48: 'quarenta e oito',
+  49: 'quarenta e nove', 64: 'sessenta e quatro', 22: 'vinte e dois',
+  31: 'trinta e um', 99: 'noventa e nove'
+};
+Object.assign(NUM_WORDS, EXTRA_WORDS);
+
+// ── AUDIO ─────────────────────────────────────────────────────────
 let currentAudio = null;
+let currentBtn = null;
 
-function initVoice() {
-  const status = document.getElementById('voiceStatus');
-  if (status) status.textContent = 'Voz: ElevenLabs (pt-PT)';
-}
-
-async function speak(text, btnId) {
-  const btn = btnId ? document.getElementById(btnId) : null;
-
+async function speak(text, btnEl) {
   if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-  if (currentBtn)   { currentBtn.classList.remove('playing'); currentBtn = null; }
-
-  if (btn) { btn.classList.add('playing'); currentBtn = btn; }
-
+  if (currentBtn) { currentBtn.classList.remove('playing'); currentBtn = null; }
+  if (btnEl) { btnEl.classList.add('playing'); currentBtn = btnEl; }
   try {
-    const res = await fetch(WORKER_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text })
-    });
+    const res = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) });
     if (!res.ok) throw new Error('Worker error ' + res.status);
-    const blob  = await res.blob();
-    const url   = URL.createObjectURL(blob);
-    const audio = new Audio(url);
-    currentAudio = audio;
-    audio.onended = audio.onerror = () => {
-      if (btn) btn.classList.remove('playing');
-      if (currentBtn === btn) currentBtn = null;
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    currentAudio = new Audio(url);
+    currentAudio.onended = currentAudio.onerror = () => {
+      if (btnEl) btnEl.classList.remove('playing');
+      if (currentBtn === btnEl) currentBtn = null;
       URL.revokeObjectURL(url);
     };
-    audio.play();
-  } catch (err) {
+    currentAudio.play();
+    return currentAudio;
+  } catch(err) {
     console.error('TTS error:', err);
-    if (btn) btn.classList.remove('playing');
-    if (currentBtn === btn) currentBtn = null;
+    if (btnEl) btnEl.classList.remove('playing');
   }
 }
 
-function speakStr(masc, fem) {
-  return fem ? masc + '. ' + fem : masc;
-}
+function speakStr(masc, fem) { return fem ? masc + '. ' + fem : masc; }
 
-// ── MODE ─────────────────────────────────────────────────────────────
+// ── MODE ──────────────────────────────────────────────────────────
 let mode = 'study';
 
 function setMode(m) {
   mode = m;
-  ['study','quiz','flashcard'].forEach(id =>
-    document.getElementById('btn-' + id).classList.toggle('active', id === m)
-  );
+  ['study','quiz','flashcard','escuta'].forEach(id => {
+    const btn = document.getElementById('btn-' + id);
+    if (btn) btn.classList.toggle('active', id === m);
+  });
   document.getElementById('btn-reveal').style.display      = m === 'quiz'      ? 'inline-block' : 'none';
-  document.getElementById('table-container').style.display = m === 'flashcard' ? 'none'         : 'block';
-  document.getElementById('flashcard-view').style.display  = m === 'flashcard' ? 'block'        : 'none';
-  document.getElementById('legend').style.display          = m === 'flashcard' ? 'none'         : 'flex';
-
+  document.getElementById('table-container').style.display = (m === 'flashcard' || m === 'escuta') ? 'none' : 'block';
+  document.getElementById('flashcard-view').style.display  = m === 'flashcard' ? 'block' : 'none';
+  document.getElementById('escuta-view').style.display     = m === 'escuta'    ? 'block' : 'none';
+  document.getElementById('legend').style.display          = (m === 'flashcard' || m === 'escuta') ? 'none' : 'flex';
   if (m === 'flashcard') initFlashcards();
+  else if (m === 'escuta') initEscuta();
   else render();
 }
 
-// ── TABLE ────────────────────────────────────────────────────────────
-function revealAll() {
-  document.querySelectorAll('.hidden').forEach(el => el.classList.add('revealed'));
-}
+// ── TABLE ─────────────────────────────────────────────────────────
+function revealAll() { document.querySelectorAll('.hidden').forEach(el => el.classList.add('revealed')); }
 
 function rowClick(tr, masc, fem) {
-  if (mode === 'quiz') {
-    tr.querySelectorAll('.hidden').forEach(h => h.classList.toggle('revealed'));
-  } else {
-    speak(speakStr(masc, fem), null);
-    tr.classList.add('row-playing');
-    setTimeout(() => tr.classList.remove('row-playing'), 800);
-  }
+  if (mode === 'quiz') { tr.querySelectorAll('.hidden').forEach(h => h.classList.toggle('revealed')); }
+  else { speak(speakStr(masc, fem), null); }
 }
 
 function render() {
@@ -485,108 +344,189 @@ function render() {
     { title: '20 – 29 · Vinte e…',          rows: numbers.filter(r => r[0] >= 20 && r[0] < 30) },
     { title: '30 – 100 · Dezenas',           rows: numbers.filter(r => r[0] >= 30) },
   ];
-
   let html = '';
   sections.forEach(sec => {
-    html += `<div class="section-title">${sec.title}</div>
-<table><thead><tr><th>#</th><th>Português</th><th>Nota</th></tr></thead><tbody>`;
-
+    html += `<div class="section-title">${sec.title}</div><table><thead><tr><th>#</th><th>Português</th><th>Nota</th></tr></thead><tbody>`;
     sec.rows.forEach(([n, masc, fem, note]) => {
       const hasGender = fem !== null;
-      const s = speakStr(masc, fem).replace(/'/g, "\\'");
       const mEsc = masc.replace(/'/g, "\\'");
       const fEsc = fem ? fem.replace(/'/g, "\\'") : '';
-
-      let ptCell;
-      if (mode === 'study') {
-        ptCell = hasGender
-          ? `${masc} / <span class="fem">${fem}</span>`
-          : masc;
-      } else {
-        ptCell = hasGender
-          ? `<span class="hidden">${masc}</span> / <span class="hidden fem">${fem}</span>`
-          : `<span class="hidden">${masc}</span>`;
-      }
-
-      const noteHtml = note
-        ? (mode === 'study'
-            ? note
-            : `<span class="hidden" style="font-family:'IBM Plex Sans',sans-serif">${note}</span>`)
-        : '';
-
-      html += `<tr onclick="rowClick(this,'${mEsc}','${fEsc}')">
-  <td class="num">${n}</td>
-  <td class="pt">${ptCell}</td>
-  <td class="note">${noteHtml}</td>
-</tr>`;
+      let ptCell = mode === 'study'
+        ? (hasGender ? `${masc} / <span class="fem">${fem}</span>` : masc)
+        : (hasGender ? `<span class="hidden">${masc}</span> / <span class="hidden fem">${fem}</span>` : `<span class="hidden">${masc}</span>`);
+      const noteHtml = note ? (mode === 'study' ? note : `<span class="hidden" style="font-family:'IBM Plex Sans',sans-serif">${note}</span>`) : '';
+      html += `<tr onclick="rowClick(this,'${mEsc}','${fEsc}')"><td class="num">${n}</td><td class="pt">${ptCell}</td><td class="note">${noteHtml}</td></tr>`;
     });
-
     html += `</tbody></table>`;
   });
-
   container.innerHTML = html;
   container.className = mode === 'quiz' ? 'quiz-mode' : '';
 }
 
-// ── FLASHCARDS ───────────────────────────────────────────────────────
-let fcDeck = [];
-let fcIdx  = 0;
+// ── FLASHCARDS ────────────────────────────────────────────────────
+let fcDeck = [], fcIdx = 0;
 
 function shuffle(arr) {
   const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
   return a;
 }
 
 function speakCurrent(side) {
   const [n, masc, fem] = fcDeck[fcIdx];
-  if (side === 'front') {
-    speak(String(n), 'speakFront');
-  } else {
-    speak(fem ? masc + '. ' + fem : masc, 'speakBack');
-  }
+  const btnId = side === 'front' ? 'speakFront' : 'speakBack';
+  speak(side === 'front' ? String(n) : speakStr(masc, fem), document.getElementById(btnId));
 }
 
 function renderFlash() {
   const [n, masc, fem] = fcDeck[fcIdx];
-  const hasGender = fem !== null;
   document.getElementById('flashCounter').textContent = `${fcIdx + 1} / ${fcDeck.length}`;
   document.getElementById('flashNum').textContent = n;
   const ans = document.getElementById('flashAnswer');
-  ans.textContent = hasGender ? `${masc} / ${fem}` : masc;
-  ans.className = 'flash-answer' + (hasGender ? ' has-gender' : '');
+  ans.textContent = fem ? `${masc} / ${fem}` : masc;
+  ans.className = 'flash-answer' + (fem ? ' has-gender' : '');
   document.getElementById('flashcard').classList.remove('flipped');
   document.getElementById('flashHint').textContent = 'clique para revelar';
 }
 
 function flipCard() {
-  const card = document.getElementById('flashcard');
-  card.classList.toggle('flipped');
-  document.getElementById('flashHint').textContent = card.classList.contains('flipped') ? '' : 'clique para revelar';
+  document.getElementById('flashcard').classList.toggle('flipped');
+  document.getElementById('flashHint').textContent = document.getElementById('flashcard').classList.contains('flipped') ? '' : 'clique para revelar';
 }
 
-function flashNav(dir) {
-  fcIdx = (fcIdx + dir + fcDeck.length) % fcDeck.length;
-  renderFlash();
+function flashNav(dir) { fcIdx = (fcIdx + dir + fcDeck.length) % fcDeck.length; renderFlash(); }
+function shuffleFlash() { fcDeck = shuffle([...numbers]); fcIdx = 0; renderFlash(); }
+function initFlashcards() { fcDeck = shuffle([...numbers]); fcIdx = 0; renderFlash(); }
+
+// ── ESCUTA ────────────────────────────────────────────────────────
+let escutaDeck = [], escutaIdx = 0, escutaCorrect = 0, escutaTotal = 0;
+let escutaStep = 1; // 1 = pick digit, 2 = pick spelling
+let escutaCurrentItem = null;
+let escutaStep1Done = false;
+
+function initEscuta() {
+  escutaDeck = shuffle([...ESCUTA_SENTENCES]);
+  escutaIdx = 0; escutaCorrect = 0; escutaTotal = 0;
+  renderEscuta();
 }
 
-function shuffleFlash() {
-  fcDeck = shuffle([...numbers]);
-  fcIdx = 0;
-  renderFlash();
+function renderEscuta() {
+  if (escutaIdx >= escutaDeck.length) { escutaDeck = shuffle([...ESCUTA_SENTENCES]); escutaIdx = 0; }
+  escutaCurrentItem = escutaDeck[escutaIdx];
+  escutaStep = 1;
+  escutaStep1Done = false;
+
+  document.getElementById('escutaFill').style.width = `${(escutaIdx / escutaDeck.length) * 100}%`;
+  document.getElementById('escutaScore').textContent = `Score: ${escutaCorrect} / ${escutaTotal}`;
+  document.getElementById('escutaFeedback').textContent = '';
+  document.getElementById('escutaFeedback').className = 'escuta-feedback';
+  document.getElementById('escutaNext').disabled = true;
+  document.getElementById('escutaSentenceReveal').style.display = 'none';
+  document.getElementById('escutaStep1').style.display = 'block';
+  document.getElementById('escutaStep2').style.display = 'none';
+  document.getElementById('escutaPlayBtn').classList.remove('playing');
+
+  buildDigitGrid();
 }
 
-function initFlashcards() {
-  fcDeck = shuffle([...numbers]);
-  fcIdx  = 0;
-  renderFlash();
+function escutaPlay() {
+  const btn = document.getElementById('escutaPlayBtn');
+  speak(escutaCurrentItem.s, btn);
 }
 
+function buildDigitGrid() {
+  const correct = escutaCurrentItem.n;
+  // Build 3 wrong digit distractors from numbers array
+  const pool = numbers.map(r => r[0]).filter(n => n !== correct && n <= 100);
+  const wrongs = shuffle(pool).slice(0, 3);
+  const opts = shuffle([correct, ...wrongs]);
+  const grid = document.getElementById('digitGrid');
+  grid.innerHTML = '';
+  opts.forEach(n => {
+    const btn = document.createElement('button');
+    btn.className = 'digit-opt';
+    btn.textContent = n;
+    btn.onclick = () => checkDigit(btn, n, correct);
+    grid.appendChild(btn);
+  });
+}
+
+function checkDigit(btn, chosen, correct) {
+  if (escutaStep1Done) return;
+  escutaStep1Done = true;
+  document.querySelectorAll('.digit-opt').forEach(b => {
+    b.disabled = true;
+    if (parseInt(b.textContent) === correct) b.classList.add('correct');
+  });
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    document.getElementById('escutaFeedback').textContent = 'Correto! Agora escreve o número.';
+    document.getElementById('escutaFeedback').className = 'escuta-feedback ok';
+    // Move to step 2
+    setTimeout(() => {
+      document.getElementById('escutaStep2').style.display = 'block';
+      buildSpellGrid();
+    }, 500);
+  } else {
+    btn.classList.add('wrong');
+    escutaTotal++;
+    document.getElementById('escutaFeedback').textContent = `Errado — era ${correct}`;
+    document.getElementById('escutaFeedback').className = 'escuta-feedback bad';
+    revealSentence();
+    document.getElementById('escutaNext').disabled = false;
+    document.getElementById('escutaScore').textContent = `Score: ${escutaCorrect} / ${escutaTotal}`;
+  }
+}
+
+function buildSpellGrid() {
+  const correctWord = escutaCurrentItem.w;
+  // Build 3 wrong spelling distractors
+  const allWords = [...new Set(Object.values(NUM_WORDS))].filter(w => w !== correctWord);
+  const wrongs = shuffle(allWords).slice(0, 3);
+  const opts = shuffle([correctWord, ...wrongs]);
+  const grid = document.getElementById('spellGrid');
+  grid.innerHTML = '';
+  opts.forEach(word => {
+    const btn = document.createElement('button');
+    btn.className = 'spell-opt';
+    btn.textContent = word;
+    btn.onclick = () => checkSpell(btn, word, correctWord);
+    grid.appendChild(btn);
+  });
+}
+
+function checkSpell(btn, chosen, correct) {
+  document.querySelectorAll('.spell-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === correct) b.classList.add('correct');
+  });
+  escutaTotal++;
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    escutaCorrect++;
+    document.getElementById('escutaFeedback').textContent = 'Perfeito! ✓';
+    document.getElementById('escutaFeedback').className = 'escuta-feedback ok';
+  } else {
+    btn.classList.add('wrong');
+    document.getElementById('escutaFeedback').textContent = `Errado — era "${correct}"`;
+    document.getElementById('escutaFeedback').className = 'escuta-feedback bad';
+  }
+  revealSentence();
+  document.getElementById('escutaNext').disabled = false;
+  document.getElementById('escutaScore').textContent = `Score: ${escutaCorrect} / ${escutaTotal}`;
+}
+
+function revealSentence() {
+  const el = document.getElementById('escutaSentenceReveal');
+  el.textContent = escutaCurrentItem.s;
+  el.style.display = 'block';
+  speak(escutaCurrentItem.s, null);
+}
+
+function escutaNext() { escutaIdx++; renderEscuta(); }
+
+// ── INIT ──────────────────────────────────────────────────────────
 render();
-initVoice();
 </script>
 </body>
 </html>

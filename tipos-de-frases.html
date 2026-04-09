@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tipos de Frases</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0; --surface: #ffffff; --surface2: #f2ede6;
+    --border: #e0d8cc; --border2: #ccc4b4;
+    --green: #2d7a50; --green-light: #eef5f1; --green-mid: #9acbb0;
+    --red: #a03428; --red-light: #fdf2f1; --red-mid: #dba09a;
+    --yellow: #b07d2a; --text: #2e2820; --muted: #8a7a68; --muted2: #b0a090;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+  header { padding: 1.5rem 2rem 1rem; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .header-text h1 { font-family: var(--mono); font-size: 1rem; font-weight: 400; color: var(--muted); }
+  .header-text h1 span { color: var(--green); }
+  .header-text p { font-size: 0.82rem; color: var(--muted2); margin-top: 0.2rem; }
+  .pt-flag { flex-shrink: 0; width: 48px; height: 32px; border-radius: 3px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.15); margin-top: 2px; }
+
+  .tabs { display: flex; border-bottom: 1px solid var(--border); padding: 0 2rem; }
+  .tab { font-family: var(--mono); font-size: 0.8rem; padding: 0.75rem 1.25rem; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none; letter-spacing: 0.03em; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  .view { display: none; padding: 1.5rem 2rem 3rem; max-width: 680px; }
+  .view.active { display: block; }
+
+  .section-title { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin: 2rem 0 0.75rem; border-left: 3px solid var(--red); padding-left: 0.65rem; }
+  .section-title:first-child { margin-top: 0; }
+
+  /* TYPE CARDS — reference */
+  .type-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-bottom: 1.5rem; }
+  .type-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.1rem; }
+  .type-card .type-name { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--red); margin-bottom: 0.4rem; }
+  .type-card .type-rule { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+  .type-card .type-example { font-family: var(--mono); font-size: 0.85rem; color: var(--green); font-weight: 600; cursor: pointer; }
+  .type-card .type-example:hover { text-decoration: underline; text-decoration-color: var(--green); text-underline-offset: 3px; }
+
+  /* MAS NOTE */
+  .note-block { background: var(--surface2); border-left: 3px solid var(--green); padding: 0.85rem 1.1rem; margin: 1rem 0 1.5rem; border-radius: 0 4px 4px 0; font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+  .note-block strong { color: var(--green); font-family: var(--mono); }
+  .note-block em { color: var(--muted); font-style: italic; }
+
+  /* TRANSFORMER */
+  .transformer-wrap { max-width: 560px; }
+  .transformer-score { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); margin-bottom: 1rem; display: flex; justify-content: space-between; }
+
+  .transformer-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.25rem; }
+  .tx-prompt { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.5rem; }
+  .tx-source-type { display: inline-block; font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.15rem 0.5rem; border-radius: 2px; margin-bottom: 0.75rem; }
+  .tx-source-type.afirmativa  { background: var(--green-light); color: var(--green); border: 1px solid var(--green-mid); }
+  .tx-source-type.negativa    { background: var(--red-light);   color: var(--red);   border: 1px solid var(--red-mid); }
+  .tx-source-type.interrogativa { background: #fdf6e8; color: var(--yellow); border: 1px solid #e0c070; }
+  .tx-sentence { font-family: var(--mono); font-size: 1.1rem; color: var(--text); font-weight: 600; margin-bottom: 1.25rem; line-height: 1.5; cursor: pointer; }
+  .tx-sentence:hover { text-decoration: underline; text-decoration-color: var(--muted); text-underline-offset: 3px; }
+
+  .tx-target-label { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.6rem; }
+  .tx-buttons { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .tx-btn { font-family: var(--mono); font-size: 0.8rem; padding: 0.6rem 1.25rem; border-radius: 4px; cursor: pointer; border: 1px solid var(--border); background: var(--surface2); color: var(--text); transition: all 0.2s; }
+  .tx-btn:hover:not(:disabled) { border-color: var(--green); color: var(--green); }
+  .tx-btn:disabled { cursor: default; opacity: 0.6; }
+
+  .tx-result { display: none; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+  .tx-result.visible { display: block; }
+  .tx-result-label { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.4rem; }
+  .tx-result-sentence { font-family: var(--mono); font-size: 1.1rem; color: var(--green); font-weight: 600; margin-bottom: 0.6rem; cursor: pointer; line-height: 1.5; }
+  .tx-result-sentence:hover { text-decoration: underline; text-decoration-color: var(--green); }
+  .tx-result-note { font-size: 0.8rem; color: var(--muted); font-style: italic; }
+  .tx-feedback { font-family: var(--mono); font-size: 0.8rem; margin-top: 0.5rem; min-height: 1.2rem; }
+  .tx-feedback.ok  { color: var(--green); }
+  .tx-feedback.bad { color: var(--red); }
+
+  .tx-next { display: block; margin: 0 auto; font-family: var(--mono); font-size: 0.85rem; padding: 0.6rem 2rem; background: var(--green); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+  .tx-next:disabled { opacity: 0.3; cursor: default; }
+
+  /* EXPRESSÃO */
+  .expressao-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; max-width: 560px; }
+  .exp-tag { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--yellow); background: #fdf6e8; border: 1px solid #e0c070; padding: 0.15rem 0.5rem; border-radius: 2px; margin-bottom: 1rem; display: inline-block; }
+  .exp-pt { font-family: var(--mono); font-size: 1.3rem; color: var(--green); font-weight: 700; margin-bottom: 0.3rem; cursor: pointer; }
+  .exp-pt:hover { text-decoration: underline; text-decoration-color: var(--green); }
+  .exp-en { font-size: 0.9rem; color: var(--muted); font-style: italic; margin-bottom: 1rem; }
+  .exp-explanation { font-size: 0.85rem; color: var(--text); line-height: 1.7; border-top: 1px solid var(--border); padding-top: 1rem; }
+  .exp-explanation strong { color: var(--green); font-family: var(--mono); }
+
+  /* FLASHCARDS */
+  .fc-wrap { max-width: 560px; margin: 0 auto; }
+  .fc-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; gap: 0.5rem; flex-wrap: wrap; }
+  .fc-counter { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+  .fc-ctrl { font-family: var(--mono); font-size: 0.78rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 0.4rem 0.9rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .fc-ctrl:hover { border-color: var(--green); color: var(--green); }
+  .fc-progress { height: 2px; background: var(--border); border-radius: 1px; margin-bottom: 1.5rem; overflow: hidden; }
+  .fc-progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
+  .fc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; min-height: 300px; display: flex; flex-direction: column; align-items: center; padding: 1.5rem 2rem; text-align: center; }
+  .fc-hints { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 1.25rem; }
+  .fc-type-badge { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.15rem 0.5rem; border-radius: 2px; margin-bottom: 0.75rem; }
+  .fc-en-prompt { font-size: 1.1rem; color: var(--text); font-weight: 300; line-height: 1.6; margin-bottom: 1.25rem; padding: 0 0.5rem; }
+  .fc-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1.25rem; }
+  .fc-pt-answer { font-family: var(--mono); font-size: 1.1rem; color: var(--green); filter: blur(7px); transition: filter 0.3s; cursor: pointer; line-height: 1.5; margin-bottom: 1.25rem; padding: 0.1rem 0.5rem; background: var(--border); border-radius: 4px; display: inline-block; }
+  .fc-pt-answer.revealed { filter: blur(0); background: transparent; }
+  .fc-speak-pill { background: var(--surface2); border: 1px solid var(--border); color: var(--green); padding: 0.35rem 1.2rem; border-radius: 99px; cursor: pointer; transition: all 0.2s; font-size: 1rem; margin-bottom: 1.5rem; }
+  .fc-speak-pill:hover, .fc-speak-pill.playing { background: var(--green); color: #fff; border-color: var(--green); }
+  .fc-nav { display: flex; gap: 1rem; margin-top: auto; }
+  .fc-nav-btn { font-family: var(--mono); font-size: 0.82rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 0.55rem 1.25rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .fc-nav-btn:hover { border-color: var(--green); color: var(--green); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-text">
+    <h1>Unidade 1 · <span>Tipos de Frases</span></h1>
+    <p>A1.1 — Lighthouse Language School</p>
+  </div>
+  <svg class="pt-flag" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="19.2" height="32" fill="#006600"/>
+    <rect x="19.2" y="0" width="28.8" height="32" fill="#FF0000"/>
+    <circle cx="19.2" cy="16" r="7" fill="none" stroke="#FFCC00" stroke-width="1.2"/>
+    <circle cx="19.2" cy="16" r="4.5" fill="none" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="19.2" y1="11.5" x2="19.2" y2="20.5" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="14.7" y1="16" x2="23.7" y2="16" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="16" y1="12.8" x2="22.4" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <line x1="22.4" y1="12.8" x2="16" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <rect x="17" y="13.5" width="4.4" height="5" fill="white" rx="0.5"/>
+    <circle cx="19.2" cy="16" r="0.8" fill="#003399"/>
+    <circle cx="17.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="17.7" cy="17.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="17.5" r="0.5" fill="#003399"/>
+  </svg>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('tabela', this)">Tabela</button>
+  <button class="tab" onclick="switchTab('transformer', this)">Transformar</button>
+  <button class="tab" onclick="switchTab('flashcards', this)">Flashcards</button>
+  <button class="tab" onclick="switchTab('expressao', this)">Expressão</button>
+</div>
+
+<!-- TABELA -->
+<div id="tabela" class="view active">
+  <div class="section-title">Os Três Tipos</div>
+  <div class="type-cards">
+    <div class="type-card">
+      <div class="type-name">① Afirmativa</div>
+      <div class="type-rule">Statement. Subject + verb + rest.</div>
+      <div class="type-example" onclick="speak('O homem é alto, mas gordo.')">O homem é alto, mas gordo.</div>
+    </div>
+    <div class="type-card">
+      <div class="type-name">② Negativa</div>
+      <div class="type-rule">Add <strong style="color:var(--red);font-family:var(--mono)">não</strong> before the verb.</div>
+      <div class="type-example" onclick="speak('O homem não é alto, mas é gordo.')">O homem não é alto, mas é gordo.</div>
+    </div>
+    <div class="type-card">
+      <div class="type-name">③ Interrogativa</div>
+      <div class="type-rule">Same words, rising intonation + ?</div>
+      <div class="type-example" onclick="speak('O homem é alto, mas gordo?')">O homem é alto, mas gordo?</div>
+    </div>
+  </div>
+
+  <div class="note-block">
+    <strong>mas</strong> = but (contrast) &nbsp;·&nbsp; not to be confused with <strong>mais</strong> = more / plus<br>
+    <em>O homem é alto, mas gordo.</em> — The man is tall, but fat.<br>
+    <em>Gosto de café, mas não de chá.</em> — I like coffee, but not tea.
+  </div>
+
+  <div class="section-title">Exemplos com Áudio</div>
+  <table style="width:100%;border-collapse:collapse;font-size:0.88rem;" id="examplesTable"></table>
+</div>
+
+<!-- TRANSFORMER -->
+<div id="transformer" class="view">
+  <div class="transformer-wrap">
+    <div class="transformer-score">
+      <span>Transforma a frase</span>
+      <span id="txScore" style="color:var(--text)">0 / 0</span>
+    </div>
+    <div class="transformer-card" id="txCard">
+      <div class="tx-prompt">Tipo de frase:</div>
+      <div id="txSourceBadge" class="tx-source-type afirmativa">afirmativa</div>
+      <div class="tx-sentence" id="txSentence" onclick="speakTxSource()"></div>
+      <div class="tx-target-label" id="txTargetLabel">Transforma para:</div>
+      <div class="tx-buttons" id="txButtons"></div>
+      <div class="tx-result" id="txResult">
+        <div class="tx-result-label">Resultado:</div>
+        <div class="tx-result-sentence" id="txResultSentence" onclick="speakTxResult()"></div>
+        <div class="tx-result-note" id="txResultNote"></div>
+        <div class="tx-feedback" id="txFeedback"></div>
+      </div>
+    </div>
+    <button class="tx-next" id="txNext" onclick="nextTransformer()" disabled>Próximo →</button>
+  </div>
+</div>
+
+<!-- FLASHCARDS -->
+<div id="flashcards" class="view">
+  <div class="fc-wrap">
+    <div class="fc-topbar">
+      <span class="fc-counter" id="fcCounter">1 / 1</span>
+      <div style="display:flex;gap:0.5rem;">
+        <button class="fc-ctrl" onclick="shuffleFC()">⇄ Baralhar</button>
+        <button class="fc-ctrl" onclick="resetFC()">↺ Reiniciar</button>
+      </div>
+    </div>
+    <div class="fc-progress"><div class="fc-progress-fill" id="fcProgressFill" style="width:0%"></div></div>
+    <div class="fc-card">
+      <div class="fc-hints" id="fcHints">clique na frase para revelar · 🔊 para ouvir</div>
+      <div class="fc-type-badge" id="fcTypeBadge"></div>
+      <div class="fc-en-prompt" id="fcEnPrompt"></div>
+      <div class="fc-divider"></div>
+      <div class="fc-pt-answer" id="fcPtAnswer" onclick="revealFC()"></div>
+      <button class="fc-speak-pill" id="fcSpeakPill" onclick="speakFC()">🔊</button>
+      <div class="fc-nav">
+        <button class="fc-nav-btn" onclick="fcMove(-1)">← Anterior</button>
+        <button class="fc-nav-btn" onclick="fcMove(1)">Próximo →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPRESSÃO -->
+<div id="expressao" class="view">
+  <div class="section-title">Expressão do Dia — Diz-se Assim</div>
+  <div class="expressao-card">
+    <div class="exp-tag">Expressão idiomática</div>
+    <div class="exp-pt" onclick="speak('Isso são outros quinhentos.')">Isso são outros quinhentos.</div>
+    <div class="exp-en">"That's a whole different story."</div>
+    <div class="exp-explanation">
+      Used when you want to signal that a subject, situation, or problem is <strong>completely different</strong> from what was being discussed — a sharp change of topic or context.<br><br>
+      Literally: <em>"Those are another five hundred."</em> — a reference to old Portuguese currency. The phrase survives as pure idiom.<br><br>
+      Example: someone asks you about your work, you answer, then they ask about your personal life — you might say <strong>Isso são outros quinhentos</strong> before pivoting.
+    </div>
+  </div>
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+let currentAudio = null;
+
+async function speak(text, btnEl) {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (btnEl) btnEl.classList.add('playing');
+  try {
+    const res = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) });
+    if (!res.ok) throw new Error();
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    currentAudio = new Audio(url);
+    currentAudio.onended = currentAudio.onerror = () => { if (btnEl) btnEl.classList.remove('playing'); URL.revokeObjectURL(url); currentAudio = null; };
+    currentAudio.play();
+  } catch(e) { if (btnEl) btnEl.classList.remove('playing'); }
+}
+
+// ── DATA ─────────────────────────────────────────────────────────
+// Each trio: afirmativa, negativa, interrogativa + note
+const SENTENCE_SETS = [
+  {
+    af: 'O homem é alto, mas gordo.',
+    neg: 'O homem não é alto, mas é gordo.',
+    int: 'O homem é alto, mas gordo?',
+    en_af: 'The man is tall, but fat.',
+    en_neg: "The man isn't tall, but he's fat.",
+    en_int: 'The man is tall, but fat?',
+    note_neg: 'não placed before é'
+  },
+  {
+    af: 'O café é barato aqui.',
+    neg: 'O café não é barato aqui.',
+    int: 'O café é barato aqui?',
+    en_af: 'Coffee is cheap here.',
+    en_neg: "Coffee isn't cheap here.",
+    en_int: 'Is coffee cheap here?',
+    note_neg: 'não before é'
+  },
+  {
+    af: 'Ele fala português muito bem.',
+    neg: 'Ele não fala português muito bem.',
+    int: 'Ele fala português muito bem?',
+    en_af: 'He speaks Portuguese very well.',
+    en_neg: "He doesn't speak Portuguese very well.",
+    en_int: 'Does he speak Portuguese very well?',
+    note_neg: 'não before fala'
+  },
+  {
+    af: 'A loja está aberta hoje.',
+    neg: 'A loja não está aberta hoje.',
+    int: 'A loja está aberta hoje?',
+    en_af: 'The shop is open today.',
+    en_neg: "The shop isn't open today.",
+    en_int: 'Is the shop open today?',
+    note_neg: 'não before está'
+  },
+  {
+    af: 'Você tem tempo agora.',
+    neg: 'Você não tem tempo agora.',
+    int: 'Você tem tempo agora?',
+    en_af: 'You have time now.',
+    en_neg: "You don't have time now.",
+    en_int: 'Do you have time now?',
+    note_neg: 'não before tem'
+  },
+  {
+    af: 'O ananás é caro, mas delicioso.',
+    neg: 'O ananás não é caro, mas é delicioso.',
+    int: 'O ananás é caro, mas delicioso?',
+    en_af: 'The pineapple is expensive, but delicious.',
+    en_neg: "The pineapple isn't expensive, but it's delicious.",
+    en_int: 'Is the pineapple expensive, but delicious?',
+    note_neg: 'não before é'
+  },
+  {
+    af: 'Ela trabalha em Lisboa.',
+    neg: 'Ela não trabalha em Lisboa.',
+    int: 'Ela trabalha em Lisboa?',
+    en_af: 'She works in Lisbon.',
+    en_neg: "She doesn't work in Lisbon.",
+    en_int: 'Does she work in Lisbon?',
+    note_neg: 'não before trabalha'
+  },
+  {
+    af: 'O restaurante tem esplanada.',
+    neg: 'O restaurante não tem esplanada.',
+    int: 'O restaurante tem esplanada?',
+    en_af: 'The restaurant has an outdoor terrace.',
+    en_neg: "The restaurant doesn't have an outdoor terrace.",
+    en_int: 'Does the restaurant have an outdoor terrace?',
+    note_neg: 'não before tem'
+  },
+];
+
+// Examples table data
+const EXAMPLES = [
+  { type: 'afirmativa',   pt: 'O homem é alto, mas gordo.',         en: 'The man is tall, but fat.' },
+  { type: 'negativa',     pt: 'O homem não é alto, mas é gordo.',    en: "The man isn't tall, but he's fat." },
+  { type: 'interrogativa',pt: 'O homem é alto, mas gordo?',          en: 'The man is tall, but fat? (rising intonation)' },
+  { type: 'afirmativa',   pt: 'Eu sou de Miami.',                    en: "I'm from Miami." },
+  { type: 'negativa',     pt: 'Eu não sou de Lisboa.',               en: "I'm not from Lisbon." },
+  { type: 'interrogativa',pt: 'Você é de Lisboa?',                   en: 'Are you from Lisbon?' },
+  { type: 'afirmativa',   pt: 'O café é barato.',                    en: 'The coffee is cheap.' },
+  { type: 'negativa',     pt: 'O café não é caro.',                  en: "The coffee isn't expensive." },
+  { type: 'interrogativa',pt: 'O café é bom aqui?',                  en: 'Is the coffee good here?' },
+];
+
+const TYPE_COLORS = {
+  afirmativa:   { bg: '#eef5f1', color: '#2d7a50', border: '#9acbb0' },
+  negativa:     { bg: '#fdf2f1', color: '#a03428', border: '#dba09a' },
+  interrogativa:{ bg: '#fdf6e8', color: '#b07d2a', border: '#e0c070' },
+};
+
+function typeBadgeStyle(type) {
+  const c = TYPE_COLORS[type] || {};
+  return `background:${c.bg};color:${c.color};border:1px solid ${c.border};font-family:var(--mono);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;padding:0.15rem 0.5rem;border-radius:2px;`;
+}
+
+// ── EXAMPLES TABLE ────────────────────────────────────────────────
+function buildExamplesTable() {
+  const tbody = EXAMPLES.map(e => `
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:0.6rem 0.75rem;width:45%;font-family:var(--mono);font-size:0.88rem;color:var(--green);cursor:pointer;font-weight:600;" onclick="speak('${e.pt.replace(/'/g,"\\'")}')">
+        ${e.pt}
+      </td>
+      <td style="padding:0.6rem 0.75rem;font-size:0.85rem;color:var(--text);">${e.en}</td>
+      <td style="padding:0.6rem 0.75rem;white-space:nowrap;"><span style="${typeBadgeStyle(e.type)}">${e.type}</span></td>
+    </tr>`).join('');
+  document.getElementById('examplesTable').innerHTML =
+    `<thead><tr><th style="font-family:var(--mono);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);padding:0.5rem 0.75rem;border-bottom:1px solid var(--border);text-align:left;">Português</th><th style="font-family:var(--mono);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);padding:0.5rem 0.75rem;border-bottom:1px solid var(--border);text-align:left;">English</th><th style="font-family:var(--mono);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);padding:0.5rem 0.75rem;border-bottom:1px solid var(--border);text-align:left;">Tipo</th></tr></thead><tbody>${tbody}</tbody>`;
+}
+
+// ── TRANSFORMER ───────────────────────────────────────────────────
+let txDeck = [], txIdx = 0, txCorrect = 0, txTotal = 0, txAnswered = false;
+let txCurrentSet = null, txSourceType = null, txTargetType = null;
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+
+function initTransformer() {
+  // Generate tasks: for each set, create af→neg, af→int, neg→int combos
+  const tasks = [];
+  SENTENCE_SETS.forEach(set => {
+    tasks.push({ set, from: 'af', to: 'neg' });
+    tasks.push({ set, from: 'af', to: 'int' });
+    tasks.push({ set, from: 'neg', to: 'af' });
+  });
+  txDeck = shuffle(tasks);
+  txIdx = 0; txCorrect = 0; txTotal = 0;
+  renderTransformer();
+}
+
+const TYPE_LABELS = { af: 'afirmativa', neg: 'negativa', int: 'interrogativa' };
+const TYPE_KEY_MAP = { af: 'af', neg: 'neg', int: 'int' };
+
+function getSentence(set, key) {
+  return { af: set.af, neg: set.neg, int: set.int }[key];
+}
+function getEnglish(set, key) {
+  return { af: set.en_af, neg: set.en_neg, int: set.en_int }[key];
+}
+
+function renderTransformer() {
+  if (txIdx >= txDeck.length) { txDeck = shuffle(txDeck); txIdx = 0; }
+  txAnswered = false;
+  const task = txDeck[txIdx];
+  txCurrentSet = task.set;
+  txSourceType = task.from;
+  txTargetType = task.to;
+
+  const sourceSentence = getSentence(task.set, task.from);
+  const sourceLabel = TYPE_LABELS[task.from];
+
+  const badge = document.getElementById('txSourceBadge');
+  badge.textContent = sourceLabel;
+  badge.className = `tx-source-type ${sourceLabel}`;
+  document.getElementById('txSentence').textContent = sourceSentence;
+  document.getElementById('txTargetLabel').textContent = `Transforma para ${TYPE_LABELS[task.to]}:`;
+  document.getElementById('txResult').classList.remove('visible');
+  document.getElementById('txFeedback').textContent = '';
+  document.getElementById('txNext').disabled = true;
+  document.getElementById('txScore').textContent = `${txCorrect} / ${txTotal}`;
+
+  // Build choice buttons — show target sentence blurred + 1 wrong
+  const correctResult = getSentence(task.set, task.to);
+  // Pick a wrong sentence from another set (same target type)
+  const wrongPool = SENTENCE_SETS.filter(s => s !== task.set);
+  const wrongSet = wrongPool[Math.floor(Math.random() * wrongPool.length)];
+  const wrongResult = getSentence(wrongSet, task.to);
+  const opts = shuffle([
+    { text: correctResult, correct: true },
+    { text: wrongResult,   correct: false },
+  ]);
+
+  const btnContainer = document.getElementById('txButtons');
+  btnContainer.innerHTML = '';
+  opts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'tx-btn';
+    btn.textContent = opt.text;
+    btn.onclick = () => checkTransformer(btn, opt.correct, correctResult, task);
+    btnContainer.appendChild(btn);
+  });
+}
+
+function checkTransformer(btn, isCorrect, correctResult, task) {
+  if (txAnswered) return;
+  txAnswered = true; txTotal++;
+
+  document.querySelectorAll('.tx-btn').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === correctResult) b.style.borderColor = 'var(--green)';
+  });
+
+  const fb = document.getElementById('txFeedback');
+  if (isCorrect) {
+    btn.style.borderColor = 'var(--green)';
+    btn.style.color = 'var(--green)';
+    txCorrect++;
+    fb.textContent = 'Correto! ✓'; fb.className = 'tx-feedback ok';
+  } else {
+    btn.style.borderColor = 'var(--red)';
+    btn.style.color = 'var(--red)';
+    fb.textContent = 'Errado.'; fb.className = 'tx-feedback bad';
+  }
+
+  // Show result panel
+  const result = document.getElementById('txResult');
+  document.getElementById('txResultSentence').textContent = correctResult;
+  document.getElementById('txResultNote').textContent = task.set[`note_${txTargetType}`] || '';
+  result.classList.add('visible');
+
+  document.getElementById('txNext').disabled = false;
+  document.getElementById('txScore').textContent = `${txCorrect} / ${txTotal}`;
+  speak(correctResult, null);
+}
+
+function speakTxSource() { speak(document.getElementById('txSentence').textContent, null); }
+function speakTxResult() { speak(document.getElementById('txResultSentence').textContent, null); }
+function nextTransformer() { txIdx++; renderTransformer(); }
+
+// ── FLASHCARDS ────────────────────────────────────────────────────
+// Cards: English prompt → Portuguese (all three types)
+const FC_CARDS = SENTENCE_SETS.flatMap(set => [
+  { type: 'afirmativa',   en: set.en_af,  pt: set.af  },
+  { type: 'negativa',     en: set.en_neg, pt: set.neg },
+  { type: 'interrogativa',en: set.en_int, pt: set.int },
+]);
+
+let fcDeck = [...FC_CARDS], fcIdx = 0, fcRevealed = false;
+
+function renderFC() {
+  const c = fcDeck[fcIdx];
+  fcRevealed = false;
+  const tColors = TYPE_COLORS[c.type] || {};
+  document.getElementById('fcCounter').textContent = `${fcIdx + 1} / ${fcDeck.length}`;
+  document.getElementById('fcProgressFill').style.width = `${((fcIdx + 1) / fcDeck.length) * 100}%`;
+  document.getElementById('fcTypeBadge').textContent = c.type;
+  document.getElementById('fcTypeBadge').style.cssText = `background:${tColors.bg};color:${tColors.color};border:1px solid ${tColors.border};font-family:var(--mono);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;padding:0.15rem 0.5rem;border-radius:2px;margin-bottom:0.75rem;`;
+  document.getElementById('fcEnPrompt').textContent = c.en;
+  document.getElementById('fcPtAnswer').textContent = c.pt;
+  document.getElementById('fcPtAnswer').classList.remove('revealed');
+  document.getElementById('fcHints').textContent = 'clique na frase para revelar · 🔊 para ouvir';
+  document.getElementById('fcSpeakPill').classList.remove('playing');
+}
+
+function revealFC() {
+  if (fcRevealed) return;
+  fcRevealed = true;
+  document.getElementById('fcPtAnswer').classList.add('revealed');
+  document.getElementById('fcHints').textContent = '';
+}
+
+function speakFC() { speak(fcDeck[fcIdx].pt, document.getElementById('fcSpeakPill')); }
+function fcMove(dir) { fcIdx = (fcIdx + dir + fcDeck.length) % fcDeck.length; renderFC(); }
+function shuffleFC() { fcDeck = shuffle([...FC_CARDS]); fcIdx = 0; renderFC(); }
+function resetFC()   { fcDeck = [...FC_CARDS]; fcIdx = 0; renderFC(); }
+
+// ── TAB SWITCHING ─────────────────────────────────────────────────
+function switchTab(id, tabEl) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  tabEl.classList.add('active');
+  if (id === 'transformer') initTransformer();
+  if (id === 'flashcards') renderFC();
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+buildExamplesTable();
+renderFC();
+</script>
+<script>
+(function(){
+  try {
+    var d = JSON.parse(localStorage.getItem('pt-study-last-visited') || '{}');
+    d['tipos-de-frases.html'] = Date.now();
+    localStorage.setItem('pt-study-last-visited', JSON.stringify(d));
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>
