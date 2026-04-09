@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt" translate="no">
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -163,7 +163,7 @@
 <div id="escuta-view">
   <div class="escuta-score" id="escutaScore">Score: 0 / 0</div>
   <div class="escuta-progress"><div class="escuta-progress-fill" id="escutaFill" style="width:0%"></div></div>
-  <div class="escuta-card">
+  <div class="escuta-card" translate="no">
     <div class="escuta-label">Ouve a frase e identifica o número</div>
     <button class="escuta-play-btn" id="escutaPlayBtn" onclick="escutaPlay()">🔊 Ouvir frase</button>
 
@@ -445,6 +445,7 @@ function buildDigitGrid() {
   opts.forEach(n => {
     const btn = document.createElement('button');
     btn.className = 'digit-opt';
+    btn.setAttribute('translate', 'no');
     btn.textContent = n;
     btn.onclick = () => checkDigit(btn, n, correct);
     grid.appendChild(btn);
@@ -460,13 +461,14 @@ function checkDigit(btn, chosen, correct) {
   });
   if (chosen === correct) {
     btn.classList.add('correct');
-    document.getElementById('escutaFeedback').textContent = 'Correto! Agora escreve o número.';
+    document.getElementById('escutaFeedback').textContent = 'Correto! Agora escreve o número em português.';
     document.getElementById('escutaFeedback').className = 'escuta-feedback ok';
+    revealSentence();
     // Move to step 2
     setTimeout(() => {
       document.getElementById('escutaStep2').style.display = 'block';
       buildSpellGrid();
-    }, 500);
+    }, 800);
   } else {
     btn.classList.add('wrong');
     escutaTotal++;
@@ -489,6 +491,7 @@ function buildSpellGrid() {
   opts.forEach(word => {
     const btn = document.createElement('button');
     btn.className = 'spell-opt';
+    btn.setAttribute('translate', 'no');
     btn.textContent = word;
     btn.onclick = () => checkSpell(btn, word, correctWord);
     grid.appendChild(btn);
