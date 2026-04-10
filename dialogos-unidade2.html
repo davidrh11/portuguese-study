@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="pt" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diálogos — Unidade 2</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0; --surface: #ffffff; --surface2: #f2ede6;
+    --border: #e0d8cc; --border2: #ccc4b4;
+    --green: #2d7a50; --green-light: #eef5f1; --green-mid: #9acbb0;
+    --red: #a03428; --red-light: #fdf2f1; --red-mid: #dba09a;
+    --yellow: #b07d2a; --text: #2e2820; --muted: #8a7a68; --muted2: #b0a090;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+    --blue: #2a5fa0; --blue-light: #eef3fb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+  header {
+    padding: 1.5rem 2rem 1rem; border-bottom: 1px solid var(--border);
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  }
+  .header-text h1 { font-family: var(--mono); font-size: 1rem; font-weight: 400; color: var(--muted); }
+  .header-text h1 span { color: var(--green); }
+  .header-text p { font-size: 0.82rem; color: var(--muted2); margin-top: 0.2rem; }
+  .pt-flag { flex-shrink: 0; width: 48px; height: 32px; border-radius: 3px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.15); margin-top: 2px; }
+
+  /* MODE TABS */
+  .tabs { display: flex; border-bottom: 1px solid var(--border); padding: 0 2rem; }
+  .tab { font-family: var(--mono); font-size: 0.8rem; padding: 0.75rem 1.25rem; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  .view { display: none; padding: 1.5rem 2rem 3rem; max-width: 700px; }
+  .view.active { display: block; }
+
+  /* DIALOGUE SELECTOR */
+  .dialogue-selector { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem; }
+  .dialogue-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1.1rem 1.5rem; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 1.25rem;
+  }
+  .dialogue-card:hover { border-color: var(--green-mid); }
+  .dialogue-card.active { border-color: var(--green); background: var(--green-light); }
+  .dc-register {
+    font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase;
+    letter-spacing: 0.1em; padding: 0.2rem 0.5rem; border-radius: 2px; white-space: nowrap;
+  }
+  .dc-register.informal { background: #eef5f1; color: var(--green); border: 1px solid var(--green-mid); }
+  .dc-register.formal   { background: var(--blue-light); color: var(--blue); border: 1px solid #a0b8d8; }
+  .dc-info { flex: 1; }
+  .dc-title { font-weight: 600; font-size: 0.95rem; color: var(--text); margin-bottom: 0.2rem; }
+  .dc-desc { font-size: 0.8rem; color: var(--muted); }
+
+  /* ROLE PICKER */
+  .role-picker { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .role-btn {
+    flex: 1; min-width: 140px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.85rem 1rem; cursor: pointer; transition: all 0.2s; text-align: center;
+  }
+  .role-btn:hover { border-color: var(--green-mid); }
+  .role-btn.selected { border-color: var(--green); background: var(--green-light); }
+  .role-btn .rb-name { font-family: var(--mono); font-size: 0.9rem; font-weight: 600; color: var(--green); margin-bottom: 0.2rem; }
+  .role-btn .rb-desc { font-size: 0.75rem; color: var(--muted); }
+
+  /* CONVERSATION UI */
+  .convo-header {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px 8px 0 0;
+    padding: 0.85rem 1.25rem; display: flex; align-items: center; justify-content: space-between;
+    border-bottom: none;
+  }
+  .convo-title { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .convo-score { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
+  .convo-score span { color: var(--green); }
+
+  .convo-thread {
+    background: var(--surface); border: 1px solid var(--border); border-top: none;
+    border-radius: 0 0 8px 8px; padding: 1.25rem;
+    display: flex; flex-direction: column; gap: 0.85rem; min-height: 200px;
+    margin-bottom: 1.25rem;
+  }
+
+  /* Chat bubbles */
+  .bubble-row { display: flex; gap: 0.75rem; align-items: flex-end; }
+  .bubble-row.them { justify-content: flex-start; }
+  .bubble-row.you  { justify-content: flex-end; }
+
+  .avatar {
+    width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 0.7rem; font-weight: 600;
+  }
+  .avatar.them { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+  .avatar.you  { background: var(--green-light); color: var(--green); border: 1px solid var(--green-mid); }
+
+  .bubble {
+    max-width: 75%; padding: 0.7rem 1rem; border-radius: 12px;
+    font-size: 0.9rem; line-height: 1.5; position: relative; cursor: pointer;
+  }
+  .bubble.them {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-bottom-left-radius: 3px; color: var(--text);
+  }
+  .bubble.them:hover { border-color: var(--green-mid); }
+  .bubble.you {
+    background: var(--green-light); border: 1px solid var(--green-mid);
+    border-bottom-right-radius: 3px; color: var(--text);
+  }
+  .bubble .speaker-label {
+    font-family: var(--mono); font-size: 0.58rem; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.3rem; display: block;
+  }
+  .bubble.correct-reveal { background: var(--green-light); border-color: var(--green); }
+  .bubble.wrong-reveal   { background: var(--red-light);   border-color: var(--red-mid); }
+
+  /* YOUR TURN */
+  .your-turn-label {
+    font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.75rem;
+  }
+  .options-grid { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; }
+  .option-btn {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+    padding: 0.8rem 1rem; cursor: pointer; font-size: 0.9rem; color: var(--text);
+    text-align: left; transition: all 0.15s; font-family: var(--sans);
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .option-btn:hover:not(:disabled) { border-color: var(--green); background: var(--green-light); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-light); color: var(--green); }
+  .option-btn.wrong   { border-color: var(--red);   background: var(--red-light);   color: var(--red); }
+  .option-btn:disabled { cursor: default; }
+  .option-letter {
+    font-family: var(--mono); font-size: 0.65rem; color: var(--muted);
+    background: var(--surface2); border: 1px solid var(--border);
+    width: 1.4rem; height: 1.4rem; border-radius: 2px; display: flex;
+    align-items: center; justify-content: center; flex-shrink: 0;
+  }
+
+  .convo-feedback {
+    font-family: var(--mono); font-size: 0.82rem; min-height: 1.4rem;
+    margin-bottom: 0.75rem; text-align: center;
+  }
+  .convo-feedback.ok  { color: var(--green); }
+  .convo-feedback.bad { color: var(--red); }
+
+  .convo-next {
+    display: block; margin: 0 auto; font-family: var(--mono); font-size: 0.85rem;
+    padding: 0.6rem 2rem; background: var(--green); color: #fff;
+    border: none; border-radius: 4px; cursor: pointer; font-weight: 600;
+  }
+  .convo-next:disabled { opacity: 0.3; cursor: default; }
+  .convo-restart {
+    display: block; margin: 0.75rem auto 0; font-family: var(--mono); font-size: 0.78rem;
+    padding: 0.5rem 1.5rem; background: none; border: 1px solid var(--border);
+    color: var(--muted); border-radius: 4px; cursor: pointer;
+  }
+  .convo-restart:hover { border-color: var(--green); color: var(--green); }
+
+  /* DONE state */
+  .convo-done {
+    text-align: center; padding: 1.5rem 1rem;
+    background: var(--surface); border: 1px solid var(--green-mid);
+    border-radius: 8px; margin-bottom: 1rem;
+  }
+  .convo-done h3 { font-family: var(--mono); font-size: 1rem; color: var(--green); margin-bottom: 0.5rem; }
+  .convo-done .score-big { font-family: var(--mono); font-size: 2.5rem; color: var(--green); font-weight: 700; margin-bottom: 0.5rem; }
+  .convo-done p { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.25rem; }
+
+  /* LIVRE MODE */
+  .livre-dialogue { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem; }
+  .livre-line {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1rem 1.25rem; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: flex-start; gap: 1rem;
+  }
+  .livre-line:hover { border-color: var(--green-mid); }
+  .livre-line.playing { border-color: var(--green); background: var(--green-light); }
+  .ll-speaker {
+    font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--muted); white-space: nowrap; margin-top: 0.15rem; min-width: 60px;
+  }
+  .ll-text { font-size: 0.9rem; color: var(--text); line-height: 1.5; flex: 1; }
+  .ll-text .hl { color: var(--green); font-weight: 600; }
+  .ll-translation { font-size: 0.78rem; color: var(--muted); font-style: italic; margin-top: 0.2rem; }
+  .ll-speak { color: var(--green); font-size: 0.9rem; flex-shrink: 0; margin-top: 0.1rem; }
+
+  .livre-section-title {
+    font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--red); margin: 1.5rem 0 0.75rem;
+    border-left: 3px solid var(--red); padding-left: 0.65rem;
+  }
+  .livre-section-title:first-child { margin-top: 0; }
+
+  /* EXPRESSÃO */
+  .exp-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1.5rem; margin-bottom: 1rem;
+  }
+  .exp-tag { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--yellow); background: #fdf6e8; border: 1px solid #e0c070; padding: 0.15rem 0.5rem; border-radius: 2px; margin-bottom: 1rem; display: inline-block; }
+  .exp-pt { font-family: var(--mono); font-size: 1.2rem; color: var(--green); font-weight: 700; margin-bottom: 0.25rem; cursor: pointer; }
+  .exp-pt:hover { text-decoration: underline; text-decoration-color: var(--green); text-underline-offset: 3px; }
+  .exp-en { font-size: 0.88rem; color: var(--muted); font-style: italic; margin-bottom: 0.85rem; }
+  .exp-body { font-size: 0.85rem; color: var(--text); line-height: 1.7; border-top: 1px solid var(--border); padding-top: 0.85rem; }
+  .exp-body strong { color: var(--green); font-family: var(--mono); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-text">
+    <h1>Unidade 2 · <span>Diálogos</span></h1>
+    <p>A1.1 — Lighthouse Language School · 6 de maio</p>
+  </div>
+  <svg class="pt-flag" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="19.2" height="32" fill="#006600"/>
+    <rect x="19.2" y="0" width="28.8" height="32" fill="#FF0000"/>
+    <circle cx="19.2" cy="16" r="7" fill="none" stroke="#FFCC00" stroke-width="1.2"/>
+    <circle cx="19.2" cy="16" r="4.5" fill="none" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="19.2" y1="11.5" x2="19.2" y2="20.5" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="14.7" y1="16" x2="23.7" y2="16" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="16" y1="12.8" x2="22.4" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <line x1="22.4" y1="12.8" x2="16" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <rect x="17" y="13.5" width="4.4" height="5" fill="white" rx="0.5"/>
+    <circle cx="19.2" cy="16" r="0.8" fill="#003399"/>
+    <circle cx="17.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="17.7" cy="17.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="17.5" r="0.5" fill="#003399"/>
+  </svg>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('guiado', this)">Guiado</button>
+  <button class="tab" onclick="switchTab('livre', this)">Livre</button>
+  <button class="tab" onclick="switchTab('expressoes', this)">Expressões</button>
+</div>
+
+<!-- GUIADO -->
+<div id="guiado" class="view active">
+  <div class="dialogue-selector" id="dialogueSelector"></div>
+
+  <div id="rolePicker" style="display:none;">
+    <div style="font-family:var(--mono);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.6rem;">Escolhe o teu papel:</div>
+    <div class="role-picker" id="rolePickerBtns"></div>
+  </div>
+
+  <div id="convoArea" style="display:none;">
+    <div class="convo-header">
+      <span class="convo-title" id="convoTitle"></span>
+      <span class="convo-score">Correto: <span id="scoreDisplay">0</span> / <span id="totalDisplay">0</span></span>
+    </div>
+    <div class="convo-thread" id="convoThread"></div>
+    <div id="inputArea">
+      <div class="your-turn-label" id="yourTurnLabel">A tua vez →</div>
+      <div class="options-grid" id="optionsGrid"></div>
+      <div class="convo-feedback" id="convoFeedback"></div>
+      <button class="convo-next" id="convoNext" onclick="advanceConvo()" disabled>Continuar →</button>
+    </div>
+    <div id="convoDone" style="display:none;">
+      <div class="convo-done">
+        <h3>Diálogo completo!</h3>
+        <div class="score-big" id="finalScore"></div>
+        <p id="finalMsg"></p>
+        <button class="convo-restart" onclick="restartConvo()">↺ Repetir</button>
+        <button class="convo-restart" onclick="switchRoles()" style="margin-top:0.4rem;">⇄ Mudar papel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LIVRE -->
+<div id="livre" class="view">
+  <div id="livreContent"></div>
+</div>
+
+<!-- EXPRESSÕES -->
+<div id="expressoes" class="view">
+  <div class="livre-section-title">Palavra do Dia</div>
+  <div class="exp-card">
+    <div class="exp-tag">Expressão do estado</div>
+    <div class="exp-pt" onclick="speak('Estou de rastos!')">Estou de rastos!</div>
+    <div class="exp-en">"I'm exhausted / I'm dragging myself along."</div>
+    <div class="exp-body">
+      Used when you're completely drained — physically or mentally. More vivid than <strong>estou cansado</strong>. Literally "I'm crawling along the ground." You'll hear this often in Lisbon.<br><br>
+      <em>Context:</em> after a long day, a bad night's sleep, a tough week. Perfectly natural in informal conversation.
+    </div>
+  </div>
+
+  <div class="livre-section-title">Diz-se Assim</div>
+  <div class="exp-card">
+    <div class="exp-tag">Resposta ao como está</div>
+    <div class="exp-pt" onclick="speak('Vai-se andando.')">Vai-se andando.</div>
+    <div class="exp-en">"So-so." / "Getting by." / "One keeps going."</div>
+    <div class="exp-body">
+      The Portuguese equivalent of "can't complain" or "so-so" — used when you're not great but not bad. When someone asks <strong>Como está?</strong> or <strong>Tudo bem?</strong> and you want to be honest without being dramatic, this is the answer.<br><br>
+      Literally: "one keeps walking." The reflexive <strong>vai-se</strong> makes it impersonal — it's not just you, it's life in general moving forward. Very Portuguese in its understated resignation.
+    </div>
+  </div>
+
+  <div class="livre-section-title">Expressões-Chave deste Diálogo</div>
+  <div id="keyPhrasesCards"></div>
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+let currentAudio = null;
+
+async function speak(text, btnEl) {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (btnEl) btnEl.classList.add('playing');
+  try {
+    const res = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) });
+    if (!res.ok) throw new Error();
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    currentAudio = new Audio(url);
+    currentAudio.onended = currentAudio.onerror = () => {
+      if (btnEl) btnEl.classList.remove('playing');
+      URL.revokeObjectURL(url); currentAudio = null;
+    };
+    currentAudio.play();
+  } catch(e) { if (btnEl) btnEl.classList.remove('playing'); }
+}
+
+// ── DIALOGUE DATA ─────────────────────────────────────────────────
+const DIALOGUES = [
+  {
+    id: 'informal',
+    title: 'Tudo bem? — Informal',
+    desc: 'Hannah & Rui · colleagues greeting',
+    register: 'informal',
+    speakers: ['Hannah', 'Rui'],
+    lines: [
+      { speaker: 'Hannah', text: 'Bom dia, Rui! Tudo bem?', en: 'Good morning, Rui! How are you?', key: ['Bom dia', 'Tudo bem'] },
+      { speaker: 'Rui',    text: 'Bom dia, Hannah. Tudo bem, e tu?', en: 'Good morning, Hannah. Fine, and you?', key: ['Tudo bem', 'e tu'] },
+      { speaker: 'Hannah', text: 'Também, obrigada.', en: 'Also fine, thanks.', key: ['Também', 'obrigada'] },
+      { speaker: 'Rui',    text: 'Bom trabalho! Até já!', en: 'Good work! See you later!', key: ['Bom trabalho', 'Até já'] },
+      { speaker: 'Hannah', text: 'Igualmente! Até já!', en: 'Likewise! See you later!', key: ['Igualmente', 'Até já'] },
+    ]
+  },
+  {
+    id: 'formal',
+    title: 'Como está? — Formal',
+    desc: 'Peter & Sra. Amélia · formal greeting',
+    register: 'formal',
+    speakers: ['Peter', 'Sra. Amélia'],
+    lines: [
+      { speaker: 'Peter',      text: 'Bom dia, Senhora Amélia! Como está?', en: 'Good morning, Mrs. Amélia! How are you?', key: ['Bom dia', 'Como está'] },
+      { speaker: 'Sra. Amélia',text: 'Bom dia, Peter. Estou bem, obrigada. E você, como está?', en: 'Good morning, Peter. I\'m well, thank you. And you, how are you?', key: ['Estou bem', 'obrigada', 'E você', 'como está'] },
+      { speaker: 'Peter',      text: 'Também estou bem, obrigado!', en: 'I\'m also well, thank you!', key: ['Também estou bem', 'obrigado'] },
+      { speaker: 'Sra. Amélia',text: 'Ainda bem! Prazer em vê-lo! Até à próxima!', en: 'Glad to hear it! Nice to see you! Until next time!', key: ['Ainda bem', 'Prazer em vê-lo', 'Até à próxima'] },
+      { speaker: 'Peter',      text: 'Igualmente! Até à próxima!', en: 'Likewise! Until next time!', key: ['Igualmente', 'Até à próxima'] },
+    ]
+  },
+  {
+    id: 'tarde',
+    title: 'Boa tarde — TPC',
+    desc: 'Homem & Mulher · afternoon formal',
+    register: 'formal',
+    speakers: ['Homem', 'Mulher'],
+    lines: [
+      { speaker: 'Homem',  text: 'Boa tarde!', en: 'Good afternoon!', key: ['Boa tarde'] },
+      { speaker: 'Mulher', text: 'Boa tarde, Senhor Marks! Como está?', en: 'Good afternoon, Mr. Marks! How are you?', key: ['Boa tarde', 'Como está'] },
+      { speaker: 'Homem',  text: 'Bem, obrigado. E a Senhora?', en: 'Well, thank you. And you (formal)?', key: ['Bem', 'obrigado', 'E a Senhora'] },
+      { speaker: 'Mulher', text: 'Muito bem, obrigada!', en: 'Very well, thank you!', key: ['Muito bem', 'obrigada'] },
+    ]
+  }
+];
+
+// Key phrases for Expressões tab
+const KEY_PHRASES = [
+  { pt: 'Tudo bem?',          en: 'How are you? / Everything okay?',    note: 'informal — use with friends, colleagues' },
+  { pt: 'Tudo bem, e tu?',    en: 'Fine, and you?',                      note: 'tu = informal "you"' },
+  { pt: 'Como está?',         en: 'How are you?',                        note: 'formal — use with strangers, older people' },
+  { pt: 'Estou bem.',         en: "I'm well.",                           note: 'estar for temporary states' },
+  { pt: 'Muito bem.',         en: 'Very well.',                          note: 'stronger than estou bem' },
+  { pt: 'Também.',            en: 'Also / Me too.',                      note: 'the simplest way to reciprocate' },
+  { pt: 'Igualmente.',        en: 'Likewise.',                           note: 'response to compliments or greetings' },
+  { pt: 'Ainda bem.',         en: "I'm glad / Good to hear.",            note: 'warm acknowledgment' },
+  { pt: 'Prazer em vê-lo.',   en: 'Nice to see you. (to a man)',         note: '-lo for men, -la for women' },
+  { pt: 'Até já.',            en: 'See you later. (soon)',               note: 'implies you\'ll see them today' },
+  { pt: 'Até à próxima.',     en: 'Until next time.',                    note: 'more open-ended than até já' },
+  { pt: 'Bom trabalho!',      en: 'Good work!',                          note: 'can also mean "have a good day at work"' },
+];
+
+// ── STATE ─────────────────────────────────────────────────────────
+let activeDialogue = null;
+let activeRole = null; // speaker name (e.g. 'Hannah' or 'Rui')
+let convoStep = 0;     // current line index
+let score = 0;
+let total = 0;
+let answered = false;
+let wrongLines = []; // wrong answers accumulate for post-review
+
+// ── DIALOGUE SELECTOR ────────────────────────────────────────────
+function buildDialogueSelector() {
+  const container = document.getElementById('dialogueSelector');
+  DIALOGUES.forEach(d => {
+    const card = document.createElement('div');
+    card.className = 'dialogue-card';
+    card.innerHTML = `
+      <span class="dc-register ${d.register}">${d.register}</span>
+      <div class="dc-info">
+        <div class="dc-title">${d.title}</div>
+        <div class="dc-desc">${d.desc}</div>
+      </div>
+      <span style="color:var(--muted2);font-size:0.9rem;">→</span>
+    `;
+    card.onclick = () => selectDialogue(d, card);
+    container.appendChild(card);
+  });
+}
+
+function selectDialogue(dialogue, cardEl) {
+  document.querySelectorAll('.dialogue-card').forEach(c => c.classList.remove('active'));
+  cardEl.classList.add('active');
+  activeDialogue = dialogue;
+  document.getElementById('convoArea').style.display = 'none';
+  document.getElementById('convoDone').style.display = 'none';
+  buildRolePicker(dialogue);
+}
+
+function buildRolePicker(dialogue) {
+  const picker = document.getElementById('rolePicker');
+  const btns = document.getElementById('rolePickerBtns');
+  picker.style.display = 'block';
+  btns.innerHTML = '';
+  dialogue.speakers.forEach(speaker => {
+    const btn = document.createElement('div');
+    btn.className = 'role-btn';
+    const lines = dialogue.lines.filter(l => l.speaker === speaker).length;
+    btn.innerHTML = `<div class="rb-name">${speaker}</div><div class="rb-desc">${lines} linhas</div>`;
+    btn.onclick = () => {
+      document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      activeRole = speaker;
+      startConvo();
+    };
+    btns.appendChild(btn);
+  });
+}
+
+// ── START / RESTART ───────────────────────────────────────────────
+function startConvo() {
+  convoStep = 0; score = 0; total = 0; answered = false; wrongLines = [];
+  document.getElementById('scoreDisplay').textContent = '0';
+  document.getElementById('totalDisplay').textContent = '0';
+  document.getElementById('convoThread').innerHTML = '';
+  document.getElementById('convoFeedback').textContent = '';
+  document.getElementById('convoFeedback').className = 'convo-feedback';
+  document.getElementById('convoDone').style.display = 'none';
+  document.getElementById('inputArea').style.display = 'block';
+  document.getElementById('convoTitle').textContent = activeDialogue.title + ' · ' + activeRole;
+  document.getElementById('convoArea').style.display = 'block';
+  processStep();
+}
+
+function restartConvo() {
+  document.getElementById('convoDone').style.display = 'none';
+  startConvo();
+}
+
+function switchRoles() {
+  document.getElementById('convoDone').style.display = 'none';
+  buildRolePicker(activeDialogue);
+  document.getElementById('convoArea').style.display = 'none';
+}
+
+// ── CONVERSATION FLOW ─────────────────────────────────────────────
+function processStep() {
+  if (convoStep >= activeDialogue.lines.length) {
+    showDone();
+    return;
+  }
+
+  const line = activeDialogue.lines[convoStep];
+  answered = false;
+  document.getElementById('convoFeedback').textContent = '';
+  document.getElementById('convoFeedback').className = 'convo-feedback';
+  document.getElementById('convoNext').disabled = true;
+
+  if (line.speaker === activeRole) {
+    // YOUR TURN — show options
+    showYourTurn(line);
+  } else {
+    // THEIR TURN — show bubble + auto-advance after audio
+    showTheirLine(line);
+  }
+}
+
+function showTheirLine(line) {
+  addBubble(line, 'them', false);
+  document.getElementById('yourTurnLabel').textContent = '…';
+  document.getElementById('optionsGrid').innerHTML = '';
+  document.getElementById('convoNext').disabled = true;
+
+  // Speak their line, then auto-advance
+  speakThen(line.text, () => {
+    convoStep++;
+    setTimeout(processStep, 400);
+  });
+}
+
+function showYourTurn(line) {
+  document.getElementById('yourTurnLabel').textContent = 'A tua vez — ' + activeRole + ':';
+
+  // Build options: correct + 2 distractors from other dialogues
+  const allLines = DIALOGUES.flatMap(d => d.lines).filter(l => l.text !== line.text);
+  const distractors = shuffle(allLines).slice(0, 2).map(l => l.text);
+  const opts = shuffle([line.text, ...distractors]);
+
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  const letters = ['A', 'B', 'C'];
+  opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="option-letter">${letters[i]}</span>${opt}`;
+    btn.onclick = () => checkAnswer(btn, opt, line);
+    grid.appendChild(btn);
+  });
+}
+
+function checkAnswer(btn, chosen, line) {
+  if (answered) return;
+  answered = true;
+  total++;
+
+  document.querySelectorAll('.option-btn').forEach(b => {
+    b.disabled = true;
+    if (b.textContent.slice(1) === line.text) b.classList.add('correct');
+  });
+
+  const fb = document.getElementById('convoFeedback');
+  if (chosen === line.text) {
+    btn.classList.add('correct');
+    score++;
+    fb.textContent = 'Correto! ✓';
+    fb.className = 'convo-feedback ok';
+    addBubble(line, 'you', true);
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = `Errado — a resposta correta é mostrada abaixo.`;
+    fb.className = 'convo-feedback bad';
+    wrongLines.push(line);
+    addBubble(line, 'you', false);
+  }
+
+  document.getElementById('scoreDisplay').textContent = score;
+  document.getElementById('totalDisplay').textContent = total;
+  speak(line.text, null);
+  document.getElementById('convoNext').disabled = false;
+}
+
+function advanceConvo() {
+  convoStep++;
+  document.getElementById('convoFeedback').textContent = '';
+  document.getElementById('optionsGrid').innerHTML = '';
+  processStep();
+}
+
+function addBubble(line, side, correct) {
+  const thread = document.getElementById('convoThread');
+  const row = document.createElement('div');
+  row.className = `bubble-row ${side}`;
+
+  const initial = line.speaker.charAt(0);
+  const avatar = `<div class="avatar ${side}">${initial}</div>`;
+
+  const bubble = document.createElement('div');
+  bubble.className = `bubble ${side}`;
+  if (side === 'you' && answered) {
+    bubble.classList.add(correct ? 'correct-reveal' : 'wrong-reveal');
+  }
+
+  // Build highlighted text
+  let displayText = line.text;
+  if (line.key) {
+    line.key.forEach(k => {
+      displayText = displayText.replace(k, `<span class="hl">${k}</span>`);
+    });
+  }
+
+  bubble.innerHTML = `<span class="speaker-label">${line.speaker}</span>${displayText}<div class="ll-translation">${line.en}</div>`;
+  bubble.onclick = () => speak(line.text, null);
+
+  if (side === 'them') {
+    row.appendChild(document.createElement('div')).className = 'avatar them';
+    row.firstChild.textContent = initial;
+    row.appendChild(bubble);
+  } else {
+    row.appendChild(bubble);
+    const av = document.createElement('div');
+    av.className = 'avatar you'; av.textContent = initial;
+    row.appendChild(av);
+  }
+
+  thread.appendChild(row);
+  thread.scrollTop = thread.scrollHeight;
+}
+
+function showDone() {
+  document.getElementById('inputArea').style.display = 'none';
+  document.getElementById('convoDone').style.display = 'block';
+  const pct = total > 0 ? Math.round((score / total) * 100) : 100;
+  document.getElementById('finalScore').textContent = `${score} / ${total}`;
+  document.getElementById('finalMsg').textContent =
+    pct === 100 ? 'Perfeito! Diálogo completo sem erros.' :
+    pct >= 70   ? 'Muito bem! Repete para consolidar.' :
+                  'Continua a praticar — vai melhorar!';
+}
+
+// ── LIVRE MODE ────────────────────────────────────────────────────
+function buildLivre() {
+  const container = document.getElementById('livreContent');
+  container.innerHTML = '';
+
+  DIALOGUES.forEach(d => {
+    const title = document.createElement('div');
+    title.className = 'livre-section-title';
+    title.textContent = d.title;
+    container.appendChild(title);
+
+    const block = document.createElement('div');
+    block.className = 'livre-dialogue';
+
+    d.lines.forEach(line => {
+      const row = document.createElement('div');
+      row.className = 'livre-line';
+
+      let displayText = line.text;
+      if (line.key) {
+        line.key.forEach(k => {
+          displayText = displayText.replace(k, `<span class="hl">${k}</span>`);
+        });
+      }
+
+      row.innerHTML = `
+        <div class="ll-speaker">${line.speaker}</div>
+        <div class="ll-content">
+          <div class="ll-text">${displayText}</div>
+          <div class="ll-translation">${line.en}</div>
+        </div>
+        <div class="ll-speak">🔊</div>
+      `;
+      row.onclick = () => {
+        document.querySelectorAll('.livre-line').forEach(l => l.classList.remove('playing'));
+        row.classList.add('playing');
+        speak(line.text, null);
+        setTimeout(() => row.classList.remove('playing'), 3000);
+      };
+      block.appendChild(row);
+    });
+
+    container.appendChild(block);
+  });
+}
+
+function buildKeyPhrases() {
+  const container = document.getElementById('keyPhrasesCards');
+  KEY_PHRASES.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'exp-card';
+    card.style.marginBottom = '0.6rem';
+    card.innerHTML = `
+      <div class="exp-pt" onclick="speak('${p.pt.replace(/'/g, "\\'")}')">${p.pt}</div>
+      <div class="exp-en">${p.en}</div>
+      <div style="font-size:0.78rem;color:var(--muted);font-style:italic;">${p.note}</div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function speakThen(text, callback) {
+  if (!WORKER_URL) { callback(); return; }
+  fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) })
+    .then(r => r.blob())
+    .then(blob => {
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      currentAudio = audio;
+      audio.onended = () => { URL.revokeObjectURL(url); currentAudio = null; callback(); };
+      audio.onerror = () => { currentAudio = null; callback(); };
+      audio.play();
+    })
+    .catch(() => callback());
+}
+
+function switchTab(id, tabEl) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  tabEl.classList.add('active');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+buildDialogueSelector();
+buildLivre();
+buildKeyPhrases();
+</script>
+<script>
+(function(){
+  try {
+    var d = JSON.parse(localStorage.getItem('pt-study-last-visited') || '{}');
+    d['dialogos-unidade2.html'] = Date.now();
+    localStorage.setItem('pt-study-last-visited', JSON.stringify(d));
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>
