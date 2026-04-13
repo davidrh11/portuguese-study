@@ -463,12 +463,11 @@ function checkDigit(btn, chosen, correct) {
     btn.classList.add('correct');
     document.getElementById('escutaFeedback').textContent = 'Correto! Agora escreve o número em português.';
     document.getElementById('escutaFeedback').className = 'escuta-feedback ok';
-    revealSentence();
-    // Move to step 2
+    // Move to step 2 — don't reveal sentence yet, it gives away the spelling
     setTimeout(() => {
       document.getElementById('escutaStep2').style.display = 'block';
       buildSpellGrid();
-    }, 800);
+    }, 500);
   } else {
     btn.classList.add('wrong');
     escutaTotal++;
