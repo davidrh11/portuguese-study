@@ -513,16 +513,16 @@ function checkSpell(btn, chosen, correct) {
     document.getElementById('escutaFeedback').textContent = `Errado — era "${correct}"`;
     document.getElementById('escutaFeedback').className = 'escuta-feedback bad';
   }
-  revealSentence();
+  revealSentence(true);
   document.getElementById('escutaNext').disabled = false;
   document.getElementById('escutaScore').textContent = `Score: ${escutaCorrect} / ${escutaTotal}`;
 }
 
-function revealSentence() {
+function revealSentence(playAudio) {
   const el = document.getElementById('escutaSentenceReveal');
   el.textContent = escutaCurrentItem.s;
   el.style.display = 'block';
-  speak(escutaCurrentItem.s, null);
+  if (playAudio) speak(escutaCurrentItem.s, null);
 }
 
 function escutaNext() { escutaIdx++; renderEscuta(); }
