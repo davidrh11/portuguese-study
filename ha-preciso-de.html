@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="pt" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Há vs. Preciso de</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0; --surface: #ffffff; --surface2: #f2ede6;
+    --border: #e0d8cc; --border2: #ccc4b4;
+    --green: #2d7a50; --green-light: #eef5f1; --green-mid: #9acbb0;
+    --red: #a03428; --red-light: #fdf2f1; --red-mid: #dba09a;
+    --yellow: #b07d2a; --text: #2e2820; --muted: #8a7a68; --muted2: #b0a090;
+    --blue: #2a5fa0; --blue-light: #eef3fb;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+  header { padding: 1.5rem 2rem 1rem; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .header-text h1 { font-family: var(--mono); font-size: 1rem; font-weight: 400; color: var(--muted); }
+  .header-text h1 span { color: var(--green); }
+  .header-text p { font-size: 0.82rem; color: var(--muted2); margin-top: 0.2rem; }
+  .pt-flag { flex-shrink: 0; width: 48px; height: 32px; border-radius: 3px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.15); margin-top: 2px; }
+
+  .tabs { display: flex; border-bottom: 1px solid var(--border); padding: 0 2rem; }
+  .tab { font-family: var(--mono); font-size: 0.8rem; padding: 0.75rem 1.25rem; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  .view { display: none; padding: 1.5rem 2rem 3rem; max-width: 680px; }
+  .view.active { display: block; }
+
+  .section-title { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--red); margin: 2rem 0 0.75rem; border-left: 3px solid var(--red); padding-left: 0.65rem; }
+  .section-title:first-child { margin-top: 0; }
+
+  /* CONTRAST CARDS */
+  .contrast-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.25rem; }
+  .contrast-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; }
+  .contrast-card.ha { border-top: 3px solid var(--green); }
+  .contrast-card.preciso { border-top: 3px solid var(--blue); }
+  .cc-word { font-family: var(--mono); font-size: 1.3rem; font-weight: 700; margin-bottom: 0.25rem; cursor: pointer; }
+  .contrast-card.ha .cc-word { color: var(--green); }
+  .contrast-card.preciso .cc-word { color: var(--blue); }
+  .cc-word:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .contrast-card.ha .cc-word { text-decoration-color: var(--green); }
+  .contrast-card.preciso .cc-word { text-decoration-color: var(--blue); }
+  .cc-source { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); margin-bottom: 0.75rem; }
+  .cc-en { font-size: 0.85rem; color: var(--text); margin-bottom: 0.6rem; font-weight: 600; }
+  .cc-note { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
+  .cc-note strong { font-family: var(--mono); }
+  .contrast-card.ha .cc-note strong { color: var(--green); }
+  .contrast-card.preciso .cc-note strong { color: var(--blue); }
+
+  /* NOTE BLOCK */
+  .note-block { background: var(--surface2); border-left: 3px solid var(--green); padding: 0.85rem 1.1rem; margin: 1rem 0 1.5rem; border-radius: 0 4px 4px 0; font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+  .note-block strong { color: var(--green); font-family: var(--mono); }
+  .note-block.blue { border-left-color: var(--blue); }
+  .note-block.blue strong { color: var(--blue); }
+
+  /* EXAMPLES */
+  .ex-list { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem; }
+  .ex-item { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 0.85rem 1.1rem; cursor: pointer; transition: border-color 0.2s; }
+  .ex-item:hover { border-color: var(--green-mid); }
+  .ex-pt { font-family: var(--mono); font-size: 0.88rem; color: var(--text); margin-bottom: 0.25rem; }
+  .ex-pt .ha  { color: var(--green); font-weight: 700; }
+  .ex-pt .nao-ha { color: var(--red); font-weight: 700; }
+  .ex-pt .prec { color: var(--blue); font-weight: 700; }
+  .ex-en { font-size: 0.78rem; color: var(--muted); font-style: italic; }
+
+  /* QUIZ */
+  .quiz-wrap { max-width: 560px; }
+  .quiz-score { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); display: flex; justify-content: space-between; margin-bottom: 1rem; }
+  .quiz-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.25rem; }
+  .quiz-prompt-label { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.5rem; }
+  .quiz-sentence { font-family: var(--mono); font-size: 1rem; color: var(--text); line-height: 1.6; }
+  .quiz-sentence .blank { display: inline-block; min-width: 120px; border-bottom: 2px solid var(--border2); color: var(--muted2); font-style: italic; }
+  .quiz-en { font-size: 0.82rem; color: var(--muted); font-style: italic; margin-top: 0.5rem; }
+  .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+  .quiz-opt { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 0.75rem 1rem; cursor: pointer; font-family: var(--mono); font-size: 0.9rem; color: var(--text); text-align: center; transition: all 0.15s; }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--green); background: var(--green-light); color: var(--green); }
+  .quiz-opt.correct { border-color: var(--green); background: var(--green-light); color: var(--green); }
+  .quiz-opt.wrong   { border-color: var(--red);   background: var(--red-light);   color: var(--red); }
+  .quiz-opt:disabled { cursor: default; }
+  .quiz-feedback { font-family: var(--mono); font-size: 0.82rem; min-height: 1.4rem; margin-bottom: 0.75rem; text-align: center; }
+  .quiz-feedback.ok  { color: var(--green); }
+  .quiz-feedback.bad { color: var(--red); }
+  .quiz-next { display: block; margin: 0 auto; font-family: var(--mono); font-size: 0.85rem; padding: 0.6rem 2rem; background: var(--green); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+  .quiz-next:disabled { opacity: 0.3; cursor: default; }
+
+  /* FLASHCARDS */
+  .fc-wrap { max-width: 540px; margin: 0 auto; }
+  .fc-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+  .fc-counter { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+  .fc-ctrl { font-family: var(--mono); font-size: 0.72rem; background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 0.4rem 0.9rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .fc-ctrl:hover { border-color: var(--green); color: var(--green); }
+  .fc-progress { height: 2px; background: var(--border); border-radius: 1px; margin-bottom: 1.5rem; overflow: hidden; }
+  .fc-progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
+  .fc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; min-height: 280px; display: flex; flex-direction: column; align-items: center; padding: 1.5rem 2rem; text-align: center; }
+  .fc-hints { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 1.25rem; }
+  .fc-en-prompt { font-size: 1.05rem; color: var(--text); font-weight: 300; line-height: 1.6; margin-bottom: 1.25rem; padding: 0 0.5rem; }
+  .fc-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1.25rem; }
+  .fc-pt-answer { font-family: var(--mono); font-size: 1.1rem; color: var(--green); filter: blur(7px); transition: filter 0.3s; cursor: pointer; line-height: 1.5; margin-bottom: 1.25rem; padding: 0.1rem 0.5rem; background: var(--border); border-radius: 4px; display: inline-block; }
+  .fc-pt-answer.revealed { filter: blur(0); background: transparent; }
+  .fc-speak-pill { background: var(--surface2); border: 1px solid var(--border); color: var(--green); padding: 0.35rem 1.2rem; border-radius: 99px; cursor: pointer; transition: all 0.2s; font-size: 1rem; margin-bottom: 1.5rem; }
+  .fc-speak-pill:hover, .fc-speak-pill.playing { background: var(--green); color: #fff; border-color: var(--green); }
+  .fc-nav { display: flex; gap: 1rem; margin-top: auto; }
+  .fc-nav-btn { font-family: var(--mono); font-size: 0.82rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 0.55rem 1.25rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .fc-nav-btn:hover { border-color: var(--green); color: var(--green); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-text">
+    <h1>Aula 14 de Abril · <span>Há vs. Preciso de</span></h1>
+    <p>A1.1 — Lighthouse Language School</p>
+  </div>
+  <svg class="pt-flag" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="19.2" height="32" fill="#006600"/>
+    <rect x="19.2" y="0" width="28.8" height="32" fill="#FF0000"/>
+    <circle cx="19.2" cy="16" r="7" fill="none" stroke="#FFCC00" stroke-width="1.2"/>
+    <circle cx="19.2" cy="16" r="4.5" fill="none" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="19.2" y1="11.5" x2="19.2" y2="20.5" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="14.7" y1="16" x2="23.7" y2="16" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="16" y1="12.8" x2="22.4" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <line x1="22.4" y1="12.8" x2="16" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <rect x="17" y="13.5" width="4.4" height="5" fill="white" rx="0.5"/>
+    <circle cx="19.2" cy="16" r="0.8" fill="#003399"/>
+    <circle cx="17.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="17.7" cy="17.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="17.5" r="0.5" fill="#003399"/>
+  </svg>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('tabela', this)">Tabela</button>
+  <button class="tab" onclick="switchTab('quiz', this)">Quiz</button>
+  <button class="tab" onclick="switchTab('flashcards', this)">Flashcards</button>
+</div>
+
+<!-- TABELA -->
+<div id="tabela" class="view active">
+
+  <div class="section-title">A Diferença</div>
+
+  <div class="contrast-grid">
+    <div class="contrast-card ha">
+      <div class="cc-word" onclick="speak('Há ovos.')">Há</div>
+      <div class="cc-source">de haver · impessoal</div>
+      <div class="cc-en">There is / There are</div>
+      <div class="cc-note">
+        Reports what <em>exists</em> or is <em>available</em>.<br>
+        <strong>Invariable</strong> — same form for singular and plural. Never says <em>hão</em> in this usage.
+      </div>
+    </div>
+    <div class="contrast-card preciso">
+      <div class="cc-word" onclick="speak('Preciso de ovos.')">Preciso de</div>
+      <div class="cc-source">de precisar · eu</div>
+      <div class="cc-en">I need</div>
+      <div class="cc-note">
+        Expresses <em>personal need</em>. Always followed by <strong>de</strong>. The verb changes per subject: <strong>você precisa de</strong>, <strong>ele precisa de</strong>.
+      </div>
+    </div>
+  </div>
+
+  <div class="note-block">
+    <strong>Há</strong> is the third person singular of <strong>haver</strong> used impersonally — meaning it never changes form regardless of whether what follows is singular or plural. <em>Há massa</em> (there is pasta) and <em>Há ovos</em> (there are eggs) both use exactly the same <strong>há</strong>. This is one of those Portuguese features you learn as a fixed chunk.
+  </div>
+
+  <div class="section-title">Há — Singular e Plural</div>
+  <div class="ex-list">
+    <div class="ex-item" onclick="speak('Há massa, mas não há manteiga.')">
+      <div class="ex-pt"><span class="ha">Há</span> massa, mas não <span class="nao-ha">há</span> manteiga.</div>
+      <div class="ex-en">There is pasta, but there is no butter.</div>
+    </div>
+    <div class="ex-item" onclick="speak('Há ovos, mas não há frangos.')">
+      <div class="ex-pt"><span class="ha">Há</span> ovos, mas não <span class="nao-ha">há</span> frangos.</div>
+      <div class="ex-en">There are eggs, but there are no chickens.</div>
+    </div>
+    <div class="ex-item" onclick="speak('Há leite no frigorífico.')">
+      <div class="ex-pt"><span class="ha">Há</span> leite no frigorífico.</div>
+      <div class="ex-en">There is milk in the fridge.</div>
+    </div>
+    <div class="ex-item" onclick="speak('Não há manteiga.')">
+      <div class="ex-pt">Não <span class="nao-ha">há</span> manteiga.</div>
+      <div class="ex-en">There is no butter.</div>
+    </div>
+  </div>
+
+  <div class="section-title">Preciso de — Lista de Supermercado</div>
+  <div class="ex-list">
+    <div class="ex-item" onclick="speak('Preciso de leite e ovos.')">
+      <div class="ex-pt"><span class="prec">Preciso de</span> leite e ovos.</div>
+      <div class="ex-en">I need milk and eggs.</div>
+    </div>
+    <div class="ex-item" onclick="speak('Preciso de manteiga, mas não há manteiga.')">
+      <div class="ex-pt"><span class="prec">Preciso de</span> manteiga, mas não <span class="nao-ha">há</span> manteiga.</div>
+      <div class="ex-en">I need butter, but there is no butter.</div>
+    </div>
+    <div class="ex-item" onclick="speak('Você precisa de azeite?')">
+      <div class="ex-pt">Você <span class="prec">precisa de</span> azeite?</div>
+      <div class="ex-en">Do you need olive oil?</div>
+    </div>
+    <div class="ex-item" onclick="speak('Preciso de bacalhau e batatas.')">
+      <div class="ex-pt"><span class="prec">Preciso de</span> bacalhau e batatas.</div>
+      <div class="ex-en">I need cod and potatoes.</div>
+    </div>
+    <div class="ex-item" onclick="speak('Não preciso de açúcar, obrigado.')">
+      <div class="ex-pt">Não <span class="prec">preciso de</span> açúcar, obrigado.</div>
+      <div class="ex-en">I don't need sugar, thank you.</div>
+    </div>
+  </div>
+
+  <div class="section-title">Há e Preciso de — Juntos</div>
+  <div class="ex-list">
+    <div class="ex-item" onclick="speak('Preciso de leite mas não há leite.')">
+      <div class="ex-pt"><span class="prec">Preciso de</span> leite mas não <span class="nao-ha">há</span> leite.</div>
+      <div class="ex-en">I need milk but there is no milk.</div>
+    </div>
+    <div class="ex-item" onclick="speak('Há cenouras. Não preciso de cenouras.')">
+      <div class="ex-pt"><span class="ha">Há</span> cenouras. Não <span class="prec">preciso de</span> cenouras.</div>
+      <div class="ex-en">There are carrots. I don't need carrots.</div>
+    </div>
+    <div class="ex-item" onclick="speak('Não há fiambre. Preciso de fiambre.')">
+      <div class="ex-pt">Não <span class="nao-ha">há</span> fiambre. <span class="prec">Preciso de</span> fiambre.</div>
+      <div class="ex-en">There is no ham. I need ham.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="view">
+  <div class="quiz-wrap">
+    <div class="quiz-score">
+      <span>Há ou Preciso de?</span>
+      <span>Score: <span id="quizScore" style="color:var(--text)">0 / 0</span></span>
+    </div>
+    <div class="quiz-card">
+      <div class="quiz-prompt-label">Completa a frase:</div>
+      <div class="quiz-sentence" id="quizSentence"></div>
+      <div class="quiz-en" id="quizEn"></div>
+    </div>
+    <div class="quiz-options" id="quizOptions"></div>
+    <div class="quiz-feedback" id="quizFeedback"></div>
+    <button class="quiz-next" id="quizNext" onclick="nextQuiz()" disabled>Próximo →</button>
+  </div>
+</div>
+
+<!-- FLASHCARDS -->
+<div id="flashcards" class="view">
+  <div class="fc-wrap">
+    <div class="fc-topbar">
+      <span class="fc-counter" id="fcCounter">1 / 1</span>
+      <div style="display:flex;gap:0.5rem;">
+        <button class="fc-ctrl" onclick="shuffleFC()">⇄ Baralhar</button>
+        <button class="fc-ctrl" onclick="resetFC()">↺ Reiniciar</button>
+      </div>
+    </div>
+    <div class="fc-progress"><div class="fc-progress-fill" id="fcProgressFill" style="width:0%"></div></div>
+    <div class="fc-card">
+      <div class="fc-hints" id="fcHints">clique para revelar · 🔊 para ouvir</div>
+      <div class="fc-en-prompt" id="fcEnPrompt"></div>
+      <div class="fc-divider"></div>
+      <div class="fc-pt-answer" id="fcPtAnswer" onclick="revealFC()"></div>
+      <button class="fc-speak-pill" id="fcSpeakPill" onclick="speakFC()">🔊</button>
+      <div class="fc-nav">
+        <button class="fc-nav-btn" onclick="fcMove(-1)">← Anterior</button>
+        <button class="fc-nav-btn" onclick="fcMove(1)">Próximo →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+let currentAudio = null;
+
+async function speak(text, btnEl) {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (btnEl) btnEl.classList.add('playing');
+  try {
+    const res = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) });
+    if (!res.ok) throw new Error();
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    currentAudio = new Audio(url);
+    currentAudio.onended = currentAudio.onerror = () => { if (btnEl) btnEl.classList.remove('playing'); URL.revokeObjectURL(url); currentAudio = null; };
+    currentAudio.play();
+  } catch(e) { if (btnEl) btnEl.classList.remove('playing'); }
+}
+
+// ── QUIZ DATA ─────────────────────────────────────────────────────
+const QUIZ_ITEMS = [
+  { blank: '_____ massa no supermercado.', en: 'There is pasta in the supermarket.', answer: 'Há', wrong: 'Preciso de', full: 'Há massa no supermercado.' },
+  { blank: '_____ manteiga para o jantar.', en: 'I need butter for dinner.', answer: 'Preciso de', wrong: 'Há', full: 'Preciso de manteiga para o jantar.' },
+  { blank: 'Não _____ leite no frigorífico.', en: 'There is no milk in the fridge.', answer: 'há', wrong: 'preciso de', full: 'Não há leite no frigorífico.' },
+  { blank: 'Não _____ açúcar, obrigado.', en: "I don't need sugar, thank you.", answer: 'preciso de', wrong: 'há', full: 'Não preciso de açúcar, obrigado.' },
+  { blank: '_____ ovos, mas não _____ manteiga.', en: 'There are eggs, but there is no butter.', answer: 'Há / há', wrong: 'Preciso de / preciso de', full: 'Há ovos, mas não há manteiga.' },
+  { blank: '_____ bacalhau e batatas.', en: 'I need cod and potatoes.', answer: 'Preciso de', wrong: 'Há', full: 'Preciso de bacalhau e batatas.' },
+  { blank: '_____ cenouras na lista.', en: 'There are carrots on the list.', answer: 'Há', wrong: 'Preciso de', full: 'Há cenouras na lista.' },
+  { blank: 'Você _____ azeite?', en: 'Do you need olive oil?', answer: 'precisa de', wrong: 'há', full: 'Você precisa de azeite?' },
+  { blank: 'Não _____ fiambre. _____ fiambre.', en: "There is no ham. I need ham.", answer: 'há / Preciso de', wrong: 'preciso de / Há', full: 'Não há fiambre. Preciso de fiambre.' },
+  { blank: '_____ frangos?', en: 'Are there chickens? / Is there chicken?', answer: 'Há', wrong: 'Preciso de', full: 'Há frangos?' },
+];
+
+let quizDeck = [], quizIdx = 0, quizCorrect = 0, quizTotal = 0, quizAnswered = false;
+
+function initQuiz() {
+  quizDeck = [...QUIZ_ITEMS].sort(() => Math.random() - 0.5);
+  quizIdx = 0; quizCorrect = 0; quizTotal = 0; quizAnswered = false;
+  renderQuiz();
+}
+
+function renderQuiz() {
+  if (quizIdx >= quizDeck.length) { quizDeck = [...QUIZ_ITEMS].sort(() => Math.random() - 0.5); quizIdx = 0; }
+  quizAnswered = false;
+  const item = quizDeck[quizIdx];
+  document.getElementById('quizSentence').innerHTML = item.blank.replace('_____', '<span class="blank">_____</span>').replace(/_____/g, '<span class="blank">_____</span>');
+  document.getElementById('quizEn').textContent = item.en;
+  document.getElementById('quizFeedback').textContent = '';
+  document.getElementById('quizFeedback').className = 'quiz-feedback';
+  document.getElementById('quizNext').disabled = true;
+  document.getElementById('quizScore').textContent = `${quizCorrect} / ${quizTotal}`;
+
+  const opts = [item.answer, item.wrong].sort(() => Math.random() - 0.5);
+  const container = document.getElementById('quizOptions');
+  container.innerHTML = '';
+  opts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt'; btn.textContent = opt;
+    btn.onclick = () => checkQuiz(btn, opt, item.answer, item);
+    container.appendChild(btn);
+  });
+}
+
+function checkQuiz(btn, chosen, correct, item) {
+  if (quizAnswered) return;
+  quizAnswered = true; quizTotal++;
+  document.querySelectorAll('.quiz-opt').forEach(b => { b.disabled = true; if (b.textContent === correct) b.classList.add('correct'); });
+  if (chosen === correct) {
+    btn.classList.add('correct'); quizCorrect++;
+    document.getElementById('quizFeedback').textContent = 'Correto! ✓';
+    document.getElementById('quizFeedback').className = 'quiz-feedback ok';
+  } else {
+    btn.classList.add('wrong');
+    document.getElementById('quizFeedback').textContent = `Errado — "${correct}"`;
+    document.getElementById('quizFeedback').className = 'quiz-feedback bad';
+  }
+  speak(item.full, null);
+  document.getElementById('quizNext').disabled = false;
+  document.getElementById('quizScore').textContent = `${quizCorrect} / ${quizTotal}`;
+}
+
+function nextQuiz() { quizIdx++; renderQuiz(); }
+
+// ── FLASHCARDS ────────────────────────────────────────────────────
+const FC_CARDS = [
+  { en: 'There is pasta.',                       pt: 'Há massa.' },
+  { en: 'There are eggs.',                        pt: 'Há ovos.' },
+  { en: 'There is no butter.',                    pt: 'Não há manteiga.' },
+  { en: 'There are no chickens.',                 pt: 'Não há frangos.' },
+  { en: 'I need milk.',                           pt: 'Preciso de leite.' },
+  { en: 'I need cod and potatoes.',               pt: 'Preciso de bacalhau e batatas.' },
+  { en: "I don't need sugar.",                    pt: 'Não preciso de açúcar.' },
+  { en: 'Do you need olive oil?',                 pt: 'Você precisa de azeite?' },
+  { en: 'There is pasta but there is no butter.', pt: 'Há massa mas não há manteiga.' },
+  { en: 'I need butter but there is no butter.',  pt: 'Preciso de manteiga mas não há manteiga.' },
+  { en: 'There are carrots. I don\'t need carrots.', pt: 'Há cenouras. Não preciso de cenouras.' },
+  { en: 'Is there milk in the fridge?',           pt: 'Há leite no frigorífico?' },
+];
+
+let fcDeck = [...FC_CARDS], fcIdx = 0, fcRevealed = false;
+
+function renderFC() {
+  const c = fcDeck[fcIdx];
+  fcRevealed = false;
+  document.getElementById('fcCounter').textContent = `${fcIdx + 1} / ${fcDeck.length}`;
+  document.getElementById('fcProgressFill').style.width = `${((fcIdx + 1) / fcDeck.length) * 100}%`;
+  document.getElementById('fcEnPrompt').textContent = c.en;
+  document.getElementById('fcPtAnswer').textContent = c.pt;
+  document.getElementById('fcPtAnswer').className = 'fc-pt-answer';
+  document.getElementById('fcHints').textContent = 'clique para revelar · 🔊 para ouvir';
+  document.getElementById('fcSpeakPill').classList.remove('playing');
+}
+
+function revealFC() {
+  if (fcRevealed) return;
+  fcRevealed = true;
+  document.getElementById('fcPtAnswer').classList.add('revealed');
+  document.getElementById('fcHints').textContent = '';
+}
+
+function speakFC() { speak(fcDeck[fcIdx].pt, document.getElementById('fcSpeakPill')); }
+function fcMove(dir) { fcIdx = (fcIdx + dir + fcDeck.length) % fcDeck.length; renderFC(); }
+function shuffleFC() { fcDeck = [...FC_CARDS].sort(() => Math.random() - 0.5); fcIdx = 0; renderFC(); }
+function resetFC()   { fcDeck = [...FC_CARDS]; fcIdx = 0; renderFC(); }
+
+function switchTab(id, tabEl) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  tabEl.classList.add('active');
+  if (id === 'quiz') initQuiz();
+  if (id === 'flashcards') renderFC();
+}
+
+renderFC();
+</script>
+<script>
+(function(){
+  try {
+    var d = JSON.parse(localStorage.getItem('pt-study-last-visited') || '{}');
+    d['ha-preciso-de.html'] = Date.now();
+    localStorage.setItem('pt-study-last-visited', JSON.stringify(d));
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>

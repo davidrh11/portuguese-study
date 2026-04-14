@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="pt" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aula 14 de Abril</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0; --surface: #ffffff; --surface2: #f2ede6;
+    --border: #e0d8cc; --border2: #ccc4b4;
+    --green: #2d7a50; --green-light: #eef5f1; --green-mid: #9acbb0;
+    --red: #a03428; --red-light: #fdf2f1; --red-mid: #dba09a;
+    --yellow: #b07d2a; --text: #2e2820; --muted: #8a7a68; --muted2: #b0a090;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+  header { padding: 1.5rem 2rem 1rem; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .header-text h1 { font-family: var(--mono); font-size: 1rem; font-weight: 400; color: var(--muted); }
+  .header-text h1 span { color: var(--green); }
+  .header-text p { font-size: 0.82rem; color: var(--muted2); margin-top: 0.2rem; }
+  .pt-flag { flex-shrink: 0; width: 48px; height: 32px; border-radius: 3px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.15); margin-top: 2px; }
+
+  .tabs { display: flex; border-bottom: 1px solid var(--border); padding: 0 2rem; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { font-family: var(--mono); font-size: 0.8rem; padding: 0.75rem 1.25rem; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none; white-space: nowrap; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  .view { display: none; padding: 1.5rem 2rem 3rem; max-width: 680px; }
+  .view.active { display: block; }
+
+  .section-title { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--red); margin: 2rem 0 0.75rem; border-left: 3px solid var(--red); padding-left: 0.65rem; }
+  .section-title:first-child { margin-top: 0; }
+
+  /* RULE BOX */
+  .rule-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 1.25rem; }
+  .rule-box-title { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 0.75rem 1.25rem; background: var(--surface2); border-bottom: 1px solid var(--border); }
+  .rule-row { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--border); }
+  .rule-row:last-child { border-bottom: none; }
+  .rule-cell { padding: 1rem 1.25rem; }
+  .rule-cell.positive { border-right: 1px solid var(--border); }
+  .rule-cell .rc-label { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+  .rule-cell.positive .rc-label { color: var(--green); }
+  .rule-cell.negative .rc-label { color: var(--red); }
+  .rule-cell .rc-words { display: flex; flex-direction: column; gap: 0.25rem; margin-bottom: 0.75rem; }
+  .rc-word { font-family: var(--mono); font-size: 0.85rem; font-weight: 600; }
+  .rule-cell.positive .rc-word { color: var(--green); }
+  .rule-cell.negative .rc-word { color: var(--red); }
+  .rule-cell .rc-pattern { font-size: 0.78rem; color: var(--muted); font-style: italic; }
+  .rule-cell .rc-example { font-family: var(--mono); font-size: 0.82rem; color: var(--text); margin-top: 0.5rem; cursor: pointer; }
+  .rule-cell .rc-example:hover { text-decoration: underline; text-decoration-color: var(--green); text-underline-offset: 3px; }
+  .rule-cell .rc-example .hl-pos { color: var(--green); font-weight: 700; }
+  .rule-cell .rc-example .hl-neg { color: var(--red); font-weight: 700; }
+
+  /* NOTE BLOCK */
+  .note-block { background: var(--surface2); border-left: 3px solid var(--green); padding: 0.85rem 1.1rem; margin: 1rem 0 1.5rem; border-radius: 0 4px 4px 0; font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+  .note-block strong { color: var(--green); font-family: var(--mono); }
+  .note-block.red { border-left-color: var(--red); }
+  .note-block.red strong { color: var(--red); }
+
+  /* EXAMPLE SENTENCES */
+  .ex-list { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem; }
+  .ex-item { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 0.85rem 1.1rem; cursor: pointer; transition: border-color 0.2s; }
+  .ex-item:hover { border-color: var(--green-mid); }
+  .ex-pt { font-family: var(--mono); font-size: 0.88rem; color: var(--text); margin-bottom: 0.25rem; }
+  .ex-pt .hl-pos { color: var(--green); font-weight: 700; }
+  .ex-pt .hl-neg { color: var(--red); font-weight: 700; }
+  .ex-pt .hl-op  { color: var(--yellow); font-weight: 700; }
+  .ex-en { font-size: 0.78rem; color: var(--muted); font-style: italic; }
+
+  /* DRILL */
+  .drill-wrap { max-width: 560px; }
+  .drill-score { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); display: flex; justify-content: space-between; margin-bottom: 1rem; }
+  .drill-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.25rem; }
+  .drill-prompt-label { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.5rem; }
+  .drill-components { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.5rem; }
+  .drill-chip { font-family: var(--mono); font-size: 0.88rem; padding: 0.3rem 0.7rem; border-radius: 4px; font-weight: 600; }
+  .drill-chip.subject { background: var(--surface2); color: var(--text); border: 1px solid var(--border2); }
+  .drill-chip.verb    { background: #eef3fb; color: #2a5fa0; border: 1px solid #a0b8d8; }
+  .drill-chip.freq-pos { background: var(--green-light); color: var(--green); border: 1px solid var(--green-mid); }
+  .drill-chip.freq-neg { background: var(--red-light);   color: var(--red);   border: 1px solid var(--red-mid); }
+  .drill-chip.time    { background: var(--surface2); color: var(--muted); border: 1px solid var(--border2); }
+  .drill-divider { color: var(--muted2); font-size: 0.75rem; font-family: var(--mono); }
+
+  .drill-options { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; }
+  .drill-opt { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 0.8rem 1rem; cursor: pointer; font-family: var(--mono); font-size: 0.88rem; color: var(--text); text-align: left; transition: all 0.15s; }
+  .drill-opt:hover:not(:disabled) { border-color: var(--green); background: var(--green-light); color: var(--green); }
+  .drill-opt.correct { border-color: var(--green); background: var(--green-light); color: var(--green); }
+  .drill-opt.wrong   { border-color: var(--red);   background: var(--red-light);   color: var(--red); }
+  .drill-opt:disabled { cursor: default; }
+  .drill-feedback { font-family: var(--mono); font-size: 0.82rem; min-height: 1.4rem; margin-bottom: 0.75rem; text-align: center; }
+  .drill-feedback.ok  { color: var(--green); }
+  .drill-feedback.bad { color: var(--red); }
+  .drill-next { display: block; margin: 0 auto; font-family: var(--mono); font-size: 0.85rem; padding: 0.6rem 2rem; background: var(--green); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+  .drill-next:disabled { opacity: 0.3; cursor: default; }
+
+  /* OPINIAO */
+  .opiniao-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem 1.5rem; margin-bottom: 0.75rem; }
+  .oc-pt { font-family: var(--mono); font-size: 1.1rem; color: var(--green); font-weight: 700; cursor: pointer; margin-bottom: 0.25rem; }
+  .oc-pt:hover { text-decoration: underline; text-decoration-color: var(--green); text-underline-offset: 3px; }
+  .oc-en { font-size: 0.85rem; color: var(--muted); font-style: italic; margin-bottom: 0.6rem; }
+  .oc-body { font-size: 0.82rem; color: var(--text); line-height: 1.7; }
+  .oc-body strong { color: var(--green); font-family: var(--mono); }
+  .oc-body .flag { color: var(--yellow); font-style: italic; }
+  .oc-examples { margin-top: 0.75rem; display: flex; flex-direction: column; gap: 0.4rem; }
+  .oc-example { background: var(--surface2); border-radius: 4px; padding: 0.5rem 0.85rem; cursor: pointer; border: 1px solid transparent; transition: all 0.15s; }
+  .oc-example:hover { border-color: var(--green-mid); background: var(--green-light); }
+  .oc-ex-pt { font-family: var(--mono); font-size: 0.82rem; color: var(--text); margin-bottom: 0.15rem; }
+  .oc-ex-pt strong { color: var(--yellow); }
+  .oc-ex-en { font-size: 0.75rem; color: var(--muted); font-style: italic; }
+
+  /* PRONUNCIATION */
+  .pronunc-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 1rem; }
+  .pronunc-row { display: grid; grid-template-columns: 120px 1fr; border-bottom: 1px solid var(--border); align-items: center; }
+  .pronunc-row:last-child { border-bottom: none; }
+  .pr-spelling { font-family: var(--mono); font-size: 0.9rem; font-weight: 700; color: var(--green); padding: 0.75rem 1.1rem; border-right: 1px solid var(--border); }
+  .pr-sound { font-family: var(--mono); font-size: 0.85rem; color: var(--text); padding: 0.75rem 1.1rem; }
+  .pr-sound .pr-ipa { color: var(--muted); font-size: 0.8rem; }
+  .pr-sound .pr-words { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.3rem; }
+  .pr-word { font-family: var(--mono); font-size: 0.82rem; color: var(--green); cursor: pointer; background: var(--green-light); border: 1px solid var(--green-mid); padding: 0.15rem 0.5rem; border-radius: 3px; }
+  .pr-word:hover { background: var(--green); color: #fff; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-text">
+    <h1>Aula · <span>14 de Abril</span></h1>
+    <p>A1.1 — Lighthouse Language School</p>
+  </div>
+  <svg class="pt-flag" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="19.2" height="32" fill="#006600"/>
+    <rect x="19.2" y="0" width="28.8" height="32" fill="#FF0000"/>
+    <circle cx="19.2" cy="16" r="7" fill="none" stroke="#FFCC00" stroke-width="1.2"/>
+    <circle cx="19.2" cy="16" r="4.5" fill="none" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="19.2" y1="11.5" x2="19.2" y2="20.5" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="14.7" y1="16" x2="23.7" y2="16" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="16" y1="12.8" x2="22.4" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <line x1="22.4" y1="12.8" x2="16" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <rect x="17" y="13.5" width="4.4" height="5" fill="white" rx="0.5"/>
+    <circle cx="19.2" cy="16" r="0.8" fill="#003399"/>
+    <circle cx="17.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="17.7" cy="17.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="17.5" r="0.5" fill="#003399"/>
+  </svg>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('frequencia', this)">Frequência</button>
+  <button class="tab" onclick="switchTab('drill', this)">Drill</button>
+  <button class="tab" onclick="switchTab('opiniao', this)">Opinião</button>
+  <button class="tab" onclick="switchTab('pronuncia', this)">Pronúncia</button>
+</div>
+
+<!-- FREQUÊNCIA -->
+<div id="frequencia" class="view active">
+
+  <div class="section-title">Regra de Posição</div>
+
+  <div class="rule-box">
+    <div class="rule-box-title">Onde vai o advérbio de frequência?</div>
+    <div class="rule-row">
+      <div class="rule-cell positive">
+        <div class="rc-label">Positivo → depois do verbo</div>
+        <div class="rc-words">
+          <span class="rc-word">sempre</span>
+          <span class="rc-word">muitas vezes</span>
+          <span class="rc-word">frequentemente</span>
+        </div>
+        <div class="rc-pattern">sujeito + verbo + frequência</div>
+        <div class="rc-example" onclick="speak('Eu cozinho sempre à noite.')">
+          Eu cozinho <span class="hl-pos">sempre</span> à noite.
+        </div>
+      </div>
+      <div class="rule-cell negative">
+        <div class="rc-label">Negativo → antes do verbo</div>
+        <div class="rc-words">
+          <span class="rc-word">raramente</span>
+          <span class="rc-word">nunca</span>
+        </div>
+        <div class="rc-pattern">sujeito + frequência + verbo</div>
+        <div class="rc-example" onclick="speak('Eu nunca cozinho à tarde.')">
+          Eu <span class="hl-neg">nunca</span> cozinho à tarde.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note-block">
+    <strong>nunca</strong> and <strong>raramente</strong> go <em>before</em> the verb because they are negatives — they change the nature of the action. <strong>Sempre</strong>, <strong>muitas vezes</strong>, <strong>frequentemente</strong> go <em>after</em> the verb because they simply describe how often a positive action occurs.
+  </div>
+
+  <div class="section-title">Exemplos</div>
+  <div class="ex-list" id="freqExamples"></div>
+
+</div>
+
+<!-- DRILL -->
+<div id="drill" class="view">
+  <div class="drill-wrap">
+    <div class="drill-score">
+      <span>Coloca o advérbio na posição correcta</span>
+      <span>Score: <span id="drillScore" style="color:var(--text)">0 / 0</span></span>
+    </div>
+    <div class="drill-card">
+      <div class="drill-prompt-label">Qual é a frase correcta?</div>
+      <div class="drill-components" id="drillComponents"></div>
+    </div>
+    <div class="drill-options" id="drillOptions"></div>
+    <div class="drill-feedback" id="drillFeedback"></div>
+    <button class="drill-next" id="drillNext" onclick="nextDrill()" disabled>Próximo →</button>
+  </div>
+</div>
+
+<!-- OPINIÃO -->
+<div id="opiniao" class="view">
+
+  <div class="section-title">Expressões de Opinião</div>
+
+  <div class="opiniao-card">
+    <div class="oc-pt" onclick="speak('Acho que é caro.')">Acho que…</div>
+    <div class="oc-en">"I think that…" — more colloquial, more common in everyday speech</div>
+    <div class="oc-body">
+      From the verb <strong>achar</strong> (to find / to think). This is the natural, everyday way to express an opinion in Lisbon. <span class="flag">Use this one by default.</span>
+      <div class="oc-examples">
+        <div class="oc-example" onclick="speak('Acho que é caro.')">
+          <div class="oc-ex-pt"><strong>Acho que</strong> é caro.</div>
+          <div class="oc-ex-en">I think it's expensive.</div>
+        </div>
+        <div class="oc-example" onclick="speak('Acho que é barato.')">
+          <div class="oc-ex-pt"><strong>Acho que</strong> é barato.</div>
+          <div class="oc-ex-en">I think it's cheap.</div>
+        </div>
+        <div class="oc-example" onclick="speak('Acho que o restaurante é bom.')">
+          <div class="oc-ex-pt"><strong>Acho que</strong> o restaurante é bom.</div>
+          <div class="oc-ex-en">I think the restaurant is good.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="opiniao-card">
+    <div class="oc-pt" onclick="speak('Penso que é caro.')">Penso que…</div>
+    <div class="oc-en">"I think that…" — synonymous with acho que, slightly more formal</div>
+    <div class="oc-body">
+      From <strong>pensar</strong> (to think). Means exactly the same as <strong>acho que</strong>. Slightly more formal register but both are common. Your instructor confirmed they are effectively interchangeable at this level.
+      <div class="oc-examples">
+        <div class="oc-example" onclick="speak('Penso que é caro.')">
+          <div class="oc-ex-pt"><strong>Penso que</strong> é caro.</div>
+          <div class="oc-ex-en">I think it's expensive.</div>
+        </div>
+        <div class="oc-example" onclick="speak('Penso que Lisboa é uma cidade fantástica.')">
+          <div class="oc-ex-pt"><strong>Penso que</strong> Lisboa é uma cidade fantástica.</div>
+          <div class="oc-ex-en">I think Lisbon is a fantastic city.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="opiniao-card">
+    <div class="oc-pt" onclick="speak('Não sei se é caro ou barato.')">Não sei se…</div>
+    <div class="oc-en">"I don't know if…"</div>
+    <div class="oc-body">
+      Used to express uncertainty. Note: <strong>se</strong> (if) — not <strong>que</strong> (that). The <em>s</em> and the following word blend in speech.
+      <div class="oc-examples">
+        <div class="oc-example" onclick="speak('Não sei se é caro ou barato.')">
+          <div class="oc-ex-pt"><strong>Não sei se</strong> é caro ou barato.</div>
+          <div class="oc-ex-en">I don't know if it's expensive or cheap.</div>
+        </div>
+        <div class="oc-example" onclick="speak('Não sei se o restaurante está aberto.')">
+          <div class="oc-ex-pt"><strong>Não sei se</strong> o restaurante está aberto.</div>
+          <div class="oc-ex-en">I don't know if the restaurant is open.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note-block red" style="margin-top:1.5rem;">
+    <strong>Pronunciation note:</strong> <em>Acho que é</em> — the <em>e</em> in <em>que</em> blends into the <em>é</em> that follows. You won't hear a gap. Listen: the phrase sounds like <em>"Acho qu'é"</em>. Same in <em>Não sei se é</em> — the <em>e</em> and <em>é</em> run together.
+  </div>
+
+</div>
+
+<!-- PRONÚNCIA -->
+<div id="pronuncia" class="view">
+
+  <div class="section-title">ei → /ai/</div>
+
+  <div class="note-block">
+    In European Portuguese, the letter combination <strong>ei</strong> is typically pronounced <strong>/ai/</strong> — like the English word "eye." This is one of the features that most distinguishes pt-PT from Brazilian Portuguese, where <em>ei</em> sounds more like "ay."
+  </div>
+
+  <div class="pronunc-box">
+    <div class="pronunc-row">
+      <div class="pr-spelling">ei</div>
+      <div class="pr-sound">
+        <div class="pr-ipa">/ai/ — like "eye"</div>
+        <div class="pr-words">
+          <span class="pr-word" onclick="speak('peixe')">peixe</span>
+          <span class="pr-word" onclick="speak('dinheiro')">dinheiro</span>
+          <span class="pr-word" onclick="speak('primeiro')">primeiro</span>
+          <span class="pr-word" onclick="speak('manteiga')">manteiga</span>
+          <span class="pr-word" onclick="speak('feijão')">feijão</span>
+          <span class="pr-word" onclick="speak('leite')">leite</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title" style="margin-top:1.5rem;">Nota — chamar-se</div>
+  <div class="note-block">
+    <strong>chamar-se</strong> = to be called / to call oneself. A reflexive verb — the <em>-se</em> is a reflexive pronoun that attaches to the verb. In the first person: <strong>Eu chamo-me Dave.</strong> You encountered this in class from an anecdote — the reflexive pattern will be studied more fully later.
+  </div>
+
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+let currentAudio = null;
+
+async function speak(text, btnEl) {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (btnEl) btnEl.classList.add('playing');
+  try {
+    const res = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) });
+    if (!res.ok) throw new Error();
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    currentAudio = new Audio(url);
+    currentAudio.onended = currentAudio.onerror = () => { if (btnEl) btnEl.classList.remove('playing'); URL.revokeObjectURL(url); currentAudio = null; };
+    currentAudio.play();
+  } catch(e) { if (btnEl) btnEl.classList.remove('playing'); }
+}
+
+// ── FREQUENCY EXAMPLES ────────────────────────────────────────────
+const FREQ_EXAMPLES = [
+  { pt: 'Eu estudo <span class="hl-pos">sempre</span> de manhã.', en: 'I always study in the morning.', speak: 'Eu estudo sempre de manhã.' },
+  { pt: 'Ela trabalha <span class="hl-pos">muitas vezes</span> ao fim de semana.', en: 'She works many times at the weekend.', speak: 'Ela trabalha muitas vezes ao fim de semana.' },
+  { pt: 'Eu tomo <span class="hl-pos">frequentemente</span> café às dez.', en: 'I frequently have coffee at ten.', speak: 'Eu tomo frequentemente café às dez.' },
+  { pt: 'Eu <span class="hl-neg">nunca</span> preparo a lista de supermercado.', en: 'I never prepare the shopping list.', speak: 'Eu nunca preparo a lista de supermercado.' },
+  { pt: 'Eu <span class="hl-neg">raramente</span> cozinho ao almoço.', en: 'I rarely cook at lunchtime.', speak: 'Eu raramente cozinho ao almoço.' },
+  { pt: 'Você gosta <span class="hl-pos">sempre</span> de bacalhau?', en: 'Do you always like codfish?', speak: 'Você gosta sempre de bacalhau?' },
+  { pt: 'Ele <span class="hl-neg">nunca</span> chega a horas.', en: 'He never arrives on time.', speak: 'Ele nunca chega a horas.' },
+  { pt: 'Nós jantamos <span class="hl-pos">muitas vezes</span> fora.', en: 'We often have dinner out.', speak: 'Nós jantamos muitas vezes fora.' },
+];
+
+function buildFreqExamples() {
+  const container = document.getElementById('freqExamples');
+  FREQ_EXAMPLES.forEach(e => {
+    const div = document.createElement('div');
+    div.className = 'ex-item';
+    div.innerHTML = `<div class="ex-pt">${e.pt}</div><div class="ex-en">${e.en}</div>`;
+    div.onclick = () => speak(e.speak, null);
+    container.appendChild(div);
+  });
+}
+
+// ── DRILL DATA ────────────────────────────────────────────────────
+const DRILL_ITEMS = [
+  { subject: 'Eu', verb: 'cozinho', freq: 'sempre', time: 'à noite', type: 'pos',
+    correct: 'Eu cozinho sempre à noite.',
+    wrong:   'Eu sempre cozinho à noite.' },
+  { subject: 'Eu', verb: 'cozinho', freq: 'nunca', time: 'à tarde', type: 'neg',
+    correct: 'Eu nunca cozinho à tarde.',
+    wrong:   'Eu cozinho nunca à tarde.' },
+  { subject: 'Ela', verb: 'estuda', freq: 'frequentemente', time: 'de manhã', type: 'pos',
+    correct: 'Ela estuda frequentemente de manhã.',
+    wrong:   'Ela frequentemente estuda de manhã.' },
+  { subject: 'Eu', verb: 'preparo', freq: 'nunca', time: 'a lista', type: 'neg',
+    correct: 'Eu nunca preparo a lista.',
+    wrong:   'Eu preparo nunca a lista.' },
+  { subject: 'Você', verb: 'trabalha', freq: 'muitas vezes', time: 'ao fim de semana', type: 'pos',
+    correct: 'Você trabalha muitas vezes ao fim de semana.',
+    wrong:   'Você muitas vezes trabalha ao fim de semana.' },
+  { subject: 'Ele', verb: 'chega', freq: 'raramente', time: 'a horas', type: 'neg',
+    correct: 'Ele raramente chega a horas.',
+    wrong:   'Ele chega raramente a horas.' },
+  { subject: 'Eu', verb: 'tomo', freq: 'sempre', time: 'café de manhã', type: 'pos',
+    correct: 'Eu tomo sempre café de manhã.',
+    wrong:   'Eu sempre tomo café de manhã.' },
+  { subject: 'Nós', verb: 'jantamos', freq: 'muitas vezes', time: 'fora', type: 'pos',
+    correct: 'Nós jantamos muitas vezes fora.',
+    wrong:   'Nós muitas vezes jantamos fora.' },
+  { subject: 'Eu', verb: 'gasto', freq: 'raramente', time: 'muito dinheiro', type: 'neg',
+    correct: 'Eu raramente gasto muito dinheiro.',
+    wrong:   'Eu gasto raramente muito dinheiro.' },
+  { subject: 'Você', verb: 'telefona', freq: 'sempre', time: 'à família', type: 'pos',
+    correct: 'Você telefona sempre à família.',
+    wrong:   'Você sempre telefona à família.' },
+];
+
+let drillDeck = [], drillIdx = 0, drillCorrect = 0, drillTotal = 0, drillAnswered = false;
+
+function initDrill() {
+  drillDeck = [...DRILL_ITEMS].sort(() => Math.random() - 0.5);
+  drillIdx = 0; drillCorrect = 0; drillTotal = 0; drillAnswered = false;
+  renderDrill();
+}
+
+function renderDrill() {
+  if (drillIdx >= drillDeck.length) { drillDeck = [...DRILL_ITEMS].sort(() => Math.random() - 0.5); drillIdx = 0; }
+  drillAnswered = false;
+  const item = drillDeck[drillIdx];
+  document.getElementById('drillFeedback').textContent = '';
+  document.getElementById('drillFeedback').className = 'drill-feedback';
+  document.getElementById('drillNext').disabled = true;
+  document.getElementById('drillScore').textContent = `${drillCorrect} / ${drillTotal}`;
+
+  const freqClass = item.type === 'pos' ? 'freq-pos' : 'freq-neg';
+  document.getElementById('drillComponents').innerHTML = `
+    <span class="drill-chip subject">${item.subject}</span>
+    <span class="drill-divider">+</span>
+    <span class="drill-chip verb">${item.verb}</span>
+    <span class="drill-divider">+</span>
+    <span class="drill-chip ${freqClass}">${item.freq}</span>
+    <span class="drill-divider">+</span>
+    <span class="drill-chip time">${item.time}</span>
+  `;
+
+  const opts = [item.correct, item.wrong].sort(() => Math.random() - 0.5);
+  const container = document.getElementById('drillOptions');
+  container.innerHTML = '';
+  opts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'drill-opt';
+    btn.textContent = opt;
+    btn.onclick = () => checkDrill(btn, opt, item.correct, item);
+    container.appendChild(btn);
+  });
+}
+
+function checkDrill(btn, chosen, correct, item) {
+  if (drillAnswered) return;
+  drillAnswered = true; drillTotal++;
+  document.querySelectorAll('.drill-opt').forEach(b => { b.disabled = true; if (b.textContent === correct) b.classList.add('correct'); });
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    drillCorrect++;
+    document.getElementById('drillFeedback').textContent = 'Correto! ✓';
+    document.getElementById('drillFeedback').className = 'drill-feedback ok';
+  } else {
+    btn.classList.add('wrong');
+    document.getElementById('drillFeedback').textContent = `Errado — ${item.type === 'pos' ? 'positivo: verbo + frequência' : 'negativo: frequência + verbo'}`;
+    document.getElementById('drillFeedback').className = 'drill-feedback bad';
+  }
+  speak(correct, null);
+  document.getElementById('drillNext').disabled = false;
+  document.getElementById('drillScore').textContent = `${drillCorrect} / ${drillTotal}`;
+}
+
+function nextDrill() { drillIdx++; renderDrill(); }
+
+function switchTab(id, tabEl) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  tabEl.classList.add('active');
+  if (id === 'drill') initDrill();
+}
+
+buildFreqExamples();
+</script>
+<script>
+(function(){
+  try {
+    var d = JSON.parse(localStorage.getItem('pt-study-last-visited') || '{}');
+    d['aula-14-abril.html'] = Date.now();
+    localStorage.setItem('pt-study-last-visited', JSON.stringify(d));
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>
