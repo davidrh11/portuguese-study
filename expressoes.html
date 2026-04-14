@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="pt" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expressões — Português Europeu</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0; --surface: #ffffff; --surface2: #f2ede6;
+    --border: #e0d8cc; --border2: #ccc4b4;
+    --green: #2d7a50; --green-light: #eef5f1; --green-mid: #9acbb0;
+    --red: #a03428; --red-light: #fdf2f1; --red-mid: #dba09a;
+    --yellow: #b07d2a; --text: #2e2820; --muted: #8a7a68; --muted2: #b0a090;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+  header {
+    padding: 1.5rem 2rem 1rem; border-bottom: 1px solid var(--border);
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  }
+  .header-text h1 { font-family: var(--mono); font-size: 1rem; font-weight: 400; color: var(--muted); }
+  .header-text h1 span { color: var(--green); }
+  .header-text p { font-size: 0.82rem; color: var(--muted2); margin-top: 0.2rem; }
+  .pt-flag { flex-shrink: 0; width: 48px; height: 32px; border-radius: 3px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.15); margin-top: 2px; }
+
+  /* TABS */
+  .tabs { display: flex; border-bottom: 1px solid var(--border); padding: 0 2rem; }
+  .tab { font-family: var(--mono); font-size: 0.8rem; padding: 0.75rem 1.25rem; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  .view { display: none; padding: 1.5rem 2rem 3rem; max-width: 680px; }
+  .view.active { display: block; }
+
+  /* CATEGORY FILTER */
+  .cat-bar {
+    display: flex; gap: 0.4rem; margin-bottom: 1.5rem; flex-wrap: wrap;
+  }
+  .cat-btn {
+    font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em;
+    padding: 0.3rem 0.75rem; border: 1px solid var(--border); border-radius: 99px;
+    background: var(--surface); color: var(--muted); cursor: pointer; transition: all 0.15s;
+  }
+  .cat-btn:hover { border-color: var(--green-mid); color: var(--text); }
+  .cat-btn.active { background: var(--green); border-color: var(--green); color: #fff; }
+
+  /* EXPRESSION CARDS */
+  .section-title {
+    font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--red); margin: 2rem 0 0.75rem;
+    border-left: 3px solid var(--red); padding-left: 0.65rem;
+  }
+  .section-title:first-child { margin-top: 0; }
+
+  .exp-grid { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .exp-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1.25rem 1.5rem; transition: border-color 0.2s;
+  }
+  .exp-card:hover { border-color: var(--green-mid); }
+  .exp-card.featured { border-color: var(--green); border-width: 2px; }
+
+  .exp-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 0.5rem; }
+  .exp-pt {
+    font-family: var(--mono); font-size: 1.15rem; color: var(--green); font-weight: 700;
+    cursor: pointer; line-height: 1.3;
+  }
+  .exp-pt:hover { text-decoration: underline; text-decoration-color: var(--green); text-underline-offset: 3px; }
+  .exp-speak {
+    background: var(--green-light); border: 1px solid var(--green-mid); color: var(--green);
+    font-size: 0.9rem; padding: 0.3rem 0.75rem; border-radius: 99px;
+    cursor: pointer; transition: all 0.2s; flex-shrink: 0; font-family: var(--mono); font-size: 0.7rem;
+  }
+  .exp-speak:hover, .exp-speak.playing { background: var(--green); color: #fff; border-color: var(--green); }
+
+  .exp-en { font-size: 0.88rem; color: var(--muted); font-style: italic; margin-bottom: 0.75rem; }
+
+  .exp-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+  .exp-tag {
+    font-family: var(--mono); font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 0.15rem 0.45rem; border-radius: 2px;
+  }
+  .tag-register-informal { background: var(--green-light); color: var(--green); border: 1px solid var(--green-mid); }
+  .tag-register-formal   { background: #eef3fb; color: #2a5fa0; border: 1px solid #a0b8d8; }
+  .tag-lesson { background: var(--surface2); color: var(--muted); border: 1px solid var(--border2); }
+  .tag-essential { background: #fdf6e8; color: var(--yellow); border: 1px solid #e0c070; }
+
+  .exp-body { font-size: 0.84rem; color: var(--text); line-height: 1.75; }
+  .exp-body strong { color: var(--green); font-family: var(--mono); }
+  .exp-body em { color: var(--muted); }
+
+  .exp-examples { margin-top: 0.85rem; display: flex; flex-direction: column; gap: 0.4rem; }
+  .exp-example {
+    background: var(--surface2); border-radius: 4px; padding: 0.55rem 0.85rem;
+    cursor: pointer; transition: background 0.15s; border: 1px solid transparent;
+  }
+  .exp-example:hover { border-color: var(--green-mid); background: var(--green-light); }
+  .exp-example .ex-pt { font-family: var(--mono); font-size: 0.82rem; color: var(--text); margin-bottom: 0.15rem; }
+  .exp-example .ex-pt strong { color: var(--green); }
+  .exp-example .ex-en { font-size: 0.75rem; color: var(--muted); font-style: italic; }
+
+  /* COMPARISON BLOCK */
+  .compare-block {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    overflow: hidden; margin-bottom: 0.75rem;
+  }
+  .compare-title {
+    font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--muted); padding: 0.75rem 1.25rem;
+    background: var(--surface2); border-bottom: 1px solid var(--border);
+  }
+  .compare-row {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    padding: 0.85rem 1.25rem; border-bottom: 1px solid var(--border);
+    gap: 0.5rem; align-items: center; cursor: pointer; transition: background 0.15s;
+  }
+  .compare-row:last-child { border-bottom: none; }
+  .compare-row:hover { background: var(--surface2); }
+  .compare-row .cr-pt { font-family: var(--mono); font-size: 0.9rem; color: var(--green); font-weight: 600; }
+  .compare-row .cr-en { font-size: 0.82rem; color: var(--text); }
+  .compare-row .cr-note { font-size: 0.75rem; color: var(--muted); font-style: italic; }
+
+  /* FLASHCARD STYLES */
+  .fc-wrap { max-width: 540px; margin: 0 auto; }
+  .fc-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; gap: 0.5rem; flex-wrap: wrap; }
+  .fc-counter { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+  .fc-ctrl { font-family: var(--mono); font-size: 0.72rem; background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 0.4rem 0.9rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .fc-ctrl:hover { border-color: var(--green); color: var(--green); }
+  .fc-progress { height: 2px; background: var(--border); border-radius: 1px; margin-bottom: 1.5rem; overflow: hidden; }
+  .fc-progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
+
+  .fc-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    min-height: 300px; display: flex; flex-direction: column;
+    align-items: center; padding: 1.5rem 2rem; text-align: center;
+  }
+  .fc-hints { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 1.25rem; }
+  .fc-cat-tag { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--red); margin-bottom: 0.75rem; }
+  .fc-en-prompt { font-size: 1.05rem; color: var(--text); font-weight: 300; line-height: 1.5; margin-bottom: 1.25rem; padding: 0 0.5rem; }
+  .fc-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1.25rem; }
+  .fc-pt-answer {
+    font-family: var(--mono); font-size: 1.25rem; color: var(--green); font-weight: 700;
+    filter: blur(7px); transition: filter 0.3s; cursor: pointer;
+    line-height: 1.4; margin-bottom: 1.25rem; padding: 0.1rem 0.5rem;
+    background: var(--border); border-radius: 4px; display: inline-block;
+  }
+  .fc-pt-answer.revealed { filter: blur(0); background: transparent; }
+  .fc-speak-pill {
+    background: var(--surface2); border: 1px solid var(--border); color: var(--green);
+    padding: 0.35rem 1.2rem; border-radius: 99px; cursor: pointer;
+    transition: all 0.2s; font-size: 1rem; margin-bottom: 1rem;
+  }
+  .fc-speak-pill:hover, .fc-speak-pill.playing { background: var(--green); color: #fff; border-color: var(--green); }
+  .fc-ex-pt { font-style: italic; font-size: 0.82rem; color: var(--text); filter: blur(5px); transition: filter 0.3s; cursor: pointer; margin-bottom: 0.2rem; background: var(--border); border-radius: 3px; padding: 0.05rem 0.3rem; display: inline-block; }
+  .fc-ex-pt.revealed { filter: blur(0); background: transparent; }
+  .fc-ex-en { font-size: 0.75rem; color: var(--muted); filter: blur(5px); transition: filter 0.3s; background: var(--border); border-radius: 3px; padding: 0.05rem 0.3rem; display: inline-block; margin-bottom: 1rem; }
+  .fc-ex-en.revealed { filter: blur(0); background: transparent; }
+  .fc-nav { display: flex; gap: 1rem; margin-top: auto; }
+  .fc-nav-btn { font-family: var(--mono); font-size: 0.82rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 0.55rem 1.25rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .fc-nav-btn:hover { border-color: var(--green); color: var(--green); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-text">
+    <h1>Português Europeu · <span>Expressões</span></h1>
+    <p>Colecção crescente · actualizada a cada aula</p>
+  </div>
+  <svg class="pt-flag" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="19.2" height="32" fill="#006600"/>
+    <rect x="19.2" y="0" width="28.8" height="32" fill="#FF0000"/>
+    <circle cx="19.2" cy="16" r="7" fill="none" stroke="#FFCC00" stroke-width="1.2"/>
+    <circle cx="19.2" cy="16" r="4.5" fill="none" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="19.2" y1="11.5" x2="19.2" y2="20.5" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="14.7" y1="16" x2="23.7" y2="16" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="16" y1="12.8" x2="22.4" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <line x1="22.4" y1="12.8" x2="16" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <rect x="17" y="13.5" width="4.4" height="5" fill="white" rx="0.5"/>
+    <circle cx="19.2" cy="16" r="0.8" fill="#003399"/>
+    <circle cx="17.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="17.7" cy="17.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="17.5" r="0.5" fill="#003399"/>
+  </svg>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('todas', this)">Todas</button>
+  <button class="tab" onclick="switchTab('flashcards', this)">Flashcards</button>
+</div>
+
+<!-- TODAS -->
+<div id="todas" class="view active">
+
+  <div class="cat-bar" id="catBar"></div>
+
+  <div id="expressaoContent"></div>
+
+</div>
+
+<!-- FLASHCARDS -->
+<div id="flashcards" class="view">
+  <div class="fc-wrap">
+    <div class="fc-topbar">
+      <span class="fc-counter" id="fcCounter">1 / 1</span>
+      <div style="display:flex;gap:0.5rem;">
+        <button class="fc-ctrl" onclick="shuffleFC()">⇄ Baralhar</button>
+        <button class="fc-ctrl" onclick="resetFC()">↺ Reiniciar</button>
+      </div>
+    </div>
+    <div class="fc-progress"><div class="fc-progress-fill" id="fcProgressFill" style="width:0%"></div></div>
+    <div class="fc-card">
+      <div class="fc-hints" id="fcHints">clique para revelar · 🔊 para ouvir</div>
+      <div class="fc-cat-tag" id="fcCatTag"></div>
+      <div class="fc-en-prompt" id="fcEnPrompt"></div>
+      <div class="fc-divider"></div>
+      <div class="fc-pt-answer" id="fcPtAnswer" onclick="revealFC()"></div>
+      <button class="fc-speak-pill" id="fcSpeakPill" onclick="speakFC()">🔊</button>
+      <div class="fc-ex-pt" id="fcExPt" onclick="speakFCEx()"></div>
+      <div class="fc-ex-en" id="fcExEn"></div>
+      <div class="fc-nav">
+        <button class="fc-nav-btn" onclick="fcMove(-1)">← Anterior</button>
+        <button class="fc-nav-btn" onclick="fcMove(1)">Próximo →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+let currentAudio = null;
+
+async function speak(text, btnEl) {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (btnEl) btnEl.classList.add('playing');
+  try {
+    const res = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) });
+    if (!res.ok) throw new Error();
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    currentAudio = new Audio(url);
+    currentAudio.onended = currentAudio.onerror = () => { if (btnEl) btnEl.classList.remove('playing'); URL.revokeObjectURL(url); currentAudio = null; };
+    currentAudio.play();
+  } catch(e) { if (btnEl) btnEl.classList.remove('playing'); }
+}
+
+// ── DATA ──────────────────────────────────────────────────────────
+// categories: despedidas | essenciais | idiomaticas | palavras-do-dia
+const EXPRESSOES = [
+  {
+    id: 'bocadinho',
+    pt: 'um bocadinho',
+    en: 'a little bit / a short while / just a moment',
+    category: 'essenciais',
+    register: 'informal',
+    lesson: 'Aula 2',
+    featured: true,
+    body: 'Diminutive of <strong>bocado</strong>. The <strong>-inho</strong> ending makes it smaller and warmer. Portuguese use it constantly to soften requests — it immediately sounds more native than <strong>pouco</strong>.',
+    examples: [
+      { pt: 'Espera <strong>um bocadinho</strong>.', en: 'Wait a moment. (softer than just "espera")' },
+      { pt: 'Fala <strong>um bocadinho</strong> mais devagar.', en: 'Speak a little more slowly.' },
+      { pt: 'Só <strong>um bocadinho</strong> de vinho, obrigado.', en: 'Just a little wine, thank you.' },
+      { pt: 'Estou <strong>um bocadinho</strong> cansado.', en: "I'm a little tired." },
+      { pt: 'Mais <strong>um bocadinho</strong>?', en: 'A little more? (offering food or drink)' },
+    ]
+  },
+  {
+    id: 'ate-ja',
+    pt: 'Até já.',
+    en: 'See you in a bit. / See you soon.',
+    category: 'despedidas',
+    register: 'informal',
+    lesson: 'Aula 2',
+    featured: false,
+    body: 'Used when you expect to see the person again <strong>the same day</strong>, or very soon. Saying this to someone you won\'t see until next week sounds odd.',
+    examples: [
+      { pt: 'Vou ao café. <strong>Até já!</strong>', en: "I'm going to the café. See you in a bit!" },
+      { pt: '<strong>Até já</strong>, Rui! Bom trabalho!', en: 'See you soon, Rui! Good work!' },
+    ]
+  },
+  {
+    id: 'ate-logo',
+    pt: 'Até logo.',
+    en: 'See you later.',
+    category: 'despedidas',
+    register: 'informal',
+    lesson: 'Aula 2',
+    featured: false,
+    body: 'Slightly more open-ended than <strong>até já</strong> — implies later today or in the near future, but not necessarily within the hour. In practice many Portuguese use <strong>até já</strong> and <strong>até logo</strong> interchangeably.',
+    examples: [
+      { pt: 'Tenho uma reunião. <strong>Até logo!</strong>', en: 'I have a meeting. See you later!' },
+    ]
+  },
+  {
+    id: 'ate-amanha',
+    pt: 'Até amanhã.',
+    en: 'See you tomorrow.',
+    category: 'despedidas',
+    register: 'informal',
+    lesson: 'Aula 2',
+    featured: false,
+    body: 'Straightforward — you\'ll see them <strong>tomorrow</strong>. Common at end of workday with colleagues or at end of class.',
+    examples: [
+      { pt: 'Boa noite! <strong>Até amanhã!</strong>', en: 'Good night! See you tomorrow!' },
+    ]
+  },
+  {
+    id: 'ate-proxima',
+    pt: 'Até à próxima.',
+    en: 'Until next time.',
+    category: 'despedidas',
+    register: 'formal',
+    lesson: 'Aula 2',
+    featured: false,
+    body: 'The most open-ended farewell — no specific timeframe implied. More formal than the others. Use with people you see occasionally: a shopkeeper, a neighbour you don\'t know well, a client.',
+    examples: [
+      { pt: 'Foi um prazer. <strong>Até à próxima!</strong>', en: 'It was a pleasure. Until next time!' },
+      { pt: '<strong>Igualmente! Até à próxima!</strong>', en: 'Likewise! Until next time!' },
+    ]
+  },
+  {
+    id: 'prazer-velo',
+    pt: 'Prazer em vê-lo.',
+    en: 'Nice to see you. (said to a man)',
+    category: 'despedidas',
+    register: 'formal',
+    lesson: 'Aula 2',
+    featured: false,
+    body: 'The <strong>-lo</strong> ending refers to a man. For a woman: <strong>Prazer em vê-la.</strong> For a group: <strong>Prazer em vê-los.</strong> Use in formal contexts — business, meeting someone\'s parents, formal social occasions.',
+    examples: [
+      { pt: 'Ainda bem! <strong>Prazer em vê-lo!</strong> Até à próxima!', en: 'Glad to hear it! Nice to see you! Until next time!' },
+    ]
+  },
+  {
+    id: 'vai-se-andando',
+    pt: 'Vai-se andando.',
+    en: 'So-so. / Getting by. / One keeps going.',
+    category: 'palavras-do-dia',
+    register: 'informal',
+    lesson: 'Aula 2',
+    featured: false,
+    body: 'The perfect answer when you\'re not great but not bad. When someone asks <strong>Como está?</strong> or <strong>Tudo bem?</strong> and you want to be honest without being dramatic. Literally: "one keeps walking." Very Portuguese in its understated resignation.',
+    examples: [
+      { pt: '— Tudo bem? — <strong>Vai-se andando.</strong>', en: '— How are you? — So-so, getting by.' },
+    ]
+  },
+  {
+    id: 'estou-de-rastos',
+    pt: 'Estou de rastos.',
+    en: "I'm exhausted. / I'm dragging myself along.",
+    category: 'palavras-do-dia',
+    register: 'informal',
+    lesson: 'Aula 2',
+    featured: false,
+    body: 'More vivid than <strong>estou cansado</strong>. Literally "I\'m crawling along the ground." Use after a long day, bad sleep, or a tough week. Common in informal conversation in Lisbon.',
+    examples: [
+      { pt: 'Hoje <strong>estou de rastos</strong>. Dormi muito mal.', en: "I'm exhausted today. I slept very badly." },
+    ]
+  },
+  {
+    id: 'mais-vale',
+    pt: 'Mais vale feito que perfeito.',
+    en: 'Done is better than perfect.',
+    category: 'idiomaticas',
+    register: 'informal',
+    lesson: 'Aula 1',
+    featured: false,
+    body: 'A proverb used when finishing something imperfectly is better than not finishing it at all. Equivalent to "done is better than perfect" or "better done than not done."',
+    examples: [
+      { pt: 'Não está perfeito, mas... <strong>mais vale feito que perfeito!</strong>', en: "It's not perfect, but... done is better than perfect!" },
+    ]
+  },
+  {
+    id: 'obrigadissimo',
+    pt: 'Obrigadíssimo.',
+    en: 'Many thanks. / I\'m extremely grateful.',
+    category: 'essenciais',
+    register: 'informal',
+    lesson: 'Aula 1',
+    featured: false,
+    body: 'The superlative of <strong>obrigado</strong>. The <strong>-íssimo</strong> suffix intensifies — very grateful, extremely thankful. Speaker is male; a woman says <strong>Obrigadíssima</strong>.',
+    examples: [
+      { pt: '<strong>Obrigadíssimo</strong> pela ajuda!', en: 'Many thanks for the help!' },
+    ]
+  },
+  {
+    id: 'isso-sao-outros',
+    pt: 'Isso são outros quinhentos.',
+    en: "That's a whole different story.",
+    category: 'idiomaticas',
+    register: 'informal',
+    lesson: 'Aula 1',
+    featured: false,
+    body: 'Used when a subject is <strong>completely different</strong> from what was being discussed. A sharp pivot. Literally "those are another five hundred" — a reference to old Portuguese currency that survived as pure idiom.',
+    examples: [
+      { pt: '— E o teu trabalho? — Ah, <strong>isso são outros quinhentos</strong>!', en: '— And your work? — Ah, that\'s a whole different story!' },
+    ]
+  },
+];
+
+const CATEGORIES = [
+  { id: 'all',           label: 'Todas' },
+  { id: 'essenciais',    label: 'Essenciais' },
+  { id: 'despedidas',    label: 'Despedidas' },
+  { id: 'idiomaticas',   label: 'Idiomáticas' },
+  { id: 'palavras-do-dia', label: 'Palavras do Dia' },
+];
+
+// ── STATE ─────────────────────────────────────────────────────────
+let activeCategory = 'all';
+let fcDeck = [], fcIdx = 0, fcRevealed = false;
+
+// ── CATEGORY BAR ──────────────────────────────────────────────────
+function buildCatBar() {
+  const bar = document.getElementById('catBar');
+  CATEGORIES.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'cat-btn' + (c.id === 'all' ? ' active' : '');
+    btn.textContent = c.label;
+    btn.onclick = () => {
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCategory = c.id;
+      renderExpressoes();
+    };
+    bar.appendChild(btn);
+  });
+}
+
+// ── RENDER EXPRESSOES ──────────────────────────────────────────────
+function getFiltered() {
+  if (activeCategory === 'all') return EXPRESSOES;
+  return EXPRESSOES.filter(e => e.category === activeCategory);
+}
+
+function renderExpressoes() {
+  const container = document.getElementById('expressaoContent');
+  container.innerHTML = '';
+  const items = getFiltered();
+
+  // Featured first
+  const featured = items.filter(e => e.featured);
+  const rest = items.filter(e => !e.featured);
+
+  if (featured.length) {
+    const ft = document.createElement('div');
+    ft.className = 'section-title';
+    ft.textContent = 'Em Destaque';
+    container.appendChild(ft);
+    const grid = document.createElement('div');
+    grid.className = 'exp-grid';
+    featured.forEach(e => grid.appendChild(makeCard(e)));
+    container.appendChild(grid);
+  }
+
+  // Group rest by category if showing all
+  if (activeCategory === 'all') {
+    const catOrder = ['despedidas', 'essenciais', 'idiomaticas', 'palavras-do-dia'];
+    const catLabels = { despedidas: 'Despedidas', essenciais: 'Essenciais', idiomaticas: 'Expressões Idiomáticas', 'palavras-do-dia': 'Palavras do Dia' };
+
+    // Despedidas get a comparison block first
+    const despedidas = rest.filter(e => e.category === 'despedidas');
+    if (despedidas.length) {
+      const t = document.createElement('div');
+      t.className = 'section-title'; t.textContent = 'Despedidas';
+      container.appendChild(t);
+      container.appendChild(makeFarewellComparison());
+      const grid = document.createElement('div');
+      grid.className = 'exp-grid';
+      despedidas.forEach(e => grid.appendChild(makeCard(e)));
+      container.appendChild(grid);
+    }
+
+    catOrder.filter(c => c !== 'despedidas').forEach(cat => {
+      const group = rest.filter(e => e.category === cat);
+      if (!group.length) return;
+      const t = document.createElement('div');
+      t.className = 'section-title'; t.textContent = catLabels[cat];
+      container.appendChild(t);
+      const grid = document.createElement('div');
+      grid.className = 'exp-grid';
+      group.forEach(e => grid.appendChild(makeCard(e)));
+      container.appendChild(grid);
+    });
+  } else {
+    if (activeCategory === 'despedidas') container.appendChild(makeFarewellComparison());
+    const grid = document.createElement('div');
+    grid.className = 'exp-grid';
+    rest.forEach(e => grid.appendChild(makeCard(e)));
+    container.appendChild(grid);
+  }
+}
+
+function makeFarewellComparison() {
+  const block = document.createElement('div');
+  block.className = 'compare-block';
+  block.innerHTML = `<div class="compare-title">Quando usar cada despedida?</div>`;
+  const rows = [
+    { pt: 'Até já',          en: 'See you soon',       note: 'same day · very soon' },
+    { pt: 'Até logo',        en: 'See you later',       note: 'later today · near future' },
+    { pt: 'Até amanhã',      en: 'See you tomorrow',    note: 'exactly tomorrow' },
+    { pt: 'Até à próxima',   en: 'Until next time',     note: 'open-ended · more formal' },
+  ];
+  rows.forEach(r => {
+    const row = document.createElement('div');
+    row.className = 'compare-row';
+    row.innerHTML = `<span class="cr-pt">${r.pt}</span><span class="cr-en">${r.en}</span><span class="cr-note">${r.note}</span>`;
+    row.onclick = () => speak(r.pt + '.', null);
+    block.appendChild(row);
+  });
+  return block;
+}
+
+function makeCard(e) {
+  const card = document.createElement('div');
+  card.className = 'exp-card' + (e.featured ? ' featured' : '');
+
+  const registerTag = e.register === 'informal'
+    ? `<span class="exp-tag tag-register-informal">informal</span>`
+    : `<span class="exp-tag tag-register-formal">formal</span>`;
+  const lessonTag = `<span class="exp-tag tag-lesson">${e.lesson}</span>`;
+  const featuredTag = e.featured ? `<span class="exp-tag tag-essential">essencial</span>` : '';
+
+  const examples = e.examples.map(ex => `
+    <div class="exp-example" onclick="speak('${ex.pt.replace(/<[^>]+>/g,'').replace(/'/g,"\\'")}', null)">
+      <div class="ex-pt">${ex.pt}</div>
+      <div class="ex-en">${ex.en}</div>
+    </div>`).join('');
+
+  card.innerHTML = `
+    <div class="exp-header">
+      <div class="exp-pt" onclick="speak('${e.pt.replace(/'/g,"\\'")}', null)">${e.pt}</div>
+      <button class="exp-speak" onclick="speak('${e.pt.replace(/'/g,"\\'")}', this)">🔊</button>
+    </div>
+    <div class="exp-en">${e.en}</div>
+    <div class="exp-tags">${featuredTag}${registerTag}${lessonTag}</div>
+    <div class="exp-body">${e.body}</div>
+    ${examples ? `<div class="exp-examples">${examples}</div>` : ''}
+  `;
+  return card;
+}
+
+// ── FLASHCARDS ────────────────────────────────────────────────────
+function buildFCDeck() {
+  fcDeck = EXPRESSOES.map(e => ({
+    pt: e.pt,
+    en: e.en,
+    cat: CATEGORIES.find(c => c.id === e.category)?.label || '',
+    ex_pt: e.examples[0]?.pt.replace(/<[^>]+>/g, '') || '',
+    ex_en: e.examples[0]?.en || '',
+  }));
+}
+
+function renderFC() {
+  const c = fcDeck[fcIdx];
+  fcRevealed = false;
+  document.getElementById('fcCounter').textContent = `${fcIdx + 1} / ${fcDeck.length}`;
+  document.getElementById('fcProgressFill').style.width = `${((fcIdx + 1) / fcDeck.length) * 100}%`;
+  document.getElementById('fcCatTag').textContent = c.cat;
+  document.getElementById('fcEnPrompt').textContent = c.en;
+  document.getElementById('fcPtAnswer').textContent = c.pt;
+  document.getElementById('fcPtAnswer').className = 'fc-pt-answer';
+  document.getElementById('fcExPt').textContent = c.ex_pt;
+  document.getElementById('fcExPt').className = 'fc-ex-pt';
+  document.getElementById('fcExEn').textContent = c.ex_en;
+  document.getElementById('fcExEn').className = 'fc-ex-en';
+  document.getElementById('fcHints').textContent = 'clique para revelar · 🔊 para ouvir';
+  document.getElementById('fcSpeakPill').classList.remove('playing');
+}
+
+function revealFC() {
+  if (fcRevealed) return;
+  fcRevealed = true;
+  document.getElementById('fcPtAnswer').classList.add('revealed');
+  document.getElementById('fcExPt').classList.add('revealed');
+  document.getElementById('fcExEn').classList.add('revealed');
+  document.getElementById('fcHints').textContent = '';
+}
+
+function speakFC()   { speak(fcDeck[fcIdx].pt, document.getElementById('fcSpeakPill')); }
+function speakFCEx() { speak(fcDeck[fcIdx].ex_pt, document.getElementById('fcExPt')); }
+function fcMove(dir) { fcIdx = (fcIdx + dir + fcDeck.length) % fcDeck.length; renderFC(); }
+function shuffleFC() { fcDeck = [...fcDeck].sort(() => Math.random() - 0.5); fcIdx = 0; renderFC(); }
+function resetFC()   { buildFCDeck(); fcIdx = 0; renderFC(); }
+
+// ── TAB ───────────────────────────────────────────────────────────
+function switchTab(id, tabEl) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  tabEl.classList.add('active');
+  if (id === 'flashcards') renderFC();
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+buildCatBar();
+renderExpressoes();
+buildFCDeck();
+renderFC();
+</script>
+<script>
+(function(){
+  try {
+    var d = JSON.parse(localStorage.getItem('pt-study-last-visited') || '{}');
+    d['expressoes.html'] = Date.now();
+    localStorage.setItem('pt-study-last-visited', JSON.stringify(d));
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>
