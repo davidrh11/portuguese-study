@@ -292,7 +292,7 @@
         <div class="vfc-pt" id="vfcPt" onclick="vfcReveal()"></div>
         <button class="vfc-speak" id="vfcSpeak" onclick="vfcSpeakAnswer()">🔊</button>
         <div class="vfc-ex-pt" id="vfcExPt" onclick="vfcSpeakEx()"></div>
-        <div class="vfc-ex-en" id="vfcExEn" onclick="this.classList.add('revealed')"></div>
+        <div class="vfc-ex-en" id="vfcExEn"></div>
         <div class="vfc-nav">
           <button class="vfc-nav-btn" onclick="vfcMove(-1)">← Anterior</button>
           <button class="vfc-nav-btn" onclick="vfcMove(1)">Próximo →</button>
@@ -430,31 +430,31 @@ const FRAMES = [
 ];
 
 const VERBS = [
-  { inf: 'saber',     en: 'to know (facts)',         ex: 'Não sei.' },
-  { inf: 'vir',       en: 'to come',                 ex: 'Pode vir aqui?' },
-  { inf: 'falar',     en: 'to speak',                ex: 'Estou a falar português.' },
-  { inf: 'ver',       en: 'to see / understand',     ex: 'Estou a ver.' },
-  { inf: 'ficar',     en: 'to stay / become',        ex: 'Vou ficar aqui.' },
-  { inf: 'gostar',    en: 'to like (+ de)',          ex: 'Deve gostar de vinho verde.' },
-  { inf: 'precisar',  en: 'to need (+ de)',          ex: 'Preciso de ajuda.' },
-  { inf: 'trazer',    en: 'to bring',                ex: 'Pode trazer a conta?' },
-  { inf: 'pedir',     en: 'to ask for / order',      ex: 'Posso pedir, por favor?' },
-  { inf: 'comer',     en: 'to eat',                  ex: 'Vamos comer algo?' },
-  { inf: 'beber',     en: 'to drink',                ex: 'Queria beber um copo.' },
-  { inf: 'andar',     en: 'to walk / get around',    ex: 'Estou a andar pela cidade.' },
-  { inf: 'começar',   en: 'to begin',                ex: 'Estou a começar a aprender.' },
-  { inf: 'perceber',  en: 'to understand',           ex: 'Não percebo.' },
-  { inf: 'trabalhar', en: 'to work',                 ex: 'Vou trabalhar amanhã.' },
-  { inf: 'morar',     en: 'to live / reside',        ex: 'Moro em Lisboa.' },
-  { inf: 'comprar',   en: 'to buy',                  ex: 'Vou comprar pão.' },
-  { inf: 'ajudar',    en: 'to help',                 ex: 'Pode ajudar-me?' },
-  { inf: 'esperar',   en: 'to wait / hope',          ex: 'Estou a esperar.' },
-  { inf: 'conhecer',  en: 'to know (person/place)',  ex: 'Deve conhecer este restaurante.' },
-  { inf: 'chegar',    en: 'to arrive',               ex: 'Estou a chegar.' },
-  { inf: 'sentar',    en: 'to sit',                  ex: 'Posso sentar-me aqui?' },
-  { inf: 'sair',      en: 'to leave / go out',       ex: 'Devo sair por aqui?' },
-  { inf: 'voltar',    en: 'to return / come back',   ex: 'Vou voltar às seis.' },
-  { inf: 'abrir',     en: 'to open',                 ex: 'Pode abrir a janela?' },
+  { inf: 'saber',     en: 'to know (facts)',         ex: 'Não sei.',                          ex_en: "I don't know." },
+  { inf: 'vir',       en: 'to come',                 ex: 'Pode vir aqui?',                    ex_en: 'Can you come here?' },
+  { inf: 'falar',     en: 'to speak',                ex: 'Estou a falar português.',           ex_en: "I'm speaking Portuguese." },
+  { inf: 'ver',       en: 'to see / understand',     ex: 'Estou a ver.',                      ex_en: 'I see. / I understand.' },
+  { inf: 'ficar',     en: 'to stay / become',        ex: 'Vou ficar aqui.',                   ex_en: "I'm going to stay here." },
+  { inf: 'gostar',    en: 'to like (+ de)',           ex: 'Deve gostar de vinho verde.',        ex_en: 'You should try the vinho verde.' },
+  { inf: 'precisar',  en: 'to need (+ de)',           ex: 'Preciso de ajuda.',                 ex_en: 'I need help.' },
+  { inf: 'trazer',    en: 'to bring',                ex: 'Pode trazer a conta?',               ex_en: 'Can you bring the bill?' },
+  { inf: 'pedir',     en: 'to ask for / order',      ex: 'Posso pedir, por favor?',            ex_en: 'Can I order, please?' },
+  { inf: 'comer',     en: 'to eat',                  ex: 'Vamos comer algo?',                 ex_en: 'Shall we eat something?' },
+  { inf: 'beber',     en: 'to drink',                ex: 'Queria beber um copo.',              ex_en: "I'd like to have a drink." },
+  { inf: 'andar',     en: 'to walk / get around',    ex: 'Estou a andar pela cidade.',         ex_en: "I'm walking around the city." },
+  { inf: 'começar',   en: 'to begin',                ex: 'Estou a começar a aprender.',        ex_en: "I'm starting to learn." },
+  { inf: 'perceber',  en: 'to understand',           ex: 'Não percebo.',                      ex_en: "I don't understand." },
+  { inf: 'trabalhar', en: 'to work',                 ex: 'Vou trabalhar amanhã.',              ex_en: "I'm going to work tomorrow." },
+  { inf: 'morar',     en: 'to live / reside',        ex: 'Moro em Lisboa.',                   ex_en: 'I live in Lisbon.' },
+  { inf: 'comprar',   en: 'to buy',                  ex: 'Vou comprar pão.',                  ex_en: "I'm going to buy bread." },
+  { inf: 'ajudar',    en: 'to help',                 ex: 'Pode ajudar-me?',                   ex_en: 'Can you help me?' },
+  { inf: 'esperar',   en: 'to wait / hope',          ex: 'Estou a esperar.',                  ex_en: "I'm waiting." },
+  { inf: 'conhecer',  en: 'to know (person/place)',  ex: 'Deve conhecer este restaurante.',    ex_en: 'You should know this restaurant.' },
+  { inf: 'chegar',    en: 'to arrive',               ex: 'Estou a chegar.',                   ex_en: "I'm on my way." },
+  { inf: 'sentar',    en: 'to sit',                  ex: 'Posso sentar-me aqui?',             ex_en: 'May I sit here?' },
+  { inf: 'sair',      en: 'to leave / go out',       ex: 'Devo sair por aqui?',               ex_en: 'Should I leave this way?' },
+  { inf: 'voltar',    en: 'to return / come back',   ex: 'Vou voltar às seis.',               ex_en: "I'm coming back at six." },
+  { inf: 'abrir',     en: 'to open',                 ex: 'Pode abrir a janela?',              ex_en: 'Can you open the window?' },
 ];
 
 // Construtor: one good example per frame+verb combo (subset — expands on use)
@@ -714,7 +714,9 @@ function vfcRender() {
   const exPt = document.getElementById('vfcExPt');
   exPt.textContent = v.ex; exPt.className = 'vfc-ex-pt';
   const exEn = document.getElementById('vfcExEn');
-  exEn.textContent = ''; exEn.className = 'vfc-ex-en'; // no EN on example — production focus
+  exEn.textContent = v.ex_en || '';
+  exEn.className = 'vfc-ex-en';
+  exEn.onclick = (e) => { e.stopPropagation(); exEn.classList.add('revealed'); };
   document.getElementById('vfcHints').textContent = 'clique na palavra para revelar · clique no exemplo para ouvir';
   document.getElementById('vfcSpeak').classList.remove('playing');
 }
@@ -728,7 +730,11 @@ function vfcReveal() {
 }
 
 function vfcSpeakAnswer() { speak(vfcDeck[vfcIdx].inf, document.getElementById('vfcSpeak')); }
-function vfcSpeakEx()     { vfcReveal(); speak(vfcDeck[vfcIdx].ex, document.getElementById('vfcExPt')); }
+function vfcSpeakEx() {
+  vfcReveal();
+  document.getElementById('vfcExEn').classList.add('revealed');
+  speak(vfcDeck[vfcIdx].ex, document.getElementById('vfcExPt'));
+}
 function vfcMove(dir)     { vfcIdx = (vfcIdx + dir + vfcDeck.length) % vfcDeck.length; vfcRender(); }
 function vfcShuffle()     { vfcDeck = [...VERBS].sort(() => Math.random() - 0.5); vfcIdx = 0; vfcRender(); }
 function vfcReset()       { vfcDeck = [...VERBS]; vfcIdx = 0; vfcRender(); }
