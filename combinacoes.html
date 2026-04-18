@@ -178,7 +178,36 @@
   .done-card p { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.25rem; }
   .done-unlock { background: var(--green-light); border: 1px solid var(--green-mid); border-radius: 6px; padding: 0.65rem 1rem; font-size: 0.82rem; color: var(--green); margin-bottom: 1.25rem; font-family: var(--mono); }
 
-  /* ── MENTE TAB ── */
+  /* ── VERBOS FLASHCARDS ── */
+  .verbos-mode-bar { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; }
+  .vm-btn { font-family: var(--mono); font-size: 0.75rem; padding: 0.35rem 1rem; border: 1px solid var(--border); border-radius: 4px; background: var(--surface); color: var(--muted); cursor: pointer; transition: all 0.15s; }
+  .vm-btn:hover { border-color: var(--green-mid); color: var(--text); }
+  .vm-btn.active { background: var(--green); border-color: var(--green); color: #fff; }
+
+  .vfc-wrap { max-width: 480px; }
+  .vfc-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+  .vfc-counter { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+  .vfc-controls { display: flex; gap: 0.5rem; }
+  .vfc-ctrl { font-family: var(--mono); font-size: 0.72rem; background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 0.35rem 0.85rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .vfc-ctrl:hover { border-color: var(--green); color: var(--green); }
+  .vfc-progress { height: 2px; background: var(--border); border-radius: 1px; margin-bottom: 1.25rem; overflow: hidden; }
+  .vfc-progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
+
+  .vfc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; min-height: 300px; display: flex; flex-direction: column; align-items: center; padding: 1.5rem 2rem; text-align: center; gap: 0; }
+  .vfc-hints { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 1.25rem; }
+  .vfc-en { font-size: 1.05rem; color: var(--text); font-weight: 300; line-height: 1.5; margin-bottom: 1.1rem; }
+  .vfc-divider { width: 2rem; height: 1px; background: var(--border2); margin-bottom: 1.1rem; }
+  .vfc-pt { font-family: var(--mono); font-size: 1.5rem; color: var(--green); font-weight: 700; filter: blur(7px); transition: filter 0.3s; cursor: pointer; margin-bottom: 1.1rem; background: var(--border); border-radius: 4px; padding: 0.1rem 0.5rem; display: inline-block; }
+  .vfc-pt.revealed { filter: blur(0); background: transparent; }
+  .vfc-speak { background: var(--surface2); border: 1px solid var(--border); color: var(--green); padding: 0.35rem 1.2rem; border-radius: 99px; cursor: pointer; transition: all 0.2s; font-size: 1rem; margin-bottom: 1rem; }
+  .vfc-speak:hover, .vfc-speak.playing { background: var(--green); color: #fff; border-color: var(--green); }
+  .vfc-ex-pt { font-style: italic; font-size: 0.82rem; color: var(--text); filter: blur(5px); transition: filter 0.3s; cursor: pointer; margin-bottom: 0.2rem; background: var(--border); border-radius: 3px; padding: 0.05rem 0.3rem; display: inline-block; }
+  .vfc-ex-pt.revealed { filter: blur(0); background: transparent; }
+  .vfc-ex-en { font-size: 0.75rem; color: var(--muted); filter: blur(5px); transition: filter 0.3s; background: var(--border); border-radius: 3px; padding: 0.05rem 0.3rem; display: inline-block; margin-bottom: 1rem; }
+  .vfc-ex-en.revealed { filter: blur(0); background: transparent; }
+  .vfc-nav { display: flex; gap: 1rem; margin-top: auto; }
+  .vfc-nav-btn { font-family: var(--mono); font-size: 0.82rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 0.55rem 1.25rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .vfc-nav-btn:hover { border-color: var(--green); color: var(--green); }
   .mente-rule { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 1.25rem; }
   .mente-rule-row { display: grid; grid-template-columns: 120px 120px 1fr; border-bottom: 1px solid var(--border); align-items: center; }
   .mente-rule-row:last-child { border-bottom: none; }
@@ -234,8 +263,43 @@
 
 <!-- VERBOS -->
 <div id="verbos" class="view">
-  <input class="verb-search" id="verbSearch" placeholder="Search verbs…" oninput="filterVerbs()" translate="no">
-  <div class="verb-grid" id="verbGrid"></div>
+  <div class="verbos-mode-bar">
+    <button class="vm-btn active" id="vmTabela" onclick="setVerbosMode('tabela')">Tabela</button>
+    <button class="vm-btn" id="vmFlash" onclick="setVerbosMode('flashcard')">Flashcards</button>
+  </div>
+
+  <!-- TABELA -->
+  <div id="verbosTabela">
+    <input class="verb-search" id="verbSearch" placeholder="Search verbs…" oninput="filterVerbs()" translate="no">
+    <div class="verb-grid" id="verbGrid"></div>
+  </div>
+
+  <!-- FLASHCARDS -->
+  <div id="verbosFlash" style="display:none;">
+    <div class="vfc-wrap">
+      <div class="vfc-topbar">
+        <span class="vfc-counter" id="vfcCounter">1 / 25</span>
+        <div class="vfc-controls">
+          <button class="vfc-ctrl" onclick="vfcShuffle()">⇄ Baralhar</button>
+          <button class="vfc-ctrl" onclick="vfcReset()">↺ Reiniciar</button>
+        </div>
+      </div>
+      <div class="vfc-progress"><div class="vfc-progress-fill" id="vfcFill"></div></div>
+      <div class="vfc-card">
+        <div class="vfc-hints" id="vfcHints">clique na palavra para revelar · clique no exemplo para ouvir</div>
+        <div class="vfc-en" id="vfcEn"></div>
+        <div class="vfc-divider"></div>
+        <div class="vfc-pt" id="vfcPt" onclick="vfcReveal()"></div>
+        <button class="vfc-speak" id="vfcSpeak" onclick="vfcSpeakAnswer()">🔊</button>
+        <div class="vfc-ex-pt" id="vfcExPt" onclick="vfcSpeakEx()"></div>
+        <div class="vfc-ex-en" id="vfcExEn" onclick="this.classList.add('revealed')"></div>
+        <div class="vfc-nav">
+          <button class="vfc-nav-btn" onclick="vfcMove(-1)">← Anterior</button>
+          <button class="vfc-nav-btn" onclick="vfcMove(1)">Próximo →</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- CONSTRUTOR -->
@@ -626,6 +690,48 @@ function filterVerbs() {
   const q = document.getElementById('verbSearch').value.toLowerCase();
   renderVerbs(VERBS.filter(v => v.inf.includes(q) || v.en.toLowerCase().includes(q)));
 }
+
+// ── VERBOS MODE TOGGLE ────────────────────────────────────────────
+function setVerbosMode(mode) {
+  document.getElementById('vmTabela').classList.toggle('active', mode === 'tabela');
+  document.getElementById('vmFlash').classList.toggle('active', mode === 'flashcard');
+  document.getElementById('verbosTabela').style.display = mode === 'tabela' ? '' : 'none';
+  document.getElementById('verbosFlash').style.display = mode === 'flashcard' ? '' : 'none';
+  if (mode === 'flashcard') vfcRender();
+}
+
+// ── VERBOS FLASHCARDS ─────────────────────────────────────────────
+let vfcDeck = [...VERBS], vfcIdx = 0, vfcRevealed = false;
+
+function vfcRender() {
+  const v = vfcDeck[vfcIdx];
+  vfcRevealed = false;
+  document.getElementById('vfcCounter').textContent = `${vfcIdx + 1} / ${vfcDeck.length}`;
+  document.getElementById('vfcFill').style.width = `${((vfcIdx + 1) / vfcDeck.length) * 100}%`;
+  document.getElementById('vfcEn').textContent = v.en;
+  const pt = document.getElementById('vfcPt');
+  pt.textContent = v.inf; pt.className = 'vfc-pt';
+  const exPt = document.getElementById('vfcExPt');
+  exPt.textContent = v.ex; exPt.className = 'vfc-ex-pt';
+  const exEn = document.getElementById('vfcExEn');
+  exEn.textContent = ''; exEn.className = 'vfc-ex-en'; // no EN on example — production focus
+  document.getElementById('vfcHints').textContent = 'clique na palavra para revelar · clique no exemplo para ouvir';
+  document.getElementById('vfcSpeak').classList.remove('playing');
+}
+
+function vfcReveal() {
+  if (vfcRevealed) return;
+  vfcRevealed = true;
+  document.getElementById('vfcPt').classList.add('revealed');
+  document.getElementById('vfcExPt').classList.add('revealed');
+  document.getElementById('vfcHints').textContent = '';
+}
+
+function vfcSpeakAnswer() { speak(vfcDeck[vfcIdx].inf, document.getElementById('vfcSpeak')); }
+function vfcSpeakEx()     { vfcReveal(); speak(vfcDeck[vfcIdx].ex, document.getElementById('vfcExPt')); }
+function vfcMove(dir)     { vfcIdx = (vfcIdx + dir + vfcDeck.length) % vfcDeck.length; vfcRender(); }
+function vfcShuffle()     { vfcDeck = [...VERBS].sort(() => Math.random() - 0.5); vfcIdx = 0; vfcRender(); }
+function vfcReset()       { vfcDeck = [...VERBS]; vfcIdx = 0; vfcRender(); }
 
 // ── BUILD: CONSTRUTOR ─────────────────────────────────────────────
 let cFrame = null, cVerb = null;
