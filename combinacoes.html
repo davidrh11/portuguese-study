@@ -138,7 +138,8 @@
   .d-bubble.them:hover { border-color: var(--green-mid); }
   .d-bubble.you  { background: var(--green-light); border: 1px solid var(--green-mid); border-bottom-right-radius: 3px; color: var(--text); }
   .d-bubble .d-speaker { font-family: var(--mono); font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.2rem; }
-  .d-bubble .d-en { font-size: 0.72rem; color: var(--muted); font-style: italic; margin-top: 0.2rem; }
+  .d-bubble .d-en { font-size: 0.72rem; color: var(--muted); font-style: italic; margin-top: 0.2rem; filter: blur(4px); transition: filter 0.2s; cursor: pointer; background: var(--border); border-radius: 3px; padding: 0 0.2rem; display: inline-block; }
+  .d-bubble .d-en.revealed { filter: blur(0); background: transparent; }
   .d-bubble.correct { background: var(--green-light); border-color: var(--green); }
   .d-bubble.wrong   { background: var(--red-light);   border-color: var(--red-mid); }
 
@@ -257,6 +258,7 @@
   <div class="dialogo-wrap">
     <div class="situation-bar" id="situationBar"></div>
     <div class="dialogo-context" id="dialogoContext"></div>
+    <div style="font-family:var(--mono);font-size:0.6rem;color:var(--muted2);margin-bottom:0.75rem;letter-spacing:0.06em;">toque nas traduções para revelar</div>
     <div class="dialogo-score">
       <span id="dialogoScoreLabel">Correto: 0 / 0</span>
       <span id="dialogoLevelLabel"></span>
@@ -822,7 +824,7 @@ function addDialogoBubble(line, side, correct) {
   const bubble = document.createElement('div');
   bubble.className = `d-bubble ${side}`;
   if (side === 'you' && correct !== undefined) bubble.classList.add(correct ? 'correct' : 'wrong');
-  bubble.innerHTML = `<div class="d-speaker">${line.speaker || 'Você'}</div>${line.text}<div class="d-en">${line.en || ''}</div>`;
+  bubble.innerHTML = `<div class="d-speaker">${line.speaker || 'Você'}</div>${line.text}<div class="d-en" onclick="this.classList.add('revealed')">${line.en || ''}</div>`;
   bubble.onclick = () => speak(line.text, null);
 
   if (side === 'them') { row.appendChild(av); row.appendChild(bubble); }
