@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="pt" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Combinações de Verbos</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0; --surface: #ffffff; --surface2: #f2ede6;
+    --border: #e0d8cc; --border2: #ccc4b4;
+    --green: #2d7a50; --green-light: #eef5f1; --green-mid: #9acbb0;
+    --red: #a03428; --red-light: #fdf2f1; --red-mid: #dba09a;
+    --yellow: #b07d2a; --text: #2e2820; --muted: #8a7a68; --muted2: #b0a090;
+    --blue: #2a5fa0; --blue-light: #eef3fb; --blue-mid: #a0b8d8;
+    --orange: #b85c00; --orange-light: #fdf3ea; --orange-mid: #e0a870;
+    --purple: #6b3fa0; --purple-light: #f4eefb; --purple-mid: #c4a0e0;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+  header { padding: 1.5rem 2rem 1rem; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .header-text h1 { font-family: var(--mono); font-size: 1rem; font-weight: 400; color: var(--muted); }
+  .header-text h1 span { color: var(--green); }
+  .header-text p { font-size: 0.82rem; color: var(--muted2); margin-top: 0.2rem; }
+  .pt-flag { flex-shrink: 0; width: 48px; height: 32px; border-radius: 3px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.15); margin-top: 2px; }
+
+  .tabs { display: flex; border-bottom: 1px solid var(--border); padding: 0 2rem; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { font-family: var(--mono); font-size: 0.8rem; padding: 0.75rem 1.25rem; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none; white-space: nowrap; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  .view { display: none; padding: 1.5rem 2rem 3rem; max-width: 700px; }
+  .view.active { display: block; }
+
+  .section-title { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--red); margin: 2rem 0 0.75rem; border-left: 3px solid var(--red); padding-left: 0.65rem; }
+  .section-title:first-child { margin-top: 0; }
+
+  .note-block { background: var(--surface2); border-left: 3px solid var(--green); padding: 0.85rem 1.1rem; margin: 0.75rem 0 1.25rem; border-radius: 0 4px 4px 0; font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+  .note-block strong { color: var(--green); font-family: var(--mono); }
+
+  /* ── FRAME CARDS ── */
+  .frame-grid { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem; }
+  .frame-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .frame-header { display: flex; align-items: center; gap: 1rem; padding: 0.85rem 1.25rem; border-bottom: 1px solid var(--border); }
+  .frame-num { font-family: var(--mono); font-size: 0.65rem; font-weight: 700; width: 1.4rem; height: 1.4rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .frame-label { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; }
+  .frame-pattern { font-family: var(--mono); font-size: 0.82rem; margin-left: auto; color: var(--muted); }
+
+  .frame-card.estou .frame-num  { background: var(--green-light); color: var(--green); border: 1px solid var(--green-mid); }
+  .frame-card.estou .frame-label { color: var(--green); }
+  .frame-card.posso .frame-num  { background: var(--blue-light);   color: var(--blue);  border: 1px solid var(--blue-mid); }
+  .frame-card.posso .frame-label { color: var(--blue); }
+  .frame-card.queria .frame-num { background: var(--orange-light); color: var(--orange); border: 1px solid var(--orange-mid); }
+  .frame-card.queria .frame-label { color: var(--orange); }
+  .frame-card.devo .frame-num   { background: var(--red-light);    color: var(--red);   border: 1px solid var(--red-mid); }
+  .frame-card.devo .frame-label { color: var(--red); }
+  .frame-card.vou .frame-num    { background: var(--purple-light); color: var(--purple); border: 1px solid var(--purple-mid); }
+  .frame-card.vou .frame-label  { color: var(--purple); }
+
+  .frame-examples { padding: 0.75rem 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; }
+  .frame-ex { cursor: pointer; padding: 0.4rem 0.6rem; border-radius: 4px; transition: background 0.15s; border: 1px solid transparent; }
+  .frame-ex:hover { background: var(--surface2); border-color: var(--border); }
+  .frame-ex .fex-pt { font-family: var(--mono); font-size: 0.85rem; color: var(--text); margin-bottom: 0.15rem; }
+  .frame-ex .fex-en { font-size: 0.75rem; color: var(--muted); font-style: italic; }
+
+  .frame-card.estou  .hl { color: var(--green);  font-weight: 700; }
+  .frame-card.posso  .hl { color: var(--blue);   font-weight: 700; }
+  .frame-card.queria .hl { color: var(--orange); font-weight: 700; }
+  .frame-card.devo   .hl { color: var(--red);    font-weight: 700; }
+  .frame-card.vou    .hl { color: var(--purple); font-weight: 700; }
+
+  /* ── VERBOS TAB ── */
+  .verb-search { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 0.6rem 0.9rem; font-family: var(--sans); font-size: 0.9rem; color: var(--text); width: 100%; outline: none; margin-bottom: 1rem; }
+  .verb-search:focus { border-color: var(--green); }
+  .verb-search::placeholder { color: var(--muted2); }
+  .verb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.5rem; }
+  .verb-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 0.75rem 1rem; cursor: pointer; transition: border-color 0.15s; display: flex; align-items: center; gap: 0.75rem; }
+  .verb-card:hover { border-color: var(--green-mid); }
+  .verb-card .vc-pt { font-family: var(--mono); font-size: 0.9rem; color: var(--green); font-weight: 600; min-width: 90px; }
+  .verb-card .vc-en { font-size: 0.8rem; color: var(--muted); flex: 1; }
+  .verb-card .vc-speak { color: var(--green-mid); font-size: 0.8rem; flex-shrink: 0; }
+  .verb-card.playing { border-color: var(--green); background: var(--green-light); }
+
+  /* ── CONSTRUTOR TAB ── */
+  .construtor-wrap { max-width: 560px; }
+  .construtor-label { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.5rem; }
+  .frame-picker { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .frame-pill {
+    font-family: var(--mono); font-size: 0.82rem; font-weight: 600;
+    padding: 0.4rem 1rem; border-radius: 99px; cursor: pointer;
+    border: 2px solid transparent; transition: all 0.15s;
+  }
+  .frame-pill.estou  { background: var(--green-light);  color: var(--green);  border-color: var(--green-mid); }
+  .frame-pill.posso  { background: var(--blue-light);   color: var(--blue);   border-color: var(--blue-mid); }
+  .frame-pill.queria { background: var(--orange-light); color: var(--orange); border-color: var(--orange-mid); }
+  .frame-pill.devo   { background: var(--red-light);    color: var(--red);    border-color: var(--red-mid); }
+  .frame-pill.vou    { background: var(--purple-light); color: var(--purple); border-color: var(--purple-mid); }
+  .frame-pill:hover, .frame-pill.active { filter: brightness(0.92); border-color: currentColor; }
+  .frame-pill.active { filter: brightness(0.88); }
+
+  .verb-picker { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; max-height: 160px; overflow-y: auto; padding: 0.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; }
+  .verb-pill { font-family: var(--mono); font-size: 0.78rem; padding: 0.25rem 0.65rem; border-radius: 99px; cursor: pointer; background: var(--surface2); border: 1px solid var(--border2); color: var(--muted); transition: all 0.15s; }
+  .verb-pill:hover { border-color: var(--green-mid); color: var(--text); }
+  .verb-pill.active { background: var(--green-light); border-color: var(--green); color: var(--green); font-weight: 600; }
+
+  .construtor-output { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; text-align: center; min-height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 1rem; }
+  .co-sentence { font-family: var(--mono); font-size: 1.15rem; color: var(--text); line-height: 1.5; }
+  .co-en { font-size: 0.85rem; color: var(--muted); font-style: italic; }
+  .co-placeholder { font-family: var(--mono); font-size: 0.85rem; color: var(--muted2); }
+  .co-speak { background: var(--green-light); border: 1px solid var(--green-mid); color: var(--green); padding: 0.35rem 1.2rem; border-radius: 99px; cursor: pointer; font-size: 1rem; transition: all 0.2s; }
+  .co-speak:hover, .co-speak.playing { background: var(--green); color: #fff; border-color: var(--green); }
+
+  /* ── DIALOGO TAB ── */
+  .dialogo-wrap { max-width: 580px; }
+
+  .situation-bar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .sit-btn { font-family: var(--mono); font-size: 0.7rem; padding: 0.35rem 0.85rem; border: 1px solid var(--border); border-radius: 99px; background: var(--surface); color: var(--muted); cursor: pointer; transition: all 0.15s; }
+  .sit-btn:hover { border-color: var(--green-mid); color: var(--text); }
+  .sit-btn.active { background: var(--green); border-color: var(--green); color: #fff; }
+
+  .dialogo-context { background: var(--surface2); border-left: 3px solid var(--yellow); padding: 0.75rem 1rem; border-radius: 0 4px 4px 0; font-size: 0.82rem; color: var(--muted); margin-bottom: 1.25rem; font-style: italic; }
+
+  .dialogo-thread { background: var(--surface); border: 1px solid var(--border); border-radius: 8px 8px 0 0; padding: 1.25rem; min-height: 160px; display: flex; flex-direction: column; gap: 0.85rem; border-bottom: none; }
+  .d-bubble-row { display: flex; gap: 0.75rem; align-items: flex-end; }
+  .d-bubble-row.them { justify-content: flex-start; }
+  .d-bubble-row.you  { justify-content: flex-end; }
+  .d-avatar { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 0.65rem; font-weight: 700; }
+  .d-avatar.them { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+  .d-avatar.you  { background: var(--green-light); color: var(--green); border: 1px solid var(--green-mid); }
+  .d-bubble { max-width: 78%; padding: 0.65rem 0.95rem; border-radius: 10px; font-size: 0.88rem; line-height: 1.5; cursor: pointer; transition: opacity 0.2s; }
+  .d-bubble.them { background: var(--surface2); border: 1px solid var(--border); border-bottom-left-radius: 3px; color: var(--text); }
+  .d-bubble.them:hover { border-color: var(--green-mid); }
+  .d-bubble.you  { background: var(--green-light); border: 1px solid var(--green-mid); border-bottom-right-radius: 3px; color: var(--text); }
+  .d-bubble .d-speaker { font-family: var(--mono); font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.2rem; }
+  .d-bubble .d-en { font-size: 0.72rem; color: var(--muted); font-style: italic; margin-top: 0.2rem; }
+  .d-bubble.correct { background: var(--green-light); border-color: var(--green); }
+  .d-bubble.wrong   { background: var(--red-light);   border-color: var(--red-mid); }
+
+  .dialogo-input { background: var(--surface); border: 1px solid var(--border); border-top: none; border-radius: 0 0 8px 8px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+  .di-label { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.6rem; }
+  .di-options { display: flex; flex-direction: column; gap: 0.5rem; }
+  .di-opt { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 0.7rem 0.95rem; cursor: pointer; font-size: 0.88rem; color: var(--text); text-align: left; transition: all 0.15s; font-family: var(--sans); }
+  .di-opt:hover:not(:disabled) { border-color: var(--green); background: var(--green-light); }
+  .di-opt.correct { border-color: var(--green); background: var(--green-light); color: var(--green); }
+  .di-opt.wrong   { border-color: var(--red);   background: var(--red-light);   color: var(--red); }
+  .di-opt:disabled { cursor: default; }
+
+  .dialogo-feedback { font-family: var(--mono); font-size: 0.82rem; min-height: 1.2rem; margin-bottom: 0.75rem; text-align: center; }
+  .dialogo-feedback.ok  { color: var(--green); }
+  .dialogo-feedback.bad { color: var(--red); }
+
+  .dialogo-progress { display: flex; gap: 0.3rem; margin-bottom: 1rem; }
+  .dp-pip { height: 3px; flex: 1; background: var(--border); border-radius: 2px; transition: background 0.3s; }
+  .dp-pip.done { background: var(--green); }
+  .dp-pip.current { background: var(--green-mid); }
+
+  .dialogo-score { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+
+  .unlock-banner { background: var(--green-light); border: 1px solid var(--green-mid); border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 1rem; font-family: var(--mono); font-size: 0.78rem; color: var(--green); text-align: center; display: none; }
+  .unlock-banner.visible { display: block; }
+
+  .dialogo-next { display: block; margin: 0 auto; font-family: var(--mono); font-size: 0.82rem; padding: 0.55rem 2rem; background: var(--green); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+  .dialogo-next:disabled { opacity: 0.3; cursor: default; }
+  .dialogo-restart { display: block; margin: 0.5rem auto 0; font-family: var(--mono); font-size: 0.75rem; padding: 0.45rem 1.5rem; background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 4px; cursor: pointer; }
+  .dialogo-restart:hover { border-color: var(--green); color: var(--green); }
+
+  .done-card { background: var(--surface); border: 1px solid var(--green-mid); border-radius: 8px; padding: 2rem; text-align: center; }
+  .done-card h3 { font-family: var(--mono); font-size: 0.9rem; color: var(--green); margin-bottom: 0.5rem; }
+  .done-card .done-score { font-family: var(--mono); font-size: 2.5rem; font-weight: 700; color: var(--green); margin-bottom: 0.5rem; }
+  .done-card p { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.25rem; }
+  .done-unlock { background: var(--green-light); border: 1px solid var(--green-mid); border-radius: 6px; padding: 0.65rem 1rem; font-size: 0.82rem; color: var(--green); margin-bottom: 1.25rem; font-family: var(--mono); }
+
+  /* ── MENTE TAB ── */
+  .mente-rule { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 1.25rem; }
+  .mente-rule-row { display: grid; grid-template-columns: 120px 120px 1fr; border-bottom: 1px solid var(--border); align-items: center; }
+  .mente-rule-row:last-child { border-bottom: none; }
+  .mente-rule-row.header { background: var(--surface2); }
+  .mente-rule-row.header div { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 0.5rem 1rem; }
+  .mr-adj  { font-family: var(--mono); font-size: 0.85rem; color: var(--text); padding: 0.65rem 1rem; }
+  .mr-adv  { font-family: var(--mono); font-size: 0.85rem; color: var(--green); font-weight: 600; padding: 0.65rem 1rem; cursor: pointer; }
+  .mr-adv:hover { text-decoration: underline; text-decoration-color: var(--green); text-underline-offset: 3px; }
+  .mr-en   { font-size: 0.8rem; color: var(--muted); font-style: italic; padding: 0.65rem 1rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-text">
+    <h1>As <span>Combinações de Verbos</span></h1>
+    <p>A1.1 — 5 frames · 25 verbos · conversação incremental</p>
+  </div>
+  <svg class="pt-flag" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="19.2" height="32" fill="#006600"/>
+    <rect x="19.2" y="0" width="28.8" height="32" fill="#FF0000"/>
+    <circle cx="19.2" cy="16" r="7" fill="none" stroke="#FFCC00" stroke-width="1.2"/>
+    <circle cx="19.2" cy="16" r="4.5" fill="none" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="19.2" y1="11.5" x2="19.2" y2="20.5" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="14.7" y1="16" x2="23.7" y2="16" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="16" y1="12.8" x2="22.4" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <line x1="22.4" y1="12.8" x2="16" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <rect x="17" y="13.5" width="4.4" height="5" fill="white" rx="0.5"/>
+    <circle cx="19.2" cy="16" r="0.8" fill="#003399"/>
+    <circle cx="17.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="17.7" cy="17.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="17.5" r="0.5" fill="#003399"/>
+  </svg>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('referencia', this)">Referência</button>
+  <button class="tab" onclick="switchTab('verbos', this)">Verbos</button>
+  <button class="tab" onclick="switchTab('construtor', this)">Construtor</button>
+  <button class="tab" onclick="switchTab('dialogo', this)">Diálogo</button>
+  <button class="tab" onclick="switchTab('mente', this)">-mente</button>
+</div>
+
+<!-- REFERÊNCIA -->
+<div id="referencia" class="view active">
+  <div class="section-title">Os Cinco Frames</div>
+  <div class="note-block">
+    These five structures let you use <strong>any verb in the infinitive</strong> without conjugating it. Learn the frame, know the verb — you can say it.
+  </div>
+  <div class="frame-grid" id="frameGrid"></div>
+</div>
+
+<!-- VERBOS -->
+<div id="verbos" class="view">
+  <input class="verb-search" id="verbSearch" placeholder="Search verbs…" oninput="filterVerbs()" translate="no">
+  <div class="verb-grid" id="verbGrid"></div>
+</div>
+
+<!-- CONSTRUTOR -->
+<div id="construtor" class="view">
+  <div class="construtor-wrap">
+    <div class="construtor-label">1. Escolhe o frame:</div>
+    <div class="frame-picker" id="framePicker"></div>
+    <div class="construtor-label">2. Escolhe o verbo:</div>
+    <div class="verb-picker" id="verbPicker"></div>
+    <div class="construtor-output" id="construtorOutput">
+      <div class="co-placeholder">← Escolhe um frame e um verbo</div>
+    </div>
+    <div style="text-align:center;">
+      <button class="co-speak" id="construtorSpeak" onclick="speakConstructor()" style="display:none;">🔊 Ouvir</button>
+    </div>
+  </div>
+</div>
+
+<!-- DIÁLOGO -->
+<div id="dialogo" class="view">
+  <div class="dialogo-wrap">
+    <div class="situation-bar" id="situationBar"></div>
+    <div class="dialogo-context" id="dialogoContext"></div>
+    <div class="dialogo-score">
+      <span id="dialogoScoreLabel">Correto: 0 / 0</span>
+      <span id="dialogoLevelLabel"></span>
+    </div>
+    <div class="dialogo-progress" id="dialogoProgress"></div>
+    <div class="dialogo-thread" id="dialogoThread"></div>
+    <div class="dialogo-input" id="dialogoInput">
+      <div class="di-label" id="diLabel">A tua vez →</div>
+      <div class="di-options" id="diOptions"></div>
+    </div>
+    <div class="dialogo-feedback" id="dialogoFeedback"></div>
+    <div class="unlock-banner" id="unlockBanner"></div>
+    <button class="dialogo-next" id="dialogoNext" onclick="advanceDialogo()" disabled>Continuar →</button>
+    <button class="dialogo-restart" onclick="restartDialogo()">↺ Recomeçar</button>
+    <div id="dialogoDone" style="display:none; margin-top:1rem;"></div>
+  </div>
+</div>
+
+<!-- -MENTE -->
+<div id="mente" class="view">
+  <div class="section-title">Adjectivo + -mente = Advérbio</div>
+  <div class="note-block">
+    Add <strong>-mente</strong> to the feminine form of an adjective to make an adverb. For adjectives ending in <strong>-o</strong>: change to <strong>-a</strong> first, then add <strong>-mente</strong>. For adjectives ending in <strong>-e</strong> or a consonant: add <strong>-mente</strong> directly. Adjectives with accents <strong>drop the accent</strong>.
+  </div>
+  <div class="mente-rule" id="menteTable"></div>
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+let currentAudio = null;
+
+async function speak(text, btnEl) {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (btnEl) { document.querySelectorAll('.playing').forEach(b => b.classList.remove('playing')); btnEl.classList.add('playing'); }
+  try {
+    const res = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) });
+    if (!res.ok) throw new Error();
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    currentAudio = new Audio(url);
+    currentAudio.onended = currentAudio.onerror = () => { if (btnEl) btnEl.classList.remove('playing'); URL.revokeObjectURL(url); currentAudio = null; };
+    currentAudio.play();
+  } catch(e) { if (btnEl) btnEl.classList.remove('playing'); }
+}
+
+// ── DATA ──────────────────────────────────────────────────────────
+
+const FRAMES = [
+  {
+    id: 'estou', num: '0', label: 'Presente Contínuo',
+    pattern: 'estou a + Vinf',
+    en: 'I am -ing (right now)',
+    color: 'estou',
+    examples: [
+      { pt: '<span class="hl">Estou a</span> aprender português.', en: "I'm learning Portuguese.", speak: 'Estou a aprender português.' },
+      { pt: '<span class="hl">Estou a</span> esperar o autocarro.', en: "I'm waiting for the bus.", speak: 'Estou a esperar o autocarro.' },
+      { pt: 'O que <span class="hl">está a</span> fazer?', en: 'What are you doing?', speak: 'O que está a fazer?' },
+    ]
+  },
+  {
+    id: 'posso', num: '1', label: 'Permissão / Pedido',
+    pattern: 'posso/pode + Vinf',
+    en: 'Can I / Can you',
+    color: 'posso',
+    examples: [
+      { pt: '<span class="hl">Posso</span> pedir, por favor?', en: 'Can I order, please?', speak: 'Posso pedir, por favor?' },
+      { pt: '<span class="hl">Pode</span> trazer o menu?', en: 'Can you bring the menu?', speak: 'Pode trazer o menu?' },
+      { pt: '<span class="hl">Posso</span> sentar-me aqui?', en: 'May I sit here?', speak: 'Posso sentar-me aqui?' },
+    ]
+  },
+  {
+    id: 'queria', num: '2', label: 'Pedido / Desejo',
+    pattern: 'queria + Vinf/noun',
+    en: "I'd like (polite request)",
+    color: 'queria',
+    examples: [
+      { pt: '<span class="hl">Queria</span> uma garrafa de vinho tinto.', en: "I'd like a bottle of red wine.", speak: 'Queria uma garrafa de vinho tinto.' },
+      { pt: '<span class="hl">Queria</span> ir jantar fora.', en: "I'd like to go out for dinner.", speak: 'Queria ir jantar fora.' },
+      { pt: '<span class="hl">Queria</span> ir ao ginásio.', en: "I'd like to go to the gym.", speak: 'Queria ir ao ginásio.' },
+    ]
+  },
+  {
+    id: 'devo', num: '3', label: 'Conselho / Obrigação',
+    pattern: 'devo/deve + Vinf',
+    en: 'Should I / You should',
+    color: 'devo',
+    examples: [
+      { pt: '<span class="hl">Devo</span> sair por aqui?', en: 'Should I leave this way?', speak: 'Devo sair por aqui?' },
+      { pt: 'Não <span class="hl">deve</span> falar inglês em Portugal.', en: "You shouldn't speak English in Portugal.", speak: 'Não deve falar inglês em Portugal.' },
+      { pt: '<span class="hl">Deve</span> pedir o vinho verde. É o melhor.', en: 'You should order the vinho verde. It\'s the best.', speak: 'Deve pedir o vinho verde. É o melhor.' },
+    ]
+  },
+  {
+    id: 'vou', num: '4', label: 'Futuro Próximo',
+    pattern: 'vou/vai/vamos + Vinf',
+    en: "I'm going to / We're going to",
+    color: 'vou',
+    examples: [
+      { pt: '<span class="hl">Vou</span> ter aula de português.', en: "I'm going to have Portuguese class.", speak: 'Vou ter aula de português.' },
+      { pt: '<span class="hl">Vai</span> jantar onde hoje?', en: 'Where are you going to have dinner today?', speak: 'Vai jantar onde hoje?' },
+      { pt: '<span class="hl">Vamos</span> beber um copo hoje?', en: 'Shall we have a drink today?', speak: 'Vamos beber um copo hoje?' },
+    ]
+  },
+];
+
+const VERBS = [
+  { inf: 'saber',     en: 'to know (facts)',         ex: 'Não sei.' },
+  { inf: 'vir',       en: 'to come',                 ex: 'Pode vir aqui?' },
+  { inf: 'falar',     en: 'to speak',                ex: 'Estou a falar português.' },
+  { inf: 'ver',       en: 'to see / understand',     ex: 'Estou a ver.' },
+  { inf: 'ficar',     en: 'to stay / become',        ex: 'Vou ficar aqui.' },
+  { inf: 'gostar',    en: 'to like (+ de)',          ex: 'Deve gostar de vinho verde.' },
+  { inf: 'precisar',  en: 'to need (+ de)',          ex: 'Preciso de ajuda.' },
+  { inf: 'trazer',    en: 'to bring',                ex: 'Pode trazer a conta?' },
+  { inf: 'pedir',     en: 'to ask for / order',      ex: 'Posso pedir, por favor?' },
+  { inf: 'comer',     en: 'to eat',                  ex: 'Vamos comer algo?' },
+  { inf: 'beber',     en: 'to drink',                ex: 'Queria beber um copo.' },
+  { inf: 'andar',     en: 'to walk / get around',    ex: 'Estou a andar pela cidade.' },
+  { inf: 'começar',   en: 'to begin',                ex: 'Estou a começar a aprender.' },
+  { inf: 'perceber',  en: 'to understand',           ex: 'Não percebo.' },
+  { inf: 'trabalhar', en: 'to work',                 ex: 'Vou trabalhar amanhã.' },
+  { inf: 'morar',     en: 'to live / reside',        ex: 'Moro em Lisboa.' },
+  { inf: 'comprar',   en: 'to buy',                  ex: 'Vou comprar pão.' },
+  { inf: 'ajudar',    en: 'to help',                 ex: 'Pode ajudar-me?' },
+  { inf: 'esperar',   en: 'to wait / hope',          ex: 'Estou a esperar.' },
+  { inf: 'conhecer',  en: 'to know (person/place)',  ex: 'Deve conhecer este restaurante.' },
+  { inf: 'chegar',    en: 'to arrive',               ex: 'Estou a chegar.' },
+  { inf: 'sentar',    en: 'to sit',                  ex: 'Posso sentar-me aqui?' },
+  { inf: 'sair',      en: 'to leave / go out',       ex: 'Devo sair por aqui?' },
+  { inf: 'voltar',    en: 'to return / come back',   ex: 'Vou voltar às seis.' },
+  { inf: 'abrir',     en: 'to open',                 ex: 'Pode abrir a janela?' },
+];
+
+// Construtor: one good example per frame+verb combo (subset — expands on use)
+function buildSentence(frameId, verbInf) {
+  const verb = VERBS.find(v => v.inf === verbInf);
+  if (!verb) return null;
+  const templates = {
+    estou:  { pt: `Estou a ${verbInf}.`,          en: `I'm ${verb.en.replace('to ','')}ing.` },
+    posso:  { pt: `Posso ${verbInf}, por favor?`, en: `Can I ${verb.en.replace('to ','')}?` },
+    queria: { pt: `Queria ${verbInf}.`,            en: `I'd like to ${verb.en.replace('to ','')}.` },
+    devo:   { pt: `Devo ${verbInf}?`,             en: `Should I ${verb.en.replace('to ','')}?` },
+    vou:    { pt: `Vou ${verbInf}.`,              en: `I'm going to ${verb.en.replace('to ','')}.` },
+  };
+  return templates[frameId] || null;
+}
+
+// ── DIALOGUES ────────────────────────────────────────────────────
+// Each dialogue has levels. Level 1 = 2 lines, level 2 = 4 lines, etc.
+// Player always responds as "Você" (Dave)
+// unlockScore: minimum correct to unlock next level
+
+const SITUATIONS = [
+  {
+    id: 'restaurante',
+    label: 'Restaurante',
+    context: 'You\'ve just been seated at a restaurant in Lisbon.',
+    levels: [
+      {
+        level: 1,
+        lines: [
+          { speaker: 'Empregado', text: 'Boa tarde! Posso ajudar?', en: 'Good afternoon! Can I help?', side: 'them' },
+          { speaker: 'Você', options: ['Queria ver o menu, por favor.', 'Não sei.', 'Estou a comer.'], correct: 0, en: "I'd like to see the menu, please." },
+        ]
+      },
+      {
+        level: 2,
+        lines: [
+          { speaker: 'Empregado', text: 'Boa tarde! Posso ajudar?', en: 'Good afternoon! Can I help?', side: 'them' },
+          { speaker: 'Você', options: ['Queria ver o menu, por favor.', 'Vou sair agora.', 'Devo trabalhar.'], correct: 0, en: "I'd like to see the menu, please." },
+          { speaker: 'Empregado', text: 'Claro! Aqui tem. Vai beber alguma coisa?', en: 'Of course! Here you go. Will you have something to drink?', side: 'them' },
+          { speaker: 'Você', options: ['Queria um copo de vinho verde, por favor.', 'Posso trabalhar aqui?', 'Estou a voltar.'], correct: 0, en: "I'd like a glass of vinho verde, please." },
+        ]
+      },
+      {
+        level: 3,
+        lines: [
+          { speaker: 'Empregado', text: 'Boa tarde! Posso ajudar?', en: 'Good afternoon! Can I help?', side: 'them' },
+          { speaker: 'Você', options: ['Queria ver o menu, por favor.', 'Vou sair agora.', 'Devo trabalhar.'], correct: 0, en: "I'd like to see the menu, please." },
+          { speaker: 'Empregado', text: 'Claro! Aqui tem. Vai beber alguma coisa?', en: 'Of course! Here you go. Will you have something to drink?', side: 'them' },
+          { speaker: 'Você', options: ['Queria um copo de vinho verde, por favor.', 'Posso trabalhar aqui?', 'Estou a voltar.'], correct: 0, en: "I'd like a glass of vinho verde, please." },
+          { speaker: 'Empregado', text: 'Muito bem. Já decidiu o que vai comer?', en: 'Very good. Have you decided what you\'re going to eat?', side: 'them' },
+          { speaker: 'Você', options: ['Posso pedir o bacalhau, por favor?', 'Vou saber mais tarde.', 'Estou a chegar.'], correct: 0, en: 'Can I order the bacalhau, please?' },
+        ]
+      },
+    ]
+  },
+  {
+    id: 'cafe',
+    label: 'Café',
+    context: 'You walk into a café near Campo de Ourique.',
+    levels: [
+      {
+        level: 1,
+        lines: [
+          { speaker: 'Barista', text: 'Olá! O que vai ser?', en: 'Hello! What will it be?', side: 'them' },
+          { speaker: 'Você', options: ['Queria um café, por favor.', 'Estou a trabalhar.', 'Devo sair?'], correct: 0, en: "I'd like a coffee, please." },
+        ]
+      },
+      {
+        level: 2,
+        lines: [
+          { speaker: 'Barista', text: 'Olá! O que vai ser?', en: 'Hello! What will it be?', side: 'them' },
+          { speaker: 'Você', options: ['Queria um café, por favor.', 'Estou a trabalhar.', 'Devo sair?'], correct: 0, en: "I'd like a coffee, please." },
+          { speaker: 'Barista', text: 'Com certeza. Vai comer alguma coisa?', en: 'Certainly. Will you eat something?', side: 'them' },
+          { speaker: 'Você', options: ['Posso ver o que têm?', 'Vou voltar amanhã.', 'Estou a perceber.'], correct: 0, en: 'Can I see what you have?' },
+        ]
+      },
+      {
+        level: 3,
+        lines: [
+          { speaker: 'Barista', text: 'Olá! O que vai ser?', en: 'Hello! What will it be?', side: 'them' },
+          { speaker: 'Você', options: ['Queria um café, por favor.', 'Estou a trabalhar.', 'Devo sair?'], correct: 0, en: "I'd like a coffee, please." },
+          { speaker: 'Barista', text: 'Com certeza. Vai comer alguma coisa?', en: 'Certainly. Will you eat something?', side: 'them' },
+          { speaker: 'Você', options: ['Posso ver o que têm?', 'Vou voltar amanhã.', 'Estou a perceber.'], correct: 0, en: 'Can I see what you have?' },
+          { speaker: 'Barista', text: 'Claro. Temos torradas, croissants e pastéis de nata.', en: 'Of course. We have toast, croissants and custard tarts.', side: 'them' },
+          { speaker: 'Você', options: ['Queria um pastel de nata, obrigado.', 'Vou trabalhar agora.', 'Devo falar inglês?'], correct: 0, en: "I'd like a pastel de nata, thank you." },
+        ]
+      },
+    ]
+  },
+  {
+    id: 'escola',
+    label: 'Escola',
+    context: 'You arrive at Lighthouse Language School.',
+    levels: [
+      {
+        level: 1,
+        lines: [
+          { speaker: 'Professora', text: 'Bom dia! Como está?', en: 'Good morning! How are you?', side: 'them' },
+          { speaker: 'Você', options: ['Estou bem, obrigado. Estou a aprender!', 'Vou sair agora.', 'Devo comprar algo?'], correct: 0, en: "I'm well, thank you. I'm learning!" },
+        ]
+      },
+      {
+        level: 2,
+        lines: [
+          { speaker: 'Professora', text: 'Bom dia! Como está?', en: 'Good morning! How are you?', side: 'them' },
+          { speaker: 'Você', options: ['Estou bem, obrigado. Estou a aprender!', 'Vou sair agora.', 'Devo comprar algo?'], correct: 0, en: "I'm well, thank you. I'm learning!" },
+          { speaker: 'Professora', text: 'Muito bem! O que vai estudar hoje?', en: 'Very good! What are you going to study today?', side: 'them' },
+          { speaker: 'Você', options: ['Vou praticar as combinações de verbos.', 'Estou a sair.', 'Posso voltar amanhã?'], correct: 0, en: "I'm going to practise the verb combinations." },
+        ]
+      },
+      {
+        level: 3,
+        lines: [
+          { speaker: 'Professora', text: 'Bom dia! Como está?', en: 'Good morning! How are you?', side: 'them' },
+          { speaker: 'Você', options: ['Estou bem, obrigado. Estou a aprender!', 'Vou sair agora.', 'Devo comprar algo?'], correct: 0, en: "I'm well, thank you. I'm learning!" },
+          { speaker: 'Professora', text: 'Muito bem! O que vai estudar hoje?', en: 'Very good! What are you going to study today?', side: 'them' },
+          { speaker: 'Você', options: ['Vou praticar as combinações de verbos.', 'Estou a sair.', 'Posso voltar amanhã?'], correct: 0, en: "I'm going to practise the verb combinations." },
+          { speaker: 'Professora', text: 'Excelente! Posso fazer uma pergunta?', en: 'Excellent! May I ask a question?', side: 'them' },
+          { speaker: 'Você', options: ['Claro! Estou a ouvir.', 'Devo falar inglês?', 'Vou comprar um livro.'], correct: 0, en: 'Of course! I\'m listening.' },
+        ]
+      },
+    ]
+  },
+  {
+    id: 'rua',
+    label: 'Na Rua',
+    context: 'You need to ask for help on the street in Lisbon.',
+    levels: [
+      {
+        level: 1,
+        lines: [
+          { speaker: 'Você', options: ['Desculpe, posso fazer uma pergunta?', 'Estou a trabalhar.', 'Vou comprar algo.'], correct: 0, en: 'Excuse me, may I ask a question?', side: 'you-first' },
+          { speaker: 'Pessoa', text: 'Claro, diga!', en: 'Of course, go ahead!', side: 'them' },
+        ]
+      },
+      {
+        level: 2,
+        lines: [
+          { speaker: 'Você', options: ['Desculpe, posso fazer uma pergunta?', 'Estou a trabalhar.', 'Vou comprar algo.'], correct: 0, en: 'Excuse me, may I ask a question?', side: 'you-first' },
+          { speaker: 'Pessoa', text: 'Claro, diga!', en: 'Of course, go ahead!', side: 'them' },
+          { speaker: 'Você', options: ['Pode ajudar-me? Estou a procurar o mercado.', 'Devo sair por aqui?', 'Queria voltar.'], correct: 0, en: 'Can you help me? I\'m looking for the market.' },
+          { speaker: 'Pessoa', text: 'Sim! Vai sempre em frente, é ali.', en: "Yes! Go straight ahead, it's right there.", side: 'them' },
+        ]
+      },
+      {
+        level: 3,
+        lines: [
+          { speaker: 'Você', options: ['Desculpe, posso fazer uma pergunta?', 'Estou a trabalhar.', 'Vou comprar algo.'], correct: 0, en: 'Excuse me, may I ask a question?', side: 'you-first' },
+          { speaker: 'Pessoa', text: 'Claro, diga!', en: 'Of course, go ahead!', side: 'them' },
+          { speaker: 'Você', options: ['Pode ajudar-me? Estou a procurar o mercado.', 'Devo sair por aqui?', 'Queria voltar.'], correct: 0, en: 'Can you help me? I\'m looking for the market.' },
+          { speaker: 'Pessoa', text: 'Sim! Vai sempre em frente, é ali.', en: "Yes! Go straight ahead, it's right there.", side: 'them' },
+          { speaker: 'Você', options: ['Obrigado! Vou já.', 'Estou a perceber o menu.', 'Posso comer aqui?'], correct: 0, en: 'Thank you! I\'ll go right away.' },
+          { speaker: 'Pessoa', text: 'De nada! Bom passeio!', en: "You're welcome! Enjoy your walk!", side: 'them' },
+        ]
+      },
+    ]
+  },
+];
+
+const MENTE_WORDS = [
+  { adj: 'frequente',    adv: 'frequentemente',  en: 'frequently' },
+  { adj: 'lento → lenta', adv: 'lentamente',     en: 'slowly' },
+  { adj: 'rápido → rápida', adv: 'rapidamente',  en: 'quickly' },
+  { adj: 'perfeito → perfeita', adv: 'perfeitamente', en: 'perfectly' },
+  { adj: 'normal',       adv: 'normalmente',      en: 'normally' },
+  { adj: 'habitual',     adv: 'habitualmente',    en: 'habitually / usually' },
+  { adj: 'provável',     adv: 'provavelmente',    en: 'probably' },
+  { adj: 'fácil',        adv: 'facilmente',       en: 'easily — note: accent dropped' },
+  { adj: 'direto → direta', adv: 'diretamente',   en: 'directly' },
+  { adj: 'natural',      adv: 'naturalmente',     en: 'naturally / of course' },
+];
+
+// ── UNLOCK STATE (localStorage) ──────────────────────────────────
+function getUnlocks() {
+  try { return JSON.parse(localStorage.getItem('pt-comb-unlocks') || '{}'); } catch { return {}; }
+}
+function setUnlock(sitId, level) {
+  const u = getUnlocks(); u[sitId] = Math.max(u[sitId] || 1, level); localStorage.setItem('pt-comb-unlocks', JSON.stringify(u));
+}
+function getMaxLevel(sitId) { return getUnlocks()[sitId] || 1; }
+
+// ── DIALOGUE STATE ────────────────────────────────────────────────
+let dSituation = SITUATIONS[0];
+let dLevel = 1;
+let dLines = [];
+let dStep = 0;
+let dScore = 0;
+let dTotal = 0;
+let dAnswered = false;
+
+// ── BUILD: REFERÊNCIA ─────────────────────────────────────────────
+function buildReferencia() {
+  const grid = document.getElementById('frameGrid');
+  FRAMES.forEach(f => {
+    const card = document.createElement('div');
+    card.className = `frame-card ${f.color}`;
+    card.innerHTML = `
+      <div class="frame-header">
+        <div class="frame-num">${f.num}</div>
+        <div class="frame-label">${f.label}</div>
+        <div class="frame-pattern">${f.pattern}</div>
+      </div>
+      <div class="frame-examples">
+        ${f.examples.map(e => `
+          <div class="frame-ex" onclick="speak('${e.speak.replace(/'/g,"\\'")}', null)">
+            <div class="fex-pt">${e.pt}</div>
+            <div class="fex-en">${e.en}</div>
+          </div>`).join('')}
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+// ── BUILD: VERBOS ─────────────────────────────────────────────────
+function buildVerbos() {
+  renderVerbs(VERBS);
+}
+
+function renderVerbs(list) {
+  const grid = document.getElementById('verbGrid');
+  grid.innerHTML = '';
+  list.forEach(v => {
+    const card = document.createElement('div');
+    card.className = 'verb-card';
+    card.innerHTML = `<span class="vc-pt">${v.inf}</span><span class="vc-en">${v.en}</span><span class="vc-speak">🔊</span>`;
+    card.onclick = () => { speak(v.inf, card); };
+    grid.appendChild(card);
+  });
+}
+
+function filterVerbs() {
+  const q = document.getElementById('verbSearch').value.toLowerCase();
+  renderVerbs(VERBS.filter(v => v.inf.includes(q) || v.en.toLowerCase().includes(q)));
+}
+
+// ── BUILD: CONSTRUTOR ─────────────────────────────────────────────
+let cFrame = null, cVerb = null;
+
+function buildConstrutor() {
+  const fp = document.getElementById('framePicker');
+  FRAMES.forEach(f => {
+    const pill = document.createElement('div');
+    pill.className = `frame-pill ${f.color}`;
+    pill.textContent = f.id;
+    pill.onclick = () => {
+      document.querySelectorAll('.frame-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      cFrame = f.id;
+      updateConstructor();
+    };
+    fp.appendChild(pill);
+  });
+
+  const vp = document.getElementById('verbPicker');
+  VERBS.forEach(v => {
+    const pill = document.createElement('div');
+    pill.className = 'verb-pill';
+    pill.textContent = v.inf;
+    pill.onclick = () => {
+      document.querySelectorAll('.verb-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      cVerb = v.inf;
+      updateConstructor();
+    };
+    vp.appendChild(pill);
+  });
+}
+
+function updateConstructor() {
+  if (!cFrame || !cVerb) return;
+  const result = buildSentence(cFrame, cVerb);
+  if (!result) return;
+  const out = document.getElementById('construtorOutput');
+  out.innerHTML = `<div class="co-sentence">${result.pt}</div><div class="co-en">${result.en}</div>`;
+  document.getElementById('construtorSpeak').style.display = 'inline-block';
+  document.getElementById('construtorSpeak').dataset.text = result.pt;
+}
+
+function speakConstructor() {
+  const btn = document.getElementById('construtorSpeak');
+  speak(btn.dataset.text, btn);
+}
+
+// ── BUILD: DIÁLOGO ────────────────────────────────────────────────
+function buildSituationBar() {
+  const bar = document.getElementById('situationBar');
+  bar.innerHTML = '';
+  SITUATIONS.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'sit-btn' + (s.id === dSituation.id ? ' active' : '');
+    const maxL = getMaxLevel(s.id);
+    btn.textContent = s.label + (maxL > 1 ? ` ★${maxL}` : '');
+    btn.onclick = () => {
+      dSituation = s;
+      dLevel = getMaxLevel(s.id);
+      document.querySelectorAll('.sit-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      startDialogo();
+    };
+    bar.appendChild(btn);
+  });
+}
+
+function startDialogo() {
+  const sit = dSituation;
+  const levelData = sit.levels.find(l => l.level === dLevel) || sit.levels[0];
+  dLines = levelData.lines;
+  dStep = 0; dScore = 0; dTotal = 0; dAnswered = false;
+
+  document.getElementById('dialogoContext').textContent = sit.context;
+  document.getElementById('dialogoLevelLabel').textContent = `Nível ${dLevel}`;
+  document.getElementById('dialogoThread').innerHTML = '';
+  document.getElementById('diOptions').innerHTML = '';
+  document.getElementById('dialogoFeedback').textContent = '';
+  document.getElementById('dialogoFeedback').className = 'dialogo-feedback';
+  document.getElementById('dialogoNext').disabled = true;
+  document.getElementById('dialogoDone').style.display = 'none';
+  document.getElementById('dialogoInput').style.display = 'block';
+  document.getElementById('unlockBanner').classList.remove('visible');
+  updateDialogoScore();
+  buildProgressPips();
+  processDialogoStep();
+}
+
+function restartDialogo() { startDialogo(); }
+
+function buildProgressPips() {
+  const yourTurns = dLines.filter(l => !l.side || l.side === 'you-first').length;
+  const prog = document.getElementById('dialogoProgress');
+  prog.innerHTML = '';
+  for (let i = 0; i < yourTurns; i++) {
+    const pip = document.createElement('div');
+    pip.className = 'dp-pip';
+    prog.appendChild(pip);
+  }
+}
+
+function updateDialogoScore() {
+  document.getElementById('dialogoScoreLabel').textContent = `Correto: ${dScore} / ${dTotal}`;
+}
+
+function processDialogoStep() {
+  if (dStep >= dLines.length) { showDialogoDone(); return; }
+  const line = dLines[dStep];
+  dAnswered = false;
+  document.getElementById('dialogoFeedback').textContent = '';
+  document.getElementById('dialogoNext').disabled = true;
+
+  if (line.side === 'them') {
+    addDialogoBubble(line, 'them');
+    document.getElementById('diLabel').textContent = '…';
+    document.getElementById('diOptions').innerHTML = '';
+    speakThenAdvance(line.text);
+  } else {
+    // Your turn (side === undefined, 'you-first', or no side)
+    document.getElementById('diLabel').textContent = 'A tua vez →';
+    buildDialogoOptions(line);
+  }
+}
+
+function buildDialogoOptions(line) {
+  const container = document.getElementById('diOptions');
+  container.innerHTML = '';
+  const opts = shuffleWithCorrect(line.options, line.correct);
+  opts.forEach(o => {
+    const btn = document.createElement('button');
+    btn.className = 'di-opt';
+    btn.textContent = o.text;
+    btn.onclick = () => checkDialogoAnswer(btn, o.text, line.options[line.correct], line);
+    container.appendChild(btn);
+  });
+}
+
+function shuffleWithCorrect(opts, correctIdx) {
+  const tagged = opts.map((t, i) => ({ text: t, isCorrect: i === correctIdx }));
+  return tagged.sort(() => Math.random() - 0.5);
+}
+
+function checkDialogoAnswer(btn, chosen, correct, line) {
+  if (dAnswered) return;
+  dAnswered = true; dTotal++;
+
+  document.querySelectorAll('.di-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === correct) b.classList.add('correct');
+  });
+
+  const fb = document.getElementById('dialogoFeedback');
+  if (chosen === correct) {
+    dScore++;
+    fb.textContent = 'Correto! ✓'; fb.className = 'dialogo-feedback ok';
+    addDialogoBubble({ speaker: 'Você', text: chosen, en: line.en }, 'you', true);
+    updateProgressPip(true);
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = `Errado.`; fb.className = 'dialogo-feedback bad';
+    addDialogoBubble({ speaker: 'Você', text: correct, en: line.en }, 'you', false);
+    updateProgressPip(false);
+  }
+
+  speak(chosen === correct ? chosen : correct, null);
+  updateDialogoScore();
+  document.getElementById('dialogoNext').disabled = false;
+}
+
+function updateProgressPip(correct) {
+  const pips = document.querySelectorAll('.dp-pip');
+  const donePips = document.querySelectorAll('.dp-pip.done, .dp-pip.wrong-pip').length;
+  if (pips[donePips]) {
+    pips[donePips].classList.add(correct ? 'done' : 'wrong-pip');
+    pips[donePips].style.background = correct ? 'var(--green)' : 'var(--red-mid)';
+  }
+}
+
+function advanceDialogo() {
+  dStep++;
+  document.getElementById('dialogoFeedback').textContent = '';
+  document.getElementById('diOptions').innerHTML = '';
+  processDialogoStep();
+}
+
+function addDialogoBubble(line, side, correct) {
+  const thread = document.getElementById('dialogoThread');
+  const row = document.createElement('div');
+  row.className = `d-bubble-row ${side}`;
+
+  const initial = line.speaker ? line.speaker.charAt(0) : 'V';
+  const av = document.createElement('div');
+  av.className = `d-avatar ${side}`; av.textContent = initial;
+
+  const bubble = document.createElement('div');
+  bubble.className = `d-bubble ${side}`;
+  if (side === 'you' && correct !== undefined) bubble.classList.add(correct ? 'correct' : 'wrong');
+  bubble.innerHTML = `<div class="d-speaker">${line.speaker || 'Você'}</div>${line.text}<div class="d-en">${line.en || ''}</div>`;
+  bubble.onclick = () => speak(line.text, null);
+
+  if (side === 'them') { row.appendChild(av); row.appendChild(bubble); }
+  else { row.appendChild(bubble); row.appendChild(av); }
+  thread.appendChild(row);
+  thread.scrollTop = thread.scrollHeight;
+}
+
+function showDialogoDone() {
+  document.getElementById('dialogoInput').style.display = 'none';
+  document.getElementById('dialogoNext').style.display = 'none';
+  document.getElementById('dialogo-restart-wrap');
+
+  const pct = dTotal > 0 ? Math.round((dScore / dTotal) * 100) : 100;
+  const nextLevel = dLevel + 1;
+  const sit = dSituation;
+  const hasNextLevel = sit.levels.find(l => l.level === nextLevel);
+  const unlocked = pct >= 70 && hasNextLevel;
+
+  if (unlocked) { setUnlock(sit.id, nextLevel); buildSituationBar(); }
+
+  const done = document.getElementById('dialogoDone');
+  done.style.display = 'block';
+  done.innerHTML = `
+    <div class="done-card">
+      <h3>Diálogo completo!</h3>
+      <div class="done-score">${dScore} / ${dTotal}</div>
+      ${unlocked ? `<div class="done-unlock">🔓 Nível ${nextLevel} desbloqueado!</div>` : ''}
+      <p>${pct === 100 ? 'Perfeito!' : pct >= 70 ? 'Muito bem!' : 'Continua a praticar.'}</p>
+      <button class="dialogo-next" onclick="restartDialogo()" style="margin-bottom:0.5rem;">↺ Repetir nível ${dLevel}</button>
+      ${unlocked ? `<button class="dialogo-restart" onclick="playNextLevel(${nextLevel})">→ Nível ${nextLevel}</button>` : ''}
+    </div>`;
+}
+
+function playNextLevel(level) {
+  dLevel = level;
+  document.getElementById('dialogoNext').style.display = 'block';
+  startDialogo();
+}
+
+function speakThenAdvance(text) {
+  fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) })
+    .then(r => r.blob()).then(blob => {
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      currentAudio = audio;
+      audio.onended = () => { URL.revokeObjectURL(url); currentAudio = null; dStep++; setTimeout(processDialogoStep, 350); };
+      audio.onerror  = () => { currentAudio = null; dStep++; setTimeout(processDialogoStep, 350); };
+      audio.play();
+    }).catch(() => { dStep++; setTimeout(processDialogoStep, 350); });
+}
+
+// ── BUILD: -MENTE ─────────────────────────────────────────────────
+function buildMente() {
+  const table = document.getElementById('menteTable');
+  table.innerHTML = `
+    <div class="mente-rule-row header">
+      <div>Adjectivo</div><div>Advérbio</div><div>Inglês</div>
+    </div>` +
+    MENTE_WORDS.map(w => `
+      <div class="mente-rule-row">
+        <div class="mr-adj">${w.adj}</div>
+        <div class="mr-adv" onclick="speak('${w.adv}', null)">${w.adv}</div>
+        <div class="mr-en">${w.en}</div>
+      </div>`).join('');
+}
+
+// ── TABS ──────────────────────────────────────────────────────────
+function switchTab(id, tabEl) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  tabEl.classList.add('active');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+buildReferencia();
+buildVerbos();
+buildConstrutor();
+buildMente();
+
+// Dialogo init
+dLevel = getMaxLevel(dSituation.id);
+buildSituationBar();
+startDialogo();
+</script>
+<script>
+(function(){
+  try {
+    var d = JSON.parse(localStorage.getItem('pt-study-last-visited') || '{}');
+    d['combinacoes.html'] = Date.now();
+    localStorage.setItem('pt-study-last-visited', JSON.stringify(d));
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>
