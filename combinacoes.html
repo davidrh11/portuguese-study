@@ -732,7 +732,6 @@ function vfcReveal() {
 function vfcSpeakAnswer() { speak(vfcDeck[vfcIdx].inf, document.getElementById('vfcSpeak')); }
 function vfcSpeakEx() {
   vfcReveal();
-  document.getElementById('vfcExEn').classList.add('revealed');
   speak(vfcDeck[vfcIdx].ex, document.getElementById('vfcExPt'));
 }
 function vfcMove(dir)     { vfcIdx = (vfcIdx + dir + vfcDeck.length) % vfcDeck.length; vfcRender(); }
