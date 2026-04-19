@@ -131,9 +131,24 @@
   .fc-speak-pill {
     background: #1a1a1f; border: 1px solid var(--border); color: var(--blue);
     padding: 0.35rem 1.2rem; border-radius: 99px; cursor: pointer;
-    transition: all 0.2s; font-size: 1rem; margin-bottom: 1.5rem;
+    transition: all 0.2s; font-size: 1rem; margin-bottom: 1rem;
   }
   .fc-speak-pill:hover, .fc-speak-pill.playing { background: var(--green); color: var(--text); border-color: var(--blue); }
+
+  .fc-ex-pt {
+    font-style: italic; font-size: 0.82rem; color: var(--text);
+    filter: blur(5px); transition: filter 0.3s; cursor: pointer;
+    margin-bottom: 0.25rem; background: var(--border); border-radius: 3px;
+    padding: 0.05rem 0.4rem; display: inline-block;
+  }
+  .fc-ex-pt.revealed { filter: blur(0); background: transparent; }
+  .fc-ex-en {
+    font-size: 0.75rem; color: var(--muted); font-style: italic;
+    filter: blur(5px); transition: filter 0.3s; cursor: pointer;
+    background: var(--border); border-radius: 3px;
+    padding: 0.05rem 0.4rem; display: inline-block; margin-bottom: 1rem;
+  }
+  .fc-ex-en.revealed { filter: blur(0); background: transparent; }
 
   .fc-nav { display: flex; gap: 1rem; margin-top: auto; }
   .fc-nav-btn {
@@ -242,6 +257,8 @@
     <div class="fc-divider"></div>
     <div class="fc-pt-answer" id="fcAnswer" onclick="revealFC()"></div>
     <button class="fc-speak-pill" id="fcSpeakPill" onclick="speakCurrent()">🔊</button>
+    <div class="fc-ex-pt" id="fcExPt" onclick="speakEx()"></div>
+    <div class="fc-ex-en" id="fcExEn" onclick="this.classList.add('revealed')"></div>
     <div class="fc-nav">
       <button class="fc-nav-btn" onclick="fcMove(-1)">← Anterior</button>
       <button class="fc-nav-btn" onclick="fcMove(1)">Próximo →</button>
@@ -269,13 +286,27 @@
 const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
 
 const VERBS = [
-  { inf: 'ser',   en: 'to be (perm.)', eu: 'sou',   voce: 'é',    irr: { eu: true, voce: true } },
-  { inf: 'estar', en: 'to be (temp.)', eu: 'estou',  voce: 'está', irr: { eu: true, voce: true } },
-  { inf: 'ir',    en: 'to go',         eu: 'vou',    voce: 'vai',  irr: { eu: true, voce: true } },
-  { inf: 'ter',   en: 'to have',       eu: 'tenho',  voce: 'tem',  irr: { eu: true, voce: false } },
-  { inf: 'fazer', en: 'to do/make',    eu: 'faço',   voce: 'faz',  irr: { eu: true, voce: true } },
-  { inf: 'dar',   en: 'to give',       eu: 'dou',    voce: 'dá',   irr: { eu: true, voce: false } },
-  { inf: 'dizer', en: 'to say',        eu: 'digo',   voce: 'diz',  irr: { eu: true, voce: false } },
+  { inf: 'ser',   en: 'to be (perm.)', eu: 'sou',   voce: 'é',    irr: { eu: true, voce: true },
+    ex_eu:   { pt: 'Eu sou de Miami, mas moro em Lisboa.',         en: "I'm from Miami, but I live in Lisbon." },
+    ex_voce: { pt: 'Você é o professor?',                          en: 'Are you the teacher?' } },
+  { inf: 'estar', en: 'to be (temp.)', eu: 'estou',  voce: 'está', irr: { eu: true, voce: true },
+    ex_eu:   { pt: 'Estou um bocadinho cansado hoje.',             en: "I'm a little tired today." },
+    ex_voce: { pt: 'Você está bem?',                               en: 'Are you okay?' } },
+  { inf: 'ir',    en: 'to go',         eu: 'vou',    voce: 'vai',  irr: { eu: true, voce: true },
+    ex_eu:   { pt: 'Vou ao supermercado mais tarde.',              en: "I'm going to the supermarket later." },
+    ex_voce: { pt: 'Vai jantar onde hoje?',                        en: 'Where are you going for dinner today?' } },
+  { inf: 'ter',   en: 'to have',       eu: 'tenho',  voce: 'tem',  irr: { eu: true, voce: false },
+    ex_eu:   { pt: 'Tenho aula de português às sextas.',           en: 'I have Portuguese class on Fridays.' },
+    ex_voce: { pt: 'Você tem a conta, por favor?',                 en: 'Do you have the bill, please?' } },
+  { inf: 'fazer', en: 'to do/make',    eu: 'faço',   voce: 'faz',  irr: { eu: true, voce: true },
+    ex_eu:   { pt: 'Faço sempre café de manhã.',                   en: 'I always make coffee in the morning.' },
+    ex_voce: { pt: 'O que você faz da vida?',                      en: 'What do you do for a living?' } },
+  { inf: 'dar',   en: 'to give',       eu: 'dou',    voce: 'dá',   irr: { eu: true, voce: false },
+    ex_eu:   { pt: 'Dou uma ajuda, sem problema.',                 en: "I'll give you a hand, no problem." },
+    ex_voce: { pt: 'Você dá aulas de português?',                  en: 'Do you teach Portuguese?' } },
+  { inf: 'dizer', en: 'to say',        eu: 'digo',   voce: 'diz',  irr: { eu: true, voce: false },
+    ex_eu:   { pt: 'Digo sempre obrigado.',                        en: 'I always say thank you.' },
+    ex_voce: { pt: 'O que você diz? Não estou a perceber.',        en: "What are you saying? I'm not understanding." } },
 ];
 
 const SUBJECTS = [
@@ -357,7 +388,8 @@ function buildFCDeck() {
   fcDeck = [];
   VERBS.forEach(v => {
     SUBJECTS.forEach(s => {
-      fcDeck.push({ verb: v.inf, subject: s.label, form: v[s.key], isIrr: v.irr[s.key] });
+      const ex = s.key === 'eu' ? v.ex_eu : v.ex_voce;
+      fcDeck.push({ verb: v.inf, subject: s.label, form: v[s.key], isIrr: v.irr[s.key], ex_pt: ex.pt, ex_en: ex.en });
     });
   });
 }
@@ -371,9 +403,13 @@ function renderFC() {
   document.getElementById('fcSubject').textContent = c.subject;
   const ansEl = document.getElementById('fcAnswer');
   ansEl.textContent = c.form;
-  ansEl.classList.remove('revealed');
   ansEl.className = `fc-pt-answer${c.isIrr ? ' irr' : ''}`;
-  document.getElementById('fcHints').textContent = 'clique na forma para revelar · 🔊 para ouvir';
+  const exPt = document.getElementById('fcExPt');
+  exPt.textContent = c.ex_pt; exPt.className = 'fc-ex-pt';
+  const exEn = document.getElementById('fcExEn');
+  exEn.textContent = c.ex_en; exEn.className = 'fc-ex-en';
+  exEn.onclick = (e) => { e.stopPropagation(); exEn.classList.add('revealed'); };
+  document.getElementById('fcHints').textContent = 'clique na forma para revelar · clique no exemplo para ouvir';
   document.getElementById('fcSpeakPill').classList.remove('playing');
 }
 
@@ -381,7 +417,14 @@ function revealFC() {
   if (fcRevealed) return;
   fcRevealed = true;
   document.getElementById('fcAnswer').classList.add('revealed');
+  document.getElementById('fcExPt').classList.add('revealed');
   document.getElementById('fcHints').textContent = '';
+}
+
+function speakEx() {
+  const c = fcDeck[fcIdx];
+  document.getElementById('fcExPt').classList.add('revealed');
+  speak(c.ex_pt, document.getElementById('fcExPt'));
 }
 
 function fcMove(dir) { fcIdx = (fcIdx + dir + fcDeck.length) % fcDeck.length; renderFC(); }
