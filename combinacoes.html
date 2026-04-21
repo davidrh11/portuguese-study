@@ -970,6 +970,7 @@ function updateConstructor() {
 }
 
 function speakFix(text) { speak(text, document.getElementById('construtorSpeak')); }
+function speakConstructor() { const btn = document.getElementById('construtorSpeak'); speak(btn.dataset.text, btn); }
 
 // ── BUILD: DIÁLOGO ────────────────────────────────────────────────
 function buildSituationBar() {
