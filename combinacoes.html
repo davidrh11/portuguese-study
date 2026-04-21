@@ -1212,6 +1212,7 @@ function switchTab(id, tabEl) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   tabEl.classList.add('active');
+  if (id === 'dialogo') startDialogo();
 }
 
 // ── INIT ──────────────────────────────────────────────────────────
@@ -1220,10 +1221,9 @@ buildVerbos();
 buildConstrutor();
 buildMente();
 
-// Dialogo init
+// Dialogo init — UI only, no audio until tab opened
 dLevel = getMaxLevel(dSituation.id);
 buildSituationBar();
-startDialogo();
 </script>
 <script>
 (function(){
