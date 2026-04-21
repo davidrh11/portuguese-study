@@ -178,7 +178,21 @@
   .done-card p { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.25rem; }
   .done-unlock { background: var(--green-light); border: 1px solid var(--green-mid); border-radius: 6px; padding: 0.65rem 1rem; font-size: 0.82rem; color: var(--green); margin-bottom: 1.25rem; font-family: var(--mono); }
 
-  /* ── VERBOS FLASHCARDS ── */
+  .obj-picker { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; max-height: 160px; overflow-y: auto; padding: 0.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; }
+  .obj-pill { font-family: var(--mono); font-size: 0.78rem; padding: 0.25rem 0.65rem; border-radius: 99px; cursor: pointer; transition: all 0.15s; }
+  .obj-pill.natural  { background: var(--green-light); border: 1px solid var(--green-mid); color: var(--green); }
+  .obj-pill.possible { background: var(--surface2); border: 1px solid var(--border2); color: var(--muted); }
+  .obj-pill.active   { font-weight: 600; filter: brightness(0.88); border-color: currentColor; }
+
+  .co-verdict { margin-top: 0.85rem; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.82rem; line-height: 1.6; text-align: left; width: 100%; }
+  .co-verdict.ok   { background: var(--green-light); border: 1px solid var(--green-mid); color: var(--text); }
+  .co-verdict.warn { background: #fdf6e8; border: 1px solid #e0c070; color: var(--text); }
+  .co-verdict strong { font-family: var(--mono); }
+  .co-verdict.ok   strong { color: var(--green); }
+  .co-verdict.warn strong { color: var(--yellow); }
+  .co-verdict .co-fix { display: block; margin-top: 0.4rem; font-family: var(--mono); font-size: 0.85rem; cursor: pointer; }
+  .co-verdict.ok   .co-fix { color: var(--green); }
+  .co-verdict.warn .co-fix { color: var(--yellow); }
   .verbos-mode-bar { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; }
   .vm-btn { font-family: var(--mono); font-size: 0.75rem; padding: 0.35rem 1rem; border: 1px solid var(--border); border-radius: 4px; background: var(--surface); color: var(--muted); cursor: pointer; transition: all 0.15s; }
   .vm-btn:hover { border-color: var(--green-mid); color: var(--text); }
@@ -309,6 +323,8 @@
     <div class="frame-picker" id="framePicker"></div>
     <div class="construtor-label">2. Escolhe o verbo:</div>
     <div class="verb-picker" id="verbPicker"></div>
+    <div class="construtor-label" id="objLabel" style="display:none;">3. Escolhe o objecto: <span style="font-size:0.6rem;color:var(--muted2);font-weight:400;margin-left:0.5rem;">verde = natural · cinzento = possível mas verifica</span></div>
+    <div class="obj-picker" id="objPicker" style="display:none;"></div>
     <div class="construtor-output" id="construtorOutput">
       <div class="co-placeholder">← Escolhe um frame e um verbo</div>
     </div>
@@ -739,7 +755,129 @@ function vfcShuffle()     { vfcDeck = [...VERBS].sort(() => Math.random() - 0.5)
 function vfcReset()       { vfcDeck = [...VERBS]; vfcIdx = 0; vfcRender(); }
 
 // ── BUILD: CONSTRUTOR ─────────────────────────────────────────────
-let cFrame = null, cVerb = null;
+
+// Objects: each has a pt label, en translation, and a pairings map.
+// pairings: verb → 'natural' (works perfectly), 'possible' (works but odd/needs context), absent = unnatural
+// 'natural' verbs get green pills, 'possible' get grey pills
+// When combined: natural → green verdict, possible → yellow verdict + why note, absent → yellow verdict + correction
+
+const OBJECTS = [
+  // FOOD & DRINK
+  { pt: 'peixe',              en: 'fish',               pairs: { comprar:'natural', comer:'natural', pedir:'natural', trazer:'natural', ver:'possible' } },
+  { pt: 'vinho',              en: 'wine',               pairs: { comprar:'natural', beber:'natural', pedir:'natural', trazer:'natural' } },
+  { pt: 'café',               en: 'coffee',             pairs: { comprar:'natural', beber:'natural', pedir:'natural', trazer:'natural' } },
+  { pt: 'pão',                en: 'bread',              pairs: { comprar:'natural', comer:'natural', pedir:'natural', trazer:'natural' } },
+  { pt: 'água',               en: 'water',              pairs: { comprar:'natural', beber:'natural', pedir:'natural', trazer:'natural' } },
+  { pt: 'a conta',            en: 'the bill',           pairs: { pedir:'natural', trazer:'natural', ver:'natural', pagar:'natural' } },
+  { pt: 'o menu',             en: 'the menu',           pairs: { pedir:'natural', trazer:'natural', ver:'natural' } },
+  // PLACES
+  { pt: 'ao supermercado',    en: 'to the supermarket', pairs: { ir:'natural', voltar:'natural', andar:'possible' } },
+  { pt: 'ao restaurante',     en: 'to the restaurant',  pairs: { ir:'natural', voltar:'natural', andar:'possible' } },
+  { pt: 'ao café',            en: 'to the café',        pairs: { ir:'natural', voltar:'natural', andar:'possible' } },
+  { pt: 'ao banco',           en: 'to the bank',        pairs: { ir:'natural', voltar:'natural' } },
+  { pt: 'à farmácia',         en: 'to the pharmacy',   pairs: { ir:'natural', voltar:'natural' } },
+  { pt: 'para casa',          en: 'home',               pairs: { ir:'natural', voltar:'natural', ficar:'possible' } },
+  // THINGS / ACTIVITIES
+  { pt: 'um táxi',            en: 'a taxi',             pairs: { pedir:'natural', comprar:'possible', trazer:'possible' } },
+  { pt: 'ajuda',              en: 'help',               pairs: { pedir:'natural', precisar:'natural' } },
+  { pt: 'uma mesa',           en: 'a table',            pairs: { pedir:'natural', trazer:'possible' } },
+  { pt: 'a reserva',          en: 'the reservation',    pairs: { fazer:'natural', pedir:'natural', ver:'natural' } },
+  { pt: 'português',          en: 'Portuguese',         pairs: { falar:'natural', aprender:'natural', perceber:'natural', estudar:'natural' } },
+  { pt: 'inglês',             en: 'English',            pairs: { falar:'natural', perceber:'natural' } },
+  { pt: 'o carro',            en: 'the car',            pairs: { comprar:'natural', trazer:'possible', alugar:'natural' } },
+  { pt: 'uma casa',           en: 'a house',            pairs: { comprar:'natural', alugar:'natural', ver:'natural' } },
+  { pt: 'um bocadinho',       en: 'a little bit',       pairs: { esperar:'natural', ficar:'natural', beber:'natural', comer:'natural' } },
+  { pt: 'mais devagar',       en: 'more slowly',        pairs: { falar:'natural', andar:'natural' } },
+  { pt: 'aqui',               en: 'here',               pairs: { ficar:'natural', esperar:'natural', sentar:'natural', morar:'natural' } },
+  { pt: 'mais tarde',         en: 'later',              pairs: { voltar:'natural', ir:'natural', falar:'natural', fazer:'natural' } },
+  { pt: 'amanhã',             en: 'tomorrow',           pairs: { voltar:'natural', ir:'natural', trabalhar:'natural', vir:'natural' } },
+  { pt: 'isso',               en: 'that',               pairs: { fazer:'natural', ver:'natural', perceber:'natural', saber:'natural' } },
+  { pt: 'a janela',           en: 'the window',         pairs: { abrir:'natural', ver:'possible', fechar:'natural' } },
+  { pt: 'bem',                en: 'well',               pairs: { falar:'natural', fazer:'natural', perceber:'natural', ficar:'natural' } },
+  { pt: 'por aqui',           en: 'this way / around here', pairs: { sair:'natural', andar:'natural', ficar:'possible', passar:'natural' } },
+];
+
+// Evaluation: given frame + verb + object, return verdict
+function evaluate(frameId, verbInf, obj) {
+  const pair = obj.pairs[verbInf];
+
+  // Build the raw sentence
+  const frameTemplates = {
+    estou:  `Estou a ${verbInf} ${obj.pt}.`,
+    posso:  `Posso ${verbInf} ${obj.pt}?`,
+    queria: `Queria ${verbInf} ${obj.pt}.`,
+    devo:   `Devo ${verbInf} ${obj.pt}?`,
+    vou:    `Vou ${verbInf} ${obj.pt}.`,
+  };
+  const sentence = frameTemplates[frameId];
+
+  if (pair === 'natural') {
+    return { status: 'ok', sentence, why: null };
+  }
+
+  if (pair === 'possible') {
+    // Works but needs context explanation
+    const why = getPossibleWhy(frameId, verbInf, obj.pt);
+    return { status: 'ok', sentence, why };
+  }
+
+  // Unnatural — generate correction
+  return getCorrection(frameId, verbInf, obj);
+}
+
+function getPossibleWhy(frameId, verbInf, objPt) {
+  if (verbInf === 'ver' && objPt === 'peixe') return 'Natural if you mean "I\'m looking at the fish" — but if you mean ordering it, use <strong>pedir</strong>.';
+  if (verbInf === 'andar' && ['ao supermercado','ao restaurante','ao café'].includes(objPt)) return 'Works colloquially — <em>andar ao café</em> means hanging around the café. For going there with purpose, <strong>ir</strong> is more natural.';
+  if (verbInf === 'ficar' && objPt === 'para casa') return '<em>Ficar em casa</em> (stay home) is natural. <em>Ficar para casa</em> is slightly odd — the preposition should be <strong>em</strong>: <em>Vou ficar em casa.</em>';
+  if (verbInf === 'trazer' && ['um táxi','uma mesa'].includes(objPt)) return 'Understood but informal. A waiter can bring a table (<em>trazer uma mesa</em>); for a taxi, <strong>pedir um táxi</strong> is more natural.';
+  if (verbInf === 'comprar' && objPt === 'um táxi') return 'Technically correct if you\'re buying a taxi! But if you mean getting one, use <strong>pedir um táxi</strong>.';
+  return 'Understandable in context, but check if a different verb might be more natural.';
+}
+
+function getCorrection(frameId, verbInf, obj) {
+  const raw = { estou:`Estou a ${verbInf} ${obj.pt}.`, posso:`Posso ${verbInf} ${obj.pt}?`, queria:`Queria ${verbInf} ${obj.pt}.`, devo:`Devo ${verbInf} ${obj.pt}?`, vou:`Vou ${verbInf} ${obj.pt}.` };
+
+  // Find a natural verb for this object
+  const betterVerb = Object.entries(obj.pairs).find(([v, q]) => q === 'natural');
+  const betterFrame = Object.entries(obj.pairs).find(([v, q]) => q === 'natural' && FRAMES.find(f => f.id === frameId));
+
+  let why = '';
+  let fix = null;
+
+  // Specific corrections for common mistakes
+  if (verbInf === 'comer' && ['vinho','café','água','cerveja'].includes(obj.pt)) {
+    why = `<strong>${verbInf}</strong> is for solid food. For drinks, use <strong>beber</strong>.`;
+    fix = raw[frameId].replace(verbInf, 'beber');
+  } else if (verbInf === 'beber' && ['peixe','pão'].includes(obj.pt)) {
+    why = `<strong>beber</strong> is for liquids. For food, use <strong>comer</strong>.`;
+    fix = raw[frameId].replace(verbInf, 'comer');
+  } else if (['ir','voltar'].includes(verbInf) && ['peixe','vinho','café','pão','água','a conta','o menu'].includes(obj.pt)) {
+    why = `<strong>${verbInf}</strong> needs a place, not a thing. Did you mean <strong>${betterVerb ? betterVerb[0] : 'comprar'}</strong>?`;
+    fix = betterVerb ? raw[frameId].replace(verbInf, betterVerb[0]) : null;
+  } else if (verbInf === 'falar' && ['peixe','vinho','café','pão','água','a conta','o menu','o carro','uma casa'].includes(obj.pt)) {
+    why = `<strong>falar</strong> needs a language or person, not a thing. Did you mean <strong>pedir</strong>?`;
+    fix = raw[frameId].replace(verbInf, 'pedir');
+  } else if (verbInf === 'abrir' && ['peixe','vinho','café','pão','água'].includes(obj.pt)) {
+    why = `<strong>abrir</strong> means to open — you can open a bottle of wine (<em>abrir o vinho</em>), but not just wine itself.`;
+    fix = null;
+  } else if (verbInf === 'esperar' && ['peixe','vinho','café','pão','a conta','o menu'].includes(obj.pt)) {
+    why = `<strong>esperar</strong> means to wait or hope. You can wait for something, but not directly do things like this with it.`;
+    fix = betterVerb ? raw[frameId].replace(verbInf, betterVerb[0]) : null;
+  } else {
+    why = `<strong>${verbInf}</strong> + <strong>${obj.pt}</strong> doesn't combine naturally in Portuguese.`;
+    fix = betterVerb ? raw[frameId].replace(verbInf, betterVerb[0]) : null;
+  }
+
+  return {
+    status: 'warn',
+    sentence: raw[frameId],
+    why,
+    fix,
+    fixLabel: fix ? `→ Try: ${fix}` : null
+  };
+}
+
+let cFrame = null, cVerb = null, cObj = null;
 
 function buildConstrutor() {
   const fp = document.getElementById('framePicker');
@@ -765,26 +903,73 @@ function buildConstrutor() {
       document.querySelectorAll('.verb-pill').forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
       cVerb = v.inf;
+      cObj = null;
+      buildObjPicker();
       updateConstructor();
     };
     vp.appendChild(pill);
   });
 }
 
-function updateConstructor() {
-  if (!cFrame || !cVerb) return;
-  const result = buildSentence(cFrame, cVerb);
-  if (!result) return;
-  const out = document.getElementById('construtorOutput');
-  out.innerHTML = `<div class="co-sentence">${result.pt}</div><div class="co-en" onclick="this.classList.add('revealed')">${result.en}</div>`;
-  document.getElementById('construtorSpeak').style.display = 'inline-block';
-  document.getElementById('construtorSpeak').dataset.text = result.pt;
+function buildObjPicker() {
+  const op = document.getElementById('objPicker');
+  const ol = document.getElementById('objLabel');
+  op.innerHTML = '';
+  ol.style.display = 'block';
+  op.style.display = 'flex';
+
+  OBJECTS.forEach(obj => {
+    const pair = obj.pairs[cVerb];
+    const pill = document.createElement('div');
+    pill.className = `obj-pill ${pair === 'natural' ? 'natural' : 'possible'}`;
+    pill.textContent = obj.pt;
+    pill.title = obj.en;
+    pill.onclick = () => {
+      document.querySelectorAll('.obj-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      cObj = obj;
+      updateConstructor();
+    };
+    op.appendChild(pill);
+  });
 }
 
-function speakConstructor() {
-  const btn = document.getElementById('construtorSpeak');
-  speak(btn.dataset.text, btn);
+function updateConstructor() {
+  if (!cFrame || !cVerb) return;
+  const out = document.getElementById('construtorOutput');
+
+  if (!cObj) {
+    // No object selected yet — show basic sentence
+    const result = buildSentence(cFrame, cVerb);
+    if (!result) return;
+    out.innerHTML = `<div class="co-sentence">${result.pt}</div><div class="co-en" onclick="this.classList.add('revealed')">${result.en}</div>`;
+    document.getElementById('construtorSpeak').style.display = 'inline-block';
+    document.getElementById('construtorSpeak').dataset.text = result.pt;
+    return;
+  }
+
+  // Object selected — evaluate and show verdict
+  const verdict = evaluate(cFrame, cVerb, cObj);
+  const verdictHtml = verdict.status === 'ok'
+    ? `<div class="co-verdict ok">
+        ✓ <strong>Natural.</strong> ${verdict.why ? verdict.why : 'This combination works well.'}
+        ${verdict.fix ? `<span class="co-fix" onclick="speakFix('${verdict.fix.replace(/'/g,"\\'")}')"> ${verdict.fixLabel}</span>` : ''}
+       </div>`
+    : `<div class="co-verdict warn">
+        ⚠ <strong>Unnatural.</strong> ${verdict.why}
+        ${verdict.fixLabel ? `<span class="co-fix" onclick="speakFix('${verdict.fix.replace(/'/g,"\\'")}')"> ${verdict.fixLabel}</span>` : ''}
+       </div>`;
+
+  out.innerHTML = `
+    <div class="co-sentence">${verdict.sentence}</div>
+    <div class="co-en" onclick="this.classList.add('revealed')">${cObj.en}</div>
+    ${verdictHtml}`;
+
+  document.getElementById('construtorSpeak').style.display = 'inline-block';
+  document.getElementById('construtorSpeak').dataset.text = verdict.sentence;
 }
+
+function speakFix(text) { speak(text, document.getElementById('construtorSpeak')); }
 
 // ── BUILD: DIÁLOGO ────────────────────────────────────────────────
 function buildSituationBar() {
