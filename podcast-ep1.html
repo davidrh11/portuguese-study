@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="pt" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Episódio 1 — Verbos Infinitivos</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0; --surface: #ffffff; --surface2: #f2ede6;
+    --border: #e0d8cc; --border2: #ccc4b4;
+    --green: #2d7a50; --green-light: #eef5f1; --green-mid: #9acbb0;
+    --red: #a03428; --text: #2e2820; --muted: #8a7a68; --muted2: #b0a090;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; display: flex; flex-direction: column; }
+
+  header {
+    padding: 1.5rem 2rem 1rem; border-bottom: 1px solid var(--border);
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem;
+  }
+  .header-text h1 { font-family: var(--mono); font-size: 1rem; font-weight: 400; color: var(--muted); }
+  .header-text h1 span { color: var(--green); }
+  .header-text p { font-size: 0.82rem; color: var(--muted2); margin-top: 0.2rem; }
+  .pt-flag { flex-shrink: 0; width: 48px; height: 32px; border-radius: 3px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.15); margin-top: 2px; }
+
+  /* MAIN PLAYER */
+  .player-wrap {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; padding: 2rem; max-width: 560px; margin: 0 auto; width: 100%;
+  }
+
+  /* EPISODE BADGE */
+  .ep-badge {
+    font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--green); background: var(--green-light);
+    border: 1px solid var(--green-mid); padding: 0.25rem 0.75rem; border-radius: 99px;
+    margin-bottom: 1.5rem;
+  }
+
+  /* DISPLAY CARD — shows current segment */
+  .display-card {
+    width: 100%; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 2rem 2rem 1.5rem; text-align: center;
+    min-height: 200px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 0.75rem;
+    margin-bottom: 1.5rem; position: relative; transition: border-color 0.3s;
+  }
+  .display-card.playing { border-color: var(--green); }
+  .display-card.pausing { border-color: var(--border2); }
+
+  .seg-type {
+    position: absolute; top: 1rem; left: 1.25rem;
+    font-family: var(--mono); font-size: 0.58rem; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--muted2);
+  }
+  .seg-num {
+    position: absolute; top: 1rem; right: 1.25rem;
+    font-family: var(--mono); font-size: 0.58rem; color: var(--muted2);
+  }
+
+  .display-pt {
+    font-family: var(--mono); font-size: 1.6rem; font-weight: 700;
+    color: var(--green); line-height: 1.3;
+  }
+  .display-en {
+    font-size: 0.95rem; color: var(--muted); font-style: italic; line-height: 1.5;
+  }
+  .display-example {
+    font-family: var(--mono); font-size: 0.9rem; color: var(--text);
+    line-height: 1.5; font-style: italic;
+  }
+  .display-instruction {
+    font-family: var(--mono); font-size: 0.75rem; color: var(--muted2);
+    letter-spacing: 0.06em;
+  }
+  .display-pause {
+    font-family: var(--mono); font-size: 0.8rem; color: var(--muted2);
+    letter-spacing: 0.1em;
+  }
+
+  /* WAVEFORM ANIMATION */
+  .waveform {
+    display: flex; align-items: center; gap: 3px; height: 24px; margin-bottom: 0.5rem;
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .waveform.active { opacity: 1; }
+  .waveform .bar {
+    width: 3px; background: var(--green); border-radius: 2px;
+    animation: wave 0.8s ease-in-out infinite;
+  }
+  .waveform .bar:nth-child(1) { animation-delay: 0s;    height: 8px; }
+  .waveform .bar:nth-child(2) { animation-delay: 0.1s;  height: 16px; }
+  .waveform .bar:nth-child(3) { animation-delay: 0.2s;  height: 24px; }
+  .waveform .bar:nth-child(4) { animation-delay: 0.3s;  height: 16px; }
+  .waveform .bar:nth-child(5) { animation-delay: 0.15s; height: 10px; }
+  .waveform .bar:nth-child(6) { animation-delay: 0.25s; height: 20px; }
+  .waveform .bar:nth-child(7) { animation-delay: 0.05s; height: 12px; }
+  @keyframes wave { 0%,100%{transform:scaleY(0.4)} 50%{transform:scaleY(1)} }
+
+  /* PROGRESS BAR */
+  .progress-wrap { width: 100%; margin-bottom: 1.25rem; }
+  .progress-track {
+    width: 100%; height: 4px; background: var(--border); border-radius: 2px;
+    overflow: hidden; margin-bottom: 0.5rem;
+  }
+  .progress-fill {
+    height: 100%; background: var(--green); border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+  .progress-labels {
+    display: flex; justify-content: space-between;
+    font-family: var(--mono); font-size: 0.65rem; color: var(--muted2);
+  }
+
+  /* CONTROLS */
+  .controls { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+
+  .btn-play {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--green); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(45,122,80,0.3);
+  }
+  .btn-play:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(45,122,80,0.4); }
+  .btn-play:active { transform: scale(0.97); }
+  .btn-play svg { fill: #fff; }
+
+  .btn-skip {
+    font-family: var(--mono); font-size: 0.72rem; padding: 0.5rem 1rem;
+    background: var(--surface); border: 1px solid var(--border); color: var(--muted);
+    border-radius: 4px; cursor: pointer; transition: all 0.15s;
+  }
+  .btn-skip:hover { border-color: var(--green-mid); color: var(--text); }
+
+  .btn-restart {
+    font-family: var(--mono); font-size: 0.72rem; padding: 0.5rem 1rem;
+    background: var(--surface); border: 1px solid var(--border); color: var(--muted);
+    border-radius: 4px; cursor: pointer; transition: all 0.15s;
+  }
+  .btn-restart:hover { border-color: var(--red); color: var(--red); }
+
+  /* VERB INDEX */
+  .verb-index {
+    width: 100%; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden;
+  }
+  .vi-header {
+    font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--muted); padding: 0.6rem 1rem;
+    background: var(--surface2); border-bottom: 1px solid var(--border);
+  }
+  .vi-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    padding: 0.5rem;
+    gap: 0.25rem;
+  }
+  .vi-item {
+    font-family: var(--mono); font-size: 0.7rem; color: var(--muted2);
+    padding: 0.3rem 0.4rem; border-radius: 3px; text-align: center;
+    transition: all 0.2s;
+  }
+  .vi-item.done    { color: var(--green);  background: var(--green-light); }
+  .vi-item.current { color: var(--green);  background: var(--green-light); border: 1px solid var(--green-mid); font-weight: 700; }
+  .vi-item.pending { color: var(--muted2); }
+
+  /* DONE STATE */
+  .done-overlay {
+    width: 100%; background: var(--surface); border: 1px solid var(--green-mid);
+    border-radius: 12px; padding: 2.5rem 2rem; text-align: center; display: none;
+    margin-bottom: 1.5rem;
+  }
+  .done-overlay.visible { display: block; }
+  .done-overlay h2 { font-family: var(--mono); font-size: 1rem; color: var(--green); margin-bottom: 0.5rem; }
+  .done-overlay p  { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.5rem; }
+  .done-overlay .done-btn {
+    font-family: var(--mono); font-size: 0.82rem; padding: 0.6rem 2rem;
+    background: var(--green); color: #fff; border: none; border-radius: 4px; cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-text">
+    <h1>Episódio 1 · <span>Verbos — Infinitivos</span></h1>
+    <p>25 verbos · audio walkthrough · repete em voz alta</p>
+  </div>
+  <svg class="pt-flag" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="19.2" height="32" fill="#006600"/>
+    <rect x="19.2" y="0" width="28.8" height="32" fill="#FF0000"/>
+    <circle cx="19.2" cy="16" r="7" fill="none" stroke="#FFCC00" stroke-width="1.2"/>
+    <circle cx="19.2" cy="16" r="4.5" fill="none" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="19.2" y1="11.5" x2="19.2" y2="20.5" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="14.7" y1="16" x2="23.7" y2="16" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="16" y1="12.8" x2="22.4" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <line x1="22.4" y1="12.8" x2="16" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <rect x="17" y="13.5" width="4.4" height="5" fill="white" rx="0.5"/>
+    <circle cx="19.2" cy="16" r="0.8" fill="#003399"/>
+    <circle cx="17.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="17.7" cy="17.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="17.5" r="0.5" fill="#003399"/>
+  </svg>
+</header>
+
+<div class="player-wrap">
+  <div class="ep-badge">Episódio 1 de 3 · Infinitivos</div>
+
+  <div class="done-overlay" id="doneOverlay">
+    <h2>Episódio completo!</h2>
+    <p>Ouviste e repetiste os 25 verbos. Muito bem.</p>
+    <button class="done-btn" onclick="restart()">↺ Repetir</button>
+  </div>
+
+  <div class="display-card" id="displayCard">
+    <span class="seg-type" id="segType"></span>
+    <span class="seg-num" id="segNum"></span>
+    <div class="waveform" id="waveform">
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+    <div id="displayContent"></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-labels">
+      <span id="progressLabel">0 / 25 verbos</span>
+      <span id="progressPct">0%</span>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn-skip" onclick="skipBack()">← Anterior</button>
+    <button class="btn-play" id="btnPlay" onclick="togglePlay()">
+      <svg id="playIcon" width="22" height="22" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+    <button class="btn-skip" onclick="skipForward()">Próximo →</button>
+    <button class="btn-restart" onclick="restart()">↺</button>
+  </div>
+
+  <div class="verb-index">
+    <div class="vi-header">Verbos — progresso</div>
+    <div class="vi-grid" id="verbIndex"></div>
+  </div>
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+
+// ── VERB DATA ─────────────────────────────────────────────────────
+const VERBS = [
+  { inf: 'saber',     en: 'to know (facts)',        ex_pt: 'Não sei.',                           ex_en: "I don't know." },
+  { inf: 'vir',       en: 'to come',                ex_pt: 'Pode vir aqui?',                     ex_en: 'Can you come here?' },
+  { inf: 'falar',     en: 'to speak',               ex_pt: 'Estou a falar português.',            ex_en: "I'm speaking Portuguese." },
+  { inf: 'ver',       en: 'to see / understand',    ex_pt: 'Estou a ver.',                       ex_en: 'I see. / I understand.' },
+  { inf: 'ficar',     en: 'to stay / become',       ex_pt: 'Vou ficar aqui.',                    ex_en: "I'm going to stay here." },
+  { inf: 'gostar',    en: 'to like',                ex_pt: 'Gosto muito de Lisboa.',              ex_en: 'I really like Lisbon.' },
+  { inf: 'precisar',  en: 'to need',                ex_pt: 'Preciso de ajuda.',                  ex_en: 'I need help.' },
+  { inf: 'trazer',    en: 'to bring',               ex_pt: 'Pode trazer a conta?',                ex_en: 'Can you bring the bill?' },
+  { inf: 'pedir',     en: 'to ask for / order',     ex_pt: 'Posso pedir, por favor?',             ex_en: 'Can I order, please?' },
+  { inf: 'comer',     en: 'to eat',                 ex_pt: 'Vamos comer algo?',                  ex_en: 'Shall we eat something?' },
+  { inf: 'beber',     en: 'to drink',               ex_pt: 'Queria beber um copo.',               ex_en: "I'd like to have a drink." },
+  { inf: 'andar',     en: 'to walk / get around',   ex_pt: 'Estou a andar pela cidade.',          ex_en: "I'm walking around the city." },
+  { inf: 'começar',   en: 'to begin',               ex_pt: 'Estou a começar a aprender.',         ex_en: "I'm starting to learn." },
+  { inf: 'perceber',  en: 'to understand',          ex_pt: 'Não percebo.',                       ex_en: "I don't understand." },
+  { inf: 'trabalhar', en: 'to work',                ex_pt: 'Vou trabalhar amanhã.',               ex_en: "I'm going to work tomorrow." },
+  { inf: 'morar',     en: 'to live / reside',       ex_pt: 'Moro em Lisboa.',                    ex_en: 'I live in Lisbon.' },
+  { inf: 'comprar',   en: 'to buy',                 ex_pt: 'Vou comprar pão.',                   ex_en: "I'm going to buy bread." },
+  { inf: 'ajudar',    en: 'to help',                ex_pt: 'Pode ajudar-me?',                    ex_en: 'Can you help me?' },
+  { inf: 'esperar',   en: 'to wait / hope',         ex_pt: 'Estou a esperar.',                   ex_en: "I'm waiting." },
+  { inf: 'conhecer',  en: 'to know (person/place)', ex_pt: 'Conhece Lisboa bem?',                 ex_en: 'Do you know Lisbon well?' },
+  { inf: 'chegar',    en: 'to arrive',              ex_pt: 'Estou a chegar.',                    ex_en: "I'm on my way." },
+  { inf: 'sentar',    en: 'to sit',                 ex_pt: 'Posso sentar-me aqui?',              ex_en: 'May I sit here?' },
+  { inf: 'sair',      en: 'to leave / go out',      ex_pt: 'Devo sair por aqui?',                ex_en: 'Should I leave this way?' },
+  { inf: 'voltar',    en: 'to return / come back',  ex_pt: 'Vou voltar às seis.',                ex_en: "I'm coming back at six." },
+  { inf: 'abrir',     en: 'to open',                ex_pt: 'Pode abrir a janela?',               ex_en: 'Can you open the window?' },
+];
+
+// ── SEGMENT BUILDER ───────────────────────────────────────────────
+// Each verb produces a sequence of timed segments:
+// [intro: verb name] → [pause: repeat] → [english] → [example] → [pause: repeat] → [english of example]
+
+const PAUSE_REPEAT   = 3000;  // pause after PT — time to say it aloud
+const PAUSE_CONFIRM  = 1500;  // pause after EN — let it land
+const PAUSE_BETWEEN  = 1000;  // brief gap between verbs
+
+function buildSegments() {
+  const segs = [];
+
+  // Intro
+  segs.push({ type: 'instruction', text: 'Verbos em português europeu. Ouve cada verbo, repete em voz alta, e ouve a tradução.', display: { instruction: 'Ouve · Repete · Aprende' } });
+  segs.push({ type: 'pause', duration: 2000, display: { pause: '…' } });
+
+  VERBS.forEach((v, i) => {
+    // 1. Say the infinitive
+    segs.push({
+      type: 'pt',
+      text: v.inf,
+      verbIdx: i,
+      display: { pt: v.inf, type: `verbo ${i + 1} de ${VERBS.length}` }
+    });
+    // 2. Pause — repeat aloud
+    segs.push({
+      type: 'pause',
+      duration: PAUSE_REPEAT,
+      verbIdx: i,
+      display: { pt: v.inf, pause: '← repete em voz alta' }
+    });
+    // 3. English definition
+    segs.push({
+      type: 'en',
+      text: v.en,
+      verbIdx: i,
+      display: { pt: v.inf, en: v.en }
+    });
+    // 4. Pause — let it land
+    segs.push({ type: 'pause', duration: PAUSE_CONFIRM, verbIdx: i, display: { pt: v.inf, en: v.en } });
+    // 5. Example sentence
+    segs.push({
+      type: 'example',
+      text: v.ex_pt,
+      verbIdx: i,
+      display: { pt: v.inf, en: v.en, example: v.ex_pt }
+    });
+    // 6. Pause — absorb example
+    segs.push({
+      type: 'pause',
+      duration: PAUSE_REPEAT,
+      verbIdx: i,
+      display: { pt: v.inf, en: v.en, example: v.ex_pt, pause: '← ouve bem' }
+    });
+    // 7. English of example
+    segs.push({
+      type: 'en-example',
+      text: v.ex_en,
+      verbIdx: i,
+      display: { pt: v.inf, en: v.en, example: v.ex_pt, exEn: v.ex_en }
+    });
+    // 8. Gap before next verb
+    if (i < VERBS.length - 1) {
+      segs.push({ type: 'pause', duration: PAUSE_BETWEEN, verbIdx: i, display: { pause: '…' } });
+    }
+  });
+
+  // Outro
+  segs.push({ type: 'instruction', text: 'Muito bem. Vinte e cinco verbos completos. Continua a praticar.', display: { instruction: 'Episódio completo!' } });
+
+  return segs;
+}
+
+const SEGMENTS = buildSegments();
+
+// ── STATE ─────────────────────────────────────────────────────────
+let segIdx     = 0;
+let isPlaying  = false;
+let isPaused   = false;
+let pauseTimer = null;
+let currentAudio = null;
+let audioCache = {};
+
+// ── AUDIO CACHE ───────────────────────────────────────────────────
+async function fetchAudio(text) {
+  if (audioCache[text]) return audioCache[text];
+  const res = await fetch(WORKER_URL, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text })
+  });
+  if (!res.ok) throw new Error('TTS error');
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  audioCache[text] = url;
+  return url;
+}
+
+// ── PLAYER ────────────────────────────────────────────────────────
+async function playFromSegment(idx) {
+  if (idx >= SEGMENTS.length) { finish(); return; }
+  segIdx = idx;
+  const seg = SEGMENTS[segIdx];
+
+  updateDisplay(seg);
+  updateProgress();
+  updateVerbIndex(seg.verbIdx);
+
+  if (seg.type === 'pause') {
+    document.getElementById('displayCard').classList.remove('playing');
+    document.getElementById('displayCard').classList.add('pausing');
+    document.getElementById('waveform').classList.remove('active');
+    pauseTimer = setTimeout(() => { if (isPlaying) playFromSegment(segIdx + 1); }, seg.duration);
+    return;
+  }
+
+  // Audio segment
+  document.getElementById('displayCard').classList.add('playing');
+  document.getElementById('displayCard').classList.remove('pausing');
+  document.getElementById('waveform').classList.add('active');
+
+  try {
+    const url = await fetchAudio(seg.text);
+    if (!isPlaying) return; // stopped while loading
+    currentAudio = new Audio(url);
+    currentAudio.onended = () => {
+      document.getElementById('waveform').classList.remove('active');
+      if (isPlaying) playFromSegment(segIdx + 1);
+    };
+    currentAudio.onerror = () => {
+      if (isPlaying) playFromSegment(segIdx + 1);
+    };
+    currentAudio.play();
+  } catch(e) {
+    if (isPlaying) playFromSegment(segIdx + 1);
+  }
+}
+
+function stopCurrent() {
+  clearTimeout(pauseTimer);
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  document.getElementById('waveform').classList.remove('active');
+  document.getElementById('displayCard').classList.remove('playing', 'pausing');
+}
+
+function togglePlay() {
+  if (isPlaying) {
+    isPlaying = false;
+    stopCurrent();
+    setPlayIcon(false);
+  } else {
+    isPlaying = true;
+    setPlayIcon(true);
+    playFromSegment(segIdx);
+  }
+}
+
+function skipForward() {
+  // Skip to next verb
+  stopCurrent();
+  const currentVerb = SEGMENTS[segIdx]?.verbIdx ?? -1;
+  let next = segIdx + 1;
+  while (next < SEGMENTS.length && (SEGMENTS[next].verbIdx === currentVerb || SEGMENTS[next].type === 'pause' && SEGMENTS[next].verbIdx === currentVerb)) next++;
+  segIdx = next;
+  if (isPlaying) playFromSegment(segIdx);
+  else { updateDisplay(SEGMENTS[segIdx]); updateProgress(); updateVerbIndex(SEGMENTS[segIdx]?.verbIdx); }
+}
+
+function skipBack() {
+  stopCurrent();
+  const currentVerb = SEGMENTS[segIdx]?.verbIdx ?? 0;
+  const prevVerb = Math.max(0, currentVerb - 1);
+  let back = 0;
+  for (let i = 0; i < SEGMENTS.length; i++) { if (SEGMENTS[i].verbIdx === prevVerb && SEGMENTS[i].type === 'pt') { back = i; break; } }
+  segIdx = back;
+  if (isPlaying) playFromSegment(segIdx);
+  else { updateDisplay(SEGMENTS[segIdx]); updateProgress(); updateVerbIndex(prevVerb); }
+}
+
+function restart() {
+  isPlaying = false;
+  stopCurrent();
+  segIdx = 0;
+  setPlayIcon(false);
+  document.getElementById('doneOverlay').classList.remove('visible');
+  document.getElementById('displayCard').style.display = '';
+  updateDisplay(SEGMENTS[0]);
+  updateProgress();
+  buildVerbIndex();
+}
+
+function finish() {
+  isPlaying = false;
+  setPlayIcon(false);
+  document.getElementById('doneOverlay').classList.add('visible');
+  document.getElementById('displayCard').style.display = 'none';
+}
+
+function setPlayIcon(playing) {
+  document.getElementById('playIcon').innerHTML = playing
+    ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
+    : '<path d="M8 5v14l11-7z"/>';
+}
+
+// ── DISPLAY ───────────────────────────────────────────────────────
+function updateDisplay(seg) {
+  if (!seg) return;
+  const d = seg.display || {};
+  const content = document.getElementById('displayContent');
+
+  document.getElementById('segType').textContent = seg.type === 'pt' ? 'infinitivo' : seg.type === 'en' ? 'tradução' : seg.type === 'example' ? 'exemplo' : seg.type === 'en-example' ? 'tradução' : seg.type === 'instruction' ? 'instrução' : '';
+  document.getElementById('segNum').textContent = seg.verbIdx !== undefined ? `${seg.verbIdx + 1} / ${VERBS.length}` : '';
+
+  let html = '';
+  if (d.instruction) html += `<div class="display-instruction">${d.instruction}</div>`;
+  if (d.pt)          html += `<div class="display-pt">${d.pt}</div>`;
+  if (d.en)          html += `<div class="display-en">${d.en}</div>`;
+  if (d.example)     html += `<div class="display-example">"${d.example}"</div>`;
+  if (d.exEn)        html += `<div class="display-en">${d.exEn}</div>`;
+  if (d.pause)       html += `<div class="display-pause">${d.pause}</div>`;
+  content.innerHTML = html;
+}
+
+function updateProgress() {
+  const verbsDone = SEGMENTS[segIdx]?.verbIdx !== undefined ? SEGMENTS[segIdx].verbIdx : 0;
+  const pct = Math.round((verbsDone / VERBS.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `${verbsDone} / ${VERBS.length} verbos`;
+  document.getElementById('progressPct').textContent = pct + '%';
+}
+
+// ── VERB INDEX ────────────────────────────────────────────────────
+function buildVerbIndex() {
+  const grid = document.getElementById('verbIndex');
+  grid.innerHTML = '';
+  VERBS.forEach((v, i) => {
+    const item = document.createElement('div');
+    item.className = 'vi-item pending';
+    item.id = `vi-${i}`;
+    item.textContent = v.inf;
+    grid.appendChild(item);
+  });
+}
+
+function updateVerbIndex(verbIdx) {
+  if (verbIdx === undefined) return;
+  VERBS.forEach((_, i) => {
+    const el = document.getElementById(`vi-${i}`);
+    if (!el) return;
+    el.className = i < verbIdx ? 'vi-item done' : i === verbIdx ? 'vi-item current' : 'vi-item pending';
+  });
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+buildVerbIndex();
+updateDisplay(SEGMENTS[0]);
+updateProgress();
+
+// Pre-fetch first few verbs for smooth start
+setTimeout(() => {
+  VERBS.slice(0, 3).forEach(v => {
+    fetchAudio(v.inf).catch(() => {});
+    fetchAudio(v.en).catch(() => {});
+    fetchAudio(v.ex_pt).catch(() => {});
+    fetchAudio(v.ex_en).catch(() => {});
+  });
+}, 500);
+</script>
+</body>
+</html>
