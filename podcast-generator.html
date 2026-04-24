@@ -191,13 +191,170 @@ function buildEp1Segments() {
 
   VERBS.forEach((v, i) => {
     segs.push({ text: `Verbo ${i + 1}.`, pause_after: P_SHORT });
-    segs.push({ text: v.inf, pause_after: P_REPEAT });          // say it → pause → repeat
-    segs.push({ text: v.en,  pause_after: P_CONFIRM });         // english → pause
-    segs.push({ text: v.ex_pt, pause_after: P_REPEAT });        // example → pause → absorb
-    segs.push({ text: v.ex_en, pause_after: i < VERBS.length - 1 ? P_BETWEEN : 1.0 }); // EN of example
+    segs.push({ text: v.inf, pause_after: P_REPEAT });
+    segs.push({ text: v.en,  pause_after: P_CONFIRM });
+    segs.push({ text: v.ex_pt, pause_after: P_REPEAT });
+    segs.push({ text: v.ex_en, pause_after: P_CONFIRM });
+    segs.push({ text: v.ex_pt, pause_after: i < VERBS.length - 1 ? P_BETWEEN : 1.0 });
   });
 
   segs.push({ text: 'Muito bem. Vinte e cinco verbos completos. Continua a praticar. Até já.', pause_after: 0 });
+  return segs;
+}
+
+// ── EP2 DATA ──────────────────────────────────────────────────────
+const VERBS_IRR = [
+  { inf: 'ser',   en: 'to be, permanent', pres_eu: 'sou',   pres_voc: 'é',     past_eu: 'fui',   past_voc: 'foi',
+    ex_pres: { pt: 'Sou de Miami, mas moro em Lisboa.', en: 'I am from Miami, but I live in Lisbon.' },
+    ex_past: { pt: 'Foi uma boa aula de português.', en: 'It was a good Portuguese class.' } },
+  { inf: 'estar', en: 'to be, temporary', pres_eu: 'estou', pres_voc: 'está',  past_eu: 'estive', past_voc: 'esteve',
+    ex_pres: { pt: 'Estou a aprender português frequentemente.', en: 'I am learning Portuguese frequently.' },
+    ex_past: { pt: 'Estive no café da Praça das Flores.', en: 'I was at the café in Praça das Flores.' } },
+  { inf: 'ir',    en: 'to go',            pres_eu: 'vou',   pres_voc: 'vai',   past_eu: 'fui',   past_voc: 'foi',
+    ex_pres: { pt: 'Vou ao supermercado comprar pão e manteiga.', en: 'I am going to the supermarket to buy bread and butter.' },
+    ex_past: { pt: 'Fui ao restaurante jantar fora ontem.', en: 'I went to the restaurant for dinner yesterday.' } },
+  { inf: 'ter',   en: 'to have',          pres_eu: 'tenho', pres_voc: 'tem',   past_eu: 'tive',  past_voc: 'teve',
+    ex_pres: { pt: 'Tenho aula de português às sextas-feiras.', en: 'I have Portuguese class on Fridays.' },
+    ex_past: { pt: 'Tive a barriga a dar horas antes do jantar.', en: 'I was starving before dinner.' } },
+  { inf: 'fazer', en: 'to do, to make',   pres_eu: 'faço',  pres_voc: 'faz',   past_eu: 'fiz',   past_voc: 'fez',
+    ex_pres: { pt: 'Faço sempre café de manhã antes de trabalhar.', en: 'I always make coffee in the morning before working.' },
+    ex_past: { pt: 'Fiz uma lista de supermercado antes de sair.', en: 'I made a shopping list before leaving.' } },
+  { inf: 'dar',   en: 'to give',          pres_eu: 'dou',   pres_voc: 'dá',    past_eu: 'dei',   past_voc: 'deu',
+    ex_pres: { pt: 'Dou sempre uma gorjeta quando o serviço é bom.', en: 'I always give a tip when the service is good.' },
+    ex_past: { pt: 'Dei a conta ao empregado e fui embora.', en: 'I gave the bill to the waiter and left.' } },
+  { inf: 'dizer', en: 'to say',           pres_eu: 'digo',  pres_voc: 'diz',   past_eu: 'disse', past_voc: 'disse',
+    ex_pres: { pt: 'Digo sempre obrigado quando alguém me ajuda.', en: 'I always say thank you when someone helps me.' },
+    ex_past: { pt: 'Disse ao empregado que queria a carta de vinhos.', en: 'I told the waiter I wanted the wine list.' } },
+];
+
+function buildEp2Segments() {
+  const segs = [];
+  const P2_REPEAT = 3.0, P2_CONFIRM = 1.5, P2_SHORT = 0.8, P2_BETWEEN = 2.0;
+
+  segs.push({ text: 'Sete verbos irregulares em português europeu. Para cada verbo vais ouvir o presente e o passado, nas formas eu e você. Repete cada forma em voz alta.', pause_after: 1.5 });
+  segs.push({ text: 'Vamos começar.', pause_after: 2.0 });
+
+  VERBS_IRR.forEach((v, i) => {
+    segs.push({ text: `Verbo ${i + 1}. ${v.inf}. ${v.en}.`, pause_after: P2_SHORT });
+    segs.push({ text: 'Presente do indicativo.', pause_after: P2_SHORT });
+    segs.push({ text: `Eu ${v.pres_eu}.`, pause_after: P2_REPEAT });
+    segs.push({ text: `Você ${v.pres_voc}.`, pause_after: P2_REPEAT });
+    segs.push({ text: v.ex_pres.pt, pause_after: P2_REPEAT });
+    segs.push({ text: v.ex_pres.en, pause_after: P2_CONFIRM });
+    segs.push({ text: 'Pretérito perfeito.', pause_after: P2_SHORT });
+    segs.push({ text: `Eu ${v.past_eu}.`, pause_after: P2_REPEAT });
+    segs.push({ text: `Você ${v.past_voc}.`, pause_after: P2_REPEAT });
+    segs.push({ text: v.ex_past.pt, pause_after: P2_REPEAT });
+    segs.push({ text: v.ex_past.en, pause_after: i < VERBS_IRR.length - 1 ? P2_BETWEEN : 1.0 });
+  });
+
+  segs.push({ text: 'Muito bem. Sete verbos irregulares — presente e passado — completos. Continua a praticar.', pause_after: 0 });
+  return segs;
+}
+
+// ── EP3 DATA ──────────────────────────────────────────────────────
+const FRAMES_EP3 = [
+  {
+    label: 'Estou a',
+    intro: 'Frame um. Estou a, mais o infinitivo. O presente contínuo — o que está a fazer agora.',
+    examples: [
+      { pt: 'Estou a aprender português.', en: "I'm learning Portuguese." },
+      { pt: 'Estou a esperar o autocarro na paragem.', en: "I'm waiting for the bus at the stop." },
+      { pt: 'Estou a cozinhar o jantar na cozinha.', en: "I'm cooking dinner in the kitchen." },
+      { pt: 'Estou a andar pela Baixa de Lisboa.', en: "I'm walking through downtown Lisbon." },
+    ],
+    prompts: [
+      { en: "I'm buying bread at the supermarket.", pt: 'Estou a comprar pão no supermercado.' },
+      { en: "I'm drinking coffee.", pt: 'Estou a beber café.' },
+      { en: "I'm opening the window.", pt: 'Estou a abrir a janela.' },
+    ]
+  },
+  {
+    label: 'Posso',
+    intro: 'Frame dois. Posso, mais o infinitivo. Permissão ou pedido educado. Pode também usar pode para pedir ao outro.',
+    examples: [
+      { pt: 'Posso pedir, por favor?', en: 'Can I order, please?' },
+      { pt: 'Pode trazer a carta de vinhos?', en: 'Can you bring the wine list?' },
+      { pt: 'Posso sentar-me aqui?', en: 'May I sit here?' },
+      { pt: 'Pode ajudar-me a encontrar a farmácia?', en: 'Can you help me find the pharmacy?' },
+    ],
+    prompts: [
+      { en: 'Can I ask a question?', pt: 'Posso fazer uma pergunta?' },
+      { en: 'Can you bring the bill?', pt: 'Pode trazer a conta?' },
+      { en: 'May I sit in the living room?', pt: 'Posso sentar-me na sala de estar?' },
+    ]
+  },
+  {
+    label: 'Queria',
+    intro: 'Frame três. Queria, mais o infinitivo ou um substantivo. O equivalente de I would like. Muito educado e natural.',
+    examples: [
+      { pt: 'Queria uma garrafa de vinho tinto, por favor.', en: "I'd like a bottle of red wine, please." },
+      { pt: 'Queria ir jantar fora esta noite.', en: "I'd like to go out for dinner tonight." },
+      { pt: 'Queria comprar pão e manteiga no supermercado.', en: "I'd like to buy bread and butter at the supermarket." },
+      { pt: 'Queria morar mais perto do rio Tejo.', en: "I'd like to live closer to the Tagus river." },
+    ],
+    prompts: [
+      { en: "I'd like a coffee, please.", pt: 'Queria um café, por favor.' },
+      { en: "I'd like to know Lisbon better.", pt: 'Queria conhecer Lisboa melhor.' },
+      { en: "I'd like to order the bacalhau.", pt: 'Queria pedir o bacalhau.' },
+    ]
+  },
+  {
+    label: 'Devo',
+    intro: 'Frame quatro. Devo, mais o infinitivo. Conselho ou obrigação moral.',
+    examples: [
+      { pt: 'Devo sair por aqui?', en: 'Should I leave this way?' },
+      { pt: 'Não deve falar inglês sempre. Deve praticar o português.', en: "You shouldn't always speak English. You should practise Portuguese." },
+      { pt: 'Deve pedir o peixe do dia. É o melhor.', en: "You should order the fish of the day. It's the best." },
+      { pt: 'Devo comprar mais azeite? Há muito pouco em casa.', en: 'Should I buy more olive oil? There is very little at home.' },
+    ],
+    prompts: [
+      { en: 'Should I wait here?', pt: 'Devo esperar aqui?' },
+      { en: 'You should try the vinho verde.', pt: 'Deve experimentar o vinho verde.' },
+      { en: 'Should I open the window?', pt: 'Devo abrir a janela?' },
+    ]
+  },
+  {
+    label: 'Vou',
+    intro: 'Frame cinco. Vou, mais o infinitivo. O futuro próximo — o que vai fazer a seguir, hoje, amanhã.',
+    examples: [
+      { pt: 'Vou ter aula de português amanhã.', en: "I'm going to have Portuguese class tomorrow." },
+      { pt: 'Vou comprar pão e leite no supermercado a seguir.', en: "I'm going to buy bread and milk at the supermarket next." },
+      { pt: 'Vamos beber um copo esta noite?', en: 'Shall we have a drink tonight?' },
+      { pt: 'Vou voltar para casa às seis. Há bacalhau para o jantar.', en: "I'm going home at six. There's bacalhau for dinner." },
+    ],
+    prompts: [
+      { en: "I'm going to work tomorrow.", pt: 'Vou trabalhar amanhã.' },
+      { en: "I'm going to stay here a little bit.", pt: 'Vou ficar aqui um bocadinho.' },
+      { en: "We're going to eat out tonight.", pt: 'Vamos comer fora esta noite.' },
+    ]
+  },
+];
+
+function buildEp3Segments() {
+  const segs = [];
+  const P3_EXAMPLE = 2.5, P3_CONFIRM = 1.5, P3_SHORT = 0.8, P3_PROMPT = 5.0, P3_BETWEEN = 2.0;
+
+  segs.push({ text: 'Combinações de verbos em português europeu. Cinco frames. Para cada frame, ouves exemplos reais e depois tentas produzir frases em português. Ouve o prompt em inglês, faz uma pausa, e diz a frase em português. Depois ouves a resposta correcta.', pause_after: 2.0 });
+
+  FRAMES_EP3.forEach((f, fi) => {
+    segs.push({ text: f.intro, pause_after: P3_SHORT });
+    segs.push({ text: 'Exemplos.', pause_after: P3_SHORT });
+    f.examples.forEach(ex => {
+      segs.push({ text: ex.pt, pause_after: P3_EXAMPLE });
+      segs.push({ text: ex.en, pause_after: P3_CONFIRM });
+    });
+    segs.push({ text: 'Agora és tu. Ouve o inglês e diz a frase em português.', pause_after: P3_SHORT });
+    f.prompts.forEach(p => {
+      segs.push({ text: p.en, pause_after: P3_PROMPT });
+      segs.push({ text: p.pt, pause_after: P3_CONFIRM });
+    });
+    if (fi < FRAMES_EP3.length - 1) {
+      segs.push({ text: 'Frame seguinte.', pause_after: P3_BETWEEN });
+    }
+  });
+
+  segs.push({ text: 'Muito bem. Cinco frames, vinte e cinco combinações. Continua a praticar. Usa estes frames em todas as conversas.', pause_after: 0 });
   return segs;
 }
 
@@ -207,9 +364,25 @@ const EPISODES = [
     title: 'Ep. 1 — Verbos: Infinitivos',
     desc: '25 verbos · infinitivo · tradução · exemplo',
     icon: '🎧',
-    filename: 'pt-verbos-infinitivos.mp3',
+    filename: 'pt-ep1-verbos-infinitivos.mp3',
     buildSegments: buildEp1Segments,
-  }
+  },
+  {
+    id: 'ep2',
+    title: 'Ep. 2 — Conjugações Irregulares',
+    desc: '7 verbos · presente & passado · eu & você',
+    icon: '🎧',
+    filename: 'pt-ep2-conjugacoes.mp3',
+    buildSegments: buildEp2Segments,
+  },
+  {
+    id: 'ep3',
+    title: 'Ep. 3 — Combinações de Verbos',
+    desc: '5 frames · exemplos · produção EN→PT',
+    icon: '🎧',
+    filename: 'pt-ep3-combinacoes.mp3',
+    buildSegments: buildEp3Segments,
+  },
 ];
 
 // ── STATE ─────────────────────────────────────────────────────────

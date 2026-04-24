@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Episódio 2 — Conjugações Irregulares</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0; --surface: #ffffff; --surface2: #f2ede6;
+    --border: #e0d8cc; --border2: #ccc4b4;
+    --green: #2d7a50; --green-light: #eef5f1; --green-mid: #9acbb0;
+    --red: #a03428; --blue: #2a5fa0; --blue-light: #eef3fb;
+    --text: #2e2820; --muted: #8a7a68; --muted2: #b0a090;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; display: flex; flex-direction: column; }
+
+  header { padding: 1.5rem 2rem 1rem; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+  .header-text h1 { font-family: var(--mono); font-size: 1rem; font-weight: 400; color: var(--muted); }
+  .header-text h1 span { color: var(--green); }
+  .header-text p { font-size: 0.82rem; color: var(--muted2); margin-top: 0.2rem; }
+  .pt-flag { flex-shrink: 0; width: 48px; height: 32px; border-radius: 3px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.15); margin-top: 2px; }
+
+  .player-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; max-width: 560px; margin: 0 auto; width: 100%; }
+
+  .ep-badge { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--green); background: var(--green-light); border: 1px solid var(--green-mid); padding: 0.25rem 0.75rem; border-radius: 99px; margin-bottom: 1.5rem; }
+
+  .display-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2rem 2rem 1.5rem; text-align: center; min-height: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem; margin-bottom: 1.5rem; position: relative; transition: border-color 0.3s; }
+  .display-card.playing { border-color: var(--green); }
+  .display-card.pausing { border-color: var(--border2); }
+
+  .seg-type { position: absolute; top: 1rem; left: 1.25rem; font-family: var(--mono); font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted2); }
+  .seg-num  { position: absolute; top: 1rem; right: 1.25rem; font-family: var(--mono); font-size: 0.58rem; color: var(--muted2); }
+
+  .display-verb { font-family: var(--mono); font-size: 1.4rem; font-weight: 700; color: var(--green); }
+  .display-tense { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+  .display-form { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--text); }
+  .display-form .subj { color: var(--blue); }
+  .display-form .conj { color: var(--green); }
+  .display-en { font-size: 0.9rem; color: var(--muted); font-style: italic; }
+  .display-example { font-family: var(--mono); font-size: 0.88rem; color: var(--text); font-style: italic; line-height: 1.5; }
+  .display-instruction { font-family: var(--mono); font-size: 0.75rem; color: var(--muted2); letter-spacing: 0.06em; }
+  .display-pause { font-family: var(--mono); font-size: 0.8rem; color: var(--muted2); letter-spacing: 0.1em; }
+
+  .waveform { display: flex; align-items: center; gap: 3px; height: 24px; margin-bottom: 0.25rem; opacity: 0; transition: opacity 0.3s; }
+  .waveform.active { opacity: 1; }
+  .waveform .bar { width: 3px; background: var(--green); border-radius: 2px; animation: wave 0.8s ease-in-out infinite; }
+  .waveform .bar:nth-child(1){animation-delay:0s;height:8px} .waveform .bar:nth-child(2){animation-delay:0.1s;height:16px} .waveform .bar:nth-child(3){animation-delay:0.2s;height:24px} .waveform .bar:nth-child(4){animation-delay:0.3s;height:16px} .waveform .bar:nth-child(5){animation-delay:0.15s;height:10px} .waveform .bar:nth-child(6){animation-delay:0.25s;height:20px} .waveform .bar:nth-child(7){animation-delay:0.05s;height:12px}
+  @keyframes wave { 0%,100%{transform:scaleY(0.4)} 50%{transform:scaleY(1)} }
+
+  .progress-wrap { width: 100%; margin-bottom: 1.25rem; }
+  .progress-track { width: 100%; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 0.5rem; }
+  .progress-fill { height: 100%; background: var(--green); border-radius: 2px; transition: width 0.4s ease; }
+  .progress-labels { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 0.65rem; color: var(--muted2); }
+
+  .controls { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+  .btn-play { width: 56px; height: 56px; border-radius: 50%; background: var(--green); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; box-shadow: 0 2px 8px rgba(45,122,80,0.3); }
+  .btn-play:hover { transform: scale(1.05); }
+  .btn-play svg { fill: #fff; }
+  .btn-skip { font-family: var(--mono); font-size: 0.72rem; padding: 0.5rem 1rem; background: var(--surface); border: 1px solid var(--border); color: var(--muted); border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .btn-skip:hover { border-color: var(--green-mid); color: var(--text); }
+  .btn-restart { font-family: var(--mono); font-size: 0.72rem; padding: 0.5rem 1rem; background: var(--surface); border: 1px solid var(--border); color: var(--muted); border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .btn-restart:hover { border-color: var(--red); color: var(--red); }
+
+  /* VERB GRID */
+  .verb-index { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .vi-header { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 0.6rem 1rem; background: var(--surface2); border-bottom: 1px solid var(--border); }
+  .vi-grid { display: grid; grid-template-columns: repeat(7, 1fr); padding: 0.5rem; gap: 0.25rem; }
+  .vi-item { font-family: var(--mono); font-size: 0.68rem; color: var(--muted2); padding: 0.3rem 0.25rem; border-radius: 3px; text-align: center; transition: all 0.2s; }
+  .vi-item.done    { color: var(--green); background: var(--green-light); }
+  .vi-item.current { color: var(--green); background: var(--green-light); border: 1px solid var(--green-mid); font-weight: 700; }
+
+  .done-overlay { width: 100%; background: var(--surface); border: 1px solid var(--green-mid); border-radius: 12px; padding: 2.5rem 2rem; text-align: center; display: none; margin-bottom: 1.5rem; }
+  .done-overlay.visible { display: block; }
+  .done-overlay h2 { font-family: var(--mono); font-size: 1rem; color: var(--green); margin-bottom: 0.5rem; }
+  .done-overlay p { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.5rem; }
+  .done-btn { font-family: var(--mono); font-size: 0.82rem; padding: 0.6rem 2rem; background: var(--green); color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-text">
+    <h1>Episódio 2 · <span>Conjugações Irregulares</span></h1>
+    <p>7 verbos · presente e passado · eu & você</p>
+  </div>
+  <svg class="pt-flag" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="19.2" height="32" fill="#006600"/>
+    <rect x="19.2" y="0" width="28.8" height="32" fill="#FF0000"/>
+    <circle cx="19.2" cy="16" r="7" fill="none" stroke="#FFCC00" stroke-width="1.2"/>
+    <circle cx="19.2" cy="16" r="4.5" fill="none" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="19.2" y1="11.5" x2="19.2" y2="20.5" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="14.7" y1="16" x2="23.7" y2="16" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="16" y1="12.8" x2="22.4" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <line x1="22.4" y1="12.8" x2="16" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <rect x="17" y="13.5" width="4.4" height="5" fill="white" rx="0.5"/>
+    <circle cx="19.2" cy="16" r="0.8" fill="#003399"/>
+    <circle cx="17.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="17.7" cy="17.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="17.5" r="0.5" fill="#003399"/>
+  </svg>
+</header>
+
+<div class="player-wrap">
+  <div class="ep-badge">Episódio 2 de 3 · Conjugações</div>
+  <div class="done-overlay" id="doneOverlay">
+    <h2>Episódio completo!</h2>
+    <p>Sete verbos irregulares — presente e passado. Muito bem.</p>
+    <button class="done-btn" onclick="restart()">↺ Repetir</button>
+  </div>
+  <div class="display-card" id="displayCard">
+    <span class="seg-type" id="segType"></span>
+    <span class="seg-num" id="segNum"></span>
+    <div class="waveform" id="waveform">
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+    </div>
+    <div id="displayContent"></div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-labels">
+      <span id="progressLabel">0 / 7 verbos</span>
+      <span id="progressPct">0%</span>
+    </div>
+  </div>
+  <div class="controls">
+    <button class="btn-skip" onclick="skipBack()">← Anterior</button>
+    <button class="btn-play" id="btnPlay" onclick="togglePlay()">
+      <svg id="playIcon" width="22" height="22" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+    <button class="btn-skip" onclick="skipForward()">Próximo →</button>
+    <button class="btn-restart" onclick="restart()">↺</button>
+  </div>
+  <div class="verb-index">
+    <div class="vi-header">Verbos — progresso</div>
+    <div class="vi-grid" id="verbIndex"></div>
+  </div>
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+
+const VERBS = [
+  {
+    inf: 'ser', en: 'to be (permanent)',
+    pres_eu: 'sou',   pres_eu_en: 'I am',
+    pres_voc: 'é',    pres_voc_en: 'you are',
+    past_eu: 'fui',   past_eu_en: 'I was',
+    past_voc: 'foi',  past_voc_en: 'you were',
+    // Examples draw from frases-do-dia + aula guides
+    ex_pres: { pt: 'Sou de Miami, mas moro em Lisboa.', en: 'I am from Miami, but I live in Lisbon.' },
+    ex_past: { pt: 'Foi uma boa aula de português.', en: 'It was a good Portuguese class.' },
+  },
+  {
+    inf: 'estar', en: 'to be (temporary)',
+    pres_eu: 'estou',  pres_eu_en: 'I am',
+    pres_voc: 'está',  pres_voc_en: 'you are',
+    past_eu: 'estive', past_eu_en: 'I was',
+    past_voc: 'esteve',past_voc_en: 'you were',
+    ex_pres: { pt: 'Estou a aprender português frequentemente.', en: 'I am learning Portuguese frequently.' },
+    ex_past: { pt: 'Estive no café da Praça das Flores.', en: 'I was at the café in Praça das Flores.' },
+  },
+  {
+    inf: 'ir', en: 'to go',
+    pres_eu: 'vou',   pres_eu_en: 'I go, I am going',
+    pres_voc: 'vai',  pres_voc_en: 'you go, you are going',
+    past_eu: 'fui',   past_eu_en: 'I went',
+    past_voc: 'foi',  past_voc_en: 'you went',
+    ex_pres: { pt: 'Vou ao supermercado comprar pão e manteiga.', en: 'I am going to the supermarket to buy bread and butter.' },
+    ex_past: { pt: 'Fui ao restaurante jantar fora ontem.', en: 'I went to the restaurant for dinner yesterday.' },
+  },
+  {
+    inf: 'ter', en: 'to have',
+    pres_eu: 'tenho', pres_eu_en: 'I have',
+    pres_voc: 'tem',  pres_voc_en: 'you have',
+    past_eu: 'tive',  past_eu_en: 'I had',
+    past_voc: 'teve', past_voc_en: 'you had',
+    ex_pres: { pt: 'Tenho aula de português às sextas-feiras.', en: 'I have Portuguese class on Fridays.' },
+    ex_past: { pt: 'Tive a barriga a dar horas antes do jantar.', en: 'I was starving before dinner.' },
+  },
+  {
+    inf: 'fazer', en: 'to do, to make',
+    pres_eu: 'faço',   pres_eu_en: 'I do, I make',
+    pres_voc: 'faz',   pres_voc_en: 'you do, you make',
+    past_eu: 'fiz',    past_eu_en: 'I did, I made',
+    past_voc: 'fez',   past_voc_en: 'you did, you made',
+    ex_pres: { pt: 'Faço sempre café de manhã antes de trabalhar.', en: 'I always make coffee in the morning before working.' },
+    ex_past: { pt: 'Fiz uma lista de supermercado antes de sair.', en: 'I made a shopping list before leaving.' },
+  },
+  {
+    inf: 'dar', en: 'to give',
+    pres_eu: 'dou',   pres_eu_en: 'I give',
+    pres_voc: 'dá',   pres_voc_en: 'you give',
+    past_eu: 'dei',   past_eu_en: 'I gave',
+    past_voc: 'deu',  past_voc_en: 'you gave',
+    ex_pres: { pt: 'Dou sempre uma gorjeta quando o serviço é bom.', en: 'I always give a tip when the service is good.' },
+    ex_past: { pt: 'Dei a conta ao empregado e fui embora.', en: 'I gave the bill to the waiter and left.' },
+  },
+  {
+    inf: 'dizer', en: 'to say',
+    pres_eu: 'digo',  pres_eu_en: 'I say',
+    pres_voc: 'diz',  pres_voc_en: 'you say',
+    past_eu: 'disse', past_eu_en: 'I said',
+    past_voc: 'disse',past_voc_en: 'you said',
+    ex_pres: { pt: 'Digo sempre obrigado quando alguém me ajuda.', en: 'I always say thank you when someone helps me.' },
+    ex_past: { pt: 'Disse ao empregado que queria a carta de vinhos.', en: 'I told the waiter I wanted the wine list.' },
+  },
+];
+
+const P_REPEAT  = 3.0;
+const P_CONFIRM = 1.5;
+const P_SHORT   = 0.8;
+const P_BETWEEN = 1.5;
+
+function buildSegments() {
+  const segs = [];
+  segs.push({ type: 'instruction', text: 'Sete verbos irregulares em português europeu. Para cada verbo vais ouvir o presente e o passado, nas formas eu e você. Repete cada forma em voz alta.', display: { instruction: 'Presente & Passado · eu & você' }, verbIdx: null });
+  segs.push({ type: 'pause', duration: 2000, display: { pause: '…' }, verbIdx: null });
+
+  VERBS.forEach((v, i) => {
+    // ── VERB INTRO
+    segs.push({ type: 'instruction', text: `Verbo ${i + 1}. ${v.inf}. ${v.en}.`, display: { verb: v.inf, en: v.en, tense: 'infinitivo' }, verbIdx: i });
+    segs.push({ type: 'pause', duration: P_SHORT * 1000, display: { verb: v.inf, en: v.en }, verbIdx: i });
+
+    // ── PRESENTE
+    segs.push({ type: 'tense-header', text: 'Presente do indicativo.', display: { verb: v.inf, tense: 'presente do indicativo' }, verbIdx: i });
+    segs.push({ type: 'pause', duration: P_SHORT * 1000, display: { verb: v.inf, tense: 'presente' }, verbIdx: i });
+
+    // eu present
+    segs.push({ type: 'pt', text: `Eu ${v.pres_eu}.`, display: { verb: v.inf, tense: 'presente', form: `eu ${v.pres_eu}` }, verbIdx: i });
+    segs.push({ type: 'pause', duration: P_REPEAT * 1000, display: { verb: v.inf, tense: 'presente', form: `eu ${v.pres_eu}`, pause: '← repete' }, verbIdx: i });
+    segs.push({ type: 'en', text: v.pres_eu_en, display: { verb: v.inf, tense: 'presente', form: `eu ${v.pres_eu}`, en: v.pres_eu_en }, verbIdx: i });
+    segs.push({ type: 'pause', duration: P_CONFIRM * 1000, display: { verb: v.inf, form: `eu ${v.pres_eu}`, en: v.pres_eu_en }, verbIdx: i });
+
+    // você present
+    segs.push({ type: 'pt', text: `Você ${v.pres_voc}.`, display: { verb: v.inf, tense: 'presente', form: `você ${v.pres_voc}` }, verbIdx: i });
+    segs.push({ type: 'pause', duration: P_REPEAT * 1000, display: { verb: v.inf, tense: 'presente', form: `você ${v.pres_voc}`, pause: '← repete' }, verbIdx: i });
+    segs.push({ type: 'en', text: v.pres_voc_en, display: { verb: v.inf, tense: 'presente', form: `você ${v.pres_voc}`, en: v.pres_voc_en }, verbIdx: i });
+    segs.push({ type: 'pause', duration: P_CONFIRM * 1000, display: { verb: v.inf, form: `você ${v.pres_voc}`, en: v.pres_voc_en }, verbIdx: i });
+
+    // presente example
+    segs.push({ type: 'example', text: v.ex_pres.pt, display: { verb: v.inf, tense: 'exemplo — presente', form: v.ex_pres.pt }, verbIdx: i });
+    segs.push({ type: 'pause', duration: P_REPEAT * 1000, display: { verb: v.inf, form: v.ex_pres.pt, pause: '← ouve bem' }, verbIdx: i });
+    segs.push({ type: 'en', text: v.ex_pres.en, display: { verb: v.inf, form: v.ex_pres.pt, en: v.ex_pres.en }, verbIdx: i });
+    segs.push({ type: 'pause', duration: P_CONFIRM * 1000, display: { verb: v.inf, en: v.ex_pres.en }, verbIdx: i });
+
+    // ── PASSADO
+    segs.push({ type: 'tense-header', text: 'Pretérito perfeito.', display: { verb: v.inf, tense: 'pretérito perfeito' }, verbIdx: i });
+    segs.push({ type: 'pause', duration: P_SHORT * 1000, display: { verb: v.inf, tense: 'passado' }, verbIdx: i });
+
+    // eu past
+    segs.push({ type: 'pt', text: `Eu ${v.past_eu}.`, display: { verb: v.inf, tense: 'passado', form: `eu ${v.past_eu}` }, verbIdx: i });
+    segs.push({ type: 'pause', duration: P_REPEAT * 1000, display: { verb: v.inf, tense: 'passado', form: `eu ${v.past_eu}`, pause: '← repete' }, verbIdx: i });
+    segs.push({ type: 'en', text: v.past_eu_en, display: { verb: v.inf, tense: 'passado', form: `eu ${v.past_eu}`, en: v.past_eu_en }, verbIdx: i });
+    segs.push({ type: 'pause', duration: P_CONFIRM * 1000, display: { verb: v.inf, form: `eu ${v.past_eu}`, en: v.past_eu_en }, verbIdx: i });
+
+    // você past
+    segs.push({ type: 'pt', text: `Você ${v.past_voc}.`, display: { verb: v.inf, tense: 'passado', form: `você ${v.past_voc}` }, verbIdx: i });
+    segs.push({ type: 'pause', duration: P_REPEAT * 1000, display: { verb: v.inf, tense: 'passado', form: `você ${v.past_voc}`, pause: '← repete' }, verbIdx: i });
+    segs.push({ type: 'en', text: v.past_voc_en, display: { verb: v.inf, tense: 'passado', form: `você ${v.past_voc}`, en: v.past_voc_en }, verbIdx: i });
+    segs.push({ type: 'pause', duration: P_CONFIRM * 1000, display: { verb: v.inf, form: `você ${v.past_voc}`, en: v.past_voc_en }, verbIdx: i });
+
+    // passado example
+    segs.push({ type: 'example', text: v.ex_past.pt, display: { verb: v.inf, tense: 'exemplo — passado', form: v.ex_past.pt }, verbIdx: i });
+    segs.push({ type: 'pause', duration: P_REPEAT * 1000, display: { verb: v.inf, form: v.ex_past.pt, pause: '← ouve bem' }, verbIdx: i });
+    segs.push({ type: 'en', text: v.ex_past.en, display: { verb: v.inf, form: v.ex_past.pt, en: v.ex_past.en }, verbIdx: i });
+    segs.push({ type: 'pause', duration: i < VERBS.length - 1 ? P_BETWEEN * 1000 : 1000, display: { pause: '…' }, verbIdx: i });
+  });
+
+  segs.push({ type: 'instruction', text: 'Muito bem. Sete verbos irregulares — presente e passado — completos. Continua a praticar.', display: { instruction: 'Episódio completo!' }, verbIdx: null });
+  return segs;
+}
+
+const SEGMENTS = buildSegments();
+let segIdx = 0, isPlaying = false, pauseTimer = null, currentAudio = null, audioCache = {};
+
+async function fetchAudio(text) {
+  if (audioCache[text]) return audioCache[text];
+  const res = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) });
+  if (!res.ok) throw new Error('TTS error');
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  audioCache[text] = url;
+  return url;
+}
+
+async function playFromSegment(idx) {
+  if (idx >= SEGMENTS.length) { finish(); return; }
+  segIdx = idx;
+  const seg = SEGMENTS[segIdx];
+  updateDisplay(seg);
+  updateProgress(seg.verbIdx);
+
+  if (seg.verbIdx !== null) updateVerbIndex(seg.verbIdx);
+
+  if (seg.type === 'pause') {
+    document.getElementById('displayCard').classList.remove('playing');
+    document.getElementById('displayCard').classList.add('pausing');
+    document.getElementById('waveform').classList.remove('active');
+    pauseTimer = setTimeout(() => { if (isPlaying) playFromSegment(segIdx + 1); }, seg.duration);
+    return;
+  }
+
+  document.getElementById('displayCard').classList.add('playing');
+  document.getElementById('displayCard').classList.remove('pausing');
+  document.getElementById('waveform').classList.add('active');
+
+  try {
+    const url = await fetchAudio(seg.text);
+    if (!isPlaying) return;
+    currentAudio = new Audio(url);
+    currentAudio.onended = () => { document.getElementById('waveform').classList.remove('active'); if (isPlaying) playFromSegment(segIdx + 1); };
+    currentAudio.onerror = () => { if (isPlaying) playFromSegment(segIdx + 1); };
+    currentAudio.play();
+  } catch(e) { if (isPlaying) playFromSegment(segIdx + 1); }
+}
+
+function stopCurrent() {
+  clearTimeout(pauseTimer);
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  document.getElementById('waveform').classList.remove('active');
+  document.getElementById('displayCard').classList.remove('playing', 'pausing');
+}
+
+function togglePlay() {
+  if (isPlaying) { isPlaying = false; stopCurrent(); setPlayIcon(false); }
+  else { isPlaying = true; setPlayIcon(true); playFromSegment(segIdx); }
+}
+
+function skipForward() {
+  stopCurrent();
+  const curVerb = SEGMENTS[segIdx]?.verbIdx ?? -1;
+  let next = segIdx + 1;
+  while (next < SEGMENTS.length && SEGMENTS[next].verbIdx === curVerb) next++;
+  segIdx = next;
+  if (isPlaying) playFromSegment(segIdx);
+  else { updateDisplay(SEGMENTS[segIdx]); updateProgress(SEGMENTS[segIdx]?.verbIdx); }
+}
+
+function skipBack() {
+  stopCurrent();
+  const curVerb = SEGMENTS[segIdx]?.verbIdx ?? 0;
+  const prevVerb = Math.max(0, curVerb - 1);
+  let back = 0;
+  for (let i = 0; i < SEGMENTS.length; i++) { if (SEGMENTS[i].verbIdx === prevVerb && SEGMENTS[i].type === 'instruction') { back = i; break; } }
+  segIdx = back;
+  if (isPlaying) playFromSegment(segIdx);
+  else { updateDisplay(SEGMENTS[segIdx]); updateProgress(prevVerb); }
+}
+
+function restart() {
+  isPlaying = false; stopCurrent(); segIdx = 0; setPlayIcon(false);
+  document.getElementById('doneOverlay').classList.remove('visible');
+  document.getElementById('displayCard').style.display = '';
+  updateDisplay(SEGMENTS[0]); updateProgress(null); buildVerbIndex();
+}
+
+function finish() {
+  isPlaying = false; setPlayIcon(false);
+  document.getElementById('doneOverlay').classList.add('visible');
+  document.getElementById('displayCard').style.display = 'none';
+}
+
+function setPlayIcon(playing) {
+  document.getElementById('playIcon').innerHTML = playing
+    ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
+    : '<path d="M8 5v14l11-7z"/>';
+}
+
+function updateDisplay(seg) {
+  if (!seg) return;
+  const d = seg.display || {};
+  document.getElementById('segType').textContent = seg.type === 'pt' ? 'português' : seg.type === 'en' ? 'tradução' : seg.type === 'example' ? 'exemplo' : seg.type === 'tense-header' ? 'tempo verbal' : '';
+  document.getElementById('segNum').textContent = seg.verbIdx !== null && seg.verbIdx !== undefined ? `${seg.verbIdx + 1} / ${VERBS.length}` : '';
+
+  let html = '';
+  if (d.instruction) html += `<div class="display-instruction">${d.instruction}</div>`;
+  if (d.verb)        html += `<div class="display-verb">${d.verb}</div>`;
+  if (d.tense)       html += `<div class="display-tense">${d.tense}</div>`;
+  if (d.form)        html += `<div class="display-form">${d.form}</div>`;
+  if (d.en)          html += `<div class="display-en">${d.en}</div>`;
+  if (d.pause)       html += `<div class="display-pause">${d.pause}</div>`;
+  document.getElementById('displayContent').innerHTML = html;
+}
+
+function updateProgress(verbIdx) {
+  const done = verbIdx !== null && verbIdx !== undefined ? verbIdx : 0;
+  const pct = Math.round((done / VERBS.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `${done} / ${VERBS.length} verbos`;
+  document.getElementById('progressPct').textContent = pct + '%';
+}
+
+function buildVerbIndex() {
+  const grid = document.getElementById('verbIndex');
+  grid.innerHTML = '';
+  VERBS.forEach((v, i) => {
+    const item = document.createElement('div');
+    item.className = 'vi-item pending'; item.id = `vi-${i}`; item.textContent = v.inf;
+    grid.appendChild(item);
+  });
+}
+
+function updateVerbIndex(verbIdx) {
+  VERBS.forEach((_, i) => {
+    const el = document.getElementById(`vi-${i}`);
+    if (!el) return;
+    el.className = i < verbIdx ? 'vi-item done' : i === verbIdx ? 'vi-item current' : 'vi-item';
+  });
+}
+
+buildVerbIndex();
+updateDisplay(SEGMENTS[0]);
+updateProgress(null);
+</script>
+</body>
+</html>

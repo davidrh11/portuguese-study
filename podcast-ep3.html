@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="pt" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Episódio 3 — Combinações de Verbos</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0; --surface: #ffffff; --surface2: #f2ede6;
+    --border: #e0d8cc; --border2: #ccc4b4;
+    --green: #2d7a50; --green-light: #eef5f1; --green-mid: #9acbb0;
+    --red: #a03428; --red-light: #fdf2f1;
+    --yellow: #b07d2a; --yellow-light: #fdf6e8;
+    --blue: #2a5fa0; --blue-light: #eef3fb;
+    --orange: #b85c00; --orange-light: #fdf3ea;
+    --purple: #6b3fa0; --purple-light: #f4eefb;
+    --text: #2e2820; --muted: #8a7a68; --muted2: #b0a090;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; display: flex; flex-direction: column; }
+
+  header { padding: 1.5rem 2rem 1rem; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+  .header-text h1 { font-family: var(--mono); font-size: 1rem; font-weight: 400; color: var(--muted); }
+  .header-text h1 span { color: var(--green); }
+  .header-text p { font-size: 0.82rem; color: var(--muted2); margin-top: 0.2rem; }
+  .pt-flag { flex-shrink: 0; width: 48px; height: 32px; border-radius: 3px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.15); margin-top: 2px; }
+
+  .player-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; max-width: 560px; margin: 0 auto; width: 100%; }
+
+  .ep-badge { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--green); background: var(--green-light); border: 1px solid var(--green-mid); padding: 0.25rem 0.75rem; border-radius: 99px; margin-bottom: 1.5rem; }
+
+  .display-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2rem 2rem 1.5rem; text-align: center; min-height: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem; margin-bottom: 1.5rem; position: relative; transition: border-color 0.3s; }
+  .display-card.playing { border-color: var(--green); }
+  .display-card.pausing { border-color: var(--border2); }
+  .display-card.prompt  { border-color: var(--yellow); background: var(--yellow-light); }
+
+  .seg-type { position: absolute; top: 1rem; left: 1.25rem; font-family: var(--mono); font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted2); }
+  .seg-num  { position: absolute; top: 1rem; right: 1.25rem; font-family: var(--mono); font-size: 0.58rem; color: var(--muted2); }
+
+  .display-frame { font-family: var(--mono); font-size: 1.1rem; font-weight: 700; }
+  .display-frame.estou  { color: var(--green); }
+  .display-frame.posso  { color: var(--blue); }
+  .display-frame.queria { color: var(--orange); }
+  .display-frame.devo   { color: var(--red); }
+  .display-frame.vou    { color: var(--purple); }
+
+  .display-pt { font-family: var(--mono); font-size: 1.15rem; font-weight: 600; color: var(--text); line-height: 1.4; }
+  .display-en { font-size: 0.9rem; color: var(--muted); font-style: italic; line-height: 1.5; }
+  .display-prompt { font-size: 1rem; color: var(--yellow); font-weight: 600; line-height: 1.5; }
+  .display-prompt-label { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--yellow); }
+  .display-instruction { font-family: var(--mono); font-size: 0.78rem; color: var(--muted2); letter-spacing: 0.05em; line-height: 1.5; }
+  .display-pause { font-family: var(--mono); font-size: 0.8rem; color: var(--muted2); letter-spacing: 0.1em; }
+  .display-answer { font-family: var(--mono); font-size: 1.1rem; color: var(--green); font-weight: 700; }
+
+  .waveform { display: flex; align-items: center; gap: 3px; height: 24px; margin-bottom: 0.25rem; opacity: 0; transition: opacity 0.3s; }
+  .waveform.active { opacity: 1; }
+  .waveform .bar { width: 3px; background: var(--green); border-radius: 2px; animation: wave 0.8s ease-in-out infinite; }
+  .waveform .bar:nth-child(1){animation-delay:0s;height:8px} .waveform .bar:nth-child(2){animation-delay:0.1s;height:16px} .waveform .bar:nth-child(3){animation-delay:0.2s;height:24px} .waveform .bar:nth-child(4){animation-delay:0.3s;height:16px} .waveform .bar:nth-child(5){animation-delay:0.15s;height:10px} .waveform .bar:nth-child(6){animation-delay:0.25s;height:20px} .waveform .bar:nth-child(7){animation-delay:0.05s;height:12px}
+  @keyframes wave { 0%,100%{transform:scaleY(0.4)} 50%{transform:scaleY(1)} }
+
+  .progress-wrap { width: 100%; margin-bottom: 1.25rem; }
+  .progress-track { width: 100%; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 0.5rem; }
+  .progress-fill { height: 100%; background: var(--green); border-radius: 2px; transition: width 0.4s ease; }
+  .progress-labels { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 0.65rem; color: var(--muted2); }
+
+  .controls { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+  .btn-play { width: 56px; height: 56px; border-radius: 50%; background: var(--green); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; box-shadow: 0 2px 8px rgba(45,122,80,0.3); }
+  .btn-play:hover { transform: scale(1.05); }
+  .btn-play svg { fill: #fff; }
+  .btn-skip { font-family: var(--mono); font-size: 0.72rem; padding: 0.5rem 1rem; background: var(--surface); border: 1px solid var(--border); color: var(--muted); border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .btn-skip:hover { border-color: var(--green-mid); color: var(--text); }
+  .btn-restart { font-family: var(--mono); font-size: 0.72rem; padding: 0.5rem 1rem; background: var(--surface); border: 1px solid var(--border); color: var(--muted); border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .btn-restart:hover { border-color: var(--red); color: var(--red); }
+
+  /* FRAME INDEX */
+  .frame-index { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .fi-header { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 0.6rem 1rem; background: var(--surface2); border-bottom: 1px solid var(--border); }
+  .fi-grid { display: grid; grid-template-columns: repeat(5, 1fr); padding: 0.5rem; gap: 0.25rem; }
+  .fi-item { font-family: var(--mono); font-size: 0.7rem; color: var(--muted2); padding: 0.35rem 0.25rem; border-radius: 3px; text-align: center; transition: all 0.2s; }
+  .fi-item.done-estou   { color: var(--green);  background: var(--green-light); }
+  .fi-item.done-posso   { color: var(--blue);   background: var(--blue-light); }
+  .fi-item.done-queria  { color: var(--orange); background: var(--orange-light); }
+  .fi-item.done-devo    { color: var(--red);    background: var(--red-light); }
+  .fi-item.done-vou     { color: var(--purple); background: var(--purple-light); }
+  .fi-item.current      { font-weight: 700; border: 1px solid currentColor; }
+
+  .done-overlay { width: 100%; background: var(--surface); border: 1px solid var(--green-mid); border-radius: 12px; padding: 2.5rem 2rem; text-align: center; display: none; margin-bottom: 1.5rem; }
+  .done-overlay.visible { display: block; }
+  .done-overlay h2 { font-family: var(--mono); font-size: 1rem; color: var(--green); margin-bottom: 0.5rem; }
+  .done-overlay p { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.5rem; }
+  .done-btn { font-family: var(--mono); font-size: 0.82rem; padding: 0.6rem 2rem; background: var(--green); color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-text">
+    <h1>Episódio 3 · <span>Combinações de Verbos</span></h1>
+    <p>5 frames · produção · contexto real</p>
+  </div>
+  <svg class="pt-flag" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="19.2" height="32" fill="#006600"/>
+    <rect x="19.2" y="0" width="28.8" height="32" fill="#FF0000"/>
+    <circle cx="19.2" cy="16" r="7" fill="none" stroke="#FFCC00" stroke-width="1.2"/>
+    <circle cx="19.2" cy="16" r="4.5" fill="none" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="19.2" y1="11.5" x2="19.2" y2="20.5" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="14.7" y1="16" x2="23.7" y2="16" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="16" y1="12.8" x2="22.4" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <line x1="22.4" y1="12.8" x2="16" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <rect x="17" y="13.5" width="4.4" height="5" fill="white" rx="0.5"/>
+    <circle cx="19.2" cy="16" r="0.8" fill="#003399"/>
+    <circle cx="17.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="17.7" cy="17.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="17.5" r="0.5" fill="#003399"/>
+  </svg>
+</header>
+
+<div class="player-wrap">
+  <div class="ep-badge">Episódio 3 de 3 · Combinações</div>
+  <div class="done-overlay" id="doneOverlay">
+    <h2>Episódio completo!</h2>
+    <p>Cinco frames, vinte e cinco combinações. Muito bem.</p>
+    <button class="done-btn" onclick="restart()">↺ Repetir</button>
+  </div>
+  <div class="display-card" id="displayCard">
+    <span class="seg-type" id="segType"></span>
+    <span class="seg-num" id="segNum"></span>
+    <div class="waveform" id="waveform">
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+    </div>
+    <div id="displayContent"></div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-labels">
+      <span id="progressLabel">0 / 5 frames</span>
+      <span id="progressPct">0%</span>
+    </div>
+  </div>
+  <div class="controls">
+    <button class="btn-skip" onclick="skipBack()">← Anterior</button>
+    <button class="btn-play" id="btnPlay" onclick="togglePlay()">
+      <svg id="playIcon" width="22" height="22" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+    <button class="btn-skip" onclick="skipForward()">Próximo →</button>
+    <button class="btn-restart" onclick="restart()">↺</button>
+  </div>
+  <div class="frame-index">
+    <div class="fi-header">Frames — progresso</div>
+    <div class="fi-grid" id="frameIndex"></div>
+  </div>
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+
+// Each frame has: intro explanation, 4 examples, then 3 production prompts
+// Examples draw from casa-vocabulario, ha-preciso-de, frases-do-dia, aula-14-abril
+const FRAMES = [
+  {
+    id: 'estou',
+    label: 'Estou a',
+    intro: 'Frame um. Estou a, mais o infinitivo. Use este frame para dizer o que está a fazer agora mesmo. O presente contínuo em português europeu.',
+    examples: [
+      { pt: 'Estou a aprender português.', en: "I'm learning Portuguese." },
+      { pt: 'Estou a esperar o autocarro na paragem.', en: "I'm waiting for the bus at the stop." },
+      { pt: 'Estou a cozinhar o jantar na cozinha.', en: "I'm cooking dinner in the kitchen." },
+      { pt: 'Estou a andar pela Baixa de Lisboa.', en: "I'm walking through downtown Lisbon." },
+    ],
+    prompts: [
+      { en: "I'm buying bread at the supermarket.", pt: 'Estou a comprar pão no supermercado.' },
+      { en: "I'm drinking coffee.", pt: 'Estou a beber café.' },
+      { en: "I'm opening the window.", pt: 'Estou a abrir a janela.' },
+    ]
+  },
+  {
+    id: 'posso',
+    label: 'Posso',
+    intro: 'Frame dois. Posso, mais o infinitivo. Use este frame para pedir permissão ou fazer um pedido educado. Pode também usar pode para pedir ao outro.',
+    examples: [
+      { pt: 'Posso pedir, por favor?', en: 'Can I order, please?' },
+      { pt: 'Pode trazer a carta de vinhos?', en: 'Can you bring the wine list?' },
+      { pt: 'Posso sentar-me aqui?', en: 'May I sit here?' },
+      { pt: 'Pode ajudar-me a encontrar a farmácia?', en: 'Can you help me find the pharmacy?' },
+    ],
+    prompts: [
+      { en: 'Can I ask a question?', pt: 'Posso fazer uma pergunta?' },
+      { en: 'Can you bring the bill?', pt: 'Pode trazer a conta?' },
+      { en: 'May I sit in the living room?', pt: 'Posso sentar-me na sala de estar?' },
+    ]
+  },
+  {
+    id: 'queria',
+    label: 'Queria',
+    intro: 'Frame três. Queria, mais o infinitivo ou um substantivo. Use este frame para dizer o que gostaria de ter ou fazer. É o equivalente de I would like em inglês. Muito educado e natural.',
+    examples: [
+      { pt: 'Queria uma garrafa de vinho tinto, por favor.', en: "I'd like a bottle of red wine, please." },
+      { pt: 'Queria ir jantar fora esta noite.', en: "I'd like to go out for dinner tonight." },
+      { pt: 'Queria comprar pão e manteiga no supermercado.', en: "I'd like to buy bread and butter at the supermarket." },
+      { pt: 'Queria morar mais perto do rio Tejo.', en: "I'd like to live closer to the Tagus river." },
+    ],
+    prompts: [
+      { en: "I'd like a coffee, please.", pt: 'Queria um café, por favor.' },
+      { en: "I'd like to know Lisbon better.", pt: 'Queria conhecer Lisboa melhor.' },
+      { en: "I'd like to order the bacalhau.", pt: 'Queria pedir o bacalhau.' },
+    ]
+  },
+  {
+    id: 'devo',
+    label: 'Devo',
+    intro: 'Frame quatro. Devo, mais o infinitivo. Use este frame para perguntar ou dizer o que deve fazer. Conselho ou obrigação moral. Não deve falar inglês em Portugal. Deve pedir o vinho verde.',
+    examples: [
+      { pt: 'Devo sair por aqui?', en: 'Should I leave this way?' },
+      { pt: 'Não deve falar inglês sempre. Deve praticar o português.', en: "You shouldn't always speak English. You should practise Portuguese." },
+      { pt: 'Deve pedir o peixe do dia. É o melhor.', en: 'You should order the fish of the day. It\'s the best.' },
+      { pt: 'Devo comprar mais azeite? Há muito pouco em casa.', en: 'Should I buy more olive oil? There is very little at home.' },
+    ],
+    prompts: [
+      { en: 'Should I wait here?', pt: 'Devo esperar aqui?' },
+      { en: 'You should try the vinho verde.', pt: 'Deve experimentar o vinho verde.' },
+      { en: 'Should I open the window?', pt: 'Devo abrir a janela?' },
+    ]
+  },
+  {
+    id: 'vou',
+    label: 'Vou',
+    intro: 'Frame cinco. Vou, mais o infinitivo. Use este frame para falar sobre o futuro próximo. O que vai fazer a seguir, hoje, amanhã. Vou, vai, vamos.',
+    examples: [
+      { pt: 'Vou ter aula de português amanhã.', en: "I'm going to have Portuguese class tomorrow." },
+      { pt: 'Vou comprar pão e leite no supermercado a seguir.', en: "I'm going to buy bread and milk at the supermarket next." },
+      { pt: 'Vamos beber um copo esta noite?', en: 'Shall we have a drink tonight?' },
+      { pt: 'Vou voltar para casa às seis. Há bacalhau para o jantar.', en: "I'm going home at six. There's bacalhau for dinner." },
+    ],
+    prompts: [
+      { en: "I'm going to work tomorrow.", pt: 'Vou trabalhar amanhã.' },
+      { en: "I'm going to stay here a little bit.", pt: 'Vou ficar aqui um bocadinho.' },
+      { en: "We're going to eat out tonight.", pt: 'Vamos comer fora esta noite.' },
+    ]
+  },
+];
+
+const P_REPEAT  = 5000;  // production prompt pause — longer for ep3
+const P_CONFIRM = 1500;
+const P_SHORT   = 800;
+const P_BETWEEN = 2000;
+
+function buildSegments() {
+  const segs = [];
+
+  segs.push({ type: 'instruction', text: 'Combinações de verbos em português europeu. Cinco frames. Para cada frame, ouves exemplos reais e depois tentas produzir frases em português. Ouve o prompt em inglês, faz uma pausa, e diz a frase em português. Depois ouves a resposta correcta.', display: { instruction: 'Ouve · Produz · Confirma' }, frameIdx: null });
+  segs.push({ type: 'pause', duration: 2000, display: { pause: '…' }, frameIdx: null });
+
+  FRAMES.forEach((f, fi) => {
+    // Frame intro
+    segs.push({ type: 'intro', text: f.intro, display: { frame: f.id, label: f.label, instruction: f.intro }, frameIdx: fi });
+    segs.push({ type: 'pause', duration: P_SHORT, display: { frame: f.id, label: f.label }, frameIdx: fi });
+
+    // Examples — hear and absorb
+    segs.push({ type: 'instruction', text: 'Exemplos.', display: { frame: f.id, label: f.label, instruction: 'Exemplos →' }, frameIdx: fi });
+
+    f.examples.forEach((ex, ei) => {
+      segs.push({ type: 'pt', text: ex.pt, display: { frame: f.id, label: f.label, pt: ex.pt }, frameIdx: fi });
+      segs.push({ type: 'pause', duration: 2500, display: { frame: f.id, pt: ex.pt, pause: '← repete' }, frameIdx: fi });
+      segs.push({ type: 'en', text: ex.en, display: { frame: f.id, pt: ex.pt, en: ex.en }, frameIdx: fi });
+      segs.push({ type: 'pause', duration: P_CONFIRM, display: { frame: f.id, en: ex.en }, frameIdx: fi });
+    });
+
+    // Production prompts — EN → pause → PT answer
+    segs.push({ type: 'instruction', text: 'Agora és tu. Ouve o inglês e diz a frase em português.', display: { frame: f.id, label: f.label, instruction: 'A tua vez — ouve em inglês, diz em português.' }, frameIdx: fi });
+    segs.push({ type: 'pause', duration: P_SHORT, display: { frame: f.id, label: f.label }, frameIdx: fi });
+
+    f.prompts.forEach((p, pi) => {
+      // English prompt
+      segs.push({ type: 'prompt-en', text: p.en, display: { frame: f.id, promptLabel: 'Como se diz?', prompt: p.en }, frameIdx: fi });
+      // Long pause — produce it
+      segs.push({ type: 'pause', duration: P_REPEAT, display: { frame: f.id, promptLabel: 'Como se diz?', prompt: p.en, pause: '← diz em português' }, frameIdx: fi });
+      // Answer in Portuguese
+      segs.push({ type: 'answer', text: p.pt, display: { frame: f.id, label: f.label, answer: p.pt }, frameIdx: fi });
+      segs.push({ type: 'pause', duration: P_CONFIRM, display: { frame: f.id, answer: p.pt }, frameIdx: fi });
+    });
+
+    if (fi < FRAMES.length - 1) {
+      segs.push({ type: 'pause', duration: P_BETWEEN, display: { pause: '…' }, frameIdx: fi });
+    }
+  });
+
+  segs.push({ type: 'instruction', text: 'Muito bem. Cinco frames, vinte e cinco combinações. Continua a praticar. Usa estes frames em todas as conversas.', display: { instruction: 'Episódio completo!' }, frameIdx: null });
+  return segs;
+}
+
+const SEGMENTS = buildSegments();
+let segIdx = 0, isPlaying = false, pauseTimer = null, currentAudio = null, audioCache = {};
+
+async function fetchAudio(text) {
+  if (audioCache[text]) return audioCache[text];
+  const res = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) });
+  if (!res.ok) throw new Error('TTS error');
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  audioCache[text] = url;
+  return url;
+}
+
+async function playFromSegment(idx) {
+  if (idx >= SEGMENTS.length) { finish(); return; }
+  segIdx = idx;
+  const seg = SEGMENTS[segIdx];
+  updateDisplay(seg);
+  updateProgress(seg.frameIdx);
+  if (seg.frameIdx !== null && seg.frameIdx !== undefined) updateFrameIndex(seg.frameIdx, seg.type);
+
+  if (seg.type === 'pause') {
+    document.getElementById('displayCard').classList.remove('playing', 'prompt');
+    document.getElementById('displayCard').classList.add('pausing');
+    document.getElementById('waveform').classList.remove('active');
+    pauseTimer = setTimeout(() => { if (isPlaying) playFromSegment(segIdx + 1); }, seg.duration);
+    return;
+  }
+
+  const isPrompt = seg.type === 'prompt-en';
+  document.getElementById('displayCard').classList.toggle('prompt', isPrompt);
+  document.getElementById('displayCard').classList.toggle('playing', !isPrompt);
+  document.getElementById('displayCard').classList.remove('pausing');
+  document.getElementById('waveform').classList.add('active');
+
+  try {
+    const url = await fetchAudio(seg.text);
+    if (!isPlaying) return;
+    currentAudio = new Audio(url);
+    currentAudio.onended = () => { document.getElementById('waveform').classList.remove('active'); if (isPlaying) playFromSegment(segIdx + 1); };
+    currentAudio.onerror = () => { if (isPlaying) playFromSegment(segIdx + 1); };
+    currentAudio.play();
+  } catch(e) { if (isPlaying) playFromSegment(segIdx + 1); }
+}
+
+function stopCurrent() {
+  clearTimeout(pauseTimer);
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  document.getElementById('waveform').classList.remove('active');
+  document.getElementById('displayCard').classList.remove('playing', 'pausing', 'prompt');
+}
+
+function togglePlay() {
+  if (isPlaying) { isPlaying = false; stopCurrent(); setPlayIcon(false); }
+  else { isPlaying = true; setPlayIcon(true); playFromSegment(segIdx); }
+}
+
+function skipForward() {
+  stopCurrent();
+  const cur = SEGMENTS[segIdx]?.frameIdx ?? -1;
+  let next = segIdx + 1;
+  while (next < SEGMENTS.length && SEGMENTS[next].frameIdx === cur) next++;
+  segIdx = next;
+  if (isPlaying) playFromSegment(segIdx);
+  else { updateDisplay(SEGMENTS[segIdx]); updateProgress(SEGMENTS[segIdx]?.frameIdx); }
+}
+
+function skipBack() {
+  stopCurrent();
+  const cur = SEGMENTS[segIdx]?.frameIdx ?? 0;
+  const prev = Math.max(0, cur - 1);
+  let back = 0;
+  for (let i = 0; i < SEGMENTS.length; i++) { if (SEGMENTS[i].frameIdx === prev && SEGMENTS[i].type === 'intro') { back = i; break; } }
+  segIdx = back;
+  if (isPlaying) playFromSegment(segIdx);
+  else { updateDisplay(SEGMENTS[segIdx]); updateProgress(prev); }
+}
+
+function restart() {
+  isPlaying = false; stopCurrent(); segIdx = 0; setPlayIcon(false);
+  document.getElementById('doneOverlay').classList.remove('visible');
+  document.getElementById('displayCard').style.display = '';
+  updateDisplay(SEGMENTS[0]); updateProgress(null); buildFrameIndex();
+}
+
+function finish() {
+  isPlaying = false; setPlayIcon(false);
+  document.getElementById('doneOverlay').classList.add('visible');
+  document.getElementById('displayCard').style.display = 'none';
+}
+
+function setPlayIcon(playing) {
+  document.getElementById('playIcon').innerHTML = playing
+    ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
+    : '<path d="M8 5v14l11-7z"/>';
+}
+
+function updateDisplay(seg) {
+  if (!seg) return;
+  const d = seg.display || {};
+  const typeLabels = { intro: 'frame', pt: 'português', en: 'tradução', 'prompt-en': 'desafio', answer: 'resposta', instruction: 'instrução', example: 'exemplo' };
+  document.getElementById('segType').textContent = typeLabels[seg.type] || '';
+  document.getElementById('segNum').textContent = seg.frameIdx !== null && seg.frameIdx !== undefined ? `frame ${seg.frameIdx + 1} / 5` : '';
+
+  let html = '';
+  if (d.instruction)   html += `<div class="display-instruction">${d.instruction}</div>`;
+  if (d.label)         html += `<div class="display-frame ${d.frame || ''}">${d.label}</div>`;
+  if (d.pt)            html += `<div class="display-pt">${d.pt}</div>`;
+  if (d.en)            html += `<div class="display-en">${d.en}</div>`;
+  if (d.promptLabel)   html += `<div class="display-prompt-label">${d.promptLabel}</div>`;
+  if (d.prompt)        html += `<div class="display-prompt">${d.prompt}</div>`;
+  if (d.answer)        html += `<div class="display-answer">${d.answer}</div>`;
+  if (d.pause)         html += `<div class="display-pause">${d.pause}</div>`;
+  document.getElementById('displayContent').innerHTML = html;
+}
+
+function updateProgress(frameIdx) {
+  const done = frameIdx !== null && frameIdx !== undefined ? frameIdx : 0;
+  const pct = Math.round((done / FRAMES.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `${done} / ${FRAMES.length} frames`;
+  document.getElementById('progressPct').textContent = pct + '%';
+}
+
+function buildFrameIndex() {
+  const grid = document.getElementById('frameIndex');
+  grid.innerHTML = '';
+  FRAMES.forEach((f, i) => {
+    const item = document.createElement('div');
+    item.className = 'fi-item'; item.id = `fi-${i}`; item.textContent = f.label;
+    grid.appendChild(item);
+  });
+}
+
+function updateFrameIndex(frameIdx, type) {
+  FRAMES.forEach((f, i) => {
+    const el = document.getElementById(`fi-${i}`);
+    if (!el) return;
+    if (i < frameIdx) el.className = `fi-item done-${FRAMES[i].id}`;
+    else if (i === frameIdx) el.className = `fi-item done-${f.id} current`;
+    else el.className = 'fi-item';
+  });
+}
+
+buildFrameIndex();
+updateDisplay(SEGMENTS[0]);
+updateProgress(null);
+</script>
+</body>
+</html>

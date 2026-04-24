@@ -145,7 +145,14 @@
   }
   .btn-restart:hover { border-color: var(--red); color: var(--red); }
 
-  /* VERB INDEX */
+  .btn-wakelock {
+    font-family: var(--mono); font-size: 0.72rem; padding: 0.45rem 1.1rem;
+    background: var(--surface); border: 1px solid var(--border); color: var(--muted);
+    border-radius: 4px; cursor: pointer; transition: all 0.15s; margin-bottom: 1.25rem;
+    width: 100%; max-width: 240px;
+  }
+  .btn-wakelock:hover { border-color: var(--green-mid); color: var(--text); }
+  .btn-wakelock.active { background: var(--green-light); border-color: var(--green); color: var(--green); }
   .verb-index {
     width: 100%; background: var(--surface); border: 1px solid var(--border);
     border-radius: 8px; overflow: hidden;
@@ -245,6 +252,7 @@
     <button class="btn-skip" onclick="skipForward()">Próximo →</button>
     <button class="btn-restart" onclick="restart()">↺</button>
   </div>
+  <button class="btn-wakelock" id="btnWakeLock" onclick="toggleWakeLock()">☀ Manter ecrã ativo</button>
 
   <div class="verb-index">
     <div class="vi-header">Verbos — progresso</div>
@@ -344,7 +352,15 @@ function buildSegments() {
       verbIdx: i,
       display: { pt: v.inf, en: v.en, example: v.ex_pt, exEn: v.ex_en }
     });
-    // 8. Gap before next verb
+    // 8. Short pause then repeat PT example
+    segs.push({ type: 'pause', duration: PAUSE_CONFIRM, verbIdx: i, display: { pt: v.inf, example: v.ex_pt } });
+    segs.push({
+      type: 'example',
+      text: v.ex_pt,
+      verbIdx: i,
+      display: { pt: v.inf, en: v.en, example: v.ex_pt }
+    });
+    // 9. Gap before next verb
     if (i < VERBS.length - 1) {
       segs.push({ type: 'pause', duration: PAUSE_BETWEEN, verbIdx: i, display: { pause: '…' } });
     }
