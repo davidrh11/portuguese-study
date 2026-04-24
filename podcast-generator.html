@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Podcast Generator — Português</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<!-- LAME MP3 encoder -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"></script>
+<style>
+  :root {
+    --bg: #f9f6f0; --surface: #ffffff; --surface2: #f2ede6;
+    --border: #e0d8cc; --border2: #ccc4b4;
+    --green: #2d7a50; --green-light: #eef5f1; --green-mid: #9acbb0;
+    --red: #a03428; --red-light: #fdf2f1;
+    --text: #2e2820; --muted: #8a7a68; --muted2: #b0a090;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+  header { padding: 1.5rem 2rem 1rem; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; }
+  .header-text h1 { font-family: var(--mono); font-size: 1rem; font-weight: 400; color: var(--muted); }
+  .header-text h1 span { color: var(--green); }
+  .header-text p { font-size: 0.82rem; color: var(--muted2); margin-top: 0.2rem; }
+  .pt-flag { flex-shrink: 0; width: 48px; height: 32px; border-radius: 3px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.15); margin-top: 2px; }
+
+  .wrap { max-width: 600px; margin: 0 auto; padding: 2rem; }
+
+  /* EPISODE CARDS */
+  .ep-grid { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+  .ep-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1.25rem 1.5rem; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 1.25rem;
+  }
+  .ep-card:hover { border-color: var(--green-mid); }
+  .ep-card.selected { border-color: var(--green); background: var(--green-light); }
+  .ep-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .ep-info { flex: 1; }
+  .ep-title { font-family: var(--mono); font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 0.2rem; }
+  .ep-desc { font-size: 0.78rem; color: var(--muted); }
+  .ep-duration { font-family: var(--mono); font-size: 0.7rem; color: var(--muted2); }
+
+  /* SECTION TITLE */
+  .section-title { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--red); margin: 1.5rem 0 0.75rem; border-left: 3px solid var(--red); padding-left: 0.65rem; }
+  .section-title:first-child { margin-top: 0; }
+
+  /* GENERATE BUTTON */
+  .btn-generate {
+    width: 100%; padding: 0.9rem; font-family: var(--mono); font-size: 0.9rem; font-weight: 600;
+    background: var(--green); color: #fff; border: none; border-radius: 6px;
+    cursor: pointer; transition: all 0.2s; margin-bottom: 1.5rem;
+  }
+  .btn-generate:hover { filter: brightness(1.1); }
+  .btn-generate:disabled { opacity: 0.4; cursor: default; }
+
+  /* PROGRESS */
+  .progress-wrap { display: none; margin-bottom: 1.5rem; }
+  .progress-wrap.visible { display: block; }
+  .progress-header { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-bottom: 0.5rem; }
+  .progress-track { width: 100%; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 0.75rem; }
+  .progress-fill { height: 100%; background: var(--green); border-radius: 3px; transition: width 0.3s; }
+  .progress-log { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 0.75rem 1rem; max-height: 160px; overflow-y: auto; }
+  .log-line { font-family: var(--mono); font-size: 0.68rem; color: var(--muted); padding: 0.15rem 0; border-bottom: 1px solid var(--border); }
+  .log-line:last-child { border-bottom: none; color: var(--text); }
+  .log-line.done { color: var(--green); }
+  .log-line.error { color: var(--red); }
+
+  /* DOWNLOAD */
+  .download-wrap { display: none; background: var(--green-light); border: 1px solid var(--green-mid); border-radius: 8px; padding: 1.5rem; text-align: center; }
+  .download-wrap.visible { display: block; }
+  .download-wrap h3 { font-family: var(--mono); font-size: 0.9rem; color: var(--green); margin-bottom: 0.5rem; }
+  .download-wrap p { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.25rem; }
+  .btn-download {
+    display: inline-block; font-family: var(--mono); font-size: 0.85rem; font-weight: 600;
+    padding: 0.7rem 2rem; background: var(--green); color: #fff;
+    border: none; border-radius: 4px; cursor: pointer; text-decoration: none;
+    transition: filter 0.2s;
+  }
+  .btn-download:hover { filter: brightness(1.1); }
+  .file-size { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); margin-top: 0.75rem; }
+
+  /* NOTE */
+  .note-block { background: var(--surface2); border-left: 3px solid var(--green); padding: 0.85rem 1.1rem; border-radius: 0 4px 4px 0; font-size: 0.82rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.5rem; }
+  .note-block strong { color: var(--green); font-family: var(--mono); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-text">
+    <h1>Podcast <span>Generator</span></h1>
+    <p>Gera episódios MP3 para ouvir a caminhar</p>
+  </div>
+  <svg class="pt-flag" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="19.2" height="32" fill="#006600"/>
+    <rect x="19.2" y="0" width="28.8" height="32" fill="#FF0000"/>
+    <circle cx="19.2" cy="16" r="7" fill="none" stroke="#FFCC00" stroke-width="1.2"/>
+    <circle cx="19.2" cy="16" r="4.5" fill="none" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="19.2" y1="11.5" x2="19.2" y2="20.5" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="14.7" y1="16" x2="23.7" y2="16" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="16" y1="12.8" x2="22.4" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <line x1="22.4" y1="12.8" x2="16" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <rect x="17" y="13.5" width="4.4" height="5" fill="white" rx="0.5"/>
+    <circle cx="19.2" cy="16" r="0.8" fill="#003399"/>
+    <circle cx="17.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="17.7" cy="17.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="17.5" r="0.5" fill="#003399"/>
+  </svg>
+</header>
+
+<div class="wrap">
+
+  <div class="note-block">
+    Use this on <strong>desktop Chrome</strong>. Select an episode, click Generate, wait for all segments to download and stitch, then download the MP3. Transfer to your phone via AirDrop, cable, or cloud.
+  </div>
+
+  <div class="section-title">Escolhe o Episódio</div>
+  <div class="ep-grid" id="epGrid"></div>
+
+  <button class="btn-generate" id="btnGenerate" onclick="generate()" disabled>
+    🎙 Gerar MP3
+  </button>
+
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-header">
+      <span id="progressLabel">A gerar…</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-log" id="progressLog"></div>
+  </div>
+
+  <div class="download-wrap" id="downloadWrap">
+    <h3>✓ MP3 pronto!</h3>
+    <p id="downloadDesc"></p>
+    <a class="btn-download" id="downloadBtn" download>⬇ Download MP3</a>
+    <div class="file-size" id="fileSize"></div>
+  </div>
+
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+
+// ── EPISODE DATA ──────────────────────────────────────────────────
+const VERBS = [
+  { inf: 'saber',     en: 'to know facts',          ex_pt: 'Não sei.',                           ex_en: "I don't know." },
+  { inf: 'vir',       en: 'to come',                ex_pt: 'Pode vir aqui?',                     ex_en: 'Can you come here?' },
+  { inf: 'falar',     en: 'to speak',               ex_pt: 'Estou a falar português.',            ex_en: "I'm speaking Portuguese." },
+  { inf: 'ver',       en: 'to see, to understand',  ex_pt: 'Estou a ver.',                       ex_en: 'I see. I understand.' },
+  { inf: 'ficar',     en: 'to stay, to become',     ex_pt: 'Vou ficar aqui.',                    ex_en: "I'm going to stay here." },
+  { inf: 'gostar',    en: 'to like',                ex_pt: 'Gosto muito de Lisboa.',              ex_en: 'I really like Lisbon.' },
+  { inf: 'precisar',  en: 'to need',                ex_pt: 'Preciso de ajuda.',                  ex_en: 'I need help.' },
+  { inf: 'trazer',    en: 'to bring',               ex_pt: 'Pode trazer a conta?',                ex_en: 'Can you bring the bill?' },
+  { inf: 'pedir',     en: 'to ask for, to order',   ex_pt: 'Posso pedir, por favor?',             ex_en: 'Can I order, please?' },
+  { inf: 'comer',     en: 'to eat',                 ex_pt: 'Vamos comer algo?',                  ex_en: 'Shall we eat something?' },
+  { inf: 'beber',     en: 'to drink',               ex_pt: 'Queria beber um copo.',               ex_en: "I'd like to have a drink." },
+  { inf: 'andar',     en: 'to walk, to get around', ex_pt: 'Estou a andar pela cidade.',          ex_en: "I'm walking around the city." },
+  { inf: 'começar',   en: 'to begin',               ex_pt: 'Estou a começar a aprender.',         ex_en: "I'm starting to learn." },
+  { inf: 'perceber',  en: 'to understand',          ex_pt: 'Não percebo.',                       ex_en: "I don't understand." },
+  { inf: 'trabalhar', en: 'to work',                ex_pt: 'Vou trabalhar amanhã.',               ex_en: "I'm going to work tomorrow." },
+  { inf: 'morar',     en: 'to live, to reside',     ex_pt: 'Moro em Lisboa.',                    ex_en: 'I live in Lisbon.' },
+  { inf: 'comprar',   en: 'to buy',                 ex_pt: 'Vou comprar pão.',                   ex_en: "I'm going to buy bread." },
+  { inf: 'ajudar',    en: 'to help',                ex_pt: 'Pode ajudar-me?',                    ex_en: 'Can you help me?' },
+  { inf: 'esperar',   en: 'to wait, to hope',       ex_pt: 'Estou a esperar.',                   ex_en: "I'm waiting." },
+  { inf: 'conhecer',  en: 'to know a person or place', ex_pt: 'Conhece Lisboa bem?',             ex_en: 'Do you know Lisbon well?' },
+  { inf: 'chegar',    en: 'to arrive',              ex_pt: 'Estou a chegar.',                    ex_en: "I'm on my way." },
+  { inf: 'sentar',    en: 'to sit',                 ex_pt: 'Posso sentar-me aqui?',              ex_en: 'May I sit here?' },
+  { inf: 'sair',      en: 'to leave, to go out',    ex_pt: 'Devo sair por aqui?',                ex_en: 'Should I leave this way?' },
+  { inf: 'voltar',    en: 'to return, to come back',ex_pt: 'Vou voltar às seis.',                ex_en: "I'm coming back at six." },
+  { inf: 'abrir',     en: 'to open',                ex_pt: 'Pode abrir a janela?',               ex_en: 'Can you open the window?' },
+];
+
+// Pause durations in seconds (will become silence buffers)
+const P_REPEAT  = 3.0;   // after PT — say it aloud
+const P_CONFIRM = 1.5;   // after EN — let it land
+const P_BETWEEN = 1.2;   // between verbs
+const P_SHORT   = 0.6;   // brief gap
+
+// Each episode is an array of { text, pause_after }
+// text: string to speak via TTS | null for silence-only
+// pause_after: seconds of silence to add after this segment
+function buildEp1Segments() {
+  const segs = [];
+  segs.push({ text: 'Verbos em português europeu. Vinte e cinco verbos essenciais. Ouve cada verbo, repete em voz alta, e ouve a tradução.', pause_after: 1.5 });
+  segs.push({ text: 'Vamos começar.', pause_after: 2.0 });
+
+  VERBS.forEach((v, i) => {
+    segs.push({ text: `Verbo ${i + 1}.`, pause_after: P_SHORT });
+    segs.push({ text: v.inf, pause_after: P_REPEAT });          // say it → pause → repeat
+    segs.push({ text: v.en,  pause_after: P_CONFIRM });         // english → pause
+    segs.push({ text: v.ex_pt, pause_after: P_REPEAT });        // example → pause → absorb
+    segs.push({ text: v.ex_en, pause_after: i < VERBS.length - 1 ? P_BETWEEN : 1.0 }); // EN of example
+  });
+
+  segs.push({ text: 'Muito bem. Vinte e cinco verbos completos. Continua a praticar. Até já.', pause_after: 0 });
+  return segs;
+}
+
+const EPISODES = [
+  {
+    id: 'ep1',
+    title: 'Ep. 1 — Verbos: Infinitivos',
+    desc: '25 verbos · infinitivo · tradução · exemplo',
+    icon: '🎧',
+    filename: 'pt-verbos-infinitivos.mp3',
+    buildSegments: buildEp1Segments,
+  }
+];
+
+// ── STATE ─────────────────────────────────────────────────────────
+let selectedEp = null;
+
+// ── BUILD EPISODE LIST ────────────────────────────────────────────
+function buildEpGrid() {
+  const grid = document.getElementById('epGrid');
+  EPISODES.forEach(ep => {
+    const card = document.createElement('div');
+    card.className = 'ep-card';
+    card.innerHTML = `
+      <div class="ep-icon">${ep.icon}</div>
+      <div class="ep-info">
+        <div class="ep-title">${ep.title}</div>
+        <div class="ep-desc">${ep.desc}</div>
+      </div>`;
+    card.onclick = () => {
+      document.querySelectorAll('.ep-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedEp = ep;
+      document.getElementById('btnGenerate').disabled = false;
+    };
+    grid.appendChild(card);
+  });
+}
+
+// ── AUDIO FETCH ───────────────────────────────────────────────────
+async function fetchAudioBuffer(ctx, text) {
+  const res = await fetch(WORKER_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text })
+  });
+  if (!res.ok) throw new Error(`TTS failed for: ${text}`);
+  const arrayBuf = await res.arrayBuffer();
+  return await ctx.decodeAudioData(arrayBuf);
+}
+
+function makeSilenceBuffer(ctx, seconds) {
+  const sampleRate = ctx.sampleRate;
+  const length = Math.floor(sampleRate * seconds);
+  const buffer = ctx.createBuffer(1, length, sampleRate);
+  return buffer;
+}
+
+// ── GENERATE ─────────────────────────────────────────────────────
+async function generate() {
+  if (!selectedEp) return;
+
+  const btn = document.getElementById('btnGenerate');
+  btn.disabled = true;
+
+  document.getElementById('progressWrap').classList.add('visible');
+  document.getElementById('downloadWrap').classList.remove('visible');
+  document.getElementById('progressLog').innerHTML = '';
+
+  const segments = selectedEp.buildSegments();
+  const totalSegs = segments.length;
+  const ctx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 44100 });
+
+  const buffers = [];
+  let done = 0;
+
+  for (const seg of segments) {
+    try {
+      log(`🔊 "${seg.text.substring(0, 50)}${seg.text.length > 50 ? '…' : ''}"`, false);
+
+      // Fetch TTS audio
+      const audioBuf = await fetchAudioBuffer(ctx, seg.text);
+      buffers.push(audioBuf);
+
+      // Add silence after
+      if (seg.pause_after > 0) {
+        buffers.push(makeSilenceBuffer(ctx, seg.pause_after));
+      }
+
+      done++;
+      updateProgress(done, totalSegs);
+      logDone();
+
+    } catch(e) {
+      log(`✗ Error: ${e.message}`, true);
+      done++;
+      updateProgress(done, totalSegs);
+    }
+  }
+
+  log('Stitching audio…', false);
+
+  // Stitch all buffers into one
+  const totalSamples = buffers.reduce((sum, b) => sum + b.length, 0);
+  const sampleRate = ctx.sampleRate;
+  const channels = 1; // mono
+  const combined = ctx.createBuffer(channels, totalSamples, sampleRate);
+  const channelData = combined.getChannelData(0);
+
+  let offset = 0;
+  for (const buf of buffers) {
+    const src = buf.numberOfChannels > 0 ? buf.getChannelData(0) : new Float32Array(buf.length);
+    channelData.set(src, offset);
+    offset += buf.length;
+  }
+
+  log('Encoding MP3…', false);
+
+  // Encode to MP3 using lamejs
+  const mp3Data = encodeToMp3(channelData, sampleRate);
+  const mp3Blob = new Blob(mp3Data, { type: 'audio/mp3' });
+  const mp3Url = URL.createObjectURL(mp3Blob);
+
+  logDone();
+  updateProgress(totalSegs, totalSegs);
+
+  // Show download
+  const durationMin = Math.round(totalSamples / sampleRate / 60);
+  const sizeMB = (mp3Blob.size / 1024 / 1024).toFixed(1);
+  document.getElementById('downloadDesc').textContent = `${selectedEp.title} · ~${durationMin} min · ${sizeMB} MB`;
+  document.getElementById('downloadBtn').href = mp3Url;
+  document.getElementById('downloadBtn').download = selectedEp.filename;
+  document.getElementById('fileSize').textContent = `${sizeMB} MB — transfere para o telefone via AirDrop ou cabo`;
+  document.getElementById('downloadWrap').classList.add('visible');
+
+  btn.disabled = false;
+  log('✓ Pronto!', false);
+  document.querySelector('.log-line:last-child').classList.add('done');
+}
+
+// ── MP3 ENCODER (lamejs) ──────────────────────────────────────────
+function encodeToMp3(float32Array, sampleRate) {
+  const mp3enc = new lamejs.Mp3Encoder(1, sampleRate, 128); // mono, sampleRate, 128kbps
+  const blockSize = 1152;
+  const mp3Data = [];
+
+  // Convert Float32 → Int16
+  const int16 = new Int16Array(float32Array.length);
+  for (let i = 0; i < float32Array.length; i++) {
+    const s = Math.max(-1, Math.min(1, float32Array[i]));
+    int16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+  }
+
+  for (let i = 0; i < int16.length; i += blockSize) {
+    const chunk = int16.subarray(i, i + blockSize);
+    const encoded = mp3enc.encodeBuffer(chunk);
+    if (encoded.length > 0) mp3Data.push(new Int8Array(encoded));
+  }
+
+  const flushed = mp3enc.flush();
+  if (flushed.length > 0) mp3Data.push(new Int8Array(flushed));
+
+  return mp3Data;
+}
+
+// ── UI HELPERS ────────────────────────────────────────────────────
+function updateProgress(done, total) {
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressLabel').textContent = `Segmento ${done} de ${total}`;
+}
+
+function log(msg, isError) {
+  const log = document.getElementById('progressLog');
+  const line = document.createElement('div');
+  line.className = 'log-line' + (isError ? ' error' : '');
+  line.textContent = msg;
+  log.appendChild(line);
+  log.scrollTop = log.scrollHeight;
+}
+
+function logDone() {
+  const lines = document.querySelectorAll('.log-line');
+  if (lines.length > 0) lines[lines.length - 1].classList.add('done');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+buildEpGrid();
+</script>
+</body>
+</html>
