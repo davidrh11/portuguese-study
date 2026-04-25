@@ -224,8 +224,10 @@ function buildSegments() {
   segs.push({ type: 'pause', duration: 2000, display: { pause: '…' }, verbIdx: null });
 
   VERBS.forEach((v, i) => {
-    // ── VERB INTRO
-    segs.push({ type: 'instruction', text: `Verbo ${i + 1}. ${v.inf}. ${v.en}.`, display: { verb: v.inf, en: v.en, tense: 'infinitivo' }, verbIdx: i });
+    // ── VERB INTRO — say infinitive, pause 2s for self-definition, then EN
+    segs.push({ type: 'instruction', text: `Verbo ${i + 1}. ${v.inf}.`, display: { verb: v.inf, tense: 'infinitivo' }, verbIdx: i });
+    segs.push({ type: 'pause', duration: 2000, display: { verb: v.inf, pause: '← define em inglês' }, verbIdx: i });
+    segs.push({ type: 'en', text: v.en, display: { verb: v.inf, en: v.en }, verbIdx: i });
     segs.push({ type: 'pause', duration: P_SHORT * 1000, display: { verb: v.inf, en: v.en }, verbIdx: i });
 
     // ── PRESENTE
@@ -244,13 +246,13 @@ function buildSegments() {
     segs.push({ type: 'en', text: v.pres_voc_en, display: { verb: v.inf, tense: 'presente', form: `você ${v.pres_voc}`, en: v.pres_voc_en }, verbIdx: i });
     segs.push({ type: 'pause', duration: P_CONFIRM * 1000, display: { verb: v.inf, form: `você ${v.pres_voc}`, en: v.pres_voc_en }, verbIdx: i });
 
-    // presente example
+    // presente example — 2s after first play, 2s after repeat
     segs.push({ type: 'example', text: v.ex_pres.pt, display: { verb: v.inf, tense: 'exemplo — presente', form: v.ex_pres.pt }, verbIdx: i });
-    segs.push({ type: 'pause', duration: P_REPEAT * 1000, display: { verb: v.inf, form: v.ex_pres.pt, pause: '← ouve bem' }, verbIdx: i });
+    segs.push({ type: 'pause', duration: 2000, display: { verb: v.inf, form: v.ex_pres.pt, pause: '← ouve bem' }, verbIdx: i });
     segs.push({ type: 'en', text: v.ex_pres.en, display: { verb: v.inf, form: v.ex_pres.pt, en: v.ex_pres.en }, verbIdx: i });
     segs.push({ type: 'pause', duration: P_CONFIRM * 1000, display: { verb: v.inf, en: v.ex_pres.en }, verbIdx: i });
     segs.push({ type: 'example', text: v.ex_pres.pt, display: { verb: v.inf, tense: 'exemplo — presente', form: v.ex_pres.pt }, verbIdx: i });
-    segs.push({ type: 'pause', duration: P_CONFIRM * 1000, display: { verb: v.inf, form: v.ex_pres.pt }, verbIdx: i });
+    segs.push({ type: 'pause', duration: 2000, display: { verb: v.inf, form: v.ex_pres.pt, pause: '← repete' }, verbIdx: i });
 
     // ── PASSADO
     segs.push({ type: 'tense-header', text: 'Pretérito perfeito.', display: { verb: v.inf, tense: 'pretérito perfeito' }, verbIdx: i });
@@ -268,13 +270,13 @@ function buildSegments() {
     segs.push({ type: 'en', text: v.past_voc_en, display: { verb: v.inf, tense: 'passado', form: `você ${v.past_voc}`, en: v.past_voc_en }, verbIdx: i });
     segs.push({ type: 'pause', duration: P_CONFIRM * 1000, display: { verb: v.inf, form: `você ${v.past_voc}`, en: v.past_voc_en }, verbIdx: i });
 
-    // passado example
+    // passado example — 2s after first play, 2s after repeat
     segs.push({ type: 'example', text: v.ex_past.pt, display: { verb: v.inf, tense: 'exemplo — passado', form: v.ex_past.pt }, verbIdx: i });
-    segs.push({ type: 'pause', duration: P_REPEAT * 1000, display: { verb: v.inf, form: v.ex_past.pt, pause: '← ouve bem' }, verbIdx: i });
+    segs.push({ type: 'pause', duration: 2000, display: { verb: v.inf, form: v.ex_past.pt, pause: '← ouve bem' }, verbIdx: i });
     segs.push({ type: 'en', text: v.ex_past.en, display: { verb: v.inf, form: v.ex_past.pt, en: v.ex_past.en }, verbIdx: i });
     segs.push({ type: 'pause', duration: P_CONFIRM * 1000, display: { verb: v.inf, en: v.ex_past.en }, verbIdx: i });
     segs.push({ type: 'example', text: v.ex_past.pt, display: { verb: v.inf, tense: 'exemplo — passado', form: v.ex_past.pt }, verbIdx: i });
-    segs.push({ type: 'pause', duration: i < VERBS.length - 1 ? P_BETWEEN * 1000 : 1000, display: { pause: '…' }, verbIdx: i });
+    segs.push({ type: 'pause', duration: i < VERBS.length - 1 ? 2000 : 1000, display: { verb: v.inf, form: v.ex_past.pt, pause: '← repete' }, verbIdx: i });
   });
 
   segs.push({ type: 'instruction', text: 'Muito bem. Sete verbos irregulares — presente e passado — completos. Continua a praticar.', display: { instruction: 'Episódio completo!' }, verbIdx: null });

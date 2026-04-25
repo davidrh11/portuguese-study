@@ -235,17 +235,18 @@ function buildEp2Segments() {
   segs.push({ text: 'Vamos começar.', pause_after: 2.0 });
 
   VERBS_IRR.forEach((v, i) => {
-    segs.push({ text: `Verbo ${i + 1}. ${v.inf}. ${v.en}.`, pause_after: P2_SHORT });
+    segs.push({ text: `Verbo ${i + 1}. ${v.inf}.`, pause_after: 2.0 });
+    segs.push({ text: v.en, pause_after: P2_SHORT });
     segs.push({ text: 'Presente do indicativo.', pause_after: P2_SHORT });
     segs.push({ text: `Eu ${v.pres_eu}.`, pause_after: P2_REPEAT });
     segs.push({ text: `Você ${v.pres_voc}.`, pause_after: P2_REPEAT });
-    segs.push({ text: v.ex_pres.pt, pause_after: P2_REPEAT });
+    segs.push({ text: v.ex_pres.pt, pause_after: 2.0 });
     segs.push({ text: v.ex_pres.en, pause_after: P2_CONFIRM });
-    segs.push({ text: v.ex_pres.pt, pause_after: P2_CONFIRM });
+    segs.push({ text: v.ex_pres.pt, pause_after: 2.0 });
     segs.push({ text: 'Pretérito perfeito.', pause_after: P2_SHORT });
     segs.push({ text: `Eu ${v.past_eu}.`, pause_after: P2_REPEAT });
     segs.push({ text: `Você ${v.past_voc}.`, pause_after: P2_REPEAT });
-    segs.push({ text: v.ex_past.pt, pause_after: P2_REPEAT });
+    segs.push({ text: v.ex_past.pt, pause_after: 2.0 });
     segs.push({ text: v.ex_past.en, pause_after: P2_CONFIRM });
     segs.push({ text: v.ex_past.pt, pause_after: i < VERBS_IRR.length - 1 ? P2_BETWEEN : 1.0 });
   });
