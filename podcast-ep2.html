@@ -249,6 +249,8 @@ function buildSegments() {
     segs.push({ type: 'pause', duration: P_REPEAT * 1000, display: { verb: v.inf, form: v.ex_pres.pt, pause: '← ouve bem' }, verbIdx: i });
     segs.push({ type: 'en', text: v.ex_pres.en, display: { verb: v.inf, form: v.ex_pres.pt, en: v.ex_pres.en }, verbIdx: i });
     segs.push({ type: 'pause', duration: P_CONFIRM * 1000, display: { verb: v.inf, en: v.ex_pres.en }, verbIdx: i });
+    segs.push({ type: 'example', text: v.ex_pres.pt, display: { verb: v.inf, tense: 'exemplo — presente', form: v.ex_pres.pt }, verbIdx: i });
+    segs.push({ type: 'pause', duration: P_CONFIRM * 1000, display: { verb: v.inf, form: v.ex_pres.pt }, verbIdx: i });
 
     // ── PASSADO
     segs.push({ type: 'tense-header', text: 'Pretérito perfeito.', display: { verb: v.inf, tense: 'pretérito perfeito' }, verbIdx: i });
@@ -270,6 +272,8 @@ function buildSegments() {
     segs.push({ type: 'example', text: v.ex_past.pt, display: { verb: v.inf, tense: 'exemplo — passado', form: v.ex_past.pt }, verbIdx: i });
     segs.push({ type: 'pause', duration: P_REPEAT * 1000, display: { verb: v.inf, form: v.ex_past.pt, pause: '← ouve bem' }, verbIdx: i });
     segs.push({ type: 'en', text: v.ex_past.en, display: { verb: v.inf, form: v.ex_past.pt, en: v.ex_past.en }, verbIdx: i });
+    segs.push({ type: 'pause', duration: P_CONFIRM * 1000, display: { verb: v.inf, en: v.ex_past.en }, verbIdx: i });
+    segs.push({ type: 'example', text: v.ex_past.pt, display: { verb: v.inf, tense: 'exemplo — passado', form: v.ex_past.pt }, verbIdx: i });
     segs.push({ type: 'pause', duration: i < VERBS.length - 1 ? P_BETWEEN * 1000 : 1000, display: { pause: '…' }, verbIdx: i });
   });
 

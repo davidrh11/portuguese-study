@@ -241,11 +241,13 @@ function buildEp2Segments() {
     segs.push({ text: `Você ${v.pres_voc}.`, pause_after: P2_REPEAT });
     segs.push({ text: v.ex_pres.pt, pause_after: P2_REPEAT });
     segs.push({ text: v.ex_pres.en, pause_after: P2_CONFIRM });
+    segs.push({ text: v.ex_pres.pt, pause_after: P2_CONFIRM });
     segs.push({ text: 'Pretérito perfeito.', pause_after: P2_SHORT });
     segs.push({ text: `Eu ${v.past_eu}.`, pause_after: P2_REPEAT });
     segs.push({ text: `Você ${v.past_voc}.`, pause_after: P2_REPEAT });
     segs.push({ text: v.ex_past.pt, pause_after: P2_REPEAT });
-    segs.push({ text: v.ex_past.en, pause_after: i < VERBS_IRR.length - 1 ? P2_BETWEEN : 1.0 });
+    segs.push({ text: v.ex_past.en, pause_after: P2_CONFIRM });
+    segs.push({ text: v.ex_past.pt, pause_after: i < VERBS_IRR.length - 1 ? P2_BETWEEN : 1.0 });
   });
 
   segs.push({ text: 'Muito bem. Sete verbos irregulares — presente e passado — completos. Continua a praticar.', pause_after: 0 });
@@ -333,7 +335,7 @@ const FRAMES_EP3 = [
 
 function buildEp3Segments() {
   const segs = [];
-  const P3_EXAMPLE = 2.5, P3_CONFIRM = 1.5, P3_SHORT = 0.8, P3_PROMPT = 5.0, P3_BETWEEN = 2.0;
+  const P3_EXAMPLE = 5.0, P3_CONFIRM = 3.0, P3_SHORT = 0.8, P3_PROMPT = 10.0, P3_BETWEEN = 4.0;
 
   segs.push({ text: 'Combinações de verbos em português europeu. Cinco frames. Para cada frame, ouves exemplos reais e depois tentas produzir frases em português. Ouve o prompt em inglês, faz uma pausa, e diz a frase em português. Depois ouves a resposta correcta.', pause_after: 2.0 });
 
@@ -343,10 +345,12 @@ function buildEp3Segments() {
     f.examples.forEach(ex => {
       segs.push({ text: ex.pt, pause_after: P3_EXAMPLE });
       segs.push({ text: ex.en, pause_after: P3_CONFIRM });
+      segs.push({ text: ex.pt, pause_after: P3_CONFIRM });
     });
     segs.push({ text: 'Agora és tu. Ouve o inglês e diz a frase em português.', pause_after: P3_SHORT });
     f.prompts.forEach(p => {
       segs.push({ text: p.en, pause_after: P3_PROMPT });
+      segs.push({ text: p.pt, pause_after: P3_CONFIRM });
       segs.push({ text: p.pt, pause_after: P3_CONFIRM });
     });
     if (fi < FRAMES_EP3.length - 1) {
