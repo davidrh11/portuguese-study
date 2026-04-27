@@ -222,6 +222,51 @@
   .vfc-nav { display: flex; gap: 1rem; margin-top: auto; }
   .vfc-nav-btn { font-family: var(--mono); font-size: 0.82rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 0.55rem 1.25rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
   .vfc-nav-btn:hover { border-color: var(--green); color: var(--green); }
+  /* ── DESAFIO ── */
+  .desafio-wrap { max-width: 540px; margin: 0 auto; }
+  .desafio-mode-bar { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
+  .desafio-mode-btn { font-family: var(--mono); font-size: 0.72rem; padding: 0.35rem 1rem; border: 1px solid var(--border); border-radius: 99px; background: var(--surface); color: var(--muted); cursor: pointer; transition: all 0.15s; }
+  .desafio-mode-btn:hover { border-color: var(--green-mid); color: var(--text); }
+  .desafio-mode-btn.active { background: var(--green); border-color: var(--green); color: #fff; }
+  .desafio-mode-btn:disabled { opacity: 0.35; cursor: default; }
+  .desafio-score-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  .desafio-score { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); }
+  .desafio-streak { font-family: var(--mono); font-size: 0.78rem; color: var(--yellow); }
+  .desafio-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem 1.75rem 1.5rem; min-height: 280px; display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 1.25rem; position: relative; transition: border-color 0.3s; }
+  .desafio-card.revealing { border-color: var(--green); }
+  .desafio-situation { font-size: 0.95rem; color: var(--text); line-height: 1.6; margin-bottom: 1.25rem; font-weight: 300; max-width: 380px; }
+  .desafio-chips { display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .frame-chip { font-family: var(--mono); font-size: 0.9rem; font-weight: 700; padding: 0.35rem 1rem; border-radius: 6px; }
+  .frame-chip.estou  { background: var(--green-light);  color: var(--green);  border: 1px solid var(--green-mid); }
+  .frame-chip.posso  { background: var(--blue-light);   color: var(--blue);   border: 1px solid var(--blue-mid); }
+  .frame-chip.queria { background: var(--orange-light); color: var(--orange); border: 1px solid var(--orange-mid); }
+  .frame-chip.devo   { background: var(--red-light);    color: var(--red);    border: 1px solid var(--red-mid); }
+  .frame-chip.vou    { background: var(--purple-light); color: var(--purple); border: 1px solid var(--purple-mid); }
+  .verb-chip-display { font-family: var(--mono); font-size: 0.88rem; padding: 0.3rem 0.85rem; border-radius: 6px; background: var(--surface2); border: 1px solid var(--border2); color: var(--text); }
+  .timer-wrap { position: relative; width: 56px; height: 56px; margin: 0 auto 1rem; }
+  .timer-svg { transform: rotate(-90deg); }
+  .timer-bg { fill: none; stroke: var(--border); stroke-width: 4; }
+  .timer-fg { fill: none; stroke: var(--green); stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 0.1s linear, stroke 0.3s; }
+  .timer-num { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: var(--mono); font-size: 1rem; font-weight: 700; color: var(--text); }
+  .desafio-answer-wrap { width: 100%; margin-top: auto; }
+  .desafio-answer { font-family: var(--mono); font-size: 1.1rem; color: var(--green); font-weight: 700; filter: blur(8px); transition: filter 0.3s; background: var(--border); border-radius: 6px; padding: 0.5rem 1rem; cursor: pointer; display: inline-block; margin-bottom: 0.5rem; }
+  .desafio-answer.revealed { filter: blur(0); background: transparent; }
+  .desafio-answer-en { font-size: 0.8rem; color: var(--muted); font-style: italic; opacity: 0; transition: opacity 0.3s; display: block; margin-bottom: 0.75rem; }
+  .desafio-answer-en.visible { opacity: 1; }
+  .desafio-speak { background: var(--surface2); border: 1px solid var(--border); color: var(--green); padding: 0.3rem 1rem; border-radius: 99px; cursor: pointer; transition: all 0.2s; font-size: 0.9rem; margin-bottom: 1rem; display: none; }
+  .desafio-speak.visible { display: inline-block; }
+  .desafio-speak:hover, .desafio-speak.playing { background: var(--green); color: #fff; border-color: var(--green); }
+  .self-assess { display: none; gap: 0.75rem; justify-content: center; margin-bottom: 0.75rem; }
+  .self-assess.visible { display: flex; }
+  .sa-btn { font-family: var(--mono); font-size: 0.82rem; padding: 0.55rem 1.5rem; border-radius: 6px; cursor: pointer; border: none; font-weight: 600; transition: all 0.15s; }
+  .sa-got { background: var(--green-light); color: var(--green); border: 1px solid var(--green-mid); }
+  .sa-got:hover { background: var(--green); color: #fff; }
+  .sa-missed { background: var(--red-light); color: var(--red); border: 1px solid var(--red-mid); }
+  .sa-missed:hover { background: var(--red); color: #fff; }
+  .reveal-hint { font-family: var(--mono); font-size: 0.65rem; color: var(--muted2); letter-spacing: 0.06em; margin-bottom: 0.5rem; }
+  .livre-unlock { background: var(--green-light); border: 1px solid var(--green-mid); border-radius: 6px; padding: 0.65rem 1rem; font-family: var(--mono); font-size: 0.75rem; color: var(--green); text-align: center; margin-bottom: 1rem; display: none; }
+  .livre-unlock.visible { display: block; }
+
   .mente-rule { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 1.25rem; }
   .mente-rule-row { display: grid; grid-template-columns: 120px 120px 1fr; border-bottom: 1px solid var(--border); align-items: center; }
   .mente-rule-row:last-child { border-bottom: none; }
@@ -263,6 +308,7 @@
   <button class="tab" onclick="switchTab('verbos', this)">Verbos</button>
   <button class="tab" onclick="switchTab('construtor', this)">Construtor</button>
   <button class="tab" onclick="switchTab('dialogo', this)">Diálogo</button>
+  <button class="tab" onclick="switchTab('desafio', this)">Desafio</button>
   <button class="tab" onclick="switchTab('mente', this)">-mente</button>
 </div>
 
@@ -355,6 +401,42 @@
     <button class="dialogo-next" id="dialogoNext" onclick="advanceDialogo()" disabled>Continuar →</button>
     <button class="dialogo-restart" onclick="restartDialogo()">↺ Recomeçar</button>
     <div id="dialogoDone" style="display:none; margin-top:1rem;"></div>
+  </div>
+</div>
+
+<!-- DESAFIO -->
+<div id="desafio" class="view">
+  <div class="desafio-wrap">
+    <div class="desafio-mode-bar">
+      <button class="desafio-mode-btn active" id="dModeGuiado" onclick="setDesafioMode('guiado')">Guiado</button>
+      <button class="desafio-mode-btn" id="dModeLivre" onclick="setDesafioMode('livre')">Livre <span class="lock" id="livreLock">🔒</span></button>
+    </div>
+    <div class="livre-unlock" id="livreUnlock"></div>
+    <div class="desafio-score-bar">
+      <span class="desafio-score">Correto: <span id="dCorrect">0</span> / <span id="dTotal">0</span></span>
+      <span class="desafio-streak" id="dStreak"></span>
+    </div>
+    <div class="desafio-card" id="desafioCard">
+      <div class="desafio-situation" id="dSituation"></div>
+      <div class="desafio-chips" id="dChips"></div>
+      <div class="timer-wrap" id="timerWrap">
+        <svg class="timer-svg" width="56" height="56" viewBox="0 0 56 56">
+          <circle class="timer-bg" cx="28" cy="28" r="24"/>
+          <circle class="timer-fg" id="timerRing" cx="28" cy="28" r="24" stroke-dasharray="150.8" stroke-dashoffset="0"/>
+        </svg>
+        <div class="timer-num" id="timerNum">5</div>
+      </div>
+      <div class="desafio-answer-wrap">
+        <div class="reveal-hint" id="dRevealHint">toca para revelar →</div>
+        <div class="desafio-answer" id="dAnswer" onclick="revealDesafio()"></div>
+        <span class="desafio-answer-en" id="dAnswerEn"></span>
+        <button class="desafio-speak" id="dSpeak" onclick="speakDesafio()">🔊 Ouvir</button>
+      </div>
+    </div>
+    <div class="self-assess" id="selfAssess">
+      <button class="sa-btn sa-got" onclick="assessDesafio(true)">✓ Disse</button>
+      <button class="sa-btn sa-missed" onclick="assessDesafio(false)">✗ Não disse</button>
+    </div>
   </div>
 </div>
 
@@ -754,7 +836,201 @@ function vfcMove(dir)     { vfcIdx = (vfcIdx + dir + vfcDeck.length) % vfcDeck.l
 function vfcShuffle()     { vfcDeck = [...VERBS].sort(() => Math.random() - 0.5); vfcIdx = 0; vfcRender(); }
 function vfcReset()       { vfcDeck = [...VERBS]; vfcIdx = 0; vfcRender(); }
 
-// ── BUILD: CONSTRUTOR ─────────────────────────────────────────────
+// ── DESAFIO ───────────────────────────────────────────────────────
+
+const DESAFIO_GUIADO = [
+  // estou a
+  { situation: "You're at a café. Tell someone you're waiting for a friend.", frame: 'estou', verb: 'esperar', answer: 'Estou a esperar um amigo.', en: "I'm waiting for a friend." },
+  { situation: "Someone asks what you're doing. You're learning Portuguese.", frame: 'estou', verb: 'aprender', answer: 'Estou a aprender português.', en: "I'm learning Portuguese." },
+  { situation: "You're on your way somewhere. Tell someone.", frame: 'estou', verb: 'chegar', answer: 'Estou a chegar.', en: "I'm on my way." },
+  { situation: "You're cooking dinner at home in the kitchen.", frame: 'estou', verb: 'cozinhar', answer: 'Estou a cozinhar o jantar.', en: "I'm cooking dinner." },
+  { situation: "You're walking through Lisbon.", frame: 'estou', verb: 'andar', answer: 'Estou a andar pela cidade.', en: "I'm walking around the city." },
+  // posso
+  { situation: "You want to sit at a table in a restaurant.", frame: 'posso', verb: 'sentar', answer: 'Posso sentar-me aqui?', en: 'May I sit here?' },
+  { situation: "You want to order. Get the waiter's attention politely.", frame: 'posso', verb: 'pedir', answer: 'Posso pedir, por favor?', en: 'Can I order, please?' },
+  { situation: "Ask the waiter to bring the wine list.", frame: 'posso', verb: 'trazer', answer: 'Pode trazer a carta de vinhos?', en: 'Can you bring the wine list?' },
+  { situation: "You need help finding the pharmacy.", frame: 'posso', verb: 'ajudar', answer: 'Pode ajudar-me?', en: 'Can you help me?' },
+  { situation: "You want to open the window — ask permission.", frame: 'posso', verb: 'abrir', answer: 'Posso abrir a janela?', en: 'May I open the window?' },
+  // queria
+  { situation: "You're at a café. Order a coffee politely.", frame: 'queria', verb: 'pedir', answer: 'Queria um café, por favor.', en: "I'd like a coffee, please." },
+  { situation: "You'd like to go out for dinner tonight.", frame: 'queria', verb: 'jantar', answer: 'Queria jantar fora esta noite.', en: "I'd like to have dinner out tonight." },
+  { situation: "You'd like a bottle of red wine.", frame: 'queria', verb: 'pedir', answer: 'Queria uma garrafa de vinho tinto.', en: "I'd like a bottle of red wine." },
+  { situation: "You'd like to live closer to the centre of Lisbon.", frame: 'queria', verb: 'morar', answer: 'Queria morar mais perto do centro.', en: "I'd like to live closer to the centre." },
+  { situation: "You'd like to know this neighbourhood better.", frame: 'queria', verb: 'conhecer', answer: 'Queria conhecer este bairro melhor.', en: "I'd like to know this neighbourhood better." },
+  // devo
+  { situation: "You're not sure which exit to take. Ask.", frame: 'devo', verb: 'sair', answer: 'Devo sair por aqui?', en: 'Should I leave this way?' },
+  { situation: "Recommend the vinho verde to someone.", frame: 'devo', verb: 'pedir', answer: 'Deve pedir o vinho verde.', en: 'You should order the vinho verde.' },
+  { situation: "You want to know if you should wait here.", frame: 'devo', verb: 'esperar', answer: 'Devo esperar aqui?', en: 'Should I wait here?' },
+  { situation: "Tell someone they should try the bacalhau.", frame: 'devo', verb: 'experimentar', answer: 'Deve experimentar o bacalhau.', en: 'You should try the bacalhau.' },
+  { situation: "You're wondering if you should buy more wine.", frame: 'devo', verb: 'comprar', answer: 'Devo comprar mais vinho?', en: 'Should I buy more wine?' },
+  // vou
+  { situation: "You're going to buy bread at the supermarket.", frame: 'vou', verb: 'comprar', answer: 'Vou comprar pão no supermercado.', en: "I'm going to buy bread at the supermarket." },
+  { situation: "You're going to have Portuguese class tomorrow.", frame: 'vou', verb: 'ter', answer: 'Vou ter aula de português amanhã.', en: "I'm going to have Portuguese class tomorrow." },
+  { situation: "Suggest having a drink tonight.", frame: 'vou', verb: 'beber', answer: 'Vamos beber um copo hoje?', en: 'Shall we have a drink today?' },
+  { situation: "You're going to stay here a little while.", frame: 'vou', verb: 'ficar', answer: 'Vou ficar aqui um bocadinho.', en: "I'm going to stay here a little bit." },
+  { situation: "You'll be back at six.", frame: 'vou', verb: 'voltar', answer: 'Vou voltar às seis.', en: "I'm coming back at six." },
+];
+
+const DESAFIO_LIVRE = [
+  { situation: "You're walking around Bairro Alto. Tell someone what you're doing.", answer: 'Estou a andar pelo Bairro Alto.', en: "I'm walking around Bairro Alto." },
+  { situation: "You want to order the fish of the day. It looks good.", answer: 'Queria pedir o peixe do dia.', en: "I'd like to order the fish of the day." },
+  { situation: "You're going to the supermarket. There's no butter at home.", answer: 'Vou ao supermercado comprar manteiga.', en: "I'm going to the supermarket to buy butter." },
+  { situation: "Ask if you can sit at the table by the window.", answer: 'Posso sentar-me à mesa da janela?', en: 'May I sit at the table by the window?' },
+  { situation: "Tell someone they shouldn't always speak English in Portugal.", answer: 'Não deve falar sempre inglês em Portugal.', en: "You shouldn't always speak English in Portugal." },
+  { situation: "You'd like a meia de leite with an extra shot.", answer: 'Queria uma meia de leite com um café extra.', en: "I'd like a meia de leite with an extra shot." },
+  { situation: "You're arriving — text someone.", answer: 'Estou a chegar.', en: "I'm on my way." },
+  { situation: "Should you leave through here? Ask the person next to you.", answer: 'Devo sair por aqui?', en: 'Should I leave this way?' },
+  { situation: "You're going to come back tomorrow.", answer: 'Vou voltar amanhã.', en: "I'm going to come back tomorrow." },
+  { situation: "Ask if you can ask a question.", answer: 'Posso fazer uma pergunta?', en: 'May I ask a question?' },
+  { situation: "You'd like to go to the gym after work.", answer: 'Queria ir ao ginásio depois de trabalhar.', en: "I'd like to go to the gym after work." },
+  { situation: "Tell someone you're learning Portuguese despite it being difficult.", answer: 'Estou a aprender português apesar de ser difícil.', en: "I'm learning Portuguese despite it being difficult." },
+];
+
+// Unlock threshold
+const LIVRE_UNLOCK_AT = 15;
+
+let dMode = 'guiado';
+let dDeck = [], dIdx = 0, dCorrect = 0, dTotal = 0, dStreak = 0, dRevealed = false;
+let dTimer = null, dSeconds = 0;
+const TIMER_DURATION = 5;
+const CIRCUMFERENCE = 150.8;
+
+function initDesafio() {
+  dCorrect = 0; dTotal = 0; dStreak = 0;
+  dDeck = [...(dMode === 'guiado' ? DESAFIO_GUIADO : DESAFIO_LIVRE)].sort(() => Math.random() - 0.5);
+  dIdx = 0;
+  checkLivreUnlock();
+  renderDesafio();
+}
+
+function checkLivreUnlock() {
+  const unlocked = dCorrect >= LIVRE_UNLOCK_AT || (localStorage.getItem('pt-desafio-livre') === '1');
+  if (dCorrect >= LIVRE_UNLOCK_AT) localStorage.setItem('pt-desafio-livre', '1');
+  const livreLocked = !unlocked;
+  document.getElementById('livreLock').textContent = unlocked ? '' : '🔒';
+  document.getElementById('dModeLivre').disabled = livreLocked;
+  if (unlocked && dCorrect === LIVRE_UNLOCK_AT) {
+    const banner = document.getElementById('livreUnlock');
+    banner.textContent = '🔓 Modo Livre desbloqueado! ' + LIVRE_UNLOCK_AT + ' respostas corretas.';
+    banner.classList.add('visible');
+    setTimeout(() => banner.classList.remove('visible'), 4000);
+  }
+}
+
+function setDesafioMode(mode) {
+  if (mode === 'livre' && document.getElementById('dModeLivre').disabled) return;
+  dMode = mode;
+  document.getElementById('dModeGuiado').classList.toggle('active', mode === 'guiado');
+  document.getElementById('dModeLivre').classList.toggle('active', mode === 'livre');
+  initDesafio();
+}
+
+function renderDesafio() {
+  if (dIdx >= dDeck.length) {
+    dDeck = [...(dMode === 'guiado' ? DESAFIO_GUIADO : DESAFIO_LIVRE)].sort(() => Math.random() - 0.5);
+    dIdx = 0;
+  }
+  dRevealed = false;
+  stopTimer();
+
+  const item = dDeck[dIdx];
+  document.getElementById('dSituation').textContent = item.situation;
+  document.getElementById('dAnswer').textContent = item.answer;
+  document.getElementById('dAnswer').className = 'desafio-answer';
+  document.getElementById('dAnswerEn').textContent = item.en;
+  document.getElementById('dAnswerEn').className = 'desafio-answer-en';
+  document.getElementById('dSpeak').className = 'desafio-speak';
+  document.getElementById('dRevealHint').style.display = '';
+  document.getElementById('desafioCard').classList.remove('revealing');
+  document.getElementById('selfAssess').classList.remove('visible');
+
+  // Build chips
+  const chipsDiv = document.getElementById('dChips');
+  chipsDiv.innerHTML = '';
+  if (dMode === 'guiado') {
+    const frameChip = document.createElement('span');
+    frameChip.className = `frame-chip ${item.frame}`;
+    frameChip.textContent = item.frame === 'estou' ? 'estou a' : item.frame;
+    chipsDiv.appendChild(frameChip);
+    const verbChip = document.createElement('span');
+    verbChip.className = 'verb-chip-display';
+    verbChip.textContent = item.verb;
+    chipsDiv.appendChild(verbChip);
+  } else {
+    const hint = document.createElement('span');
+    hint.style.cssText = 'font-family:var(--mono);font-size:0.72rem;color:var(--muted);';
+    hint.textContent = 'Escolhe o frame e o verbo';
+    chipsDiv.appendChild(hint);
+  }
+
+  updateDesafioScore();
+  startTimer();
+}
+
+function startTimer() {
+  dSeconds = TIMER_DURATION;
+  updateTimerDisplay(dSeconds);
+  dTimer = setInterval(() => {
+    dSeconds--;
+    updateTimerDisplay(dSeconds);
+    if (dSeconds <= 0) {
+      stopTimer();
+      revealDesafio();
+    }
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(dTimer); dTimer = null;
+  updateTimerDisplay(0);
+}
+
+function updateTimerDisplay(s) {
+  const num = document.getElementById('timerNum');
+  const ring = document.getElementById('timerRing');
+  if (!num || !ring) return;
+  const clamped = Math.max(0, s);
+  num.textContent = clamped;
+  const offset = CIRCUMFERENCE * (1 - clamped / TIMER_DURATION);
+  ring.style.strokeDashoffset = offset;
+  // colour shifts red as time runs out
+  ring.style.stroke = clamped <= 1 ? 'var(--red)' : clamped <= 2 ? 'var(--yellow)' : 'var(--green)';
+}
+
+function revealDesafio() {
+  if (dRevealed) return;
+  dRevealed = true;
+  stopTimer();
+  document.getElementById('dAnswer').classList.add('revealed');
+  document.getElementById('dAnswerEn').classList.add('visible');
+  document.getElementById('dSpeak').classList.add('visible');
+  document.getElementById('dRevealHint').style.display = 'none';
+  document.getElementById('desafioCard').classList.add('revealing');
+  document.getElementById('selfAssess').classList.add('visible');
+  speak(dDeck[dIdx].answer, null);
+}
+
+function speakDesafio() { speak(dDeck[dIdx].answer, document.getElementById('dSpeak')); }
+
+function assessDesafio(got) {
+  dTotal++;
+  if (got) {
+    dCorrect++;
+    dStreak++;
+  } else {
+    dStreak = 0;
+  }
+  checkLivreUnlock();
+  updateDesafioScore();
+  dIdx++;
+  setTimeout(renderDesafio, 300);
+}
+
+function updateDesafioScore() {
+  document.getElementById('dCorrect').textContent = dCorrect;
+  document.getElementById('dTotal').textContent = dTotal;
+  document.getElementById('dStreak').textContent = dStreak >= 3 ? `🔥 ${dStreak}` : '';
+}
 
 // Objects: each has a pt label, en translation, and a pairings map.
 // pairings: verb → 'natural' (works perfectly), 'possible' (works but odd/needs context), absent = unnatural
@@ -1214,6 +1490,7 @@ function switchTab(id, tabEl) {
   document.getElementById(id).classList.add('active');
   tabEl.classList.add('active');
   if (id === 'dialogo') startDialogo();
+  if (id === 'desafio') initDesafio();
 }
 
 // ── INIT ──────────────────────────────────────────────────────────
@@ -1225,6 +1502,12 @@ buildMente();
 // Dialogo init — UI only, no audio until tab opened
 dLevel = getMaxLevel(dSituation.id);
 buildSituationBar();
+
+// Desafio — check previous unlock
+if (localStorage.getItem('pt-desafio-livre') === '1') {
+  document.getElementById('livreLock').textContent = '';
+  document.getElementById('dModeLivre').disabled = false;
+}
 </script>
 <script>
 (function(){
