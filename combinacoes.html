@@ -955,6 +955,7 @@ function renderDesafio() {
   document.getElementById('dAnswerEn').className = 'desafio-answer-en';
   document.getElementById('dSpeak').className = 'desafio-speak';
   document.getElementById('dRevealHint').style.display = '';
+  document.getElementById('dRevealHint').textContent = 'toca para revelar →';
   document.getElementById('desafioCard').classList.remove('revealing');
   document.getElementById('selfAssess').classList.remove('visible');
 
@@ -989,7 +990,10 @@ function startTimer() {
     updateTimerDisplay(dsSeconds);
     if (dsSeconds <= 0) {
       stopTimer();
-      revealDesafio();
+      // Don't auto-reveal — just signal time is up, let user self-assess
+      document.getElementById('timerNum').textContent = '✓';
+      document.getElementById('timerRing').style.stroke = 'var(--border2)';
+      document.getElementById('dRevealHint').textContent = 'tempo — toca para revelar';
     }
   }, 1000);
 }
