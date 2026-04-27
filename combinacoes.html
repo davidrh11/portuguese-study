@@ -889,23 +889,23 @@ const DESAFIO_LIVRE = [
 // Unlock threshold
 const LIVRE_UNLOCK_AT = 15;
 
-let dMode = 'guiado';
-let dDeck = [], dIdx = 0, dCorrect = 0, dTotal = 0, dStreak = 0, dRevealed = false;
-let dTimer = null, dSeconds = 0;
+let dsMode = 'guiado';
+let dsDeck = [], dsIdx = 0, dsCorrect = 0, dsTotal = 0, dsStreak = 0, dsRevealed = false;
+let dsTimer = null, dsSeconds = 0;
 const TIMER_DURATION = 5;
 const CIRCUMFERENCE = 150.8;
 
 function initDesafio() {
-  dCorrect = 0; dTotal = 0; dStreak = 0;
-  dDeck = [...(dMode === 'guiado' ? DESAFIO_GUIADO : DESAFIO_LIVRE)].sort(() => Math.random() - 0.5);
-  dIdx = 0;
+  dsCorrect = 0; dsTotal = 0; dsStreak = 0;
+  dsDeck = [...(dsMode === 'guiado' ? DESAFIO_GUIADO : DESAFIO_LIVRE)].sort(() => Math.random() - 0.5);
+  dsIdx = 0;
   checkLivreUnlock();
   renderDesafio();
 }
 
 function checkLivreUnlock() {
-  const unlocked = dCorrect >= LIVRE_UNLOCK_AT || (localStorage.getItem('pt-desafio-livre') === '1');
-  if (dCorrect >= LIVRE_UNLOCK_AT) localStorage.setItem('pt-desafio-livre', '1');
+  const unlocked = dsCorrect >= LIVRE_UNLOCK_AT || (localStorage.getItem('pt-desafio-livre') === '1');
+  if (dsCorrect >= LIVRE_UNLOCK_AT) localStorage.setItem('pt-desafio-livre', '1');
   const livreLocked = !unlocked;
   document.getElementById('livreLock').textContent = unlocked ? '' : '🔒';
   document.getElementById('dModeLivre').disabled = livreLocked;
@@ -919,21 +919,21 @@ function checkLivreUnlock() {
 
 function setDesafioMode(mode) {
   if (mode === 'livre' && document.getElementById('dModeLivre').disabled) return;
-  dMode = mode;
+  dsMode = mode;
   document.getElementById('dModeGuiado').classList.toggle('active', mode === 'guiado');
   document.getElementById('dModeLivre').classList.toggle('active', mode === 'livre');
   initDesafio();
 }
 
 function renderDesafio() {
-  if (dIdx >= dDeck.length) {
-    dDeck = [...(dMode === 'guiado' ? DESAFIO_GUIADO : DESAFIO_LIVRE)].sort(() => Math.random() - 0.5);
-    dIdx = 0;
+  if (dsIdx >= dsDeck.length) {
+    dsDeck = [...(dsMode === 'guiado' ? DESAFIO_GUIADO : DESAFIO_LIVRE)].sort(() => Math.random() - 0.5);
+    dsIdx = 0;
   }
-  dRevealed = false;
+  dsRevealed = false;
   stopTimer();
 
-  const item = dDeck[dIdx];
+  const item = dsDeck[dsIdx];
   document.getElementById('dSituation').textContent = item.situation;
   document.getElementById('dAnswer').textContent = item.answer;
   document.getElementById('dAnswer').className = 'desafio-answer';
@@ -947,7 +947,7 @@ function renderDesafio() {
   // Build chips
   const chipsDiv = document.getElementById('dChips');
   chipsDiv.innerHTML = '';
-  if (dMode === 'guiado') {
+  if (dsMode === 'guiado') {
     const frameChip = document.createElement('span');
     frameChip.className = `frame-chip ${item.frame}`;
     frameChip.textContent = item.frame === 'estou' ? 'estou a' : item.frame;
@@ -968,12 +968,12 @@ function renderDesafio() {
 }
 
 function startTimer() {
-  dSeconds = TIMER_DURATION;
-  updateTimerDisplay(dSeconds);
-  dTimer = setInterval(() => {
-    dSeconds--;
-    updateTimerDisplay(dSeconds);
-    if (dSeconds <= 0) {
+  dsSeconds = TIMER_DURATION;
+  updateTimerDisplay(dsSeconds);
+  dsTimer = setInterval(() => {
+    dsSeconds--;
+    updateTimerDisplay(dsSeconds);
+    if (dsSeconds <= 0) {
       stopTimer();
       revealDesafio();
     }
@@ -981,7 +981,7 @@ function startTimer() {
 }
 
 function stopTimer() {
-  clearInterval(dTimer); dTimer = null;
+  clearInterval(dsTimer); dsTimer = null;
   updateTimerDisplay(0);
 }
 
@@ -998,8 +998,8 @@ function updateTimerDisplay(s) {
 }
 
 function revealDesafio() {
-  if (dRevealed) return;
-  dRevealed = true;
+  if (dsRevealed) return;
+  dsRevealed = true;
   stopTimer();
   document.getElementById('dAnswer').classList.add('revealed');
   document.getElementById('dAnswerEn').classList.add('visible');
@@ -1007,29 +1007,29 @@ function revealDesafio() {
   document.getElementById('dRevealHint').style.display = 'none';
   document.getElementById('desafioCard').classList.add('revealing');
   document.getElementById('selfAssess').classList.add('visible');
-  speak(dDeck[dIdx].answer, null);
+  speak(dsDeck[dsIdx].answer, null);
 }
 
-function speakDesafio() { speak(dDeck[dIdx].answer, document.getElementById('dSpeak')); }
+function speakDesafio() { speak(dsDeck[dsIdx].answer, document.getElementById('dSpeak')); }
 
 function assessDesafio(got) {
-  dTotal++;
+  dsTotal++;
   if (got) {
-    dCorrect++;
-    dStreak++;
+    dsCorrect++;
+    dsStreak++;
   } else {
-    dStreak = 0;
+    dsStreak = 0;
   }
   checkLivreUnlock();
   updateDesafioScore();
-  dIdx++;
+  dsIdx++;
   setTimeout(renderDesafio, 300);
 }
 
 function updateDesafioScore() {
-  document.getElementById('dCorrect').textContent = dCorrect;
-  document.getElementById('dTotal').textContent = dTotal;
-  document.getElementById('dStreak').textContent = dStreak >= 3 ? `🔥 ${dStreak}` : '';
+  document.getElementById('dCorrect').textContent = dsCorrect;
+  document.getElementById('dTotal').textContent = dsTotal;
+  document.getElementById('dStreak').textContent = dsStreak >= 3 ? `🔥 ${dStreak}` : '';
 }
 
 // Objects: each has a pt label, en translation, and a pairings map.
