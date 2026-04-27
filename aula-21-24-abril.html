@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="pt" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aula 21 & 24 de Abril</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0; --surface: #ffffff; --surface2: #f2ede6;
+    --border: #e0d8cc; --border2: #ccc4b4;
+    --green: #2d7a50; --green-light: #eef5f1; --green-mid: #9acbb0;
+    --red: #a03428; --red-light: #fdf2f1; --red-mid: #dba09a;
+    --yellow: #b07d2a; --yellow-light: #fdf6e8;
+    --blue: #2a5fa0; --blue-light: #eef3fb; --blue-mid: #a0b8d8;
+    --text: #2e2820; --muted: #8a7a68; --muted2: #b0a090;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+  header { padding: 1.5rem 2rem 1rem; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .header-text h1 { font-family: var(--mono); font-size: 1rem; font-weight: 400; color: var(--muted); }
+  .header-text h1 span { color: var(--green); }
+  .header-text p { font-size: 0.82rem; color: var(--muted2); margin-top: 0.2rem; }
+  .pt-flag { flex-shrink: 0; width: 48px; height: 32px; border-radius: 3px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.15); margin-top: 2px; }
+
+  .tabs { display: flex; border-bottom: 1px solid var(--border); padding: 0 2rem; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { font-family: var(--mono); font-size: 0.8rem; padding: 0.75rem 1.25rem; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none; white-space: nowrap; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  .view { display: none; padding: 1.5rem 2rem 3rem; max-width: 700px; }
+  .view.active { display: block; }
+
+  .section-title { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--red); margin: 2rem 0 0.75rem; border-left: 3px solid var(--red); padding-left: 0.65rem; }
+  .section-title:first-child { margin-top: 0; }
+  .section-title.blue { color: var(--blue); border-left-color: var(--blue); }
+  .section-title.green { color: var(--green); border-left-color: var(--green); }
+
+  .note-block { background: var(--surface2); border-left: 3px solid var(--green); padding: 0.85rem 1.1rem; margin: 0.75rem 0 1.25rem; border-radius: 0 4px 4px 0; font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+  .note-block strong { color: var(--green); font-family: var(--mono); }
+  .note-block.blue { border-left-color: var(--blue); }
+  .note-block.blue strong { color: var(--blue); }
+  .note-block.yellow { border-left-color: var(--yellow); }
+  .note-block.yellow strong { color: var(--yellow); }
+
+  /* POSSESSIVO GRID */
+  .poss-grid { width: 100%; border-collapse: collapse; margin-bottom: 1.25rem; }
+  .poss-grid th { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); text-align: left; background: var(--surface2); }
+  .poss-grid td { padding: 0.65rem 0.75rem; border-bottom: 1px solid var(--border); font-size: 0.88rem; vertical-align: top; }
+  .poss-grid tr:last-child td { border-bottom: none; }
+  .poss-grid .owner { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); white-space: nowrap; }
+  .poss-grid .forms { display: flex; flex-direction: column; gap: 0.2rem; }
+  .poss-grid .form-row { display: flex; gap: 0.5rem; align-items: baseline; }
+  .poss-grid .form { font-family: var(--mono); font-weight: 700; }
+  .poss-grid .form.masc { color: var(--blue); }
+  .poss-grid .form.fem  { color: var(--red); }
+  .poss-grid .gender-label { font-size: 0.7rem; color: var(--muted); }
+
+  /* EXAMPLE SENTENCES */
+  .ex-list { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem; }
+  .ex-item { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 0.85rem 1.1rem; cursor: pointer; transition: border-color 0.15s; }
+  .ex-item:hover { border-color: var(--green-mid); }
+  .ex-pt { font-family: var(--mono); font-size: 0.88rem; color: var(--text); margin-bottom: 0.25rem; }
+  .ex-pt .hl-m { color: var(--blue); font-weight: 700; }
+  .ex-pt .hl-f { color: var(--red); font-weight: 700; }
+  .ex-pt .hl-g { color: var(--green); font-weight: 700; }
+  .ex-en { font-size: 0.78rem; color: var(--muted); font-style: italic; }
+
+  /* CONNECTOR CARDS */
+  .conn-grid { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem; }
+  .conn-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .conn-header { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1.1rem; border-bottom: 1px solid var(--border); }
+  .conn-pt { font-family: var(--mono); font-size: 1rem; font-weight: 700; cursor: pointer; }
+  .conn-pt:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .conn-en { font-size: 0.82rem; color: var(--muted); font-style: italic; }
+  .conn-type { font-family: var(--mono); font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.08em; margin-left: auto; padding: 0.15rem 0.5rem; border-radius: 2px; white-space: nowrap; }
+  .conn-type.inf  { background: var(--green-light); color: var(--green); border: 1px solid var(--green-mid); }
+  .conn-type.no-inf { background: var(--blue-light); color: var(--blue); border: 1px solid var(--blue-mid); }
+  .conn-examples { padding: 0.6rem 1.1rem; display: flex; flex-direction: column; gap: 0.4rem; }
+  .conn-ex { cursor: pointer; padding: 0.35rem 0.5rem; border-radius: 4px; border: 1px solid transparent; transition: all 0.15s; }
+  .conn-ex:hover { background: var(--surface2); border-color: var(--border); }
+  .conn-ex .cex-pt { font-family: var(--mono); font-size: 0.82rem; color: var(--text); margin-bottom: 0.15rem; }
+  .conn-ex .cex-pt .hl { color: var(--green); font-weight: 700; }
+  .conn-ex .cex-en { font-size: 0.75rem; color: var(--muted); font-style: italic; }
+
+  .conn-card.inf-type  .conn-pt { color: var(--green); }
+  .conn-card.no-inf-type .conn-pt { color: var(--blue); }
+
+  /* MEAL TIMES */
+  .meal-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.6rem; margin-bottom: 1.25rem; }
+  .meal-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 0.85rem 1rem; cursor: pointer; transition: border-color 0.15s; }
+  .meal-card:hover { border-color: var(--green-mid); }
+  .meal-time { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.3rem; }
+  .meal-pt { font-family: var(--mono); font-size: 0.92rem; color: var(--green); font-weight: 600; margin-bottom: 0.2rem; }
+  .meal-en { font-size: 0.78rem; color: var(--muted); font-style: italic; }
+
+  /* FLASHCARDS */
+  .fc-wrap { max-width: 480px; margin: 0 auto; }
+  .fc-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+  .fc-counter { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+  .fc-controls { display: flex; gap: 0.5rem; }
+  .fc-ctrl { font-family: var(--mono); font-size: 0.72rem; background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 0.35rem 0.85rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .fc-ctrl:hover { border-color: var(--green); color: var(--green); }
+  .fc-progress { height: 2px; background: var(--border); border-radius: 1px; margin-bottom: 1.25rem; overflow: hidden; }
+  .fc-progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
+  .fc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; min-height: 280px; display: flex; flex-direction: column; align-items: center; padding: 1.5rem 2rem; text-align: center; }
+  .fc-category { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 1rem; }
+  .fc-hints { font-family: var(--mono); font-size: 0.62rem; color: var(--muted2); letter-spacing: 0.06em; margin-bottom: 1rem; }
+  .fc-prompt { font-size: 1.05rem; color: var(--text); font-weight: 300; line-height: 1.5; margin-bottom: 1.1rem; padding: 0 0.5rem; }
+  .fc-divider { width: 2rem; height: 1px; background: var(--border2); margin-bottom: 1.1rem; }
+  .fc-answer { font-family: var(--mono); font-size: 1.15rem; color: var(--green); font-weight: 700; filter: blur(7px); transition: filter 0.3s; cursor: pointer; margin-bottom: 1rem; background: var(--border); border-radius: 4px; padding: 0.1rem 0.5rem; display: inline-block; }
+  .fc-answer.revealed { filter: blur(0); background: transparent; }
+  .fc-speak { background: var(--surface2); border: 1px solid var(--border); color: var(--green); padding: 0.35rem 1.2rem; border-radius: 99px; cursor: pointer; transition: all 0.2s; font-size: 1rem; margin-bottom: 1rem; }
+  .fc-speak:hover, .fc-speak.playing { background: var(--green); color: #fff; border-color: var(--green); }
+  .fc-ex { font-style: italic; font-size: 0.82rem; color: var(--text); filter: blur(5px); transition: filter 0.3s; cursor: pointer; margin-bottom: 0.2rem; background: var(--border); border-radius: 3px; padding: 0.05rem 0.35rem; display: inline-block; }
+  .fc-ex.revealed { filter: blur(0); background: transparent; }
+  .fc-ex-en { font-size: 0.75rem; color: var(--muted); filter: blur(5px); transition: filter 0.3s; cursor: pointer; background: var(--border); border-radius: 3px; padding: 0.05rem 0.35rem; display: inline-block; margin-bottom: 1rem; }
+  .fc-ex-en.revealed { filter: blur(0); background: transparent; }
+  .fc-nav { display: flex; gap: 1rem; margin-top: auto; }
+  .fc-nav-btn { font-family: var(--mono); font-size: 0.82rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 0.55rem 1.25rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .fc-nav-btn:hover { border-color: var(--green); color: var(--green); }
+
+  /* DRILL */
+  .drill-wrap { max-width: 560px; }
+  .drill-score { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); display: flex; justify-content: space-between; margin-bottom: 1rem; }
+  .drill-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.25rem; }
+  .drill-mode-label { font-family: var(--mono); font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.75rem; }
+  .drill-sentence { font-family: var(--mono); font-size: 0.95rem; color: var(--text); line-height: 1.8; margin-bottom: 0.5rem; }
+  .drill-blank { display: inline-block; min-width: 100px; border-bottom: 2px solid var(--border2); color: var(--muted2); text-align: center; padding: 0 0.25rem; }
+  .drill-en { font-size: 0.82rem; color: var(--muted); font-style: italic; margin-bottom: 1rem; }
+  .drill-options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem; }
+  .drill-opt { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 0.65rem 0.75rem; cursor: pointer; font-family: var(--mono); font-size: 0.82rem; color: var(--text); text-align: center; transition: all 0.15s; }
+  .drill-opt:hover:not(:disabled) { border-color: var(--green); background: var(--green-light); color: var(--green); }
+  .drill-opt.correct { border-color: var(--green); background: var(--green-light); color: var(--green); }
+  .drill-opt.wrong   { border-color: var(--red);   background: var(--red-light);   color: var(--red); }
+  .drill-opt:disabled { cursor: default; }
+
+  /* ASSEMBLY DRILL */
+  .assembly-parts { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+  .part-chip { font-family: var(--mono); font-size: 0.82rem; padding: 0.4rem 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; user-select: none; }
+  .part-chip.connector { background: var(--green-light); border: 1px solid var(--green-mid); color: var(--green); font-weight: 700; }
+  .part-chip.clause { background: var(--surface2); border: 1px solid var(--border2); color: var(--text); }
+  .part-chip.selected { opacity: 0.35; }
+  .assembly-drop { min-height: 48px; border: 2px dashed var(--border2); border-radius: 6px; padding: 0.5rem 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-bottom: 0.75rem; font-family: var(--mono); font-size: 0.82rem; color: var(--muted2); transition: border-color 0.15s; }
+  .assembly-drop.has-content { border-color: var(--green-mid); color: var(--text); }
+  .assembly-placed { font-family: var(--mono); font-size: 0.82rem; cursor: pointer; padding: 0.2rem 0.4rem; background: var(--green-light); border-radius: 3px; border: 1px solid var(--green-mid); color: var(--green); }
+
+  .drill-feedback { font-family: var(--mono); font-size: 0.82rem; min-height: 1.4rem; margin-bottom: 0.75rem; text-align: center; }
+  .drill-feedback.ok  { color: var(--green); }
+  .drill-feedback.bad { color: var(--red); }
+  .drill-next { display: block; margin: 0 auto; font-family: var(--mono); font-size: 0.82rem; padding: 0.55rem 2rem; background: var(--green); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+  .drill-next:disabled { opacity: 0.3; cursor: default; }
+
+  /* MODE TOGGLE */
+  .mode-toggle { display: flex; gap: 0.4rem; margin-bottom: 1.5rem; }
+  .mode-pill { font-family: var(--mono); font-size: 0.72rem; padding: 0.35rem 0.9rem; border: 1px solid var(--border); border-radius: 99px; background: var(--surface); color: var(--muted); cursor: pointer; transition: all 0.15s; }
+  .mode-pill:hover { border-color: var(--green-mid); color: var(--text); }
+  .mode-pill.active { background: var(--green); border-color: var(--green); color: #fff; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-text">
+    <h1>Aula · <span>21 & 24 de Abril</span></h1>
+    <p>A1.1 — Possessivos · Conectores · Refeições</p>
+  </div>
+  <svg class="pt-flag" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="19.2" height="32" fill="#006600"/>
+    <rect x="19.2" y="0" width="28.8" height="32" fill="#FF0000"/>
+    <circle cx="19.2" cy="16" r="7" fill="none" stroke="#FFCC00" stroke-width="1.2"/>
+    <circle cx="19.2" cy="16" r="4.5" fill="none" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="19.2" y1="11.5" x2="19.2" y2="20.5" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="14.7" y1="16" x2="23.7" y2="16" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="16" y1="12.8" x2="22.4" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <line x1="22.4" y1="12.8" x2="16" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <rect x="17" y="13.5" width="4.4" height="5" fill="white" rx="0.5"/>
+    <circle cx="19.2" cy="16" r="0.8" fill="#003399"/>
+    <circle cx="17.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="17.7" cy="17.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="17.5" r="0.5" fill="#003399"/>
+  </svg>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('possessivos', this)">Possessivos</button>
+  <button class="tab" onclick="switchTab('conectores', this)">Conectores</button>
+  <button class="tab" onclick="switchTab('flashcards', this)">Flashcards</button>
+  <button class="tab" onclick="switchTab('drill', this)">Drill</button>
+</div>
+
+<!-- ══ POSSESSIVOS ══ -->
+<div id="possessivos" class="view active">
+
+  <div class="section-title">A Regra Principal</div>
+  <div class="note-block">
+    The possessive agrees with the <strong>thing owned</strong> — not the owner. And the article (<strong>o/a/os/as</strong>) always travels with it.<br><br>
+    <strong>o meu carro</strong> — my car (carro is masc → o + meu)<br>
+    <strong>a minha garrafa</strong> — my bottle (garrafa is fem → a + minha)
+  </div>
+
+  <div class="section-title">Tabela de Possessivos</div>
+  <table class="poss-grid">
+    <thead>
+      <tr>
+        <th>Pessoa</th>
+        <th>Masculino sg/pl</th>
+        <th>Feminino sg/pl</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="owner">eu<br><span style="font-size:0.7rem;color:var(--muted2)">my</span></td>
+        <td>
+          <div class="forms">
+            <div class="form-row"><span class="form masc" onclick="speak('o meu carro')" style="cursor:pointer">meu</span><span class="gender-label">· o meu carro</span></div>
+            <div class="form-row"><span class="form masc" onclick="speak('os meus telefones')" style="cursor:pointer">meus</span><span class="gender-label">· os meus telefones</span></div>
+          </div>
+        </td>
+        <td>
+          <div class="forms">
+            <div class="form-row"><span class="form fem" onclick="speak('a minha garrafa')" style="cursor:pointer">minha</span><span class="gender-label">· a minha garrafa</span></div>
+            <div class="form-row"><span class="form fem" onclick="speak('as minhas garrafas')" style="cursor:pointer">minhas</span><span class="gender-label">· as minhas garrafas</span></div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="owner">você<br><span style="font-size:0.7rem;color:var(--muted2)">your (formal)</span></td>
+        <td>
+          <div class="forms">
+            <div class="form-row"><span class="form masc" onclick="speak('o seu carro')" style="cursor:pointer">seu</span><span class="gender-label">· o seu carro</span></div>
+            <div class="form-row"><span class="form masc" onclick="speak('os seus vinhos')" style="cursor:pointer">seus</span><span class="gender-label">· os seus vinhos</span></div>
+          </div>
+        </td>
+        <td>
+          <div class="forms">
+            <div class="form-row"><span class="form fem" onclick="speak('a sua garrafa')" style="cursor:pointer">sua</span><span class="gender-label">· a sua garrafa</span></div>
+            <div class="form-row"><span class="form fem" onclick="speak('as suas torradas')" style="cursor:pointer">suas</span><span class="gender-label">· as suas torradas</span></div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="owner">nós<br><span style="font-size:0.7rem;color:var(--muted2)">our</span></td>
+        <td>
+          <div class="forms">
+            <div class="form-row"><span class="form masc" onclick="speak('o nosso carro')" style="cursor:pointer">nosso</span><span class="gender-label">· o nosso carro</span></div>
+            <div class="form-row"><span class="form masc" onclick="speak('os nossos amigos')" style="cursor:pointer">nossos</span><span class="gender-label">· os nossos amigos</span></div>
+          </div>
+        </td>
+        <td>
+          <div class="forms">
+            <div class="form-row"><span class="form fem" onclick="speak('a nossa casa')" style="cursor:pointer">nossa</span><span class="gender-label">· a nossa casa</span></div>
+            <div class="form-row"><span class="form fem" onclick="speak('as nossas reservas')" style="cursor:pointer">nossas</span><span class="gender-label">· as nossas reservas</span></div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note-block blue">
+    <strong>teu/tua/teus/tuas</strong> — informal equivalent of seu/sua. Used with <em>tu</em>. In Lisbon you'll hear both, but your instructor uses <strong>você</strong> → <strong>seu/sua</strong> as the default. Note: <em>seu/sua</em> can also mean "his/her/their" depending on context.
+  </div>
+
+  <div class="section-title">Exemplos — clica para ouvir</div>
+  <div class="ex-list" id="possExamples"></div>
+</div>
+
+<!-- ══ CONECTORES ══ -->
+<div id="conectores" class="view">
+
+  <div class="section-title">Conectores + Infinitivo</div>
+  <div class="note-block">
+    These four connectors are followed directly by an <strong>infinitivo</strong> — just like the combinações frames. They link two actions.
+  </div>
+  <div class="conn-grid" id="connInf"></div>
+
+  <div class="section-title blue">Conectores sem Infinitivo</div>
+  <div class="note-block blue">
+    These connectors link two full clauses — each with its own conjugated verb.
+  </div>
+  <div class="conn-grid" id="connNoInf"></div>
+
+  <div class="section-title green">Refeições — Meal Times</div>
+  <div class="note-block">
+    The meal verbs and time expressions from class. <strong>de manhã</strong> ≠ <em>amanhã</em> (tomorrow) — different words, easy to confuse.
+  </div>
+  <div class="meal-grid" id="mealGrid"></div>
+
+  <div class="note-block yellow">
+    <strong>Meia de leite</strong> — the classic Portuguese milky coffee. More milk than an espresso, less than a latte. Order with <em>um café extra</em> for stronger. Pronounced /meia de leite/ — <em>leite</em> sounds like /lait/. At a café: <strong>Queria uma meia de leite, por favor.</strong>
+  </div>
+</div>
+
+<!-- ══ FLASHCARDS ══ -->
+<div id="flashcards" class="view">
+  <div class="fc-wrap">
+    <div class="mode-toggle">
+      <button class="mode-pill active" id="fcModePoss" onclick="setFCMode('possessivos')">Possessivos</button>
+      <button class="mode-pill" id="fcModeConn" onclick="setFCMode('conectores')">Conectores</button>
+    </div>
+    <div class="fc-topbar">
+      <span class="fc-counter" id="fcCounter">1 / 1</span>
+      <div class="fc-controls">
+        <button class="fc-ctrl" onclick="shuffleFC()">⇄ Baralhar</button>
+        <button class="fc-ctrl" onclick="resetFC()">↺ Reiniciar</button>
+      </div>
+    </div>
+    <div class="fc-progress"><div class="fc-progress-fill" id="fcFill"></div></div>
+    <div class="fc-card">
+      <div class="fc-category" id="fcCategory"></div>
+      <div class="fc-hints" id="fcHints">clique para revelar · 🔊 para ouvir</div>
+      <div class="fc-prompt" id="fcPrompt"></div>
+      <div class="fc-divider"></div>
+      <div class="fc-answer" id="fcAnswer" onclick="fcReveal()"></div>
+      <button class="fc-speak" id="fcSpeak" onclick="fcSpeakAnswer()">🔊</button>
+      <div class="fc-ex" id="fcEx" onclick="fcSpeakEx()"></div>
+      <div class="fc-ex-en" id="fcExEn" onclick="this.classList.add('revealed')"></div>
+      <div class="fc-nav">
+        <button class="fc-nav-btn" onclick="fcMove(-1)">← Anterior</button>
+        <button class="fc-nav-btn" onclick="fcMove(1)">Próximo →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DRILL ══ -->
+<div id="drill" class="view">
+  <div class="mode-toggle">
+    <button class="mode-pill active" id="drillModeGap" onclick="setDrillMode('gap')">Gap Fill</button>
+    <button class="mode-pill" id="drillModeAssembly" onclick="setDrillMode('assembly')">Montagem</button>
+  </div>
+  <div class="drill-wrap">
+    <div class="drill-score">
+      <span>Score: <span id="drillScore">0 / 0</span></span>
+      <span id="drillModeLabel" style="font-family:var(--mono);font-size:0.7rem;color:var(--muted)">gap fill</span>
+    </div>
+    <div id="gapDrill">
+      <div class="drill-card">
+        <div class="drill-mode-label">Escolhe o conector correcto:</div>
+        <div class="drill-sentence" id="gapSentence"></div>
+        <div class="drill-en" id="gapEn"></div>
+        <div class="drill-options" id="gapOptions"></div>
+      </div>
+      <div class="drill-feedback" id="gapFeedback"></div>
+      <button class="drill-next" id="gapNext" onclick="nextGap()" disabled>Próximo →</button>
+    </div>
+    <div id="assemblyDrill" style="display:none;">
+      <div class="drill-card">
+        <div class="drill-mode-label">Clica as partes na ordem correcta:</div>
+        <div class="drill-en" id="assemblyEn"></div>
+        <div class="assembly-parts" id="assemblyParts"></div>
+        <div class="assembly-drop" id="assemblyDrop">clica as partes para montar a frase…</div>
+      </div>
+      <div class="drill-feedback" id="assemblyFeedback"></div>
+      <button class="drill-next" id="assemblyNext" onclick="nextAssembly()" disabled>Próximo →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+let currentAudio = null;
+
+async function speak(text, btnEl) {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (btnEl) btnEl.classList.add('playing');
+  try {
+    const res = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) });
+    if (!res.ok) throw new Error();
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    currentAudio = new Audio(url);
+    currentAudio.onended = currentAudio.onerror = () => { if (btnEl) btnEl.classList.remove('playing'); URL.revokeObjectURL(url); currentAudio = null; };
+    currentAudio.play();
+  } catch(e) { if (btnEl) btnEl.classList.remove('playing'); }
+}
+
+// ── DATA ──────────────────────────────────────────────────────────
+
+const POSS_EXAMPLES = [
+  { pt: 'Estou a vender <span class="hl-m">o meu</span> carro anterior.', en: 'I am selling my old car.', speak: 'Estou a vender o meu carro anterior.' },
+  { pt: 'Estou a comprar <span class="hl-f">a minha</span> garrafa de água.', en: 'I am buying my bottle of water.', speak: 'Estou a comprar a minha garrafa de água.' },
+  { pt: 'Estou a comprar <span class="hl-f">as minhas</span> garrafas de vinho.', en: 'I am buying my bottles of wine.', speak: 'Estou a comprar as minhas garrafas de vinho.' },
+  { pt: 'Estou a vender <span class="hl-m">os meus</span> telefones.', en: 'I am selling my phones.', speak: 'Estou a vender os meus telefones.' },
+  { pt: 'Posso comprar <span class="hl-m">o seu</span> carro?', en: 'Can I buy your car?', speak: 'Posso comprar o seu carro?' },
+  { pt: 'Pode dar-me <span class="hl-f">a sua</span> garrafa de vinho?', en: 'Can you give me your bottle of wine?', speak: 'Pode dar-me a sua garrafa de vinho?' },
+  { pt: 'Posso beber <span class="hl-m">os seus</span> vinhos?', en: 'May I drink your wines?', speak: 'Posso beber os seus vinhos?' },
+  { pt: 'Posso provar <span class="hl-f">as suas</span> torradas?', en: 'May I try your toasts?', speak: 'Posso provar as suas torradas?' },
+  { pt: 'Vamos usar <span class="hl-g">o nosso</span> carro.', en: 'We are going to use our car.', speak: 'Vamos usar o nosso carro.' },
+  { pt: '<span class="hl-g">A nossa</span> casa fica perto do Tejo.', en: 'Our house is near the Tagus.', speak: 'A nossa casa fica perto do Tejo.' },
+  { pt: '<span class="hl-g">Os nossos</span> amigos moram em Lisboa.', en: 'Our friends live in Lisbon.', speak: 'Os nossos amigos moram em Lisboa.' },
+  { pt: 'Devo fazer <span class="hl-g">as nossas</span> reservas?', en: 'Should I make our reservations?', speak: 'Devo fazer as nossas reservas?' },
+];
+
+const CONNECTORS_INF = [
+  {
+    pt: 'antes de',
+    en: 'before (doing)',
+    type: 'inf',
+    examples: [
+      { pt: 'Eu tomo café <span class="hl">antes de</span> trabalhar.', en: 'I have coffee before working.', speak: 'Eu tomo café antes de trabalhar.' },
+      { pt: 'Devo ligar <span class="hl">antes de</span> ir ao restaurante.', en: 'I should call before going to the restaurant.', speak: 'Devo ligar antes de ir ao restaurante.' },
+      { pt: 'Faço a lista <span class="hl">antes de</span> ir ao supermercado.', en: 'I make the list before going to the supermarket.', speak: 'Faço a lista antes de ir ao supermercado.' },
+    ]
+  },
+  {
+    pt: 'depois de',
+    en: 'after (doing)',
+    type: 'inf',
+    examples: [
+      { pt: 'Vou ao ginásio <span class="hl">depois de</span> trabalhar.', en: 'I go to the gym after working.', speak: 'Vou ao ginásio depois de trabalhar.' },
+      { pt: '<span class="hl">Depois de</span> jantar, vamos beber um copo.', en: 'After having dinner, we are going to have a drink.', speak: 'Depois de jantar, vamos beber um copo.' },
+      { pt: 'Estou a descansar <span class="hl">depois de</span> andar muito.', en: "I'm resting after walking a lot.", speak: 'Estou a descansar depois de andar muito.' },
+    ]
+  },
+  {
+    pt: 'apesar de',
+    en: 'despite / in spite of',
+    type: 'inf',
+    examples: [
+      { pt: 'Vou sair <span class="hl">apesar de</span> estar cansado.', en: "I'm going out despite being tired.", speak: 'Vou sair apesar de estar cansado.' },
+      { pt: '<span class="hl">Apesar de</span> morar em Lisboa, não falo muito português.', en: "Despite living in Lisbon, I don't speak much Portuguese.", speak: 'Apesar de morar em Lisboa, não falo muito português.' },
+      { pt: 'Estou a aprender <span class="hl">apesar de</span> ser difícil.', en: "I'm learning despite it being difficult.", speak: 'Estou a aprender apesar de ser difícil.' },
+    ]
+  },
+  {
+    pt: 'em vez de',
+    en: 'instead of',
+    type: 'inf',
+    examples: [
+      { pt: 'Vou beber vinho verde <span class="hl">em vez de</span> beber cerveja.', en: "I'm going to drink vinho verde instead of beer.", speak: 'Vou beber vinho verde em vez de beber cerveja.' },
+      { pt: 'Devo cozinhar <span class="hl">em vez de</span> pedir comida.', en: "I should cook instead of ordering food.", speak: 'Devo cozinhar em vez de pedir comida.' },
+      { pt: 'Estou a andar <span class="hl">em vez de</span> apanhar o metro.', en: "I'm walking instead of taking the metro.", speak: 'Estou a andar em vez de apanhar o metro.' },
+    ]
+  },
+];
+
+const CONNECTORS_NO_INF = [
+  {
+    pt: 'porque',
+    en: 'because',
+    type: 'no-inf',
+    examples: [
+      { pt: 'Não fui ao trabalho <span class="hl">porque</span> estava doente.', en: "I didn't go to work because I was ill.", speak: 'Não fui ao trabalho porque estava doente.' },
+      { pt: 'Gosto de Lisboa <span class="hl">porque</span> é muito bonita.', en: 'I like Lisbon because it is very beautiful.', speak: 'Gosto de Lisboa porque é muito bonita.' },
+    ]
+  },
+  {
+    pt: 'mas',
+    en: 'but',
+    type: 'no-inf',
+    examples: [
+      { pt: 'Queria ir jantar fora <span class="hl">mas</span> não há mesa disponível.', en: "I'd like to go out for dinner but there's no table available.", speak: 'Queria ir jantar fora mas não há mesa disponível.' },
+      { pt: 'Falo um bocadinho <span class="hl">mas</span> ainda estou a aprender.', en: "I speak a little but I'm still learning.", speak: 'Falo um bocadinho mas ainda estou a aprender.' },
+    ]
+  },
+  {
+    pt: 'quando',
+    en: 'when',
+    type: 'no-inf',
+    examples: [
+      { pt: '<span class="hl">Quando</span> chego a casa, janto sempre tarde.', en: 'When I get home, I always have dinner late.', speak: 'Quando chego a casa, janto sempre tarde.' },
+      { pt: '<span class="hl">Quando</span> vou ao café, peço sempre uma meia de leite.', en: 'When I go to the café, I always order a meia de leite.', speak: 'Quando vou ao café, peço sempre uma meia de leite.' },
+    ]
+  },
+  {
+    pt: 'enquanto',
+    en: 'while',
+    type: 'no-inf',
+    examples: [
+      { pt: 'Estou a ouvir português <span class="hl">enquanto</span> ando.', en: "I'm listening to Portuguese while walking.", speak: 'Estou a ouvir português enquanto ando.' },
+      { pt: 'Estudo <span class="hl">enquanto</span> tomo o pequeno-almoço.', en: 'I study while having breakfast.', speak: 'Estudo enquanto tomo o pequeno-almoço.' },
+    ]
+  },
+  {
+    pt: 'se',
+    en: 'if',
+    type: 'no-inf',
+    examples: [
+      { pt: '<span class="hl">Se</span> há bacalhau no menu, vou pedir.', en: "If there's bacalhau on the menu, I'll order it.", speak: 'Se há bacalhau no menu, vou pedir.' },
+      { pt: '<span class="hl">Se</span> precisa de ajuda, pode perguntar.', en: 'If you need help, you can ask.', speak: 'Se precisa de ajuda, pode perguntar.' },
+    ]
+  },
+];
+
+const MEALS = [
+  { time: 'manhã', pt: 'tomar o pequeno-almoço', en: 'to have breakfast', when: 'de manhã', speak: 'Eu tomo o pequeno-almoço de manhã.' },
+  { time: '12h–13h', pt: 'almoçar', en: 'to have lunch', when: 'entre as 12h e as 13h', speak: 'Eu almoço entre as doze e a uma.' },
+  { time: 'tarde', pt: 'lanchar', en: 'to have an afternoon snack', when: 'à tarde', speak: 'Eu lancho à tarde.' },
+  { time: 'noite', pt: 'jantar', en: 'to have dinner', when: 'à noite', speak: 'Eu janto à noite.' },
+];
+
+// ── BUILD POSSESSIVOS TAB ─────────────────────────────────────────
+function buildPossExamples() {
+  const container = document.getElementById('possExamples');
+  POSS_EXAMPLES.forEach(e => {
+    const div = document.createElement('div');
+    div.className = 'ex-item';
+    div.innerHTML = `<div class="ex-pt">${e.pt}</div><div class="ex-en">${e.en}</div>`;
+    div.onclick = () => speak(e.speak, null);
+    container.appendChild(div);
+  });
+}
+
+// ── BUILD CONECTORES TAB ──────────────────────────────────────────
+function buildConnectors() {
+  buildConnGroup(CONNECTORS_INF, 'connInf', 'inf-type');
+  buildConnGroup(CONNECTORS_NO_INF, 'connNoInf', 'no-inf-type');
+
+  const mealGrid = document.getElementById('mealGrid');
+  MEALS.forEach(m => {
+    const card = document.createElement('div');
+    card.className = 'meal-card';
+    card.innerHTML = `<div class="meal-time">${m.when}</div><div class="meal-pt">${m.pt}</div><div class="meal-en">${m.en}</div>`;
+    card.onclick = () => speak(m.speak, null);
+    mealGrid.appendChild(card);
+  });
+}
+
+function buildConnGroup(list, containerId, cardClass) {
+  const container = document.getElementById(containerId);
+  list.forEach(c => {
+    const card = document.createElement('div');
+    card.className = `conn-card ${cardClass}`;
+    const exHtml = c.examples.map(e => `
+      <div class="conn-ex" onclick="speak('${e.speak.replace(/'/g,"\\'")}', null)">
+        <div class="cex-pt">${e.pt}</div>
+        <div class="cex-en">${e.en}</div>
+      </div>`).join('');
+    card.innerHTML = `
+      <div class="conn-header">
+        <span class="conn-pt" onclick="speak('${c.pt}', null)">${c.pt}</span>
+        <span class="conn-en">${c.en}</span>
+        <span class="conn-type ${c.type === 'inf' ? 'inf' : 'no-inf'}">${c.type === 'inf' ? '+ infinitivo' : 'sem infinitivo'}</span>
+      </div>
+      <div class="conn-examples">${exHtml}</div>`;
+    container.appendChild(card);
+  });
+}
+
+// ── FLASHCARDS ────────────────────────────────────────────────────
+const FC_POSSESSIVOS = [
+  { cat: 'Possessivos — eu', prompt: 'my car (masc sg)', answer: 'o meu carro', ex: 'Estou a vender o meu carro.', ex_en: 'I am selling my car.' },
+  { cat: 'Possessivos — eu', prompt: 'my bottle (fem sg)', answer: 'a minha garrafa', ex: 'A minha garrafa de água está aqui.', ex_en: 'My bottle of water is here.' },
+  { cat: 'Possessivos — eu', prompt: 'my phones (masc pl)', answer: 'os meus telefones', ex: 'Estou a vender os meus telefones.', ex_en: 'I am selling my phones.' },
+  { cat: 'Possessivos — eu', prompt: 'my bottles (fem pl)', answer: 'as minhas garrafas', ex: 'As minhas garrafas de vinho são boas.', ex_en: 'My bottles of wine are good.' },
+  { cat: 'Possessivos — você', prompt: 'your car (masc sg)', answer: 'o seu carro', ex: 'Posso comprar o seu carro?', ex_en: 'Can I buy your car?' },
+  { cat: 'Possessivos — você', prompt: 'your bottle (fem sg)', answer: 'a sua garrafa', ex: 'Pode dar-me a sua garrafa?', ex_en: 'Can you give me your bottle?' },
+  { cat: 'Possessivos — você', prompt: 'your wines (masc pl)', answer: 'os seus vinhos', ex: 'Posso provar os seus vinhos?', ex_en: 'May I try your wines?' },
+  { cat: 'Possessivos — você', prompt: 'your toasts (fem pl)', answer: 'as suas torradas', ex: 'Posso provar as suas torradas?', ex_en: 'May I try your toasts?' },
+  { cat: 'Possessivos — nós', prompt: 'our car (masc sg)', answer: 'o nosso carro', ex: 'Vamos usar o nosso carro.', ex_en: "We're going to use our car." },
+  { cat: 'Possessivos — nós', prompt: 'our house (fem sg)', answer: 'a nossa casa', ex: 'A nossa casa fica perto do Tejo.', ex_en: 'Our house is near the Tagus.' },
+  { cat: 'Possessivos — nós', prompt: 'our friends (masc pl)', answer: 'os nossos amigos', ex: 'Os nossos amigos moram em Lisboa.', ex_en: 'Our friends live in Lisbon.' },
+  { cat: 'Possessivos — nós', prompt: 'our reservations (fem pl)', answer: 'as nossas reservas', ex: 'Devo fazer as nossas reservas?', ex_en: 'Should I make our reservations?' },
+];
+
+const FC_CONECTORES = [
+  { cat: 'Conectores + inf', prompt: 'before working', answer: 'antes de trabalhar', ex: 'Tomo café antes de trabalhar.', ex_en: 'I have coffee before working.' },
+  { cat: 'Conectores + inf', prompt: 'after having dinner', answer: 'depois de jantar', ex: 'Vamos beber um copo depois de jantar.', ex_en: "We're going to have a drink after dinner." },
+  { cat: 'Conectores + inf', prompt: 'despite being tired', answer: 'apesar de estar cansado', ex: 'Vou sair apesar de estar cansado.', ex_en: "I'm going out despite being tired." },
+  { cat: 'Conectores + inf', prompt: 'instead of taking the metro', answer: 'em vez de apanhar o metro', ex: 'Estou a andar em vez de apanhar o metro.', ex_en: "I'm walking instead of taking the metro." },
+  { cat: 'Conectores + inf', prompt: 'before going to the supermarket', answer: 'antes de ir ao supermercado', ex: 'Faço a lista antes de ir ao supermercado.', ex_en: 'I make the list before going to the supermarket.' },
+  { cat: 'Conectores — cláusula', prompt: 'because I was tired', answer: 'porque estava cansado', ex: 'Não saí porque estava cansado.', ex_en: "I didn't go out because I was tired." },
+  { cat: 'Conectores — cláusula', prompt: 'but I am still learning', answer: 'mas ainda estou a aprender', ex: 'Falo um bocadinho mas ainda estou a aprender.', ex_en: "I speak a little but I'm still learning." },
+  { cat: 'Conectores — cláusula', prompt: 'when I get home', answer: 'quando chego a casa', ex: 'Quando chego a casa, janto sempre tarde.', ex_en: 'When I get home, I always have dinner late.' },
+  { cat: 'Conectores — cláusula', prompt: 'while walking', answer: 'enquanto ando', ex: 'Estou a ouvir português enquanto ando.', ex_en: "I'm listening to Portuguese while walking." },
+  { cat: 'Conectores — cláusula', prompt: "if there's bacalhau", answer: 'se há bacalhau', ex: 'Se há bacalhau no menu, vou pedir.', ex_en: "If there's bacalhau on the menu, I'll order it." },
+];
+
+let fcMode = 'possessivos';
+let fcDeck = [...FC_POSSESSIVOS], fcIdx = 0, fcRevealed = false;
+
+function setFCMode(mode) {
+  fcMode = mode;
+  document.getElementById('fcModePoss').classList.toggle('active', mode === 'possessivos');
+  document.getElementById('fcModeConn').classList.toggle('active', mode === 'conectores');
+  fcDeck = mode === 'possessivos' ? [...FC_POSSESSIVOS] : [...FC_CONECTORES];
+  fcIdx = 0; fcRender();
+}
+
+function fcRender() {
+  const c = fcDeck[fcIdx];
+  fcRevealed = false;
+  document.getElementById('fcCounter').textContent = `${fcIdx + 1} / ${fcDeck.length}`;
+  document.getElementById('fcFill').style.width = `${((fcIdx + 1) / fcDeck.length) * 100}%`;
+  document.getElementById('fcCategory').textContent = c.cat;
+  document.getElementById('fcPrompt').textContent = c.prompt;
+  const ans = document.getElementById('fcAnswer');
+  ans.textContent = c.answer; ans.className = 'fc-answer';
+  const ex = document.getElementById('fcEx');
+  ex.textContent = c.ex; ex.className = 'fc-ex';
+  const exEn = document.getElementById('fcExEn');
+  exEn.textContent = c.ex_en; exEn.className = 'fc-ex-en';
+  exEn.onclick = (e) => { e.stopPropagation(); exEn.classList.add('revealed'); };
+  document.getElementById('fcHints').textContent = 'clique para revelar · 🔊 para ouvir';
+  document.getElementById('fcSpeak').classList.remove('playing');
+}
+
+function fcReveal() {
+  if (fcRevealed) return; fcRevealed = true;
+  document.getElementById('fcAnswer').classList.add('revealed');
+  document.getElementById('fcEx').classList.add('revealed');
+  document.getElementById('fcHints').textContent = '';
+}
+
+function fcSpeakAnswer() { speak(fcDeck[fcIdx].answer, document.getElementById('fcSpeak')); }
+function fcSpeakEx() {
+  document.getElementById('fcEx').classList.add('revealed');
+  speak(fcDeck[fcIdx].ex, document.getElementById('fcEx'));
+}
+function fcMove(dir) { fcIdx = (fcIdx + dir + fcDeck.length) % fcDeck.length; fcRender(); }
+function shuffleFC() { fcDeck = [...fcDeck].sort(() => Math.random() - 0.5); fcIdx = 0; fcRender(); }
+function resetFC() { setFCMode(fcMode); }
+
+// ── DRILL DATA ────────────────────────────────────────────────────
+const GAP_ITEMS = [
+  { sentence: 'Tomo café ___ trabalhar.', answer: 'antes de', distractors: ['depois de','em vez de','apesar de'], en: 'I have coffee ___ working.' },
+  { sentence: 'Vou ao ginásio ___ trabalhar.', answer: 'depois de', distractors: ['antes de','enquanto','porque'], en: 'I go to the gym ___ working.' },
+  { sentence: 'Estou a andar ___ apanhar o metro.', answer: 'em vez de', distractors: ['antes de','depois de','apesar de'], en: "I'm walking ___ taking the metro." },
+  { sentence: 'Vou sair ___ estar cansado.', answer: 'apesar de', distractors: ['porque','em vez de','antes de'], en: "I'm going out ___ being tired." },
+  { sentence: 'Não fui trabalhar ___ estava doente.', answer: 'porque', distractors: ['mas','quando','se'], en: "I didn't go to work ___ I was ill." },
+  { sentence: 'Falo português ___ ainda estou a aprender.', answer: 'mas', distractors: ['porque','quando','enquanto'], en: 'I speak Portuguese ___ I am still learning.' },
+  { sentence: '___ chego a casa, janto sempre tarde.', answer: 'quando', distractors: ['se','enquanto','porque'], en: '___ I get home, I always have dinner late.' },
+  { sentence: 'Estou a ouvir português ___ ando.', answer: 'enquanto', distractors: ['quando','mas','depois de'], en: "I'm listening to Portuguese ___ walking." },
+  { sentence: '___ há bacalhau no menu, vou pedir.', answer: 'se', distractors: ['quando','porque','enquanto'], en: "___ there's bacalhau on the menu, I'll order it." },
+  { sentence: 'Faço a lista ___ ir ao supermercado.', answer: 'antes de', distractors: ['depois de','apesar de','em vez de'], en: 'I make the list ___ going to the supermarket.' },
+  { sentence: 'Estudo português ___ tomo o pequeno-almoço.', answer: 'enquanto', distractors: ['quando','antes de','mas'], en: 'I study Portuguese ___ having breakfast.' },
+  { sentence: '___ jantar, vamos beber um copo.', answer: 'depois de', distractors: ['antes de','em vez de','apesar de'], en: '___ dinner, we are going to have a drink.' },
+];
+
+const ASSEMBLY_ITEMS = [
+  {
+    en: "I'm going out despite being tired.",
+    parts: ['Vou sair', 'apesar de', 'estar cansado.'],
+    answer: 'Vou sair apesar de estar cansado.',
+  },
+  {
+    en: 'I have coffee before working.',
+    parts: ['antes de', 'Tomo café', 'trabalhar.'],
+    answer: 'Tomo café antes de trabalhar.',
+  },
+  {
+    en: "I'm walking instead of taking the metro.",
+    parts: ['em vez de', 'Estou a andar', 'apanhar o metro.'],
+    answer: 'Estou a andar em vez de apanhar o metro.',
+  },
+  {
+    en: "I'm listening to Portuguese while walking.",
+    parts: ['Estou a ouvir português', 'enquanto', 'ando.'],
+    answer: 'Estou a ouvir português enquanto ando.',
+  },
+  {
+    en: 'I go to the gym after working.',
+    parts: ['Vou ao ginásio', 'depois de', 'trabalhar.'],
+    answer: 'Vou ao ginásio depois de trabalhar.',
+  },
+  {
+    en: "I speak a little but I'm still learning.",
+    parts: ['Falo um bocadinho', 'mas', 'ainda estou a aprender.'],
+    answer: 'Falo um bocadinho mas ainda estou a aprender.',
+  },
+  {
+    en: 'When I get home, I always have dinner late.',
+    parts: ['Quando', 'chego a casa,', 'janto sempre tarde.'],
+    answer: 'Quando chego a casa, janto sempre tarde.',
+  },
+  {
+    en: "If there's bacalhau on the menu, I'll order it.",
+    parts: ['Se', 'há bacalhau no menu,', 'vou pedir.'],
+    answer: 'Se há bacalhau no menu, vou pedir.',
+  },
+  {
+    en: 'Despite living in Lisbon, I do not speak much Portuguese.',
+    parts: ['Apesar de', 'morar em Lisboa,', 'não falo muito português.'],
+    answer: 'Apesar de morar em Lisboa, não falo muito português.',
+  },
+];
+
+// ── GAP DRILL ─────────────────────────────────────────────────────
+let gapDeck = [], gapIdx = 0, gapCorrect = 0, gapTotal = 0, gapAnswered = false;
+
+function initGap() {
+  gapDeck = [...GAP_ITEMS].sort(() => Math.random() - 0.5);
+  gapIdx = 0; gapCorrect = 0; gapTotal = 0; gapAnswered = false;
+  renderGap();
+}
+
+function renderGap() {
+  if (gapIdx >= gapDeck.length) { gapDeck = [...GAP_ITEMS].sort(() => Math.random() - 0.5); gapIdx = 0; }
+  gapAnswered = false;
+  const item = gapDeck[gapIdx];
+  document.getElementById('gapFeedback').textContent = '';
+  document.getElementById('gapFeedback').className = 'drill-feedback';
+  document.getElementById('gapNext').disabled = true;
+  document.getElementById('gapSentence').innerHTML = item.sentence.replace('___', '<span class="drill-blank">___</span>');
+  document.getElementById('gapEn').textContent = item.en;
+
+  const opts = [item.answer, ...item.distractors].sort(() => Math.random() - 0.5);
+  const container = document.getElementById('gapOptions');
+  container.innerHTML = '';
+  opts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'drill-opt'; btn.textContent = opt;
+    btn.onclick = () => checkGap(btn, opt, item.answer, item);
+    container.appendChild(btn);
+  });
+  updateDrillScore();
+}
+
+function checkGap(btn, chosen, correct, item) {
+  if (gapAnswered) return;
+  gapAnswered = true; gapTotal++;
+  document.querySelectorAll('.drill-opt').forEach(b => { b.disabled = true; if (b.textContent === correct) b.classList.add('correct'); });
+  const fb = document.getElementById('gapFeedback');
+  if (chosen === correct) {
+    gapCorrect++; fb.textContent = 'Correto! ✓'; fb.className = 'drill-feedback ok';
+  } else {
+    btn.classList.add('wrong'); fb.textContent = `Errado — "${correct}"`; fb.className = 'drill-feedback bad';
+  }
+  const full = item.sentence.replace('___', correct);
+  speak(full, null);
+  document.getElementById('gapNext').disabled = false;
+  updateDrillScore();
+}
+
+function nextGap() { gapIdx++; renderGap(); }
+
+// ── ASSEMBLY DRILL ────────────────────────────────────────────────
+let asmDeck = [], asmIdx = 0, asmCorrect = 0, asmTotal = 0, asmAnswered = false;
+let asmSelected = [];
+
+function initAssembly() {
+  asmDeck = [...ASSEMBLY_ITEMS].sort(() => Math.random() - 0.5);
+  asmIdx = 0; asmCorrect = 0; asmTotal = 0; asmAnswered = false;
+  renderAssembly();
+}
+
+function renderAssembly() {
+  if (asmIdx >= asmDeck.length) { asmDeck = [...ASSEMBLY_ITEMS].sort(() => Math.random() - 0.5); asmIdx = 0; }
+  asmAnswered = false; asmSelected = [];
+  const item = asmDeck[asmIdx];
+  document.getElementById('assemblyFeedback').textContent = '';
+  document.getElementById('assemblyFeedback').className = 'drill-feedback';
+  document.getElementById('assemblyNext').disabled = true;
+  document.getElementById('assemblyEn').textContent = item.en;
+
+  const shuffled = [...item.parts].sort(() => Math.random() - 0.5);
+  const partsDiv = document.getElementById('assemblyParts');
+  partsDiv.innerHTML = '';
+
+  shuffled.forEach((part, i) => {
+    const chip = document.createElement('div');
+    const isConn = [...CONNECTORS_INF, ...CONNECTORS_NO_INF].some(c => part.startsWith(c.pt) || part === c.pt);
+    chip.className = `part-chip ${isConn ? 'connector' : 'clause'}`;
+    chip.textContent = part;
+    chip.dataset.idx = i;
+    chip.onclick = () => selectPart(chip, part, i);
+    partsDiv.appendChild(chip);
+  });
+
+  const drop = document.getElementById('assemblyDrop');
+  drop.innerHTML = 'clica as partes para montar a frase…';
+  drop.classList.remove('has-content');
+  updateDrillScore();
+}
+
+function selectPart(chip, part, idx) {
+  if (asmAnswered) return;
+  if (chip.classList.contains('selected')) return;
+  chip.classList.add('selected');
+  asmSelected.push({ part, idx });
+
+  const drop = document.getElementById('assemblyDrop');
+  if (asmSelected.length === 1) drop.innerHTML = '';
+  drop.classList.add('has-content');
+
+  const placed = document.createElement('span');
+  placed.className = 'assembly-placed';
+  placed.textContent = part;
+  placed.onclick = () => removePart(chip, idx);
+  drop.appendChild(placed);
+
+  // Check if all parts placed
+  const totalParts = asmDeck[asmIdx].parts.length;
+  if (asmSelected.length === totalParts) checkAssembly();
+}
+
+function removePart(chip, idx) {
+  if (asmAnswered) return;
+  chip.classList.remove('selected');
+  asmSelected = asmSelected.filter(s => s.idx !== idx);
+
+  const drop = document.getElementById('assemblyDrop');
+  drop.innerHTML = '';
+  if (asmSelected.length === 0) {
+    drop.innerHTML = 'clica as partes para montar a frase…';
+    drop.classList.remove('has-content');
+  } else {
+    drop.classList.add('has-content');
+    asmSelected.forEach(s => {
+      const placed = document.createElement('span');
+      placed.className = 'assembly-placed';
+      placed.textContent = s.part;
+      const chip2 = document.querySelector(`.part-chip[data-idx="${s.idx}"]`);
+      placed.onclick = () => removePart(chip2, s.idx);
+      drop.appendChild(placed);
+    });
+  }
+}
+
+function checkAssembly() {
+  asmAnswered = true; asmTotal++;
+  const item = asmDeck[asmIdx];
+  const assembled = asmSelected.map(s => s.part).join(' ');
+  const fb = document.getElementById('assemblyFeedback');
+  const drop = document.getElementById('assemblyDrop');
+
+  if (assembled === item.answer) {
+    asmCorrect++; fb.textContent = 'Correto! ✓'; fb.className = 'drill-feedback ok';
+    drop.style.borderColor = 'var(--green)';
+  } else {
+    fb.textContent = `Errado — ${item.answer}`; fb.className = 'drill-feedback bad';
+    drop.style.borderColor = 'var(--red)';
+  }
+  speak(item.answer, null);
+  document.getElementById('assemblyNext').disabled = false;
+  updateDrillScore();
+}
+
+function nextAssembly() { asmIdx++; document.getElementById('assemblyDrop').style.borderColor = ''; renderAssembly(); }
+
+function updateDrillScore() {
+  const correct = currentDrillMode === 'gap' ? gapCorrect : asmCorrect;
+  const total = currentDrillMode === 'gap' ? gapTotal : asmTotal;
+  document.getElementById('drillScore').textContent = `${correct} / ${total}`;
+}
+
+// ── DRILL MODE ────────────────────────────────────────────────────
+let currentDrillMode = 'gap';
+
+function setDrillMode(mode) {
+  currentDrillMode = mode;
+  document.getElementById('drillModeGap').classList.toggle('active', mode === 'gap');
+  document.getElementById('drillModeAssembly').classList.toggle('active', mode === 'assembly');
+  document.getElementById('gapDrill').style.display = mode === 'gap' ? '' : 'none';
+  document.getElementById('assemblyDrill').style.display = mode === 'assembly' ? '' : 'none';
+  document.getElementById('drillModeLabel').textContent = mode === 'gap' ? 'gap fill' : 'montagem';
+  updateDrillScore();
+  if (mode === 'assembly' && asmDeck.length === 0) initAssembly();
+}
+
+// ── TABS ──────────────────────────────────────────────────────────
+function switchTab(id, tabEl) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  tabEl.classList.add('active');
+  if (id === 'flashcards') fcRender();
+  if (id === 'drill') initGap();
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+buildPossExamples();
+buildConnectors();
+fcRender();
+initGap();
+initAssembly();
+</script>
+</body>
+</html>
