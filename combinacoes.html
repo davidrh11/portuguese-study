@@ -415,6 +415,7 @@
     <div class="desafio-score-bar">
       <span class="desafio-score">Correto: <span id="dCorrect">0</span> / <span id="dTotal">0</span></span>
       <span class="desafio-streak" id="dStreak"></span>
+      <span style="font-family:var(--mono);font-size:0.68rem;color:var(--muted2);">⏱ <span id="timerDurationLabel">8s</span></span>
     </div>
     <div class="desafio-card" id="desafioCard">
       <div class="desafio-situation" id="dSituation"></div>
@@ -892,11 +893,21 @@ const LIVRE_UNLOCK_AT = 15;
 let dsMode = 'guiado';
 let dsDeck = [], dsIdx = 0, dsCorrect = 0, dsTotal = 0, dsStreak = 0, dsRevealed = false;
 let dsTimer = null, dsSeconds = 0;
-const TIMER_DURATION = 5;
+let dsTimerDuration = 8; // adaptive — starts at 8s
+const TIMER_MIN = 3;
+const TIMER_MAX = 8;
 const CIRCUMFERENCE = 150.8;
+
+function calcTimerDuration() {
+  // Every 3 consecutive correct → -1s (min 3s)
+  // Any miss → +2s (max 8s)
+  // dsTimerDuration is updated in assessDesafio
+  return dsTimerDuration;
+}
 
 function initDesafio() {
   dsCorrect = 0; dsTotal = 0; dsStreak = 0;
+  dsTimerDuration = 8; // reset to generous on fresh start
   dsDeck = [...(dsMode === 'guiado' ? DESAFIO_GUIADO : DESAFIO_LIVRE)].sort(() => Math.random() - 0.5);
   dsIdx = 0;
   checkLivreUnlock();
@@ -909,7 +920,7 @@ function checkLivreUnlock() {
   const livreLocked = !unlocked;
   document.getElementById('livreLock').textContent = unlocked ? '' : '🔒';
   document.getElementById('dModeLivre').disabled = livreLocked;
-  if (unlocked && dCorrect === LIVRE_UNLOCK_AT) {
+  if (unlocked && dsCorrect === LIVRE_UNLOCK_AT) {
     const banner = document.getElementById('livreUnlock');
     banner.textContent = '🔓 Modo Livre desbloqueado! ' + LIVRE_UNLOCK_AT + ' respostas corretas.';
     banner.classList.add('visible');
@@ -968,7 +979,7 @@ function renderDesafio() {
 }
 
 function startTimer() {
-  dsSeconds = TIMER_DURATION;
+  dsSeconds = dsTimerDuration;
   updateTimerDisplay(dsSeconds);
   dsTimer = setInterval(() => {
     dsSeconds--;
@@ -991,9 +1002,8 @@ function updateTimerDisplay(s) {
   if (!num || !ring) return;
   const clamped = Math.max(0, s);
   num.textContent = clamped;
-  const offset = CIRCUMFERENCE * (1 - clamped / TIMER_DURATION);
+  const offset = CIRCUMFERENCE * (1 - clamped / dsTimerDuration);
   ring.style.strokeDashoffset = offset;
-  // colour shifts red as time runs out
   ring.style.stroke = clamped <= 1 ? 'var(--red)' : clamped <= 2 ? 'var(--yellow)' : 'var(--green)';
 }
 
@@ -1017,8 +1027,14 @@ function assessDesafio(got) {
   if (got) {
     dsCorrect++;
     dsStreak++;
+    // Every 3 consecutive correct → reduce timer by 1s
+    if (dsStreak % 3 === 0) {
+      dsTimerDuration = Math.max(TIMER_MIN, dsTimerDuration - 1);
+    }
   } else {
     dsStreak = 0;
+    // Miss → add 2s back
+    dsTimerDuration = Math.min(TIMER_MAX, dsTimerDuration + 2);
   }
   checkLivreUnlock();
   updateDesafioScore();
@@ -1029,7 +1045,11 @@ function assessDesafio(got) {
 function updateDesafioScore() {
   document.getElementById('dCorrect').textContent = dsCorrect;
   document.getElementById('dTotal').textContent = dsTotal;
-  document.getElementById('dStreak').textContent = dsStreak >= 3 ? `🔥 ${dStreak}` : '';
+  const streakEl = document.getElementById('dStreak');
+  streakEl.textContent = dsStreak >= 3 ? `🔥 ${dsStreak}` : '';
+  // Show current timer duration subtly
+  const timerLabel = document.getElementById('timerDurationLabel');
+  if (timerLabel) timerLabel.textContent = `${dsTimerDuration}s`;
 }
 
 // Objects: each has a pt label, en translation, and a pairings map.
