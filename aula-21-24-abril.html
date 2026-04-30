@@ -49,7 +49,36 @@
   .note-block.yellow { border-left-color: var(--yellow); }
   .note-block.yellow strong { color: var(--yellow); }
 
-  /* POSSESSIVO GRID */
+  /* ── DESAFIO ── */
+  .desafio-wrap { max-width: 540px; margin: 0 auto; }
+  .desafio-score-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  .desafio-score { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); }
+  .desafio-streak { font-family: var(--mono); font-size: 0.78rem; color: var(--yellow); }
+  .desafio-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem; min-height: 260px; display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 1.25rem; transition: border-color 0.3s; }
+  .desafio-card.revealing { border-color: var(--green); }
+  .desafio-category { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted2); margin-bottom: 0.75rem; }
+  .desafio-situation { font-size: 0.95rem; color: var(--text); line-height: 1.6; margin-bottom: 1.25rem; font-weight: 300; max-width: 380px; }
+  .timer-wrap2 { position: relative; width: 56px; height: 56px; margin: 0 auto 1rem; }
+  .timer-svg2 { transform: rotate(-90deg); }
+  .timer-bg2 { fill: none; stroke: var(--border); stroke-width: 4; }
+  .timer-fg2 { fill: none; stroke: var(--green); stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 0.1s linear, stroke 0.3s; }
+  .timer-num2 { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: var(--mono); font-size: 1rem; font-weight: 700; color: var(--text); }
+  .desafio-answer-wrap { width: 100%; margin-top: auto; }
+  .desafio-answer2 { font-family: var(--mono); font-size: 1.05rem; color: var(--green); font-weight: 700; filter: blur(7px); transition: filter 0.3s; background: var(--border); border-radius: 6px; padding: 0.5rem 1rem; cursor: pointer; display: inline-block; margin-bottom: 0.5rem; }
+  .desafio-answer2.revealed { filter: blur(0); background: transparent; }
+  .desafio-answer-en2 { font-size: 0.78rem; color: var(--muted); font-style: italic; opacity: 0; transition: opacity 0.3s; display: block; margin-bottom: 0.75rem; }
+  .desafio-answer-en2.visible { opacity: 1; }
+  .desafio-speak2 { background: var(--surface2); border: 1px solid var(--border); color: var(--green); padding: 0.3rem 1rem; border-radius: 99px; cursor: pointer; transition: all 0.2s; font-size: 0.9rem; margin-bottom: 1rem; display: none; }
+  .desafio-speak2.visible { display: inline-block; }
+  .desafio-speak2:hover, .desafio-speak2.playing { background: var(--green); color: #fff; border-color: var(--green); }
+  .reveal-hint2 { font-family: var(--mono); font-size: 0.65rem; color: var(--muted2); letter-spacing: 0.06em; margin-bottom: 0.5rem; }
+  .self-assess2 { display: none; gap: 0.75rem; justify-content: center; margin-bottom: 0.75rem; }
+  .self-assess2.visible { display: flex; }
+  .sa-btn2 { font-family: var(--mono); font-size: 0.82rem; padding: 0.55rem 1.5rem; border-radius: 6px; cursor: pointer; border: none; font-weight: 600; transition: all 0.15s; }
+  .sa-got2 { background: var(--green-light); color: var(--green); border: 1px solid var(--green-mid); }
+  .sa-got2:hover { background: var(--green); color: #fff; }
+  .sa-missed2 { background: var(--red-light); color: var(--red); border: 1px solid var(--red-mid); }
+  .sa-missed2:hover { background: var(--red); color: #fff; }
   .poss-grid { width: 100%; border-collapse: collapse; margin-bottom: 1.25rem; }
   .poss-grid th { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); text-align: left; background: var(--surface2); }
   .poss-grid td { padding: 0.65rem 0.75rem; border-bottom: 1px solid var(--border); font-size: 0.88rem; vertical-align: top; }
@@ -194,6 +223,7 @@
   <button class="tab" onclick="switchTab('conectores', this)">Conectores</button>
   <button class="tab" onclick="switchTab('flashcards', this)">Flashcards</button>
   <button class="tab" onclick="switchTab('drill', this)">Drill</button>
+  <button class="tab" onclick="switchTab('desafio', this)">Desafio</button>
 </div>
 
 <!-- ══ POSSESSIVOS ══ -->
@@ -360,6 +390,38 @@
       </div>
       <div class="drill-feedback" id="assemblyFeedback"></div>
       <button class="drill-next" id="assemblyNext" onclick="nextAssembly()" disabled>Próximo →</button>
+    </div>
+  </div>
+</div>
+
+<!-- DESAFIO -->
+<div id="desafio" class="view">
+  <div class="desafio-wrap">
+    <div class="desafio-score-bar">
+      <span class="desafio-score">Correto: <span id="d2Correct">0</span> / <span id="d2Total">0</span></span>
+      <span class="desafio-streak" id="d2Streak"></span>
+      <span style="font-family:var(--mono);font-size:0.68rem;color:var(--muted2);">⏱ <span id="d2TimerLabel">8s</span></span>
+    </div>
+    <div class="desafio-card" id="desafioCard2">
+      <div class="desafio-category" id="d2Category"></div>
+      <div class="desafio-situation" id="d2Situation"></div>
+      <div class="timer-wrap2">
+        <svg class="timer-svg2" width="56" height="56" viewBox="0 0 56 56">
+          <circle class="timer-bg2" cx="28" cy="28" r="24"/>
+          <circle class="timer-fg2" id="timerRing2" cx="28" cy="28" r="24" stroke-dasharray="150.8" stroke-dashoffset="0"/>
+        </svg>
+        <div class="timer-num2" id="timerNum2">8</div>
+      </div>
+      <div class="desafio-answer-wrap">
+        <div class="reveal-hint2" id="d2RevealHint">toca para revelar →</div>
+        <div class="desafio-answer2" id="d2Answer" onclick="revealD2()"></div>
+        <span class="desafio-answer-en2" id="d2AnswerEn"></span>
+        <button class="desafio-speak2" id="d2Speak" onclick="speakD2()">🔊 Ouvir</button>
+      </div>
+    </div>
+    <div class="self-assess2" id="selfAssess2">
+      <button class="sa-btn2 sa-got2" onclick="assessD2(true)">✓ Disse</button>
+      <button class="sa-btn2 sa-missed2" onclick="assessD2(false)">✗ Não disse</button>
     </div>
   </div>
 </div>
@@ -864,6 +926,122 @@ function switchTab(id, tabEl) {
   tabEl.classList.add('active');
   if (id === 'flashcards') fcRender();
   if (id === 'drill') initGap();
+  if (id === 'desafio') initD2();
+}
+
+// ── DESAFIO ───────────────────────────────────────────────────────
+const D2_ITEMS = [
+  // Possessivos
+  { cat: 'Possessivos', situation: "Tell someone you're selling your old car.", answer: 'Estou a vender o meu carro.', en: "I'm selling my car." },
+  { cat: 'Possessivos', situation: "Ask if you can try their wine.", answer: 'Posso provar o seu vinho?', en: 'May I try your wine?' },
+  { cat: 'Possessivos', situation: "Say our house is near the Tagus.", answer: 'A nossa casa fica perto do Tejo.', en: 'Our house is near the Tagus.' },
+  { cat: 'Possessivos', situation: "Ask if you can drink their wines.", answer: 'Posso beber os seus vinhos?', en: 'May I drink your wines?' },
+  { cat: 'Possessivos', situation: "Say you're going to use our car.", answer: 'Vamos usar o nosso carro.', en: "We're going to use our car." },
+  { cat: 'Possessivos', situation: "Say our friends live in Lisbon.", answer: 'Os nossos amigos moram em Lisboa.', en: 'Our friends live in Lisbon.' },
+  { cat: 'Possessivos', situation: "Ask if you can buy their bottle of water.", answer: 'Posso comprar a sua garrafa de água?', en: 'Can I buy your bottle of water?' },
+  { cat: 'Possessivos', situation: "Say you're buying your bottles of wine.", answer: 'Estou a comprar as minhas garrafas de vinho.', en: "I'm buying my bottles of wine." },
+  // Conectores
+  { cat: 'Conectores + inf', situation: "You always have coffee before working.", answer: 'Tomo café antes de trabalhar.', en: 'I have coffee before working.' },
+  { cat: 'Conectores + inf', situation: "You're going to the gym after working.", answer: 'Vou ao ginásio depois de trabalhar.', en: 'I go to the gym after working.' },
+  { cat: 'Conectores + inf', situation: "You're walking instead of taking the metro.", answer: 'Estou a andar em vez de apanhar o metro.', en: "I'm walking instead of taking the metro." },
+  { cat: 'Conectores + inf', situation: "You're going out despite being tired.", answer: 'Vou sair apesar de estar cansado.', en: "I'm going out despite being tired." },
+  { cat: 'Conectores', situation: "You speak a little but you're still learning.", answer: 'Falo um bocadinho mas ainda estou a aprender.', en: "I speak a little but I'm still learning." },
+  { cat: 'Conectores', situation: "When you get home you always have dinner late.", answer: 'Quando chego a casa, janto sempre tarde.', en: 'When I get home, I always have dinner late.' },
+  { cat: 'Conectores', situation: "You're listening to Portuguese while walking.", answer: 'Estou a ouvir português enquanto ando.', en: "I'm listening to Portuguese while walking." },
+  { cat: 'Conectores', situation: "If there's bacalhau on the menu you'll order it.", answer: 'Se há bacalhau no menu, vou pedir.', en: "If there's bacalhau on the menu, I'll order it." },
+  { cat: 'Refeições', situation: "Say you have breakfast in the morning.", answer: 'Tomo o pequeno-almoço de manhã.', en: 'I have breakfast in the morning.' },
+  { cat: 'Refeições', situation: "Say you have lunch between 12 and 1.", answer: 'Almoço entre as 12h e a 1h.', en: 'I have lunch between 12 and 1.' },
+  { cat: 'Refeições', situation: "Say you have dinner at night.", answer: 'Janto à noite.', en: 'I have dinner at night.' },
+];
+
+const D2_CIRCUMFERENCE = 150.8;
+const D2_TIMER_MAX = 8, D2_TIMER_MIN = 3;
+let d2Deck = [], d2Idx = 0, d2Correct = 0, d2Total = 0, d2Streak = 0;
+let d2Revealed = false, d2Timer = null, d2Seconds = 0, d2Duration = 8;
+
+function initD2() {
+  d2Correct = 0; d2Total = 0; d2Streak = 0; d2Duration = 8;
+  d2Deck = [...D2_ITEMS].sort(() => Math.random() - 0.5);
+  d2Idx = 0;
+  renderD2();
+}
+
+function renderD2() {
+  if (d2Idx >= d2Deck.length) { d2Deck = [...D2_ITEMS].sort(() => Math.random() - 0.5); d2Idx = 0; }
+  d2Revealed = false;
+  clearInterval(d2Timer);
+  const item = d2Deck[d2Idx];
+  document.getElementById('d2Category').textContent = item.cat;
+  document.getElementById('d2Situation').textContent = item.situation;
+  document.getElementById('d2Answer').textContent = item.answer;
+  document.getElementById('d2Answer').className = 'desafio-answer2';
+  document.getElementById('d2AnswerEn').textContent = item.en;
+  document.getElementById('d2AnswerEn').className = 'desafio-answer-en2';
+  document.getElementById('d2Speak').className = 'desafio-speak2';
+  document.getElementById('d2RevealHint').textContent = 'toca para revelar →';
+  document.getElementById('desafioCard2').classList.remove('revealing');
+  document.getElementById('selfAssess2').classList.remove('visible');
+  updateD2Score();
+  startD2Timer();
+}
+
+function startD2Timer() {
+  d2Seconds = d2Duration;
+  updateD2Timer(d2Seconds);
+  d2Timer = setInterval(() => {
+    d2Seconds--;
+    updateD2Timer(d2Seconds);
+    if (d2Seconds <= 0) {
+      clearInterval(d2Timer);
+      document.getElementById('timerNum2').textContent = '✓';
+      document.getElementById('timerRing2').style.stroke = 'var(--border2)';
+      document.getElementById('d2RevealHint').textContent = 'tempo — toca para revelar';
+    }
+  }, 1000);
+}
+
+function updateD2Timer(s) {
+  const clamped = Math.max(0, s);
+  document.getElementById('timerNum2').textContent = clamped;
+  const offset = D2_CIRCUMFERENCE * (1 - clamped / d2Duration);
+  document.getElementById('timerRing2').style.strokeDashoffset = offset;
+  document.getElementById('timerRing2').style.stroke = clamped <= 1 ? 'var(--red)' : clamped <= 2 ? 'var(--yellow)' : 'var(--green)';
+}
+
+function revealD2() {
+  if (d2Revealed) return;
+  d2Revealed = true;
+  clearInterval(d2Timer);
+  document.getElementById('d2Answer').classList.add('revealed');
+  document.getElementById('d2AnswerEn').classList.add('visible');
+  document.getElementById('d2Speak').classList.add('visible');
+  document.getElementById('d2RevealHint').style.display = 'none';
+  document.getElementById('desafioCard2').classList.add('revealing');
+  document.getElementById('selfAssess2').classList.add('visible');
+  speak(d2Deck[d2Idx].answer, null);
+}
+
+function speakD2() { speak(d2Deck[d2Idx].answer, document.getElementById('d2Speak')); }
+
+function assessD2(got) {
+  d2Total++;
+  if (got) {
+    d2Correct++; d2Streak++;
+    if (d2Streak % 3 === 0) d2Duration = Math.max(D2_TIMER_MIN, d2Duration - 1);
+  } else {
+    d2Streak = 0;
+    d2Duration = Math.min(D2_TIMER_MAX, d2Duration + 2);
+  }
+  updateD2Score();
+  d2Idx++;
+  setTimeout(renderD2, 300);
+}
+
+function updateD2Score() {
+  document.getElementById('d2Correct').textContent = d2Correct;
+  document.getElementById('d2Total').textContent = d2Total;
+  document.getElementById('d2Streak').textContent = d2Streak >= 3 ? `🔥 ${d2Streak}` : '';
+  document.getElementById('d2TimerLabel').textContent = `${d2Duration}s`;
 }
 
 // ── INIT ──────────────────────────────────────────────────────────

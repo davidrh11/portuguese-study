@@ -99,6 +99,7 @@
   .frame-pill.estou  { background: var(--green-light);  color: var(--green);  border-color: var(--green-mid); }
   .frame-pill.posso  { background: var(--blue-light);   color: var(--blue);   border-color: var(--blue-mid); }
   .frame-pill.queria { background: var(--orange-light); color: var(--orange); border-color: var(--orange-mid); }
+  .frame-pill.quero  { background: var(--orange-light); color: var(--orange); border-color: var(--orange-mid); }
   .frame-pill.devo   { background: var(--red-light);    color: var(--red);    border-color: var(--red-mid); }
   .frame-pill.vou    { background: var(--purple-light); color: var(--purple); border-color: var(--purple-mid); }
   .frame-pill:hover, .frame-pill.active { filter: brightness(0.92); border-color: currentColor; }
@@ -240,6 +241,7 @@
   .frame-chip.estou  { background: var(--green-light);  color: var(--green);  border: 1px solid var(--green-mid); }
   .frame-chip.posso  { background: var(--blue-light);   color: var(--blue);   border: 1px solid var(--blue-mid); }
   .frame-chip.queria { background: var(--orange-light); color: var(--orange); border: 1px solid var(--orange-mid); }
+  .frame-chip.quero  { background: var(--orange-light); color: var(--orange); border: 1px solid var(--orange-mid); }
   .frame-chip.devo   { background: var(--red-light);    color: var(--red);    border: 1px solid var(--red-mid); }
   .frame-chip.vou    { background: var(--purple-light); color: var(--purple); border: 1px solid var(--purple-mid); }
   .verb-chip-display { font-family: var(--mono); font-size: 0.88rem; padding: 0.3rem 0.85rem; border-radius: 6px; background: var(--surface2); border: 1px solid var(--border2); color: var(--text); }
@@ -508,6 +510,17 @@ const FRAMES = [
     ]
   },
   {
+    id: 'quero', num: '2b', label: 'Vontade / Desejo',
+    pattern: 'quero + Vinf',
+    en: 'I want (direct)',
+    color: 'queria',
+    examples: [
+      { pt: '<span class="hl">Quero</span> sair à noite.', en: "I want to go out tonight.", speak: 'Quero sair à noite.' },
+      { pt: '<span class="hl">Quero</span> aprender português bem.', en: "I want to learn Portuguese well.", speak: 'Quero aprender português bem.' },
+      { pt: '<span class="hl">Quero</span> viver em Lisboa para sempre.', en: "I want to live in Lisbon forever.", speak: 'Quero viver em Lisboa para sempre.' },
+    ]
+  },
+  {
     id: 'devo', num: '3', label: 'Conselho / Obrigação',
     pattern: 'devo/deve + Vinf',
     en: 'Should I / You should',
@@ -567,6 +580,7 @@ function buildSentence(frameId, verbInf) {
     estou:  { pt: `Estou a ${verbInf}.`,          en: `I'm ${verb.en.replace('to ','')}ing.` },
     posso:  { pt: `Posso ${verbInf}, por favor?`, en: `Can I ${verb.en.replace('to ','')}?` },
     queria: { pt: `Queria ${verbInf}.`,            en: `I'd like to ${verb.en.replace('to ','')}.` },
+    quero:  { pt: `Quero ${verbInf}.`,             en: `I want to ${verb.en.replace('to ','')}.` },
     devo:   { pt: `Devo ${verbInf}?`,             en: `Should I ${verb.en.replace('to ','')}?` },
     vou:    { pt: `Vou ${verbInf}.`,              en: `I'm going to ${verb.en.replace('to ','')}.` },
   };
@@ -861,6 +875,12 @@ const DESAFIO_GUIADO = [
   { situation: "You'd like a bottle of red wine.", frame: 'queria', verb: 'pedir', answer: 'Queria uma garrafa de vinho tinto.', en: "I'd like a bottle of red wine." },
   { situation: "You'd like to live closer to the centre of Lisbon.", frame: 'queria', verb: 'morar', answer: 'Queria morar mais perto do centro.', en: "I'd like to live closer to the centre." },
   { situation: "You'd like to know this neighbourhood better.", frame: 'queria', verb: 'conhecer', answer: 'Queria conhecer este bairro melhor.', en: "I'd like to know this neighbourhood better." },
+  // quero
+  { situation: "You want to go out tonight.", frame: 'quero', verb: 'sair', answer: 'Quero sair à noite.', en: "I want to go out tonight." },
+  { situation: "You want to eat something. You're hungry.", frame: 'quero', verb: 'comer', answer: 'Quero comer algo.', en: "I want to eat something." },
+  { situation: "You want to speak Portuguese better.", frame: 'quero', verb: 'falar', answer: 'Quero falar português melhor.', en: "I want to speak Portuguese better." },
+  { situation: "You want to know Lisbon better.", frame: 'quero', verb: 'conhecer', answer: 'Quero conhecer Lisboa melhor.', en: "I want to know Lisbon better." },
+  { situation: "You want to stay here a little longer.", frame: 'quero', verb: 'ficar', answer: 'Quero ficar aqui mais um bocadinho.', en: "I want to stay here a little longer." },
   // devo
   { situation: "You're not sure which exit to take. Ask.", frame: 'devo', verb: 'sair', answer: 'Devo sair por aqui?', en: 'Should I leave this way?' },
   { situation: "Recommend the vinho verde to someone.", frame: 'devo', verb: 'pedir', answer: 'Deve pedir o vinho verde.', en: 'You should order the vinho verde.' },
@@ -1109,6 +1129,7 @@ function evaluate(frameId, verbInf, obj) {
     estou:  `Estou a ${verbInf} ${obj.pt}.`,
     posso:  `Posso ${verbInf} ${obj.pt}?`,
     queria: `Queria ${verbInf} ${obj.pt}.`,
+    quero:  `Quero ${verbInf} ${obj.pt}.`,
     devo:   `Devo ${verbInf} ${obj.pt}?`,
     vou:    `Vou ${verbInf} ${obj.pt}.`,
   };

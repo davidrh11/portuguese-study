@@ -157,6 +157,7 @@
   <button class="tab" onclick="switchTab('drill', this)">Drill</button>
   <button class="tab" onclick="switchTab('opiniao', this)">Opinião</button>
   <button class="tab" onclick="switchTab('pronuncia', this)">Pronúncia</button>
+  <button class="tab" onclick="switchTab('desafio', this)">Desafio</button>
 </div>
 
 <!-- FREQUÊNCIA -->
@@ -463,10 +464,136 @@ function switchTab(id, tabEl) {
   document.getElementById(id).classList.add('active');
   tabEl.classList.add('active');
   if (id === 'drill') initDrill();
+  if (id === 'desafio') initAD();
+}
+
+// ── DESAFIO ───────────────────────────────────────────────────────
+const AD_ITEMS = [
+  // Frequency adverbs — position drill
+  { cat: 'Frequência', situation: "Say you always study in the morning.", answer: 'Eu estudo sempre de manhã.', en: 'I always study in the morning.' },
+  { cat: 'Frequência', situation: "Say you frequently have coffee at ten.", answer: 'Eu tomo frequentemente café às dez.', en: 'I frequently have coffee at ten.' },
+  { cat: 'Frequência', situation: "Say you never cook at lunchtime.", answer: 'Eu raramente cozinho ao almoço.', en: 'I rarely cook at lunchtime.' },
+  { cat: 'Frequência', situation: "Say you often have dinner out.", answer: 'Nós jantamos muitas vezes fora.', en: 'We often have dinner out.' },
+  { cat: 'Frequência', situation: "Say you never arrive on time.", answer: 'Eu nunca chego a horas.', en: 'I never arrive on time.' },
+  { cat: 'Frequência', situation: "Say you sometimes go to the gym after work.", answer: 'Às vezes vou ao ginásio depois de trabalhar.', en: 'I sometimes go to the gym after work.' },
+  // Opinião
+  { cat: 'Opinião', situation: "Say you think Portuguese is difficult but interesting.", answer: 'Acho que o português é difícil mas interessante.', en: 'I think Portuguese is difficult but interesting.' },
+  { cat: 'Opinião', situation: "Say you think Lisbon is the best city in Europe.", answer: 'Acho que Lisboa é a melhor cidade da Europa.', en: 'I think Lisbon is the best city in Europe.' },
+  { cat: 'Opinião', situation: "Say you don't know if the restaurant is good.", answer: 'Não sei se o restaurante é bom.', en: "I don't know if the restaurant is good." },
+  { cat: 'Opinião', situation: "Say you think vinho verde is better than beer.", answer: 'Acho que o vinho verde é melhor que a cerveja.', en: 'I think vinho verde is better than beer.' },
+  { cat: 'Opinião', situation: "Say you think you should practise Portuguese every day.", answer: 'Acho que devo praticar português todos os dias.', en: 'I think I should practise Portuguese every day.' },
+  // Reflexive verbs
+  { cat: 'Verbos Reflexivos', situation: "Say your name is Dave.", answer: 'Chamo-me Dave.', en: 'My name is Dave.' },
+  { cat: 'Verbos Reflexivos', situation: "Say you're complaining about the traffic.", answer: 'Estou a queixar-me do trânsito.', en: "I'm complaining about the traffic." },
+];
+
+const AD_CIRC = 150.8, AD_MAX = 8, AD_MIN = 3;
+let adDeck = [], adIdx = 0, adCorrect = 0, adTotal = 0, adStreak = 0;
+let adRevealed = false, adTimer = null, adSeconds = 0, adDuration = 8;
+
+function initAD() {
+  adCorrect = 0; adTotal = 0; adStreak = 0; adDuration = 8;
+  adDeck = [...AD_ITEMS].sort(() => Math.random() - 0.5);
+  adIdx = 0; renderAD();
+}
+
+function renderAD() {
+  if (adIdx >= adDeck.length) { adDeck = [...AD_ITEMS].sort(() => Math.random() - 0.5); adIdx = 0; }
+  adRevealed = false; clearInterval(adTimer);
+  const item = adDeck[adIdx];
+  document.getElementById('adCat').textContent = item.cat;
+  document.getElementById('adSit').textContent = item.situation;
+  document.getElementById('adAnswer').textContent = item.answer;
+  document.getElementById('adAnswer').style.cssText = 'font-family:var(--mono);font-size:1.05rem;color:var(--green);font-weight:700;filter:blur(7px);transition:filter 0.3s;background:var(--border);border-radius:6px;padding:0.5rem 1rem;cursor:pointer;display:inline-block;margin-bottom:0.5rem;';
+  document.getElementById('adAnswerEn').textContent = item.en;
+  document.getElementById('adAnswerEn').style.opacity = '0';
+  document.getElementById('adSpeak').style.display = 'none';
+  document.getElementById('adHint').textContent = 'toca para revelar →';
+  document.getElementById('adCard').style.borderColor = '';
+  document.getElementById('adAssess').style.display = 'none';
+  updateADScore(); startADTimer();
+}
+
+function startADTimer() {
+  adSeconds = adDuration; updateADTimer(adSeconds);
+  adTimer = setInterval(() => {
+    adSeconds--; updateADTimer(adSeconds);
+    if (adSeconds <= 0) {
+      clearInterval(adTimer);
+      document.getElementById('adNum').textContent = '✓';
+      document.getElementById('adRing').style.stroke = 'var(--border2)';
+      document.getElementById('adHint').textContent = 'tempo — toca para revelar';
+    }
+  }, 1000);
+}
+
+function updateADTimer(s) {
+  const c = Math.max(0, s);
+  document.getElementById('adNum').textContent = c;
+  document.getElementById('adRing').style.strokeDashoffset = AD_CIRC * (1 - c / adDuration);
+  document.getElementById('adRing').style.stroke = c <= 1 ? 'var(--red)' : c <= 2 ? 'var(--yellow)' : 'var(--green)';
+}
+
+function revealAD() {
+  if (adRevealed) return; adRevealed = true; clearInterval(adTimer);
+  document.getElementById('adAnswer').style.filter = 'blur(0)';
+  document.getElementById('adAnswer').style.background = 'transparent';
+  document.getElementById('adAnswerEn').style.opacity = '1';
+  document.getElementById('adSpeak').style.display = 'inline-block';
+  document.getElementById('adHint').style.display = 'none';
+  document.getElementById('adCard').style.borderColor = 'var(--green)';
+  document.getElementById('adAssess').style.display = 'flex';
+  speak(adDeck[adIdx].answer, null);
+}
+
+function assessAD(got) {
+  adTotal++;
+  if (got) { adCorrect++; adStreak++; if (adStreak % 3 === 0) adDuration = Math.max(AD_MIN, adDuration - 1); }
+  else { adStreak = 0; adDuration = Math.min(AD_MAX, adDuration + 2); }
+  updateADScore(); adIdx++; setTimeout(renderAD, 300);
+}
+
+function updateADScore() {
+  document.getElementById('adCorrect').textContent = adCorrect;
+  document.getElementById('adTotal').textContent = adTotal;
+  document.getElementById('adStreak').textContent = adStreak >= 3 ? `🔥 ${adStreak}` : '';
+  document.getElementById('adTimerLabel').textContent = `${adDuration}s`;
 }
 
 buildFreqExamples();
 </script>
+
+<!-- DESAFIO -->
+<div id="desafio" class="view">
+  <div style="max-width:540px;margin:0 auto;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <span style="font-family:var(--mono);font-size:0.78rem;color:var(--muted);">Correto: <span id="adCorrect">0</span> / <span id="adTotal">0</span></span>
+      <span style="font-family:var(--mono);font-size:0.78rem;color:var(--yellow);" id="adStreak"></span>
+      <span style="font-family:var(--mono);font-size:0.68rem;color:var(--muted2);">⏱ <span id="adTimerLabel">8s</span></span>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.75rem;min-height:240px;display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:1.25rem;transition:border-color 0.3s;" id="adCard">
+      <div style="font-family:var(--mono);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted2);margin-bottom:0.75rem;" id="adCat"></div>
+      <div style="font-size:0.95rem;color:var(--text);line-height:1.6;margin-bottom:1.25rem;font-weight:300;max-width:380px;" id="adSit"></div>
+      <div style="position:relative;width:56px;height:56px;margin:0 auto 1rem;">
+        <svg style="transform:rotate(-90deg)" width="56" height="56" viewBox="0 0 56 56">
+          <circle fill="none" stroke="var(--border)" stroke-width="4" cx="28" cy="28" r="24"/>
+          <circle fill="none" stroke="var(--green)" stroke-width="4" stroke-linecap="round" id="adRing" cx="28" cy="28" r="24" stroke-dasharray="150.8" stroke-dashoffset="0" style="transition:stroke-dashoffset 0.1s linear,stroke 0.3s"/>
+        </svg>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--mono);font-size:1rem;font-weight:700;" id="adNum">8</div>
+      </div>
+      <div style="width:100%;margin-top:auto;">
+        <div style="font-family:var(--mono);font-size:0.65rem;color:var(--muted2);letter-spacing:0.06em;margin-bottom:0.5rem;" id="adHint">toca para revelar →</div>
+        <div id="adAnswer" onclick="revealAD()" style="font-family:var(--mono);font-size:1.05rem;color:var(--green);font-weight:700;filter:blur(7px);background:var(--border);border-radius:6px;padding:0.5rem 1rem;cursor:pointer;display:inline-block;margin-bottom:0.5rem;"></div>
+        <span style="font-size:0.78rem;color:var(--muted);font-style:italic;opacity:0;transition:opacity 0.3s;display:block;margin-bottom:0.75rem;" id="adAnswerEn"></span>
+        <button style="background:var(--surface2);border:1px solid var(--border);color:var(--green);padding:0.3rem 1rem;border-radius:99px;cursor:pointer;font-size:0.9rem;margin-bottom:1rem;display:none;" id="adSpeak" onclick="speak(adDeck[adIdx].answer, document.getElementById('adSpeak'))">🔊 Ouvir</button>
+      </div>
+    </div>
+    <div style="display:none;gap:0.75rem;justify-content:center;margin-bottom:0.75rem;" id="adAssess">
+      <button style="font-family:var(--mono);font-size:0.82rem;padding:0.55rem 1.5rem;border-radius:6px;cursor:pointer;font-weight:600;background:var(--green-light);color:var(--green);border:1px solid var(--green-mid);" onclick="assessAD(true)">✓ Disse</button>
+      <button style="font-family:var(--mono);font-size:0.82rem;padding:0.55rem 1.5rem;border-radius:6px;cursor:pointer;font-weight:600;background:var(--red-light);color:var(--red);border:1px solid var(--red-mid);" onclick="assessAD(false)">✗ Não disse</button>
+    </div>
+  </div>
+</div>
 <script>
 (function(){
   try {

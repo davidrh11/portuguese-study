@@ -142,6 +142,7 @@
   <button class="tab active" onclick="switchTab('tabela', this)">Tabela</button>
   <button class="tab" onclick="switchTab('quiz', this)">Quiz</button>
   <button class="tab" onclick="switchTab('flashcards', this)">Flashcards</button>
+  <button class="tab" onclick="switchTab('desafio', this)">Desafio</button>
 </div>
 
 <!-- TABELA -->
@@ -278,6 +279,38 @@
   </div>
 </div>
 
+<!-- DESAFIO -->
+<div id="desafio" class="view">
+  <div style="max-width:540px;margin:0 auto;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <span style="font-family:var(--mono);font-size:0.78rem;color:var(--muted);">Correto: <span id="hd2Correct">0</span> / <span id="hd2Total">0</span></span>
+      <span style="font-family:var(--mono);font-size:0.78rem;color:var(--yellow);" id="hd2Streak"></span>
+      <span style="font-family:var(--mono);font-size:0.68rem;color:var(--muted2);">⏱ <span id="hd2TimerLabel">8s</span></span>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.75rem;min-height:240px;display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:1.25rem;transition:border-color 0.3s;" id="hdCard">
+      <div style="font-family:var(--mono);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted2);margin-bottom:0.75rem;" id="hdCat"></div>
+      <div style="font-size:0.95rem;color:var(--text);line-height:1.6;margin-bottom:1.25rem;font-weight:300;max-width:380px;" id="hdSit"></div>
+      <div style="position:relative;width:56px;height:56px;margin:0 auto 1rem;">
+        <svg style="transform:rotate(-90deg)" width="56" height="56" viewBox="0 0 56 56">
+          <circle fill="none" stroke="var(--border)" stroke-width="4" cx="28" cy="28" r="24"/>
+          <circle fill="none" stroke="var(--green)" stroke-width="4" stroke-linecap="round" id="hdRing" cx="28" cy="28" r="24" stroke-dasharray="150.8" stroke-dashoffset="0" style="transition:stroke-dashoffset 0.1s linear,stroke 0.3s"/>
+        </svg>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--mono);font-size:1rem;font-weight:700;" id="hdNum">8</div>
+      </div>
+      <div style="width:100%;margin-top:auto;">
+        <div style="font-family:var(--mono);font-size:0.65rem;color:var(--muted2);letter-spacing:0.06em;margin-bottom:0.5rem;" id="hdHint">toca para revelar →</div>
+        <div style="font-family:var(--mono);font-size:1.05rem;color:var(--green);font-weight:700;filter:blur(7px);transition:filter 0.3s;background:var(--border);border-radius:6px;padding:0.5rem 1rem;cursor:pointer;display:inline-block;margin-bottom:0.5rem;" id="hdAnswer" onclick="revealHD()"></div>
+        <span style="font-size:0.78rem;color:var(--muted);font-style:italic;opacity:0;transition:opacity 0.3s;display:block;margin-bottom:0.75rem;" id="hdAnswerEn"></span>
+        <button style="background:var(--surface2);border:1px solid var(--border);color:var(--green);padding:0.3rem 1rem;border-radius:99px;cursor:pointer;font-size:0.9rem;margin-bottom:1rem;display:none;" id="hdSpeak" onclick="speak(hdDeck[hdIdx].answer, document.getElementById('hdSpeak'))">🔊 Ouvir</button>
+      </div>
+    </div>
+    <div style="display:none;gap:0.75rem;justify-content:center;margin-bottom:0.75rem;" id="hdAssess">
+      <button style="font-family:var(--mono);font-size:0.82rem;padding:0.55rem 1.5rem;border-radius:6px;cursor:pointer;font-weight:600;background:var(--green-light);color:var(--green);border:1px solid var(--green-mid);" onclick="assessHD(true)">✓ Disse</button>
+      <button style="font-family:var(--mono);font-size:0.82rem;padding:0.55rem 1.5rem;border-radius:6px;cursor:pointer;font-weight:600;background:var(--red-light);color:var(--red);border:1px solid var(--red-mid);" onclick="assessHD(false)">✗ Não disse</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
 let currentAudio = null;
@@ -409,6 +442,96 @@ function switchTab(id, tabEl) {
   tabEl.classList.add('active');
   if (id === 'quiz') initQuiz();
   if (id === 'flashcards') renderFC();
+  if (id === 'desafio') initHD();
+}
+
+// ── DESAFIO ───────────────────────────────────────────────────────
+const HD_ITEMS = [
+  { cat: 'Há', situation: "There is pasta but no butter.", answer: 'Há massa mas não há manteiga.', en: 'There is pasta but there is no butter.' },
+  { cat: 'Há', situation: "There are eggs. There are no chickens.", answer: 'Há ovos. Não há frangos.', en: 'There are eggs. There are no chickens.' },
+  { cat: 'Há', situation: "Is there milk in the fridge?", answer: 'Há leite no frigorífico?', en: 'Is there milk in the fridge?' },
+  { cat: 'Há', situation: "There is no butter at home.", answer: 'Não há manteiga em casa.', en: 'There is no butter at home.' },
+  { cat: 'Preciso de', situation: "You need milk and eggs.", answer: 'Preciso de leite e ovos.', en: 'I need milk and eggs.' },
+  { cat: 'Preciso de', situation: "You need help.", answer: 'Preciso de ajuda.', en: 'I need help.' },
+  { cat: 'Preciso de', situation: "Ask if they need olive oil.", answer: 'Você precisa de azeite?', en: 'Do you need olive oil?' },
+  { cat: 'Preciso de', situation: "You need cod and potatoes.", answer: 'Preciso de bacalhau e batatas.', en: 'I need cod and potatoes.' },
+  { cat: 'Há + Preciso de', situation: "There is no ham. You need ham.", answer: 'Não há fiambre. Preciso de fiambre.', en: 'There is no ham. I need ham.' },
+  { cat: 'Há + Preciso de', situation: "You need butter but there is no butter.", answer: 'Preciso de manteiga mas não há manteiga.', en: 'I need butter but there is no butter.' },
+  { cat: 'Há + Preciso de', situation: "There are carrots. You don't need carrots.", answer: 'Há cenouras. Não preciso de cenouras.', en: 'There are carrots. I don\'t need carrots.' },
+];
+
+const HD_CIRC = 150.8, HD_MAX = 8, HD_MIN = 3;
+let hdDeck = [], hdIdx = 0, hdCorrect = 0, hdTotal = 0, hdStreak = 0;
+let hdRevealed = false, hdTimer = null, hdSeconds = 0, hdDuration = 8;
+
+function initHD() {
+  hdCorrect = 0; hdTotal = 0; hdStreak = 0; hdDuration = 8;
+  hdDeck = [...HD_ITEMS].sort(() => Math.random() - 0.5);
+  hdIdx = 0; renderHD();
+}
+
+function renderHD() {
+  if (hdIdx >= hdDeck.length) { hdDeck = [...HD_ITEMS].sort(() => Math.random() - 0.5); hdIdx = 0; }
+  hdRevealed = false; clearInterval(hdTimer);
+  const item = hdDeck[hdIdx];
+  document.getElementById('hdCat').textContent = item.cat;
+  document.getElementById('hdSit').textContent = item.situation;
+  document.getElementById('hdAnswer').textContent = item.answer;
+  document.getElementById('hdAnswer').style.filter = 'blur(7px)';
+  document.getElementById('hdAnswer').style.background = 'var(--border)';
+  document.getElementById('hdAnswerEn').textContent = item.en;
+  document.getElementById('hdAnswerEn').style.opacity = '0';
+  document.getElementById('hdSpeak').style.display = 'none';
+  document.getElementById('hdHint').textContent = 'toca para revelar →';
+  document.getElementById('hdCard').style.borderColor = '';
+  document.getElementById('hdAssess').style.display = 'none';
+  updateHDScore(); startHDTimer();
+}
+
+function startHDTimer() {
+  hdSeconds = hdDuration; updateHDTimer(hdSeconds);
+  hdTimer = setInterval(() => {
+    hdSeconds--; updateHDTimer(hdSeconds);
+    if (hdSeconds <= 0) {
+      clearInterval(hdTimer);
+      document.getElementById('hdNum').textContent = '✓';
+      document.getElementById('hdRing').style.stroke = 'var(--border2)';
+      document.getElementById('hdHint').textContent = 'tempo — toca para revelar';
+    }
+  }, 1000);
+}
+
+function updateHDTimer(s) {
+  const c = Math.max(0, s);
+  document.getElementById('hdNum').textContent = c;
+  document.getElementById('hdRing').style.strokeDashoffset = HD_CIRC * (1 - c / hdDuration);
+  document.getElementById('hdRing').style.stroke = c <= 1 ? 'var(--red)' : c <= 2 ? 'var(--yellow)' : 'var(--green)';
+}
+
+function revealHD() {
+  if (hdRevealed) return; hdRevealed = true; clearInterval(hdTimer);
+  document.getElementById('hdAnswer').style.filter = 'blur(0)';
+  document.getElementById('hdAnswer').style.background = 'transparent';
+  document.getElementById('hdAnswerEn').style.opacity = '1';
+  document.getElementById('hdSpeak').style.display = 'inline-block';
+  document.getElementById('hdHint').style.display = 'none';
+  document.getElementById('hdCard').style.borderColor = 'var(--green)';
+  document.getElementById('hdAssess').style.display = 'flex';
+  speak(hdDeck[hdIdx].answer, null);
+}
+
+function assessHD(got) {
+  hdTotal++;
+  if (got) { hdCorrect++; hdStreak++; if (hdStreak % 3 === 0) hdDuration = Math.max(HD_MIN, hdDuration - 1); }
+  else { hdStreak = 0; hdDuration = Math.min(HD_MAX, hdDuration + 2); }
+  updateHDScore(); hdIdx++; setTimeout(renderHD, 300);
+}
+
+function updateHDScore() {
+  document.getElementById('hd2Correct').textContent = hdCorrect;
+  document.getElementById('hd2Total').textContent = hdTotal;
+  document.getElementById('hd2Streak').textContent = hdStreak >= 3 ? `🔥 ${hdStreak}` : '';
+  document.getElementById('hd2TimerLabel').textContent = `${hdDuration}s`;
 }
 
 renderFC();
