@@ -9,159 +9,89 @@
 <title>Portuguese Study Guides</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-    :root {
-    --bg: #f9f6f0;
-    --surface: #ffffff;
-    --surface2: #f2ede6;
-    --border: #e0d8cc;
-    --border2: #ccc4b4;
-    --green: #2d7a50;
-    --green-light: #eef5f1;
-    --green-mid: #9acbb0;
-    --red: #a03428;
-    --red-light: #fdf2f1;
-    --red-mid: #dba09a;
-    --yellow: #b07d2a;
-    --blue: #2d7a50;
-    --text: #2e2820;
-    --muted: #8a7a68;
-    --muted2: #b0a090;
-    --mono: 'IBM Plex Mono', monospace;
-    --sans: 'IBM Plex Sans', sans-serif;
+  :root {
+    --bg: #f9f6f0; --surface: #ffffff; --surface2: #f2ede6;
+    --border: #e0d8cc; --border2: #ccc4b4;
+    --green: #2d7a50; --green-light: #eef5f1; --green-mid: #9acbb0;
+    --red: #a03428; --red-light: #fdf2f1; --red-mid: #dba09a;
+    --yellow: #b07d2a; --yellow-light: #fdf6e8;
+    --blue: #2a5fa0; --blue-light: #eef3fb;
+    --text: #2e2820; --muted: #8a7a68; --muted2: #b0a090;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    min-height: 100vh;
-    padding: 3rem 2rem 5rem;
-    max-width: 680px;
-    margin: 0 auto;
-  }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; padding: 2rem 1.5rem 5rem; max-width: 680px; margin: 0 auto; }
 
-  header {
-    margin-bottom: 3rem;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-  .header-text h1 {
-    font-family: var(--mono);
-    font-size: 1.1rem;
-    font-weight: 400;
-    color: var(--muted);
-    margin-bottom: 0.3rem;
-  }
-  .header-text h1 span { color: #1a5c38; }
+  header { margin-bottom: 2rem; display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+  .header-text h1 { font-family: var(--mono); font-size: 1.1rem; font-weight: 400; color: var(--muted); margin-bottom: 0.2rem; }
+  .header-text h1 span { color: var(--green); }
   .header-text p { font-size: 0.82rem; color: var(--muted2); }
+  .pt-flag { flex-shrink: 0; width: 48px; height: 32px; border-radius: 3px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.15); margin-top: 2px; }
 
-  /* Portuguese flag SVG */
-  .pt-flag {
-    flex-shrink: 0;
-    width: 48px;
-    height: 32px;
-    border-radius: 3px;
-    overflow: hidden;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
-    margin-top: 2px;
-  }
+  /* STUDY PLAN */
+  .study-plan { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 2rem; }
+  .sp-header { background: var(--green); padding: 0.85rem 1.25rem; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
+  .sp-title { font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: #fff; letter-spacing: 0.05em; text-transform: uppercase; }
+  .sp-subtitle { font-size: 0.73rem; color: rgba(255,255,255,0.75); margin-top: 0.1rem; }
+  .sp-toggle { font-family: var(--mono); font-size: 0.8rem; color: rgba(255,255,255,0.8); transition: transform 0.25s; }
+  .sp-toggle.open { transform: rotate(180deg); }
+  .sp-body { display: none; padding: 1.25rem; }
+  .sp-body.open { display: block; }
+  .sp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+  @media (max-width: 480px) { .sp-grid { grid-template-columns: 1fr; } }
+  .sp-session { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 0.85rem 1rem; }
+  .sp-time { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.4rem; display: flex; justify-content: space-between; }
+  .sp-time.walk { color: var(--blue); } .sp-time.eve { color: var(--yellow); } .sp-time.pre { color: var(--red); }
+  .sp-dur { color: var(--muted2); }
+  .sp-name { font-size: 0.88rem; font-weight: 600; color: var(--text); margin-bottom: 0.25rem; }
+  .sp-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.5; }
+  .sp-desc strong { color: var(--text); }
+  .sp-principle { background: var(--green-light); border-left: 3px solid var(--green); padding: 0.75rem 1rem; border-radius: 0 4px 4px 0; font-size: 0.8rem; color: var(--text); line-height: 1.6; }
+  .sp-principle strong { color: var(--green); font-family: var(--mono); font-size: 0.75rem; }
 
-  /* GROUP HEADERS */
-  .group-label {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: #1a5c38;
-    margin: 2.5rem 0 0.75rem;
-    border-left: 3px solid var(--green);
-    padding-left: 0.65rem;
-  }
-  .group-label:first-child { margin-top: 0; }
+  /* STATS */
+  .week-stats { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 2rem; }
+  .stat-pill { font-family: var(--mono); font-size: 0.67rem; padding: 0.28rem 0.7rem; border-radius: 99px; background: var(--surface); border: 1px solid var(--border); color: var(--muted); }
+  .stat-pill .val { color: var(--green); font-weight: 600; }
+  .stat-pill.urgent { border-color: var(--red-mid); }
+  .stat-pill.urgent .val { color: var(--red); }
+
+  /* SECTION HEADERS */
+  .section-header { display: flex; align-items: baseline; gap: 0.75rem; margin: 2.25rem 0 0.85rem; }
+  .section-label { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--green); border-left: 3px solid var(--green); padding-left: 0.65rem; }
+  .section-label.blue { color: var(--blue); border-left-color: var(--blue); }
+  .section-label.yellow { color: var(--yellow); border-left-color: var(--yellow); }
+  .section-label.red { color: var(--red); border-left-color: var(--red); }
+  .section-sub { font-size: 0.75rem; color: var(--muted2); }
+  .subsection-label { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted2); margin: 1rem 0 0.45rem 0.1rem; }
 
   /* CARDS */
-  .guide-list { display: flex; flex-direction: column; gap: 0.6rem; }
+  .guide-list { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.5rem; }
+  a.guide-card { display: grid; grid-template-columns: 2.25rem 1fr auto; align-items: center; gap: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.1rem; text-decoration: none; color: inherit; transition: border-color 0.2s, box-shadow 0.2s; position: relative; }
+  a.guide-card:hover { border-color: var(--green-mid); box-shadow: 0 2px 8px rgba(45,122,80,0.07); }
+  a.guide-card.pinned { border-left: 3px solid var(--green); }
+  a.guide-card.audio-card { border-left: 3px solid var(--blue); }
+  .guide-num { font-family: var(--mono); font-size: 0.65rem; color: var(--muted2); text-align: center; }
+  .guide-info strong { display: block; font-size: 0.92rem; font-weight: 600; color: var(--text); margin-bottom: 0.15rem; }
+  .guide-info .desc { font-size: 0.77rem; color: var(--muted); line-height: 1.4; display: block; }
+  .guide-tags { display: flex; gap: 0.35rem; flex-wrap: wrap; margin-top: 0.4rem; }
+  .gtag { font-family: var(--mono); font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.06em; padding: 0.12rem 0.4rem; border-radius: 2px; }
+  .gtag.desafio { background: var(--green-light); color: var(--green); border: 1px solid var(--green-mid); }
+  .gtag.audio   { background: var(--blue-light);  color: var(--blue);  border: 1px solid #a0b8d8; }
+  .gtag.new     { background: var(--yellow-light); color: var(--yellow); border: 1px solid #d4aa6a; }
+  .guide-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.35rem; flex-shrink: 0; }
+  .guide-arrow { font-size: 0.85rem; color: var(--border2); transition: color 0.2s; }
+  a.guide-card:hover .guide-arrow { color: var(--green); }
+  .last-studied { font-family: var(--mono); font-size: 0.58rem; white-space: nowrap; }
+  .last-studied.today  { color: var(--green); }
+  .last-studied.recent { color: var(--yellow); }
+  .last-studied.stale  { color: var(--red); opacity: 0.85; }
+  .last-studied.never  { color: var(--muted2); opacity: 0.5; }
+  .streak-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 2px; border-radius: 0 0 6px 6px; overflow: hidden; }
+  .streak-fill { height: 100%; background: var(--green); }
 
-  a.guide-card {
-    display: grid;
-    grid-template-columns: 2rem 1fr auto;
-    align-items: center;
-    gap: 1.1rem;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 1.1rem 1.25rem;
-    text-decoration: none;
-    color: inherit;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    position: relative;
-  }
-  a.guide-card:hover {
-    border-color: var(--green-mid);
-    box-shadow: 0 2px 8px rgba(45,122,80,0.08);
-  }
-
-  .guide-num {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    color: var(--muted2);
-    text-align: right;
-  }
-
-  .guide-info strong {
-    display: block;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 0.2rem;
-  }
-  .guide-info span { font-size: 0.8rem; color: var(--muted); }
-
-  .guide-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.4rem;
-  }
-
-  .guide-arrow { font-size: 0.9rem; color: var(--border2); transition: color 0.2s; }
-  a.guide-card:hover .guide-arrow { color: #1a5c38; }
-
-  /* LAST STUDIED */
-  .last-studied {
-    font-family: var(--mono);
-    font-size: 0.6rem;
-    color: var(--muted2);
-    white-space: nowrap;
-  }
-  .last-studied.today  { color: #1a5c38; }
-  .last-studied.recent { color: #b07d2a; }
-  .last-studied.stale  { color: #8b2018; opacity: 0.8; }
-  .last-studied.never  { color: var(--muted2); opacity: 0.6; }
-
-  /* STREAK BAR */
-  .streak-bar {
-    position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-    background: var(--border); border-radius: 0 0 6px 6px; overflow: hidden;
-  }
-  .streak-fill { height: 100%; background: var(--green); transition: width 0.4s ease; }
-
-  footer {
-    margin-top: 4rem;
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    color: var(--muted2);
-    border-top: 1px solid var(--border);
-    padding-top: 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  .footer-stat { color: #1a5c38; }
+  footer { margin-top: 4rem; font-family: var(--mono); font-size: 0.65rem; color: var(--muted2); border-top: 1px solid var(--border); padding-top: 1.5rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+  .footer-stat { color: var(--green); }
 </style>
 </head>
 <body>
@@ -171,26 +101,16 @@
     <h1>Português Europeu · <span>Study Guides</span></h1>
     <p>A1 — Lighthouse Language School</p>
   </div>
-
-  <!-- Portuguese Flag SVG -->
   <svg class="pt-flag" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
-    <!-- Green stripe (2/5 width) -->
     <rect x="0" y="0" width="19.2" height="32" fill="#006600"/>
-    <!-- Red stripe (3/5 width) -->
     <rect x="19.2" y="0" width="28.8" height="32" fill="#FF0000"/>
-    <!-- Yellow shield outline circle -->
     <circle cx="19.2" cy="16" r="7" fill="none" stroke="#FFCC00" stroke-width="1.2"/>
-    <!-- Armillary sphere simplified: inner circle -->
     <circle cx="19.2" cy="16" r="4.5" fill="none" stroke="#FFCC00" stroke-width="0.8"/>
-    <!-- Cross lines on sphere -->
     <line x1="19.2" y1="11.5" x2="19.2" y2="20.5" stroke="#FFCC00" stroke-width="0.8"/>
     <line x1="14.7" y1="16" x2="23.7" y2="16" stroke="#FFCC00" stroke-width="0.8"/>
-    <!-- Diagonal bands -->
     <line x1="16" y1="12.8" x2="22.4" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
     <line x1="22.4" y1="12.8" x2="16" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
-    <!-- Shield (quinas) - simplified white rectangle -->
     <rect x="17" y="13.5" width="4.4" height="5" fill="white" rx="0.5"/>
-    <!-- 5 blue dots representing quinas -->
     <circle cx="19.2" cy="16" r="0.8" fill="#003399"/>
     <circle cx="17.7" cy="14.5" r="0.5" fill="#003399"/>
     <circle cx="20.7" cy="14.5" r="0.5" fill="#003399"/>
@@ -199,6 +119,48 @@
   </svg>
 </header>
 
+<!-- STUDY PLAN -->
+<div class="study-plan">
+  <div class="sp-header" onclick="togglePlan()">
+    <div>
+      <div class="sp-title">📅 Plano de Estudo Diário</div>
+      <div class="sp-subtitle">Tap to expand — recommended daily routine</div>
+    </div>
+    <span class="sp-toggle" id="spToggle">▼</span>
+  </div>
+  <div class="sp-body" id="spBody">
+    <div class="sp-grid">
+      <div class="sp-session">
+        <div class="sp-time">☀️ Manhã <span class="sp-dur">15 min</span></div>
+        <div class="sp-name">Desafio Drill</div>
+        <div class="sp-desc">Open the <strong>most recent lesson guide</strong>. Go to the Desafio tab. Speak every answer aloud before revealing. Self-assess honestly. Full deck.</div>
+      </div>
+      <div class="sp-session">
+        <div class="sp-time walk">🚶 A Caminhar <span class="sp-dur">20–40 min</span></div>
+        <div class="sp-name">Podcast</div>
+        <div class="sp-desc">Rotate <strong>Ep. 1 → 2 → 3</strong>. Don't just listen — <strong>shadow the speaker</strong>. Say every Portuguese sentence aloud a half-second behind the audio.</div>
+      </div>
+      <div class="sp-session">
+        <div class="sp-time eve">🌙 Tarde/Noite <span class="sp-dur">10 min</span></div>
+        <div class="sp-name">Flashcards — 1 Tópico</div>
+        <div class="sp-desc">Pick one grammar guide. Do 10–15 cards. <strong>Rotate topics daily</strong>: possessivos → conectores → combinações → verbos. Never the same guide two days running.</div>
+      </div>
+      <div class="sp-session">
+        <div class="sp-time pre">📖 Pré-Aula <span class="sp-dur">20 min</span></div>
+        <div class="sp-name">Review Current Lesson</div>
+        <div class="sp-desc">Open <strong>both guides from the current week</strong>. Tabela tab only — scan all examples and speak them aloud. Prime your memory before class.</div>
+      </div>
+    </div>
+    <div class="sp-principle">
+      <strong>O princípio:</strong> Desafio and speaking aloud every day. Everything else is secondary. 15 focused minutes of active recall beats 90 minutes of passive reading. The bottleneck at A1 is production — the Desafio tab is the most important thing on this page.
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="week-stats" id="weekStats"></div>
+
+<!-- CONTENT -->
 <div id="indexContent"></div>
 
 <footer>
@@ -207,139 +169,179 @@
 </footer>
 
 <script>
-const GUIDES = [
+// ── GUIDE DATA ────────────────────────────────────────────────────
+const SECTIONS = [
   {
-    group: 'Referência Permanente',
+    label: 'Aulas Recentes', color: 'red',
+    sub: 'Last 4 sessions — retire after session 5',
     items: [
-      { num: '★', file: 'expressoes.html',     title: 'Expressões',           desc: 'Running collection — idioms, farewells, essential words — updated every class' },
-      { num: '★', file: 'combinacoes.html',    title: 'Combinações de Verbos', desc: 'Estou a / Posso / Queria / Devo / Vou + infinitivo — 25 verbs, conversation drills' },
-      { num: '★', file: 'frases-do-dia.html',  title: 'Frases do Dia a Dia',  desc: 'Everyday phrases — introductions, plans, restaurant, time' },
+      { num:'🗓', file:'aula-21-24-abril.html',           title:'Aula 5 — 21 & 24 Abril',         desc:'Possessivos · Conectores +inf / sem inf · Refeições', tags:['desafio','new'] },
+      { num:'🗓', file:'aula-14-abril.html',               title:'Aula 3 — 14 Abril',               desc:'Frequência & Opinião · acho que / não sei se · Verbos Reflexivos', tags:['desafio'] },
+      { num:'🗓', file:'ha-preciso-de.html',               title:'Aula 3 — Há vs. Preciso de',      desc:'Há / não há · Preciso de — supermarket vocabulary in context', tags:['desafio'] },
+      { num:'🗓', file:'dialogos-unidade2.html',           title:'Aula 2 — Diálogos: Saudações',    desc:'Tudo bem? / Como está? — formal & informal greetings, 3 modes', tags:[] },
     ]
   },
   {
-    group: 'Podcasts — Áudio para Caminhar',
-    items: [
-      { num: '🎙', file: 'podcast-generator.html', title: 'Gerador de MP3',                 desc: 'Gera episódios MP3 para transferir para o telefone' },
-      { num: '🎧', file: 'podcast-ep1.html',        title: 'Ep. 1 — Verbos: Infinitivos',    desc: '25 verbos · player online · para desktop' },
-      { num: '🎧', file: 'podcast-ep2.html',        title: 'Ep. 2 — Conjugações',            desc: '7 verbos irregulares · presente & passado · eu & você' },
-      { num: '🎧', file: 'podcast-ep3.html',        title: 'Ep. 3 — Combinações de Verbos',  desc: '5 frames · exemplos · produção EN→PT' },
+    label: 'Gramática', color: 'green',
+    sub: 'Permanent reference — organized by topic',
+    subsections: [
+      {
+        label: 'Verbos — Combinações',
+        items: [
+          { num:'★', file:'combinacoes.html', pinned:true, title:'Combinações de Verbos', desc:'Estou a · Posso · Queria · Quero · Devo · Vou — 25 verbos, Construtor, Desafio', tags:['desafio'] },
+        ]
+      },
+      {
+        label: 'Verbos — Conjugações',
+        items: [
+          { num:'→', file:'verbos-essenciais-presente.html', title:'7 Verbos Essenciais — Presente', desc:'ser, estar, ir, ter, fazer, dar, dizer — eu & você', tags:[] },
+          { num:'→', file:'verbos-essenciais-passado.html',  title:'7 Verbos Essenciais — Passado',  desc:'Same 7 verbs in pretérito perfeito — eu & você', tags:[] },
+          { num:'→', file:'verbos-ar-presente.html',         title:'Verbos -AR — Presente',          desc:'12 common -AR verbs · eu & você · Lisbon-life examples', tags:[] },
+          { num:'→', file:'verbos_irregulares.html',         title:'Verbos Irregulares — Presente',  desc:'10 verbs: ver, ler, fazer, dizer, trazer, saber, poder, perder, querer, pôr', tags:[] },
+        ]
+      },
+      {
+        label: 'Frases & Estrutura',
+        items: [
+          { num:'→', file:'tipos-de-frases.html',      title:'Tipos de Frases',  desc:'Afirmativa, negativa, interrogativa — sentence transformer drill', tags:[] },
+          { num:'→', file:'aula-21-24-abril.html',     title:'Conectores',       desc:'antes de · depois de · apesar de · em vez de · porque · mas · quando · enquanto · se', tags:['desafio'] },
+          { num:'→', file:'aula-21-24-abril.html',     title:'Possessivos',      desc:'meu/minha · seu/sua · nosso/nossa — full agreement grid + drills', tags:['desafio'] },
+        ]
+      },
     ]
   },
   {
-    group: 'Aula 5 — 21 & 24 de Abril',
+    label: 'Vocabulário', color: 'blue',
+    sub: 'Permanent reference — by topic',
     items: [
-      { num: '14', file: 'aula-21-24-abril.html', title: 'Possessivos & Conectores', desc: 'meu/minha/nosso · antes de/depois de/apesar de/em vez de · porque/mas/quando · refeições' },
+      { num:'→', file:'frases-do-dia.html',              title:'Frases do Dia a Dia',       desc:'Everyday phrases — introductions, plans, restaurant, café, time', tags:[] },
+      { num:'→', file:'aula1_comunicar_sala_de_aula.html', title:'Comunicar na Sala de Aula', desc:'Classroom phrases — questions, clarifications, apologies', tags:[] },
+      { num:'→', file:'numeros.html',                    title:'Números 0–100',             desc:'Cardinal numbers · masc & fem forms · Escuta listening exercise', tags:[] },
+      { num:'→', file:'casa-vocabulario.html',           title:'A Casa — Vocabulário',      desc:'Rooms, furniture, appliances, utensils — with images', tags:[] },
+      { num:'→', file:'common-words.html',               title:'100 Palavras Mais Comuns',   desc:'100 most-used Portuguese words — definitions + example sentences', tags:[] },
     ]
   },
   {
-    group: 'Aula 3 — 14 de Abril',
+    label: 'Expressões & Cultura', color: 'yellow',
+    sub: 'Permanent — updated every class',
     items: [
-      { num: '12', file: 'aula-14-abril.html',  title: 'Frequência & Opinião', desc: 'Adverbs of frequency + word order rule, acho/penso que, não sei se' },
-      { num: '13', file: 'ha-preciso-de.html',  title: 'Há vs. Preciso de',    desc: 'There is/are vs. I need — supermarket vocabulary in context' },
+      { num:'★', file:'expressoes.html', pinned:true, title:'Expressões', desc:'Idioms, farewells, cultural phrases — bocadinho, vai-se andando, estou de rastos…', tags:[] },
     ]
   },
   {
-    group: 'Aula 2 — 8 de Maio',
+    label: 'Áudio para Caminhar', color: 'blue',
+    sub: 'Generate MP3 · transfer to phone · shadow the speaker',
     items: [
-      { num: '09', file: 'tipos-de-frases.html',    title: 'Tipos de Frases',       desc: 'Afirmativa, negativa, interrogativa — sentence transformer' },
-      { num: '10', file: 'verbos-ar-presente.html', title: 'Verbos -AR — Presente', desc: '12 real -AR verbs, eu & você, with Lisbon-life examples' },
-      { num: '02', file: 'numeros.html',             title: 'Numbers',               desc: 'Cardinal numbers 0–100 + Escuta listening exercise' },
+      { num:'🎙', file:'podcast-generator.html', audioCard:true, title:'Gerador de MP3',                desc:'Generate all 3 episodes as MP3 files — AirDrop to phone', tags:['audio'] },
+      { num:'🎧', file:'podcast-ep1.html',        audioCard:true, title:'Ep. 1 — Verbos: Infinitivos',   desc:'25 verbos · infinitivo · tradução · exemplo · PT repeat', tags:['audio'] },
+      { num:'🎧', file:'podcast-ep2.html',        audioCard:true, title:'Ep. 2 — Conjugações',           desc:'7 verbos · presente & passado · eu & você · PT examples repeated', tags:['audio'] },
+      { num:'🎧', file:'podcast-ep3.html',        audioCard:true, title:'Ep. 3 — Combinações de Verbos', desc:'5 frames · examples · EN→PT production prompts · 10s pause', tags:['audio'] },
     ]
   },
-  {
-    group: 'Aula 1 — Primeiras Palavras',
-    items: [
-      { num: '01', file: 'aula1_comunicar_sala_de_aula.html', title: 'Classroom Phrases',           desc: 'Essential phrases for communicating in class' },
-      { num: '07', file: 'verbos-essenciais-presente.html',   title: '7 Essential Verbs — Present', desc: 'ser, estar, ir, ter, fazer, dar, dizer — eu & você' },
-      { num: '08', file: 'verbos-essenciais-passado.html',    title: '7 Essential Verbs — Past',    desc: 'Same 7 verbs in pretérito perfeito — eu & você' },
-      { num: '11', file: 'dialogos-unidade2.html',            title: 'Diálogos — Saudações',        desc: 'Guided dialogue practice — Tudo bem? / Como está? — 6 de maio' },
-    ]
-  },
-  {
-    group: 'Referência',
-    items: [
-      { num: '03', file: 'verbos_irregulares.html', title: 'Irregular Verbs — Present',   desc: '10 common verbs: present indicative, all conjugations' },
-      { num: '04', file: 'casa-vocabulario.html',   title: 'Around the House',            desc: 'Rooms, furniture, appliances, utensils — with images' },
-      { num: '05', file: 'common-words.html',       title: 'Common Words',                desc: '100 most frequently used Portuguese words + example sentences' },
-    ]
-  }
 ];
 
+// ── UTILS ─────────────────────────────────────────────────────────
 const LS_KEY = 'pt-study-last-visited';
+function getData() { try { return JSON.parse(localStorage.getItem(LS_KEY)||'{}'); } catch { return {}; } }
 
-function getStudyData() {
-  try { return JSON.parse(localStorage.getItem(LS_KEY) || '{}'); } catch { return {}; }
+function fmtAge(ts) {
+  if (!ts) return { text:'not yet', cls:'never' };
+  const d=(Date.now()-ts), m=Math.floor(d/60000), h=Math.floor(d/3600000), dy=Math.floor(d/86400000);
+  if (m<60)  return { text:`${m}m ago`,   cls:'today' };
+  if (h<24)  return { text:`${h}h ago`,   cls:'today' };
+  if (dy===1)return { text:'yesterday',   cls:'recent' };
+  if (dy<=3) return { text:`${dy}d ago`,  cls:'recent' };
+  return       { text:`${dy}d ago`,       cls:'stale' };
 }
 
-function formatLastStudied(ts) {
-  if (!ts) return { text: 'not yet studied', cls: 'never' };
-  const diff = Date.now() - ts;
-  const mins  = Math.floor(diff / 60000);
-  const hours = Math.floor(diff / 3600000);
-  const days  = Math.floor(diff / 86400000);
-  if (mins < 60)  return { text: `${mins}m ago`,  cls: 'today' };
-  if (hours < 24) return { text: `${hours}h ago`, cls: 'today' };
-  if (days === 1) return { text: 'yesterday',     cls: 'recent' };
-  if (days <= 3)  return { text: `${days}d ago`,  cls: 'recent' };
-  if (days <= 7)  return { text: `${days}d ago`,  cls: 'stale' };
-  return { text: `${days}d ago`, cls: 'stale' };
-}
-
-function calcStreakFill(ts) {
+function streakW(ts) {
   if (!ts) return 0;
-  const days = (Date.now() - ts) / 86400000;
-  if (days < 1) return 1;
-  if (days < 3) return 0.6;
-  if (days < 7) return 0.25;
-  return 0;
+  const d=(Date.now()-ts)/86400000;
+  return d<1?1:d<3?0.6:d<7?0.25:0;
 }
 
+// ── BUILD CARD ────────────────────────────────────────────────────
+function card(item, data) {
+  const ts = data[item.file];
+  const { text, cls } = fmtAge(ts);
+  const w = streakW(ts);
+  const tagsHtml = (item.tags||[]).map(t=>`<span class="gtag ${t}">${
+    t==='desafio'?'⚡ Desafio':t==='audio'?'🎧 Audio':t==='new'?'✦ Novo':t
+  }</span>`).join('');
+
+  const a = document.createElement('a');
+  a.className = 'guide-card'+(item.pinned?' pinned':'')+(item.audioCard?' audio-card':'');
+  a.href = item.file;
+  a.innerHTML = `
+    <span class="guide-num">${item.num}</span>
+    <div class="guide-info">
+      <strong>${item.title}</strong>
+      <span class="desc">${item.desc}</span>
+      ${tagsHtml?`<div class="guide-tags">${tagsHtml}</div>`:''}
+    </div>
+    <div class="guide-right">
+      <span class="guide-arrow">→</span>
+      <span class="last-studied ${cls}">${text}</span>
+    </div>
+    <div class="streak-bar"><div class="streak-fill" style="width:${w*100}%"></div></div>`;
+  return a;
+}
+
+// ── BUILD INDEX ───────────────────────────────────────────────────
 function buildIndex() {
-  const data = getStudyData();
-  const container = document.getElementById('indexContent');
-  const allItems = GUIDES.flatMap(g => g.items);
+  const data = getData();
+  const el = document.getElementById('indexContent');
 
-  GUIDES.forEach(group => {
-    const groupLabel = document.createElement('div');
-    groupLabel.className = 'group-label';
-    groupLabel.textContent = group.group;
-    container.appendChild(groupLabel);
+  SECTIONS.forEach(sec => {
+    const sh = document.createElement('div');
+    sh.className = 'section-header';
+    sh.innerHTML = `<span class="section-label ${sec.color||'green'}">${sec.label}</span>${sec.sub?`<span class="section-sub">${sec.sub}</span>`:''}`;
+    el.appendChild(sh);
 
-    const list = document.createElement('div');
-    list.className = 'guide-list';
-
-    group.items.forEach(item => {
-      const ts = data[item.file];
-      const { text, cls } = formatLastStudied(ts);
-      const fill = calcStreakFill(ts);
-
-      const a = document.createElement('a');
-      a.className = 'guide-card';
-      a.href = item.file;
-      a.innerHTML = `
-        <span class="guide-num">${item.num}</span>
-        <div class="guide-info">
-          <strong>${item.title}</strong>
-          <span>${item.desc}</span>
-        </div>
-        <div class="guide-right">
-          <span class="guide-arrow">→</span>
-          <span class="last-studied ${cls}">${text}</span>
-        </div>
-        <div class="streak-bar"><div class="streak-fill" style="width:${fill * 100}%"></div></div>
-      `;
-      list.appendChild(a);
-    });
-
-    container.appendChild(list);
+    if (sec.subsections) {
+      sec.subsections.forEach(sub => {
+        const sl = document.createElement('div');
+        sl.className = 'subsection-label'; sl.textContent = sub.label;
+        el.appendChild(sl);
+        const list = document.createElement('div');
+        list.className = 'guide-list'; list.style.marginBottom='0.5rem';
+        sub.items.forEach(i => list.appendChild(card(i, data)));
+        el.appendChild(list);
+      });
+    } else {
+      const list = document.createElement('div');
+      list.className = 'guide-list';
+      sec.items.forEach(i => list.appendChild(card(i, data)));
+      el.appendChild(list);
+    }
   });
 
-  const studied7d = allItems.filter(i => {
-    const ts = data[i.file];
-    return ts && (Date.now() - ts) < 7 * 86400000;
-  }).length;
+  // Unique files for stats
+  const allFiles = [...new Set(
+    SECTIONS.flatMap(s => s.subsections
+      ? s.subsections.flatMap(sub => sub.items.map(i=>i.file))
+      : s.items.map(i=>i.file)
+    )
+  )];
+  const studied7d = allFiles.filter(f=>{ const ts=data[f]; return ts&&(Date.now()-ts)<7*86400000; }).length;
+  const stale     = allFiles.filter(f=>{ const ts=data[f]; return ts&&(Date.now()-ts)>3*86400000; }).length;
+  const never     = allFiles.filter(f=>!data[f]).length;
+
   document.getElementById('footerStats').innerHTML =
-    `<span class="footer-stat">${studied7d} / ${allItems.length}</span> guides studied this week`;
+    `<span class="footer-stat">${studied7d} / ${allFiles.length}</span> guides studied this week`;
+
+  document.getElementById('weekStats').innerHTML = `
+    <div class="stat-pill">📚 <span class="val">${allFiles.length}</span> guides</div>
+    <div class="stat-pill">✓ <span class="val">${studied7d}</span> this week</div>
+    ${stale?`<div class="stat-pill urgent">⚠ <span class="val">${stale}</span> stale 3d+</div>`:''}
+    ${never?`<div class="stat-pill">○ <span class="val">${never}</span> never opened</div>`:''}
+  `;
+}
+
+function togglePlan() {
+  const b=document.getElementById('spBody'), t=document.getElementById('spToggle');
+  const o=b.classList.toggle('open');
+  t.classList.toggle('open',o);
 }
 
 buildIndex();
