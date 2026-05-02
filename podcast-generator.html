@@ -363,6 +363,59 @@ function buildEp3Segments() {
   return segs;
 }
 
+// ── EP4 DATA ──────────────────────────────────────────────────────
+const EXPRESSIONS_EP4 = [
+  { pt:'um bocadinho',                   en:'a little bit / just a moment',          cat:'Essenciais',  context:'Diminutive of bocado. Use this constantly — it immediately sounds more native than pouco. Softens any request.',         examples:[{pt:'Espera um bocadinho.',en:"Wait a moment."},{pt:'Fala um bocadinho mais devagar.',en:'Speak a little more slowly.'},{pt:'Só um bocadinho de vinho, obrigado.',en:'Just a little wine, thank you.'}] },
+  { pt:'Obrigadíssimo.',                 en:'Many thanks. I am extremely grateful.',  cat:'Essenciais',  context:'The superlative of obrigado. The suffix íssimo intensifies — extremely grateful. Dave says obrigadíssimo. A woman says obrigadíssima.',  examples:[{pt:'Obrigadíssimo pela ajuda!',en:'Many thanks for the help!'}] },
+  { pt:'Sem problema.',                  en:'No problem.',                            cat:'Essenciais',  context:'The standard casual response when someone thanks you or apologises. Interchangeable with na boa in most contexts.',           examples:[{pt:'Desculpe o atraso. Sem problema!',en:"Sorry I'm late. No problem!"}] },
+  { pt:'Na boa.',                        en:"It's fine. No worries. All good.",       cat:'Essenciais',  context:'More casual than sem problema. Signals relaxed acceptance. Works as a standalone yes to posso: just say na boa.',             examples:[{pt:'Posso sentar aqui? Na boa!',en:"Can I sit here? Sure, go ahead!"},{pt:'Tudo bem? Na boa.',en:'Everything okay? All good.'}] },
+  { pt:'Até já.',                        en:'See you in a bit.',                      cat:'Despedidas',  context:'Use when you will see the person again the same day, or very soon. Sounds odd if you will not see them until next week.',         examples:[{pt:'Vou ao café. Até já!',en:"I'm going to the café. See you in a bit!"}] },
+  { pt:'Até logo.',                      en:'See you later.',                         cat:'Despedidas',  context:'Slightly more open-ended than até já — later today or in the near future.',                                                   examples:[{pt:'Tenho uma reunião. Até logo!',en:'I have a meeting. See you later!'}] },
+  { pt:'Até amanhã.',                    en:'See you tomorrow.',                      cat:'Despedidas',  context:'Straightforward — you will see them tomorrow. Common at end of workday or end of class.',                                        examples:[{pt:'Boa noite! Até amanhã!',en:'Good night! See you tomorrow!'}] },
+  { pt:'Até à próxima.',                 en:'Until next time.',                       cat:'Despedidas',  context:'The most open-ended farewell. More formal. Use with a shopkeeper, a neighbour you do not know well, a client.',                  examples:[{pt:'Foi um prazer. Até à próxima!',en:'It was a pleasure. Until next time!'}] },
+  { pt:'Prazer em vê-lo.',               en:'Nice to see you. Said to a man.',        cat:'Despedidas',  context:'For a woman: Prazer em vê-la. For a group: Prazer em vê-los. Use in formal contexts.',                                          examples:[{pt:'Ainda bem! Prazer em vê-lo! Até à próxima!',en:'Glad to hear it! Nice to see you! Until next time!'}] },
+  { pt:'Tenha um bom fim de semana.',    en:'Have a good weekend.',                   cat:'Despedidas',  context:'Tenha is the formal imperative of ter. Use with anyone you address as você.',                                                     examples:[{pt:'Tenha um bom fim de semana! Até segunda.',en:'Have a good weekend! See you Monday.'}] },
+  { pt:'Vai-se andando.',                en:'So-so. Getting by. One keeps going.',    cat:'Palavras do Dia', context:'The perfect answer when you are not great but not bad. Literally: one keeps walking. Very Portuguese in its understated resignation.', examples:[{pt:'Tudo bem? Vai-se andando.',en:'How are you? So-so, getting by.'}] },
+  { pt:'Estou de rastos.',               en:"I'm exhausted. I'm dragging myself along.", cat:'Palavras do Dia', context:'More vivid than estou cansado. Literally: I am crawling along the ground. Use after a long day, bad sleep, a tough week.',    examples:[{pt:'Hoje estou de rastos. Dormi muito mal.',en:"I'm exhausted today. I slept very badly."}] },
+  { pt:'Tenho a barriga a dar horas.',   en:"I'm absolutely starving.",               cat:'Palavras do Dia', context:'Literally: my belly is chiming the hours. Much more expressive than tenho fome.',                                                   examples:[{pt:'Ainda não almocei. Tenho a barriga a dar horas!',en:"I haven't had lunch yet. I'm absolutely starving!"}] },
+  { pt:'Mais vale feito que perfeito.',  en:'Done is better than perfect.',           cat:'Idiomáticas', context:'A proverb: finishing something imperfectly is better than not finishing it at all.',                                               examples:[{pt:'Não está perfeito, mas... mais vale feito que perfeito!',en:"It's not perfect, but... done is better than perfect!"}] },
+  { pt:'Isso são outros quinhentos.',    en:"That's a whole different story.",        cat:'Idiomáticas', context:'Used when a subject is completely different from what was being discussed. Old Portuguese currency — pure idiom now.',               examples:[{pt:'E o teu trabalho? Ah, isso são outros quinhentos!',en:"And your work? Ah, that's a whole different story!"}] },
+  { pt:'Um homem prevenido vale por dois.', en:'Forewarned is forearmed.',            cat:'Idiomáticas', context:'A proverb: someone who prepares in advance is worth twice as much.',                                                                  examples:[{pt:'Leva sempre um chapéu de chuva. Um homem prevenido vale por dois!',en:'Always bring an umbrella. Forewarned is forearmed!'}] },
+  { pt:'Estou a mais infinitivo.',       en:'I am doing something right now.',        cat:'Estrutura',   context:'One of the most generative structures in European Portuguese. Estou a, plus any infinitive, equals I am doing that thing right now.',examples:[{pt:'Estou a aprender português.',en:"I'm learning Portuguese."},{pt:'Estou a esperar o autocarro.',en:"I'm waiting for the bus."}] },
+  { pt:'adjectivo mais -mente.',         en:'adjective plus -ly — makes adverbs.',    cat:'Estrutura',   context:'Add -mente to the feminine form of an adjective. Frequente becomes frequentemente. Lenta becomes lentamente.',                         examples:[{pt:'Fala lentamente, por favor.',en:'Speak slowly, please.'},{pt:'É provavelmente o melhor restaurante.',en:"It's probably the best restaurant."}] },
+];
+
+function buildEp4Segments() {
+  const segs = [];
+  const P4_REPEAT = 3.5, P4_CONFIRM = 1.5, P4_SHORT = 0.8, P4_BETWEEN = 2.0;
+
+  segs.push({ text:'Dezoito expressões portuguesas. Para cada expressão, ouves o contexto, os exemplos, e depois repetes.', pause_after:2.0 });
+
+  let lastCat = null;
+  EXPRESSIONS_EP4.forEach((expr, i) => {
+    if (expr.cat !== lastCat) {
+      lastCat = expr.cat;
+      segs.push({ text:`${expr.cat}.`, pause_after:P4_SHORT });
+    }
+    // Expression name + pause to repeat
+    segs.push({ text:expr.pt, pause_after:P4_REPEAT });
+    // Context
+    segs.push({ text:expr.context, pause_after:P4_CONFIRM });
+    // Examples
+    expr.examples.forEach(ex => {
+      segs.push({ text:ex.pt, pause_after:P4_REPEAT });
+      segs.push({ text:ex.en, pause_after:P4_CONFIRM });
+      segs.push({ text:ex.pt, pause_after:P4_CONFIRM });
+    });
+    if (i < EXPRESSIONS_EP4.length - 1) {
+      segs.push({ text:'', pause_after:P4_BETWEEN, silent:true });
+    }
+  });
+
+  segs.push({ text:'Muito bem. Dezoito expressões completas. Usa-as nas tuas conversas em Lisboa.', pause_after:0 });
+  return segs.filter(s => !s.silent || s.pause_after > 0).map(s => s.silent ? { text:null, pause_after:s.pause_after } : s);
+}
+
 const EPISODES = [
   {
     id: 'ep1',
@@ -387,6 +440,14 @@ const EPISODES = [
     icon: '🎧',
     filename: 'pt-ep3-combinacoes.mp3',
     buildSegments: buildEp3Segments,
+  },
+  {
+    id: 'ep4',
+    title: 'Ep. 4 — Expressões',
+    desc: '18 expressões · contexto · exemplos · repetição',
+    icon: '🎧',
+    filename: 'pt-ep4-expressoes.mp3',
+    buildSegments: buildEp4Segments,
   },
 ];
 
@@ -416,15 +477,30 @@ function buildEpGrid() {
 }
 
 // ── AUDIO FETCH ───────────────────────────────────────────────────
-async function fetchAudioBuffer(ctx, text) {
-  const res = await fetch(WORKER_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text })
-  });
-  if (!res.ok) throw new Error(`TTS failed for: ${text}`);
-  const arrayBuf = await res.arrayBuffer();
-  return await ctx.decodeAudioData(arrayBuf);
+const FETCH_DELAY_MS = 300;    // 300ms between requests — stays under Azure's rate limit
+const MAX_RETRIES = 3;
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function fetchAudioBuffer(ctx, text, attempt = 1) {
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const arrayBuf = await res.arrayBuffer();
+    return await ctx.decodeAudioData(arrayBuf);
+  } catch(e) {
+    if (attempt < MAX_RETRIES) {
+      const delay = attempt * 1000; // 1s, 2s backoff
+      log(`↺ Retry ${attempt}/${MAX_RETRIES - 1} for: "${text.substring(0, 40)}…" (waiting ${delay/1000}s)`, false);
+      await sleep(delay);
+      return fetchAudioBuffer(ctx, text, attempt + 1);
+    }
+    throw new Error(`Failed after ${MAX_RETRIES} attempts: ${text.substring(0, 40)}`);
+  }
 }
 
 function makeSilenceBuffer(ctx, seconds) {
@@ -454,9 +530,17 @@ async function generate() {
 
   for (const seg of segments) {
     try {
+      // Silence-only segment (no TTS needed)
+      if (!seg.text) {
+        if (seg.pause_after > 0) buffers.push(makeSilenceBuffer(ctx, seg.pause_after));
+        done++; updateProgress(done, totalSegs);
+        continue;
+      }
+
       log(`🔊 "${seg.text.substring(0, 50)}${seg.text.length > 50 ? '…' : ''}"`, false);
 
-      // Fetch TTS audio
+      // Fetch TTS audio with rate limiting delay
+      await sleep(FETCH_DELAY_MS);
       const audioBuf = await fetchAudioBuffer(ctx, seg.text);
       buffers.push(audioBuf);
 
@@ -470,7 +554,9 @@ async function generate() {
       logDone();
 
     } catch(e) {
-      log(`✗ Error: ${e.message}`, true);
+      log(`✗ Skipped: ${e.message}`, true);
+      // Add silence placeholder so timing isn't broken
+      buffers.push(makeSilenceBuffer(ctx, 1.0));
       done++;
       updateProgress(done, totalSegs);
     }
