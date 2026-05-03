@@ -290,13 +290,14 @@ function buildSegments() {
 const SEGMENTS = buildSegments();
 let segIdx = 0, isPlaying = false, pauseTimer = null, currentAudio = null, audioCache = {};
 
-async function fetchAudio(text) {
-  if (audioCache[text]) return audioCache[text];
-  const res = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) });
+async function fetchAudio(text, lang) {
+  const cacheKey = (lang||'pt') + ':' + text;
+  if (audioCache[cacheKey]) return audioCache[cacheKey];
+  const res = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, language: lang || 'pt' }) });
   if (!res.ok) throw new Error('TTS error');
   const blob = await res.blob();
   const url = URL.createObjectURL(blob);
-  audioCache[text] = url;
+  audioCache[cacheKey] = url;
   return url;
 }
 

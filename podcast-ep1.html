@@ -303,57 +303,27 @@ const PAUSE_BETWEEN  = 1000;  // brief gap between verbs
 function buildSegments() {
   const segs = [];
 
-  // Intro
-  segs.push({ type: 'instruction', lang: 'en', text: 'Verbos em português europeu. Ouve cada verbo, repete em voz alta, e ouve a tradução.', display: { instruction: 'Ouve · Repete · Aprende' } });
-  segs.push({ type: 'pause', duration: 2000, display: { pause: '…' } });
+  segs.push({ type:'instruction', lang:'pt', text:'Verbos em português europeu. Ouve cada verbo, repete em voz alta, e ouve a tradução.', display:{ instruction:'Ouve · Repete · Aprende' } });
+  segs.push({ type:'pause', duration:2000, display:{ pause:'…' } });
 
   VERBS.forEach((v, i) => {
-    // 1. Say the infinitive
-    segs.push({
-      type: 'pt',
-      text: v.inf,
-      verbIdx: i,
-      display: { pt: v.inf, type: `verbo ${i + 1} de ${VERBS.length}` }
-    });
-    // 2. Pause — repeat aloud
-    segs.push({
-      type: 'pause',
-      duration: PAUSE_REPEAT,
-      verbIdx: i,
-      display: { pt: v.inf, pause: '← repete em voz alta' }
-    });
-    // 3. English definition
-    segs.push({
-      type: 'en', lang: 'en',
-      text: v.en,
-      verbIdx: i,
-      display: { pt: v.inf, en: v.en }
-    });
-    // 4. Pause — let it land
-    segs.push({ type: 'pause', duration: PAUSE_CONFIRM, verbIdx: i, display: { pt: v.inf, en: v.en } });
-    // 5. Example sentence
-    segs.push({ type: 'example', text: v.ex_pt, verbIdx: i, display: { pt: v.inf, en: v.en, example: v.ex_pt } });
-    // 6. Pause — repeat aloud
-    segs.push({ type: 'pause', duration: PAUSE_REPEAT, verbIdx: i, display: { pt: v.inf, example: v.ex_pt, pause: '← repete' } });
-    // 7. English of example
-    segs.push({ type: 'en-example', text: v.ex_en, verbIdx: i, display: { pt: v.inf, example: v.ex_pt, exEn: v.ex_en } });
-    // 8. Pause — say it in PT
-    segs.push({ type: 'pause', duration: PAUSE_CONFIRM, verbIdx: i, display: { pt: v.inf, example: v.ex_pt } });
-    // 9. PT repeat #1
-    segs.push({ type: 'example', text: v.ex_pt, verbIdx: i, display: { pt: v.inf, example: v.ex_pt } });
-    // 10. Pause — repeat again
-    segs.push({ type: 'pause', duration: PAUSE_REPEAT, verbIdx: i, display: { pt: v.inf, example: v.ex_pt, pause: '← outra vez' } });
-    // 11. PT repeat #2
-    segs.push({ type: 'example', text: v.ex_pt, verbIdx: i, display: { pt: v.inf, example: v.ex_pt } });
-    // 12. Gap before next verb
+    segs.push({ type:'pt',         lang:'pt', text:v.inf,    verbIdx:i, display:{ pt:v.inf, type:`verbo ${i+1} de ${VERBS.length}` } });
+    segs.push({ type:'pause',                 duration:PAUSE_REPEAT,  verbIdx:i, display:{ pt:v.inf, pause:'← repete em voz alta' } });
+    segs.push({ type:'en',         lang:'en', text:v.en,    verbIdx:i, display:{ pt:v.inf, en:v.en } });
+    segs.push({ type:'pause',                 duration:PAUSE_CONFIRM, verbIdx:i, display:{ pt:v.inf, en:v.en } });
+    segs.push({ type:'example',    lang:'pt', text:v.ex_pt, verbIdx:i, display:{ pt:v.inf, en:v.en, example:v.ex_pt } });
+    segs.push({ type:'pause',                 duration:PAUSE_REPEAT,  verbIdx:i, display:{ pt:v.inf, example:v.ex_pt, pause:'← repete' } });
+    segs.push({ type:'en-example', lang:'en', text:v.ex_en, verbIdx:i, display:{ pt:v.inf, example:v.ex_pt, exEn:v.ex_en } });
+    segs.push({ type:'pause',                 duration:PAUSE_CONFIRM, verbIdx:i, display:{ pt:v.inf, example:v.ex_pt } });
+    segs.push({ type:'example',    lang:'pt', text:v.ex_pt, verbIdx:i, display:{ pt:v.inf, example:v.ex_pt } });
+    segs.push({ type:'pause',                 duration:PAUSE_REPEAT,  verbIdx:i, display:{ pt:v.inf, example:v.ex_pt, pause:'← outra vez' } });
+    segs.push({ type:'example',    lang:'pt', text:v.ex_pt, verbIdx:i, display:{ pt:v.inf, example:v.ex_pt } });
     if (i < VERBS.length - 1) {
-      segs.push({ type: 'pause', duration: PAUSE_BETWEEN, verbIdx: i, display: { pause: '…' } });
+      segs.push({ type:'pause', duration:PAUSE_BETWEEN, verbIdx:i, display:{ pause:'…' } });
     }
   });
 
-  // Outro
-  segs.push({ type: 'instruction', lang: 'pt', text: 'Muito bem. Vinte e cinco verbos completos. Continua a praticar.', display: { instruction: 'Episódio completo!' } });
-
+  segs.push({ type:'instruction', lang:'pt', text:'Muito bem. Vinte e cinco verbos completos. Continua a praticar.', display:{ instruction:'Episódio completo!' } });
   return segs;
 }
 
