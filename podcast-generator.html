@@ -191,8 +191,8 @@ function buildEp1Segments() {
 
   VERBS.forEach((v, i) => {
     segs.push({ text: `Verbo ${i + 1}.`, pause_after: P_SHORT });
-    segs.push({ text: v.inf, pause_after: P_REPEAT });
-    segs.push({ text: v.en,  lang: 'en', pause_after: P_CONFIRM });
+    segs.push({ text: v.inf,   pause_after: P_REPEAT });
+    segs.push({ text: v.en,    lang: 'en', pause_after: P_CONFIRM });
     segs.push({ text: v.ex_pt, pause_after: P_REPEAT });
     segs.push({ text: v.ex_en, lang: 'en', pause_after: P_CONFIRM });
     segs.push({ text: v.ex_pt, pause_after: P_REPEAT });
@@ -241,19 +241,17 @@ function buildEp2Segments() {
     segs.push({ text: 'Presente do indicativo.', pause_after: P2_SHORT });
     segs.push({ text: `Eu ${v.pres_eu}.`, pause_after: P2_REPEAT });
     segs.push({ text: `Você ${v.pres_voc}.`, pause_after: P2_REPEAT });
-    // presente example — PT → pause → EN → pause → PT → pause → PT
+    // presente example — PT → pause → EN → PT → pause
     segs.push({ text: v.ex_pres.pt, pause_after: P2_REPEAT });
     segs.push({ text: v.ex_pres.en, lang: 'en', pause_after: P2_CONFIRM });
     segs.push({ text: v.ex_pres.pt, pause_after: P2_REPEAT });
-    segs.push({ text: v.ex_pres.pt, pause_after: P2_CONFIRM });
     segs.push({ text: 'Pretérito perfeito.', pause_after: P2_SHORT });
     segs.push({ text: `Eu ${v.past_eu}.`, pause_after: P2_REPEAT });
     segs.push({ text: `Você ${v.past_voc}.`, pause_after: P2_REPEAT });
-    // passado example — PT → pause → EN → pause → PT → pause → PT
+    // passado example — PT → pause → EN → PT → pause
     segs.push({ text: v.ex_past.pt, pause_after: P2_REPEAT });
     segs.push({ text: v.ex_past.en, lang: 'en', pause_after: P2_CONFIRM });
-    segs.push({ text: v.ex_past.pt, pause_after: P2_REPEAT });
-    segs.push({ text: v.ex_past.pt, pause_after: i < VERBS_IRR.length - 1 ? P2_BETWEEN : 1.0 });
+    segs.push({ text: v.ex_past.pt, pause_after: i < VERBS_IRR.length - 1 ? P2_REPEAT : 1.0 });
   });
 
   segs.push({ text: 'Muito bem. Sete verbos irregulares — presente e passado — completos. Continua a praticar.', pause_after: 0 });
@@ -349,19 +347,16 @@ function buildEp3Segments() {
     segs.push({ text: f.intro, pause_after: P3_SHORT });
     segs.push({ text: 'Exemplos.', pause_after: P3_SHORT });
     f.examples.forEach(ex => {
-      // PT → pause → EN → pause → PT → pause → PT
+      // PT → pause → EN → PT → pause
       segs.push({ text: ex.pt, pause_after: P3_EXAMPLE });
       segs.push({ text: ex.en, lang: 'en', pause_after: P3_CONFIRM });
       segs.push({ text: ex.pt, pause_after: P3_EXAMPLE });
-      segs.push({ text: ex.pt, pause_after: P3_CONFIRM });
     });
     segs.push({ text: 'Agora és tu. Ouve o inglês e diz a frase em português.', pause_after: P3_SHORT });
     f.prompts.forEach(p => {
-      // EN → long pause → PT → pause → PT → pause → PT
+      // EN → long pause → PT → pause
       segs.push({ text: p.en, lang: 'en', pause_after: P3_PROMPT });
-      segs.push({ text: p.pt, pause_after: P3_CONFIRM });
       segs.push({ text: p.pt, pause_after: P3_EXAMPLE });
-      segs.push({ text: p.pt, pause_after: P3_CONFIRM });
     });
     if (fi < FRAMES_EP3.length - 1) {
       segs.push({ text: 'Frame seguinte.', pause_after: P3_BETWEEN });
@@ -410,12 +405,11 @@ function buildEp4Segments() {
     segs.push({ text:expr.pt, pause_after:P4_REPEAT });
     // Context
     segs.push({ text:expr.context, lang:'en', pause_after:P4_CONFIRM });
-    // Examples — PT → pause → EN → pause → PT → pause → PT
+    // Examples — PT → pause → EN → PT → pause
     expr.examples.forEach(ex => {
       segs.push({ text:ex.pt, pause_after:P4_REPEAT });
       segs.push({ text:ex.en, lang:'en', pause_after:P4_CONFIRM });
       segs.push({ text:ex.pt, pause_after:P4_REPEAT });
-      segs.push({ text:ex.pt, pause_after:P4_CONFIRM });
     });
     if (i < EXPRESSIONS_EP4.length - 1) {
       segs.push({ text:null, pause_after:P4_BETWEEN });

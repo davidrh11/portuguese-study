@@ -314,10 +314,8 @@ function buildSegments() {
     segs.push({ type:'example',    lang:'pt', text:v.ex_pt, verbIdx:i, display:{ pt:v.inf, en:v.en, example:v.ex_pt } });
     segs.push({ type:'pause',                 duration:PAUSE_REPEAT,  verbIdx:i, display:{ pt:v.inf, example:v.ex_pt, pause:'← repete' } });
     segs.push({ type:'en-example', lang:'en', text:v.ex_en, verbIdx:i, display:{ pt:v.inf, example:v.ex_pt, exEn:v.ex_en } });
-    segs.push({ type:'pause',                 duration:PAUSE_CONFIRM, verbIdx:i, display:{ pt:v.inf, example:v.ex_pt } });
     segs.push({ type:'example',    lang:'pt', text:v.ex_pt, verbIdx:i, display:{ pt:v.inf, example:v.ex_pt } });
     segs.push({ type:'pause',                 duration:PAUSE_REPEAT,  verbIdx:i, display:{ pt:v.inf, example:v.ex_pt, pause:'← outra vez' } });
-    segs.push({ type:'example',    lang:'pt', text:v.ex_pt, verbIdx:i, display:{ pt:v.inf, example:v.ex_pt } });
     if (i < VERBS.length - 1) {
       segs.push({ type:'pause', duration:PAUSE_BETWEEN, verbIdx:i, display:{ pause:'…' } });
     }

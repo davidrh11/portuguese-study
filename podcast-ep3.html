@@ -265,29 +265,23 @@ function buildSegments() {
     segs.push({ type: 'instruction', text: 'Exemplos.', display: { frame: f.id, label: f.label, instruction: 'Exemplos →' }, frameIdx: fi });
 
     f.examples.forEach((ex) => {
-      segs.push({ type: 'pt',    text: ex.pt, display: { frame: f.id, label: f.label, pt: ex.pt }, frameIdx: fi });
+      // PT → pause → EN → PT → pause
+      segs.push({ type: 'pt',    lang:'pt', text: ex.pt, display: { frame: f.id, label: f.label, pt: ex.pt }, frameIdx: fi });
       segs.push({ type: 'pause', duration: 6000, display: { frame: f.id, pt: ex.pt, pause: '← repete' }, frameIdx: fi });
-      segs.push({ type: 'en', lang: 'en', text: ex.en, display: { frame: f.id, pt: ex.pt, en: ex.en }, frameIdx: fi });
-      segs.push({ type: 'pause', duration: P_CONFIRM, display: { frame: f.id, en: ex.en }, frameIdx: fi });
-      segs.push({ type: 'pt',    text: ex.pt, display: { frame: f.id, label: f.label, pt: ex.pt }, frameIdx: fi });
+      segs.push({ type: 'en',    lang:'en', text: ex.en, display: { frame: f.id, pt: ex.pt, en: ex.en }, frameIdx: fi });
+      segs.push({ type: 'pt',    lang:'pt', text: ex.pt, display: { frame: f.id, label: f.label, pt: ex.pt }, frameIdx: fi });
       segs.push({ type: 'pause', duration: 6000, display: { frame: f.id, pt: ex.pt, pause: '← outra vez' }, frameIdx: fi });
-      segs.push({ type: 'pt',    text: ex.pt, display: { frame: f.id, label: f.label, pt: ex.pt }, frameIdx: fi });
-      segs.push({ type: 'pause', duration: P_CONFIRM, display: { frame: f.id, pt: ex.pt }, frameIdx: fi });
     });
 
-    // Production prompts — EN → long pause → PT answer → pause → PT → pause → PT
-    segs.push({ type: 'instruction', text: 'Agora és tu. Ouve o inglês e diz a frase em português.', display: { frame: f.id, label: f.label, instruction: 'A tua vez — ouve em inglês, diz em português.' }, frameIdx: fi });
+    // Production prompts — EN → long pause → PT → pause
+    segs.push({ type: 'instruction', lang:'pt', text: 'Agora és tu. Ouve o inglês e diz a frase em português.', display: { frame: f.id, label: f.label, instruction: 'A tua vez — ouve em inglês, diz em português.' }, frameIdx: fi });
     segs.push({ type: 'pause', duration: P_SHORT, display: { frame: f.id, label: f.label }, frameIdx: fi });
 
     f.prompts.forEach((p) => {
-      segs.push({ type: 'prompt-en', lang: 'en', text: p.en, display: { frame: f.id, promptLabel: 'Como se diz?', prompt: p.en }, frameIdx: fi });
+      segs.push({ type: 'prompt-en', lang:'en', text: p.en, display: { frame: f.id, promptLabel: 'Como se diz?', prompt: p.en }, frameIdx: fi });
       segs.push({ type: 'pause', duration: P_REPEAT, display: { frame: f.id, promptLabel: 'Como se diz?', prompt: p.en, pause: '← diz em português' }, frameIdx: fi });
-      segs.push({ type: 'answer', text: p.pt, display: { frame: f.id, label: f.label, answer: p.pt }, frameIdx: fi });
-      segs.push({ type: 'pause', duration: P_CONFIRM, display: { frame: f.id, answer: p.pt }, frameIdx: fi });
-      segs.push({ type: 'answer', text: p.pt, display: { frame: f.id, label: f.label, answer: p.pt }, frameIdx: fi });
+      segs.push({ type: 'answer', lang:'pt', text: p.pt, display: { frame: f.id, label: f.label, answer: p.pt }, frameIdx: fi });
       segs.push({ type: 'pause', duration: 6000, display: { frame: f.id, answer: p.pt, pause: '← outra vez' }, frameIdx: fi });
-      segs.push({ type: 'answer', text: p.pt, display: { frame: f.id, label: f.label, answer: p.pt }, frameIdx: fi });
-      segs.push({ type: 'pause', duration: P_CONFIRM, display: { frame: f.id, answer: p.pt }, frameIdx: fi });
     });
 
     if (fi < FRAMES.length - 1) {

@@ -207,16 +207,13 @@ function buildSegments() {
     segs.push({ type:'context', lang:'en', text:expr.context, display:{ cat:expr.cat, expr:expr.pt, context:expr.context }, exprIdx:i });
     segs.push({ type:'pause', duration:P_CONFIRM, display:{ cat:expr.cat, expr:expr.pt }, exprIdx:i });
 
-    // Examples — PT → pause → EN → pause → PT → pause → PT → pause
+    // Examples — PT → pause → EN → PT → pause
     expr.examples.forEach((ex, ei) => {
-      segs.push({ type:'pt', text:ex.pt, display:{ cat:expr.cat, expr:expr.pt, pt:ex.pt }, exprIdx:i });
+      segs.push({ type:'pt',  lang:'pt', text:ex.pt, display:{ cat:expr.cat, expr:expr.pt, pt:ex.pt }, exprIdx:i });
       segs.push({ type:'pause', duration:P_REPEAT, display:{ cat:expr.cat, pt:ex.pt, pause:'← repete' }, exprIdx:i });
-      segs.push({ type:'en', lang:'en', text:ex.en, display:{ cat:expr.cat, pt:ex.pt, en:ex.en }, exprIdx:i });
-      segs.push({ type:'pause', duration:P_CONFIRM, display:{ cat:expr.cat, en:ex.en }, exprIdx:i });
-      segs.push({ type:'pt', text:ex.pt, display:{ cat:expr.cat, expr:expr.pt, pt:ex.pt }, exprIdx:i });
+      segs.push({ type:'en',  lang:'en', text:ex.en, display:{ cat:expr.cat, pt:ex.pt, en:ex.en }, exprIdx:i });
+      segs.push({ type:'pt',  lang:'pt', text:ex.pt, display:{ cat:expr.cat, expr:expr.pt, pt:ex.pt }, exprIdx:i });
       segs.push({ type:'pause', duration:P_REPEAT, display:{ cat:expr.cat, pt:ex.pt, pause:'← outra vez' }, exprIdx:i });
-      segs.push({ type:'pt', text:ex.pt, display:{ cat:expr.cat, expr:expr.pt, pt:ex.pt }, exprIdx:i });
-      segs.push({ type:'pause', duration:P_CONFIRM, display:{ cat:expr.cat, pt:ex.pt }, exprIdx:i });
     });
 
     if (i < EXPRESSIONS.length - 1) {
