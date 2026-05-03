@@ -213,73 +213,77 @@ const VERBS = [
   },
 ];
 
-const P_REPEAT  = 3.0;
+const P_REPEAT  = 4.0;  // +1s
 const P_CONFIRM = 1.5;
 const P_SHORT   = 0.8;
 const P_BETWEEN = 1.5;
 
 function buildSegments() {
   const segs = [];
-  segs.push({ type: 'instruction', text: 'Sete verbos irregulares em português europeu. Para cada verbo vais ouvir o presente e o passado, nas formas eu e você. Repete cada forma em voz alta.', display: { instruction: 'Presente & Passado · eu & você' }, verbIdx: null });
+  segs.push({ type: 'instruction', lang: 'pt', text: 'Sete verbos irregulares em português europeu. Para cada verbo vais ouvir o presente e o passado, nas formas eu e você. Repete cada forma em voz alta.', display: { instruction: 'Presente & Passado · eu & você' }, verbIdx: null });
   segs.push({ type: 'pause', duration: 2000, display: { pause: '…' }, verbIdx: null });
 
   VERBS.forEach((v, i) => {
     // ── VERB INTRO — say infinitive, pause 2s for self-definition, then EN
-    segs.push({ type: 'instruction', text: `Verbo ${i + 1}. ${v.inf}.`, display: { verb: v.inf, tense: 'infinitivo' }, verbIdx: i });
+    segs.push({ type: 'instruction', lang: 'pt', text: `Verbo ${i + 1}. ${v.inf}.`, display: { verb: v.inf, tense: 'infinitivo' }, verbIdx: i });
     segs.push({ type: 'pause', duration: 2000, display: { verb: v.inf, pause: '← define em inglês' }, verbIdx: i });
-    segs.push({ type: 'en', text: v.en, display: { verb: v.inf, en: v.en }, verbIdx: i });
+    segs.push({ type: 'en', lang: 'en', text: v.en, display: { verb: v.inf, en: v.en }, verbIdx: i });
     segs.push({ type: 'pause', duration: P_SHORT * 1000, display: { verb: v.inf, en: v.en }, verbIdx: i });
 
     // ── PRESENTE
-    segs.push({ type: 'tense-header', text: 'Presente do indicativo.', display: { verb: v.inf, tense: 'presente do indicativo' }, verbIdx: i });
+    segs.push({ type: 'tense-header', lang: 'pt', text: 'Presente do indicativo.', display: { verb: v.inf, tense: 'presente do indicativo' }, verbIdx: i });
     segs.push({ type: 'pause', duration: P_SHORT * 1000, display: { verb: v.inf, tense: 'presente' }, verbIdx: i });
 
     // eu present
     segs.push({ type: 'pt', text: `Eu ${v.pres_eu}.`, display: { verb: v.inf, tense: 'presente', form: `eu ${v.pres_eu}` }, verbIdx: i });
     segs.push({ type: 'pause', duration: P_REPEAT * 1000, display: { verb: v.inf, tense: 'presente', form: `eu ${v.pres_eu}`, pause: '← repete' }, verbIdx: i });
-    segs.push({ type: 'en', text: v.pres_eu_en, display: { verb: v.inf, tense: 'presente', form: `eu ${v.pres_eu}`, en: v.pres_eu_en }, verbIdx: i });
+    segs.push({ type: 'en', lang: 'en', text: v.pres_eu_en, display: { verb: v.inf, tense: 'presente', form: `eu ${v.pres_eu}`, en: v.pres_eu_en }, verbIdx: i });
     segs.push({ type: 'pause', duration: P_CONFIRM * 1000, display: { verb: v.inf, form: `eu ${v.pres_eu}`, en: v.pres_eu_en }, verbIdx: i });
 
     // você present
     segs.push({ type: 'pt', text: `Você ${v.pres_voc}.`, display: { verb: v.inf, tense: 'presente', form: `você ${v.pres_voc}` }, verbIdx: i });
     segs.push({ type: 'pause', duration: P_REPEAT * 1000, display: { verb: v.inf, tense: 'presente', form: `você ${v.pres_voc}`, pause: '← repete' }, verbIdx: i });
-    segs.push({ type: 'en', text: v.pres_voc_en, display: { verb: v.inf, tense: 'presente', form: `você ${v.pres_voc}`, en: v.pres_voc_en }, verbIdx: i });
+    segs.push({ type: 'en', lang: 'en', text: v.pres_voc_en, display: { verb: v.inf, tense: 'presente', form: `você ${v.pres_voc}`, en: v.pres_voc_en }, verbIdx: i });
     segs.push({ type: 'pause', duration: P_CONFIRM * 1000, display: { verb: v.inf, form: `você ${v.pres_voc}`, en: v.pres_voc_en }, verbIdx: i });
 
-    // presente example — 2s after first play, 2s after repeat
+    // presente example — PT → pause → EN → pause → PT → pause → PT → pause
     segs.push({ type: 'example', text: v.ex_pres.pt, display: { verb: v.inf, tense: 'exemplo — presente', form: v.ex_pres.pt }, verbIdx: i });
-    segs.push({ type: 'pause', duration: 2000, display: { verb: v.inf, form: v.ex_pres.pt, pause: '← ouve bem' }, verbIdx: i });
-    segs.push({ type: 'en', text: v.ex_pres.en, display: { verb: v.inf, form: v.ex_pres.pt, en: v.ex_pres.en }, verbIdx: i });
+    segs.push({ type: 'pause', duration: P_REPEAT * 1000, display: { verb: v.inf, form: v.ex_pres.pt, pause: '← repete' }, verbIdx: i });
+    segs.push({ type: 'en', lang: 'en', text: v.ex_pres.en, display: { verb: v.inf, form: v.ex_pres.pt, en: v.ex_pres.en }, verbIdx: i });
     segs.push({ type: 'pause', duration: P_CONFIRM * 1000, display: { verb: v.inf, en: v.ex_pres.en }, verbIdx: i });
     segs.push({ type: 'example', text: v.ex_pres.pt, display: { verb: v.inf, tense: 'exemplo — presente', form: v.ex_pres.pt }, verbIdx: i });
-    segs.push({ type: 'pause', duration: 2000, display: { verb: v.inf, form: v.ex_pres.pt, pause: '← repete' }, verbIdx: i });
+    segs.push({ type: 'pause', duration: P_REPEAT * 1000, display: { verb: v.inf, form: v.ex_pres.pt, pause: '← outra vez' }, verbIdx: i });
+    segs.push({ type: 'example', text: v.ex_pres.pt, display: { verb: v.inf, tense: 'exemplo — presente', form: v.ex_pres.pt }, verbIdx: i });
+    segs.push({ type: 'pause', duration: P_CONFIRM * 1000, display: { verb: v.inf, form: v.ex_pres.pt }, verbIdx: i });
 
     // ── PASSADO
-    segs.push({ type: 'tense-header', text: 'Pretérito perfeito.', display: { verb: v.inf, tense: 'pretérito perfeito' }, verbIdx: i });
+    segs.push({ type: 'tense-header', lang: 'pt', text: 'Pretérito perfeito.', display: { verb: v.inf, tense: 'pretérito perfeito' }, verbIdx: i });
     segs.push({ type: 'pause', duration: P_SHORT * 1000, display: { verb: v.inf, tense: 'passado' }, verbIdx: i });
 
     // eu past
     segs.push({ type: 'pt', text: `Eu ${v.past_eu}.`, display: { verb: v.inf, tense: 'passado', form: `eu ${v.past_eu}` }, verbIdx: i });
     segs.push({ type: 'pause', duration: P_REPEAT * 1000, display: { verb: v.inf, tense: 'passado', form: `eu ${v.past_eu}`, pause: '← repete' }, verbIdx: i });
-    segs.push({ type: 'en', text: v.past_eu_en, display: { verb: v.inf, tense: 'passado', form: `eu ${v.past_eu}`, en: v.past_eu_en }, verbIdx: i });
+    segs.push({ type: 'en', lang: 'en', text: v.past_eu_en, display: { verb: v.inf, tense: 'passado', form: `eu ${v.past_eu}`, en: v.past_eu_en }, verbIdx: i });
     segs.push({ type: 'pause', duration: P_CONFIRM * 1000, display: { verb: v.inf, form: `eu ${v.past_eu}`, en: v.past_eu_en }, verbIdx: i });
 
     // você past
     segs.push({ type: 'pt', text: `Você ${v.past_voc}.`, display: { verb: v.inf, tense: 'passado', form: `você ${v.past_voc}` }, verbIdx: i });
     segs.push({ type: 'pause', duration: P_REPEAT * 1000, display: { verb: v.inf, tense: 'passado', form: `você ${v.past_voc}`, pause: '← repete' }, verbIdx: i });
-    segs.push({ type: 'en', text: v.past_voc_en, display: { verb: v.inf, tense: 'passado', form: `você ${v.past_voc}`, en: v.past_voc_en }, verbIdx: i });
+    segs.push({ type: 'en', lang: 'en', text: v.past_voc_en, display: { verb: v.inf, tense: 'passado', form: `você ${v.past_voc}`, en: v.past_voc_en }, verbIdx: i });
     segs.push({ type: 'pause', duration: P_CONFIRM * 1000, display: { verb: v.inf, form: `você ${v.past_voc}`, en: v.past_voc_en }, verbIdx: i });
 
-    // passado example — 2s after first play, 2s after repeat
+    // passado example — PT → pause → EN → pause → PT → pause → PT → pause
     segs.push({ type: 'example', text: v.ex_past.pt, display: { verb: v.inf, tense: 'exemplo — passado', form: v.ex_past.pt }, verbIdx: i });
-    segs.push({ type: 'pause', duration: 2000, display: { verb: v.inf, form: v.ex_past.pt, pause: '← ouve bem' }, verbIdx: i });
-    segs.push({ type: 'en', text: v.ex_past.en, display: { verb: v.inf, form: v.ex_past.pt, en: v.ex_past.en }, verbIdx: i });
+    segs.push({ type: 'pause', duration: P_REPEAT * 1000, display: { verb: v.inf, form: v.ex_past.pt, pause: '← repete' }, verbIdx: i });
+    segs.push({ type: 'en', lang: 'en', text: v.ex_past.en, display: { verb: v.inf, form: v.ex_past.pt, en: v.ex_past.en }, verbIdx: i });
     segs.push({ type: 'pause', duration: P_CONFIRM * 1000, display: { verb: v.inf, en: v.ex_past.en }, verbIdx: i });
     segs.push({ type: 'example', text: v.ex_past.pt, display: { verb: v.inf, tense: 'exemplo — passado', form: v.ex_past.pt }, verbIdx: i });
-    segs.push({ type: 'pause', duration: i < VERBS.length - 1 ? 2000 : 1000, display: { verb: v.inf, form: v.ex_past.pt, pause: '← repete' }, verbIdx: i });
+    segs.push({ type: 'pause', duration: P_REPEAT * 1000, display: { verb: v.inf, form: v.ex_past.pt, pause: '← outra vez' }, verbIdx: i });
+    segs.push({ type: 'example', text: v.ex_past.pt, display: { verb: v.inf, tense: 'exemplo — passado', form: v.ex_past.pt }, verbIdx: i });
+    segs.push({ type: 'pause', duration: i < VERBS.length - 1 ? P_CONFIRM * 1000 : 1000, display: { verb: v.inf, form: v.ex_past.pt }, verbIdx: i });
   });
 
-  segs.push({ type: 'instruction', text: 'Muito bem. Sete verbos irregulares — presente e passado — completos. Continua a praticar.', display: { instruction: 'Episódio completo!' }, verbIdx: null });
+  segs.push({ type: 'instruction', lang: 'pt', text: 'Muito bem. Sete verbos irregulares — presente e passado — completos. Continua a praticar.', display: { instruction: 'Episódio completo!' }, verbIdx: null });
   return segs;
 }
 
@@ -318,7 +322,7 @@ async function playFromSegment(idx) {
   document.getElementById('waveform').classList.add('active');
 
   try {
-    const url = await fetchAudio(seg.text);
+    const url = await fetchAudio(seg.text, seg.lang || 'pt');
     if (!isPlaying) return;
     currentAudio = new Audio(url);
     currentAudio.onended = () => { document.getElementById('waveform').classList.remove('active'); if (isPlaying) playFromSegment(segIdx + 1); };

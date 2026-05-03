@@ -176,7 +176,7 @@ const VERBS = [
 ];
 
 // Pause durations in seconds (will become silence buffers)
-const P_REPEAT  = 3.0;   // after PT — say it aloud
+const P_REPEAT  = 4.0;   // +1s — time to say it aloud
 const P_CONFIRM = 1.5;   // after EN — let it land
 const P_BETWEEN = 1.2;   // between verbs
 const P_SHORT   = 0.6;   // brief gap
@@ -186,15 +186,16 @@ const P_SHORT   = 0.6;   // brief gap
 // pause_after: seconds of silence to add after this segment
 function buildEp1Segments() {
   const segs = [];
-  segs.push({ text: 'Verbos em português europeu. Vinte e cinco verbos essenciais. Ouve cada verbo, repete em voz alta, e ouve a tradução.', pause_after: 1.5 });
+  segs.push({ text: 'Verbos em português europeu. Vinte e cinco verbos essenciais. Ouve cada verbo, repete em voz alta, e ouve a tradução.', lang: 'pt', pause_after: 1.5 });
   segs.push({ text: 'Vamos começar.', pause_after: 2.0 });
 
   VERBS.forEach((v, i) => {
     segs.push({ text: `Verbo ${i + 1}.`, pause_after: P_SHORT });
     segs.push({ text: v.inf, pause_after: P_REPEAT });
-    segs.push({ text: v.en,  pause_after: P_CONFIRM });
+    segs.push({ text: v.en,  lang: 'en', pause_after: P_CONFIRM });
     segs.push({ text: v.ex_pt, pause_after: P_REPEAT });
-    segs.push({ text: v.ex_en, pause_after: P_CONFIRM });
+    segs.push({ text: v.ex_en, lang: 'en', pause_after: P_CONFIRM });
+    segs.push({ text: v.ex_pt, pause_after: P_REPEAT });
     segs.push({ text: v.ex_pt, pause_after: i < VERBS.length - 1 ? P_BETWEEN : 1.0 });
   });
 
@@ -229,25 +230,29 @@ const VERBS_IRR = [
 
 function buildEp2Segments() {
   const segs = [];
-  const P2_REPEAT = 3.0, P2_CONFIRM = 1.5, P2_SHORT = 0.8, P2_BETWEEN = 2.0;
+  const P2_REPEAT = 4.0, P2_CONFIRM = 1.5, P2_SHORT = 0.8, P2_BETWEEN = 2.0;
 
   segs.push({ text: 'Sete verbos irregulares em português europeu. Para cada verbo vais ouvir o presente e o passado, nas formas eu e você. Repete cada forma em voz alta.', pause_after: 1.5 });
   segs.push({ text: 'Vamos começar.', pause_after: 2.0 });
 
   VERBS_IRR.forEach((v, i) => {
     segs.push({ text: `Verbo ${i + 1}. ${v.inf}.`, pause_after: 2.0 });
-    segs.push({ text: v.en, pause_after: P2_SHORT });
+    segs.push({ text: v.en, lang: 'en', pause_after: P2_SHORT });
     segs.push({ text: 'Presente do indicativo.', pause_after: P2_SHORT });
     segs.push({ text: `Eu ${v.pres_eu}.`, pause_after: P2_REPEAT });
     segs.push({ text: `Você ${v.pres_voc}.`, pause_after: P2_REPEAT });
-    segs.push({ text: v.ex_pres.pt, pause_after: 2.0 });
-    segs.push({ text: v.ex_pres.en, pause_after: P2_CONFIRM });
-    segs.push({ text: v.ex_pres.pt, pause_after: 2.0 });
+    // presente example — PT → pause → EN → pause → PT → pause → PT
+    segs.push({ text: v.ex_pres.pt, pause_after: P2_REPEAT });
+    segs.push({ text: v.ex_pres.en, lang: 'en', pause_after: P2_CONFIRM });
+    segs.push({ text: v.ex_pres.pt, pause_after: P2_REPEAT });
+    segs.push({ text: v.ex_pres.pt, pause_after: P2_CONFIRM });
     segs.push({ text: 'Pretérito perfeito.', pause_after: P2_SHORT });
     segs.push({ text: `Eu ${v.past_eu}.`, pause_after: P2_REPEAT });
     segs.push({ text: `Você ${v.past_voc}.`, pause_after: P2_REPEAT });
-    segs.push({ text: v.ex_past.pt, pause_after: 2.0 });
-    segs.push({ text: v.ex_past.en, pause_after: P2_CONFIRM });
+    // passado example — PT → pause → EN → pause → PT → pause → PT
+    segs.push({ text: v.ex_past.pt, pause_after: P2_REPEAT });
+    segs.push({ text: v.ex_past.en, lang: 'en', pause_after: P2_CONFIRM });
+    segs.push({ text: v.ex_past.pt, pause_after: P2_REPEAT });
     segs.push({ text: v.ex_past.pt, pause_after: i < VERBS_IRR.length - 1 ? P2_BETWEEN : 1.0 });
   });
 
@@ -336,7 +341,7 @@ const FRAMES_EP3 = [
 
 function buildEp3Segments() {
   const segs = [];
-  const P3_EXAMPLE = 5.0, P3_CONFIRM = 3.0, P3_SHORT = 0.8, P3_PROMPT = 10.0, P3_BETWEEN = 4.0;
+  const P3_EXAMPLE = 6.0, P3_CONFIRM = 3.0, P3_SHORT = 0.8, P3_PROMPT = 10.0, P3_BETWEEN = 4.0;
 
   segs.push({ text: 'Combinações de verbos em português europeu. Cinco frames. Para cada frame, ouves exemplos reais e depois tentas produzir frases em português. Ouve o prompt em inglês, faz uma pausa, e diz a frase em português. Depois ouves a resposta correcta.', pause_after: 2.0 });
 
@@ -344,14 +349,18 @@ function buildEp3Segments() {
     segs.push({ text: f.intro, pause_after: P3_SHORT });
     segs.push({ text: 'Exemplos.', pause_after: P3_SHORT });
     f.examples.forEach(ex => {
+      // PT → pause → EN → pause → PT → pause → PT
       segs.push({ text: ex.pt, pause_after: P3_EXAMPLE });
-      segs.push({ text: ex.en, pause_after: P3_CONFIRM });
+      segs.push({ text: ex.en, lang: 'en', pause_after: P3_CONFIRM });
+      segs.push({ text: ex.pt, pause_after: P3_EXAMPLE });
       segs.push({ text: ex.pt, pause_after: P3_CONFIRM });
     });
     segs.push({ text: 'Agora és tu. Ouve o inglês e diz a frase em português.', pause_after: P3_SHORT });
     f.prompts.forEach(p => {
-      segs.push({ text: p.en, pause_after: P3_PROMPT });
+      // EN → long pause → PT → pause → PT → pause → PT
+      segs.push({ text: p.en, lang: 'en', pause_after: P3_PROMPT });
       segs.push({ text: p.pt, pause_after: P3_CONFIRM });
+      segs.push({ text: p.pt, pause_after: P3_EXAMPLE });
       segs.push({ text: p.pt, pause_after: P3_CONFIRM });
     });
     if (fi < FRAMES_EP3.length - 1) {
@@ -387,7 +396,7 @@ const EXPRESSIONS_EP4 = [
 
 function buildEp4Segments() {
   const segs = [];
-  const P4_REPEAT = 3.5, P4_CONFIRM = 1.5, P4_SHORT = 0.8, P4_BETWEEN = 2.0;
+  const P4_REPEAT = 4.5, P4_CONFIRM = 1.5, P4_SHORT = 0.8, P4_BETWEEN = 2.0;
 
   segs.push({ text:'Dezoito expressões portuguesas. Para cada expressão, ouves o contexto, os exemplos, e depois repetes.', pause_after:2.0 });
 
@@ -400,20 +409,21 @@ function buildEp4Segments() {
     // Expression name + pause to repeat
     segs.push({ text:expr.pt, pause_after:P4_REPEAT });
     // Context
-    segs.push({ text:expr.context, pause_after:P4_CONFIRM });
-    // Examples
+    segs.push({ text:expr.context, lang:'en', pause_after:P4_CONFIRM });
+    // Examples — PT → pause → EN → pause → PT → pause → PT
     expr.examples.forEach(ex => {
       segs.push({ text:ex.pt, pause_after:P4_REPEAT });
-      segs.push({ text:ex.en, pause_after:P4_CONFIRM });
+      segs.push({ text:ex.en, lang:'en', pause_after:P4_CONFIRM });
+      segs.push({ text:ex.pt, pause_after:P4_REPEAT });
       segs.push({ text:ex.pt, pause_after:P4_CONFIRM });
     });
     if (i < EXPRESSIONS_EP4.length - 1) {
-      segs.push({ text:'', pause_after:P4_BETWEEN, silent:true });
+      segs.push({ text:null, pause_after:P4_BETWEEN });
     }
   });
 
   segs.push({ text:'Muito bem. Dezoito expressões completas. Usa-as nas tuas conversas em Lisboa.', pause_after:0 });
-  return segs.filter(s => !s.silent || s.pause_after > 0).map(s => s.silent ? { text:null, pause_after:s.pause_after } : s);
+  return segs;
 }
 
 const EPISODES = [
@@ -482,22 +492,22 @@ const MAX_RETRIES = 3;
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-async function fetchAudioBuffer(ctx, text, attempt = 1) {
+async function fetchAudioBuffer(ctx, text, lang, attempt = 1) {
   try {
     const res = await fetch(WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text })
+      body: JSON.stringify({ text, language: lang || 'pt' })
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const arrayBuf = await res.arrayBuffer();
     return await ctx.decodeAudioData(arrayBuf);
   } catch(e) {
     if (attempt < MAX_RETRIES) {
-      const delay = attempt * 1000; // 1s, 2s backoff
+      const delay = attempt * 1000;
       log(`↺ Retry ${attempt}/${MAX_RETRIES - 1} for: "${text.substring(0, 40)}…" (waiting ${delay/1000}s)`, false);
       await sleep(delay);
-      return fetchAudioBuffer(ctx, text, attempt + 1);
+      return fetchAudioBuffer(ctx, text, lang, attempt + 1);
     }
     throw new Error(`Failed after ${MAX_RETRIES} attempts: ${text.substring(0, 40)}`);
   }
@@ -541,7 +551,7 @@ async function generate() {
 
       // Fetch TTS audio with rate limiting delay
       await sleep(FETCH_DELAY_MS);
-      const audioBuf = await fetchAudioBuffer(ctx, seg.text);
+      const audioBuf = await fetchAudioBuffer(ctx, seg.text, seg.lang || 'pt');
       buffers.push(audioBuf);
 
       // Add silence after

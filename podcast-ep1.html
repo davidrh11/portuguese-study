@@ -296,7 +296,7 @@ const VERBS = [
 // Each verb produces a sequence of timed segments:
 // [intro: verb name] → [pause: repeat] → [english] → [example] → [pause: repeat] → [english of example]
 
-const PAUSE_REPEAT   = 3000;  // pause after PT — time to say it aloud
+const PAUSE_REPEAT   = 4000;  // pause after PT — time to say it aloud (+1s)
 const PAUSE_CONFIRM  = 1500;  // pause after EN — let it land
 const PAUSE_BETWEEN  = 1000;  // brief gap between verbs
 
@@ -304,7 +304,7 @@ function buildSegments() {
   const segs = [];
 
   // Intro
-  segs.push({ type: 'instruction', text: 'Verbos em português europeu. Ouve cada verbo, repete em voz alta, e ouve a tradução.', display: { instruction: 'Ouve · Repete · Aprende' } });
+  segs.push({ type: 'instruction', lang: 'en', text: 'Verbos em português europeu. Ouve cada verbo, repete em voz alta, e ouve a tradução.', display: { instruction: 'Ouve · Repete · Aprende' } });
   segs.push({ type: 'pause', duration: 2000, display: { pause: '…' } });
 
   VERBS.forEach((v, i) => {
@@ -324,7 +324,7 @@ function buildSegments() {
     });
     // 3. English definition
     segs.push({
-      type: 'en',
+      type: 'en', lang: 'en',
       text: v.en,
       verbIdx: i,
       display: { pt: v.inf, en: v.en }
@@ -332,42 +332,27 @@ function buildSegments() {
     // 4. Pause — let it land
     segs.push({ type: 'pause', duration: PAUSE_CONFIRM, verbIdx: i, display: { pt: v.inf, en: v.en } });
     // 5. Example sentence
-    segs.push({
-      type: 'example',
-      text: v.ex_pt,
-      verbIdx: i,
-      display: { pt: v.inf, en: v.en, example: v.ex_pt }
-    });
-    // 6. Pause — absorb example
-    segs.push({
-      type: 'pause',
-      duration: PAUSE_REPEAT,
-      verbIdx: i,
-      display: { pt: v.inf, en: v.en, example: v.ex_pt, pause: '← ouve bem' }
-    });
+    segs.push({ type: 'example', text: v.ex_pt, verbIdx: i, display: { pt: v.inf, en: v.en, example: v.ex_pt } });
+    // 6. Pause — repeat aloud
+    segs.push({ type: 'pause', duration: PAUSE_REPEAT, verbIdx: i, display: { pt: v.inf, example: v.ex_pt, pause: '← repete' } });
     // 7. English of example
-    segs.push({
-      type: 'en-example',
-      text: v.ex_en,
-      verbIdx: i,
-      display: { pt: v.inf, en: v.en, example: v.ex_pt, exEn: v.ex_en }
-    });
-    // 8. Short pause then repeat PT example
+    segs.push({ type: 'en-example', text: v.ex_en, verbIdx: i, display: { pt: v.inf, example: v.ex_pt, exEn: v.ex_en } });
+    // 8. Pause — say it in PT
     segs.push({ type: 'pause', duration: PAUSE_CONFIRM, verbIdx: i, display: { pt: v.inf, example: v.ex_pt } });
-    segs.push({
-      type: 'example',
-      text: v.ex_pt,
-      verbIdx: i,
-      display: { pt: v.inf, en: v.en, example: v.ex_pt }
-    });
-    // 9. Gap before next verb
+    // 9. PT repeat #1
+    segs.push({ type: 'example', text: v.ex_pt, verbIdx: i, display: { pt: v.inf, example: v.ex_pt } });
+    // 10. Pause — repeat again
+    segs.push({ type: 'pause', duration: PAUSE_REPEAT, verbIdx: i, display: { pt: v.inf, example: v.ex_pt, pause: '← outra vez' } });
+    // 11. PT repeat #2
+    segs.push({ type: 'example', text: v.ex_pt, verbIdx: i, display: { pt: v.inf, example: v.ex_pt } });
+    // 12. Gap before next verb
     if (i < VERBS.length - 1) {
       segs.push({ type: 'pause', duration: PAUSE_BETWEEN, verbIdx: i, display: { pause: '…' } });
     }
   });
 
   // Outro
-  segs.push({ type: 'instruction', text: 'Muito bem. Vinte e cinco verbos completos. Continua a praticar.', display: { instruction: 'Episódio completo!' } });
+  segs.push({ type: 'instruction', lang: 'pt', text: 'Muito bem. Vinte e cinco verbos completos. Continua a praticar.', display: { instruction: 'Episódio completo!' } });
 
   return segs;
 }
@@ -383,16 +368,17 @@ let currentAudio = null;
 let audioCache = {};
 
 // ── AUDIO CACHE ───────────────────────────────────────────────────
-async function fetchAudio(text) {
-  if (audioCache[text]) return audioCache[text];
+async function fetchAudio(text, lang) {
+  const cacheKey = lang + ':' + text;
+  if (audioCache[cacheKey]) return audioCache[cacheKey];
   const res = await fetch(WORKER_URL, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text })
+    body: JSON.stringify({ text, language: lang || 'pt' })
   });
   if (!res.ok) throw new Error('TTS error');
   const blob = await res.blob();
   const url = URL.createObjectURL(blob);
-  audioCache[text] = url;
+  audioCache[cacheKey] = url;
   return url;
 }
 
@@ -420,7 +406,7 @@ async function playFromSegment(idx) {
   document.getElementById('waveform').classList.add('active');
 
   try {
-    const url = await fetchAudio(seg.text);
+    const url = await fetchAudio(seg.text, seg.lang || 'pt');
     if (!isPlaying) return; // stopped while loading
     currentAudio = new Audio(url);
     currentAudio.onended = () => {
