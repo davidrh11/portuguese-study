@@ -125,24 +125,30 @@
   .d-btn:hover { opacity: 0.85; }
   .d-hint { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); margin-top: 1rem; letter-spacing: 0.05em; }
 
-  .flashcard-wrap { max-width: 540px; margin: 0 auto; }
-  .progress-bar { height: 3px; background: var(--border); border-radius: 2px; margin-bottom: 1.5rem; }
-  .progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
-  .fc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; min-height: 270px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 1.25rem 2rem 1.5rem; text-align: center; }
-  .fc-cat { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); align-self: flex-start; margin-bottom: 0.75rem; }
-  .fc-hints { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
-  .fc-en { font-size: 1.05rem; color: var(--text); margin-bottom: 0.5rem; }
-  .fc-use { font-size: 0.8rem; color: var(--muted); font-style: italic; margin-bottom: 1rem; }
-  .fc-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1rem; }
-  .fc-pt { font-family: var(--mono); font-size: 1.8rem; font-weight: 600; color: var(--green); filter: blur(7px); transition: filter 0.3s; cursor: pointer; margin-bottom: 0.75rem; }
-  .fc-pt.revealed { filter: blur(0); }
-  .fc-speak-pill { background: var(--bg); border: 1px solid var(--border); color: var(--green); padding: 0.35rem 1.1rem; border-radius: 99px; cursor: pointer; margin-bottom: 0.75rem; font-size: 1rem; transition: all 0.2s; }
-  .fc-speak-pill:hover { background: var(--green); color: #fff; border-color: var(--green); }
-  .fc-example { font-size: 0.8rem; color: var(--muted); font-style: italic; filter: blur(4px); transition: filter 0.3s; }
-  .fc-example.revealed { filter: blur(0); }
-  .fc-nav { display: flex; gap: 0.75rem; justify-content: center; margin-top: 1.25rem; flex-wrap: wrap; }
-  .nav-btn { font-family: var(--mono); font-size: 0.8rem; padding: 0.5rem 1.1rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); border-radius: 4px; cursor: pointer; transition: all 0.15s; }
-  .nav-btn:hover { border-color: var(--green); color: var(--green); }
+  .flashcard-wrap { max-width: 480px; margin: 0 auto; }
+  .vfc-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+  .vfc-counter { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+  .vfc-controls { display: flex; gap: 0.5rem; }
+  .vfc-ctrl { font-family: var(--mono); font-size: 0.72rem; background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 0.35rem 0.85rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .vfc-ctrl:hover { border-color: var(--green); color: var(--green); }
+  .vfc-progress { height: 2px; background: var(--border); border-radius: 1px; margin-bottom: 1.25rem; overflow: hidden; }
+  .vfc-progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
+  .vfc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; min-height: 300px; display: flex; flex-direction: column; align-items: center; padding: 1.5rem 2rem; text-align: center; gap: 0; }
+  .vfc-hints { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 1.25rem; }
+  .vfc-cat { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); align-self: flex-start; margin-bottom: 0.75rem; }
+  .vfc-en { font-size: 1.05rem; color: var(--text); font-weight: 300; line-height: 1.5; margin-bottom: 1.1rem; }
+  .vfc-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1.1rem; }
+  .vfc-pt { font-family: var(--mono); font-size: 1.5rem; color: var(--green); font-weight: 700; filter: blur(7px); transition: filter 0.3s; cursor: pointer; margin-bottom: 1.1rem; background: var(--border); border-radius: 4px; padding: 0.1rem 0.5rem; display: inline-block; }
+  .vfc-pt.revealed { filter: blur(0); background: transparent; }
+  .vfc-speak { background: var(--bg); border: 1px solid var(--border); color: var(--green); padding: 0.35rem 1.2rem; border-radius: 99px; cursor: pointer; transition: all 0.2s; font-size: 1rem; margin-bottom: 1rem; }
+  .vfc-speak:hover, .vfc-speak.playing { background: var(--green); color: #fff; border-color: var(--green); }
+  .vfc-ex-pt { font-style: italic; font-size: 0.82rem; color: var(--text); filter: blur(5px); transition: filter 0.3s; cursor: pointer; margin-bottom: 0.2rem; background: var(--border); border-radius: 3px; padding: 0.05rem 0.3rem; display: inline-block; }
+  .vfc-ex-pt.revealed { filter: blur(0); background: transparent; }
+  .vfc-ex-en { font-size: 0.75rem; color: var(--muted); filter: blur(5px); transition: filter 0.3s; background: var(--border); border-radius: 3px; padding: 0.05rem 0.3rem; display: inline-block; margin-bottom: 1rem; cursor: pointer; }
+  .vfc-ex-en.revealed { filter: blur(0); background: transparent; }
+  .vfc-nav { display: flex; gap: 1rem; margin-top: auto; }
+  .vfc-nav-btn { font-family: var(--mono); font-size: 0.82rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 0.55rem 1.25rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .vfc-nav-btn:hover { border-color: var(--green); color: var(--green); }
 
   /* QUIZ */
   .quiz-wrap { max-width: 520px; margin: 0 auto; }
@@ -289,23 +295,28 @@
 <!-- ══ FLASHCARDS ══ -->
 <div id="flashcards" class="view">
 <div class="flashcard-wrap">
-  <div class="progress-bar"><div class="progress-fill" id="fc-progress"></div></div>
-  <div class="fc-card">
-    <span class="fc-cat" id="fc-cat"></span>
-    <div class="fc-hints">click word to reveal · 🔊 to hear</div>
-    <div class="fc-en" id="fc-en"></div>
-    <div class="fc-use" id="fc-use"></div>
-    <div class="fc-divider"></div>
-    <div class="fc-pt" id="fc-pt" onclick="revealFC()"></div>
-    <button class="fc-speak-pill" onclick="speakFC()">🔊</button>
-    <div class="fc-example" id="fc-example"></div>
+  <div class="vfc-topbar">
+    <span class="vfc-counter" id="vfcCounter">1 / 1</span>
+    <div class="vfc-controls">
+      <button class="vfc-ctrl" onclick="vfcShuffle()">⇄ Baralhar</button>
+      <button class="vfc-ctrl" onclick="vfcReset()">↺ Reiniciar</button>
+    </div>
   </div>
-  <div class="fc-nav">
-    <button class="nav-btn" onclick="fcMove(-1)">← Anterior</button>
-    <button class="nav-btn" onclick="shuffleFC()">Baralhar</button>
-    <button class="nav-btn" onclick="fcMove(1)">Próximo →</button>
+  <div class="vfc-progress"><div class="vfc-progress-fill" id="vfcFill"></div></div>
+  <div class="vfc-card">
+    <div class="vfc-hints" id="vfcHints">clique na palavra para revelar · clique no exemplo para ouvir</div>
+    <div class="vfc-cat" id="vfcCat"></div>
+    <div class="vfc-en" id="vfcEn"></div>
+    <div class="vfc-divider"></div>
+    <div class="vfc-pt" id="vfcPt" onclick="vfcReveal()"></div>
+    <button class="vfc-speak" id="vfcSpeak" onclick="vfcSpeakAnswer()">🔊</button>
+    <div class="vfc-ex-pt" id="vfcExPt" onclick="vfcSpeakEx()"></div>
+    <div class="vfc-ex-en" id="vfcExEn"></div>
+    <div class="vfc-nav">
+      <button class="vfc-nav-btn" onclick="vfcMove(-1)">← Anterior</button>
+      <button class="vfc-nav-btn" onclick="vfcMove(1)">Próximo →</button>
+    </div>
   </div>
-  <p style="text-align:center;margin-top:0.5rem;font-family:var(--mono);font-size:0.65rem;color:var(--muted)" id="fc-counter"></p>
 </div>
 </div>
 
@@ -372,52 +383,64 @@ function switchTab(id, btn) {
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
-  if (id==='flashcards') renderFC();
+  if (id==='flashcards') vfcRender();
   if (id==='quiz') startQuiz();
   if (id==='desafio') initDesafio();
 }
 
 const CARDS = [
-  { cat:'Adição', pt:'e', en:'and', use:'joins equal elements', ex:'Eu falo inglês e português.' },
-  { cat:'Adição', pt:'também', en:'also; too', use:'adds agreement or extra info', ex:'Eu também moro em Lisboa.' },
-  { cat:'Adição', pt:'além disso', en:'furthermore; besides', use:'adds a new point', ex:'É barato. Além disso, é perto.' },
-  { cat:'Contraste', pt:'mas', en:'but', use:'most common contrast connector', ex:'Gosto de Lisboa, mas prefiro o Porto.' },
-  { cat:'Contraste', pt:'no entanto', en:'however; nevertheless', use:'more formal than mas', ex:'Está frio. No entanto, o sol brilha.' },
-  { cat:'Contraste', pt:'embora', en:'although; even though', use:'requires subjunctive', ex:'Embora esteja frio, vou à praia.' },
-  { cat:'Contraste', pt:'apesar de', en:'despite; in spite of', use:'followed by noun or infinitive', ex:'Apesar do frio, saí de casa.' },
-  { cat:'Causa', pt:'porque', en:'because', use:'most common cause connector', ex:'Estou cansado porque trabalhei muito.' },
-  { cat:'Consequência', pt:'por isso', en:'so; therefore; that\'s why', use:'shows consequence', ex:'Está a chover, por isso fico em casa.' },
-  { cat:'Causa', pt:'como', en:'since; as (causal)', use:'starts the sentence', ex:'Como está frio, visto um casaco.' },
-  { cat:'Tempo', pt:'primeiro', en:'first; firstly', use:'sequence — first step', ex:'Primeiro, tomo o pequeno-almoço.' },
-  { cat:'Tempo', pt:'depois', en:'then; afterwards', use:'sequence — next step', ex:'Depois, vou ao trabalho.' },
-  { cat:'Tempo', pt:'finalmente', en:'finally; at last', use:'sequence — last step', ex:'Finalmente, chego a casa.' },
-  { cat:'Tempo', pt:'quando', en:'when', use:'time clause', ex:'Quando chego a casa, janto.' },
-  { cat:'Tempo', pt:'enquanto', en:'while; whilst', use:'simultaneous actions', ex:'Enquanto trabalho, ouço música.' },
-  { cat:'Condição', pt:'se', en:'if', use:'conditional clause', ex:'Se está sol, vou à praia.' },
+  { cat:'Adição', pt:'e', en:'and', use:'joins equal elements', ex:'Eu falo inglês e português.', note:'Eu falo inglês e português.', en_note:'I speak English and Portuguese.' },
+  { cat:'Adição', pt:'também', en:'also; too', use:'adds agreement or extra info', ex:'Eu também moro em Lisboa.', note:'Eu também moro em Lisboa.', en_note:'I also live in Lisbon.' },
+  { cat:'Adição', pt:'além disso', en:'furthermore; besides', use:'adds a new point', ex:'É barato. Além disso, é perto.', note:'É barato. Além disso, é perto.', en_note:'It is cheap. Furthermore, it is nearby.' },
+  { cat:'Contraste', pt:'mas', en:'but', use:'most common contrast connector', ex:'Gosto de Lisboa, mas prefiro o Porto.', note:'Gosto de Lisboa, mas prefiro o Porto.', en_note:'I like Lisbon, but I prefer Porto.' },
+  { cat:'Contraste', pt:'no entanto', en:'however; nevertheless', use:'more formal than mas', ex:'Está frio. No entanto, o sol está a brilhar.', note:'Está frio. No entanto, o sol está a brilhar.', en_note:'It is cold. However, the sun is shining.' },
+  { cat:'Contraste', pt:'embora', en:'although; even though', use:'requires subjunctive', ex:'Embora esteja frio, vou à praia.', note:'Embora esteja frio, vou à praia.', en_note:'Although it is cold, I am going to the beach.' },
+  { cat:'Contraste', pt:'apesar de', en:'despite; in spite of', use:'followed by noun or infinitive', ex:'Apesar do frio, saí de casa.', note:'Apesar do frio, saí de casa.', en_note:'Despite the cold, I left the house.' },
+  { cat:'Causa', pt:'porque', en:'because', use:'most common cause connector', ex:'Estou cansado porque trabalhei muito.', note:'Estou cansado porque trabalhei muito.', en_note:'I am tired because I worked a lot.' },
+  { cat:'Consequência', pt:'por isso', en:"so; therefore; that's why", use:'shows consequence', ex:'Está a chover, por isso fico em casa.', note:'Está a chover, por isso fico em casa.', en_note:'It is raining, so I am staying home.' },
+  { cat:'Causa', pt:'como', en:'since; as (causal)', use:'starts the sentence', ex:'Como está frio, visto um casaco.', note:'Como está frio, visto um casaco.', en_note:'Since it is cold, I am wearing a coat.' },
+  { cat:'Tempo', pt:'primeiro', en:'first; firstly', use:'sequence — first step', ex:'Primeiro, tomo o pequeno-almoço.', note:'Primeiro, tomo o pequeno-almoço.', en_note:'First, I have breakfast.' },
+  { cat:'Tempo', pt:'depois', en:'then; afterwards', use:'sequence — next step', ex:'Depois, vou ao trabalho.', note:'Depois, vou ao trabalho.', en_note:'Then, I go to work.' },
+  { cat:'Tempo', pt:'finalmente', en:'finally; at last', use:'sequence — last step', ex:'Finalmente, chego a casa.', note:'Finalmente, chego a casa.', en_note:'Finally, I get home.' },
+  { cat:'Tempo', pt:'quando', en:'when', use:'time clause', ex:'Quando chego a casa, janto.', note:'Quando chego a casa, janto.', en_note:'When I get home, I have dinner.' },
+  { cat:'Tempo', pt:'enquanto', en:'while; whilst', use:'simultaneous actions', ex:'Enquanto trabalho, ouço música.', note:'Enquanto trabalho, ouço música.', en_note:'While I work, I listen to music.' },
+  { cat:'Condição', pt:'se', en:'if', use:'conditional clause', ex:'Se está sol, vou à praia.', note:'Se está sol, vou à praia.', en_note:'If it is sunny, I go to the beach.' },
 ];
 
-let deck=[...CARDS], cur=0;
+let vfcDeck=[...CARDS], vfcIdx=0, vfcRevealed=false;
 
-function renderFC() {
-  const c=deck[cur];
-  document.getElementById('fc-cat').textContent=c.cat;
-  document.getElementById('fc-en').textContent=c.en;
-  document.getElementById('fc-use').textContent=c.use;
-  const ptEl=document.getElementById('fc-pt');
-  ptEl.textContent=c.pt; ptEl.classList.remove('revealed');
-  const exEl=document.getElementById('fc-example');
-  exEl.textContent=c.ex; exEl.classList.remove('revealed');
-  document.getElementById('fc-counter').textContent=`${cur+1} / ${deck.length}`;
-  document.getElementById('fc-progress').style.width=`${((cur+1)/deck.length)*100}%`;
+function vfcRender() {
+  const c=vfcDeck[vfcIdx];
+  vfcRevealed=false;
+  document.getElementById('vfcCounter').textContent=`${vfcIdx+1} / ${vfcDeck.length}`;
+  document.getElementById('vfcFill').style.width=`${((vfcIdx+1)/vfcDeck.length)*100}%`;
+  document.getElementById('vfcCat').textContent=c.cat||'';
+  document.getElementById('vfcEn').textContent=c.en;
+  const pt=document.getElementById('vfcPt');
+  pt.textContent=c.pt; pt.className='vfc-pt';
+  const exPt=document.getElementById('vfcExPt');
+  exPt.textContent=c.note||''; exPt.className='vfc-ex-pt';
+  const exEn=document.getElementById('vfcExEn');
+  exEn.textContent=c.en_note||''; exEn.className='vfc-ex-en';
+  exEn.onclick=()=>exEn.classList.add('revealed');
+  document.getElementById('vfcHints').textContent='clique na palavra para revelar · clique no exemplo para ouvir';
+  document.getElementById('vfcSpeak').classList.remove('playing');
 }
-function revealFC() {
-  document.getElementById('fc-pt').classList.add('revealed');
-  document.getElementById('fc-example').classList.add('revealed');
+function vfcReveal() {
+  if(vfcRevealed) return; vfcRevealed=true;
+  document.getElementById('vfcPt').classList.add('revealed');
+  document.getElementById('vfcExPt').classList.add('revealed');
+  document.getElementById('vfcHints').textContent='';
 }
-function speakFC() { speak(deck[cur].ex); }
-function fcMove(d) { cur=(cur+d+deck.length)%deck.length; renderFC(); }
-function shuffleFC() { deck=[...CARDS].sort(()=>Math.random()-0.5); cur=0; renderFC(); }
-renderFC();
+function vfcSpeakAnswer() { speak(vfcDeck[vfcIdx].pt, document.getElementById('vfcSpeak')); }
+function vfcSpeakEx() {
+  vfcReveal();
+  speak(vfcDeck[vfcIdx].note||vfcDeck[vfcIdx].pt, document.getElementById('vfcExPt'));
+}
+function vfcMove(dir) { vfcIdx=(vfcIdx+dir+vfcDeck.length)%vfcDeck.length; vfcRender(); }
+function vfcShuffle() { vfcDeck=[...CARDS].sort(()=>Math.random()-0.5); vfcIdx=0; vfcRender(); }
+function vfcReset() { vfcDeck=[...CARDS]; vfcIdx=0; vfcRender(); }
+vfcRender();
 
 const QUIZ_POOL = CARDS.map(c=>({q:c.pt, a:c.en, ex:c.ex}));
 let qDeck=[],qIdx=0,qScore=0,qTotal=0,qAnswered=false;
@@ -495,14 +518,18 @@ function loadDesafioCard(){
     fill.style.strokeDashoffset=138*(1-dSecondsLeft/5);
     if(dSecondsLeft<=2) fill.classList.add('warn');
     if(dSecondsLeft<=1){fill.classList.remove('warn');fill.classList.add('danger');}
-    if(dSecondsLeft<=0){clearInterval(dTimer);revealDesafio();}
+    if(dSecondsLeft<=0){
+      clearInterval(dTimer);
+      txt.textContent='✓';
+      fill.style.stroke='var(--border)';
+      document.getElementById('d-hint').textContent='tempo — toca para revelar';
+    }
   },1000);
 }
 
 function revealDesafio(){
   if(dRevealed) return; dRevealed=true; clearInterval(dTimer);
-  document.getElementById('d-timer-text').textContent='•';
-  document.getElementById('d-timer-fill').style.strokeDashoffset=0;
+  document.getElementById('d-timer-text').textContent='✓';
   document.getElementById('d-answer').classList.add('revealed');
   document.getElementById('d-actions').style.display='flex';
   document.getElementById('d-hint').style.display='none';

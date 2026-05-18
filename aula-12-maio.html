@@ -144,6 +144,13 @@
   }
   .estar-sentence .blank.hidden { color: transparent; background: #e8f4ee; border-radius: 3px; }
   .estar-sentence .blank.hidden:hover { color: var(--green); background: transparent; }
+  .estar-audio {
+    display: inline-block; margin-left: 0.4rem; background: none; border: none;
+    color: var(--muted); cursor: pointer; font-size: 0.8rem; padding: 0;
+    transition: color 0.15s; vertical-align: middle;
+  }
+  .estar-audio:hover { color: var(--green); }
+  .estar-audio.playing { color: var(--green); }
 
   .estar-controls { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
   .ctrl-btn {
@@ -161,53 +168,30 @@
   }
 
   /* FLASHCARDS */
-  .flashcard-wrap { max-width: 560px; margin: 0 auto; }
-  .progress-bar { height: 3px; background: var(--border); border-radius: 2px; margin-bottom: 1.5rem; overflow: hidden; }
-  .progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
-
-  .fc-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 10px; min-height: 280px;
-    display: flex; flex-direction: column; align-items: center;
-    justify-content: flex-start; padding: 1.25rem 2rem 1.5rem;
-    text-align: center; position: relative;
-  }
-  .fc-cat {
-    font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase;
-    letter-spacing: 0.1em; color: var(--green); align-self: flex-start;
-    margin-bottom: 0.75rem;
-  }
-  .fc-hints {
-    font-family: var(--mono); font-size: 0.6rem; color: var(--muted);
-    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem;
-  }
-  .fc-en { font-size: 1.1rem; color: var(--text); margin-bottom: 1rem; }
-  .fc-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1rem; }
-  .fc-pt {
-    font-family: var(--mono); font-size: 1.8rem; font-weight: 600;
-    color: var(--green); filter: blur(7px); transition: filter 0.3s;
-    cursor: pointer; margin-bottom: 1rem;
-  }
-  .fc-pt.revealed { filter: blur(0); }
-  .fc-speak-pill {
-    background: var(--bg); border: 1px solid var(--border);
-    color: var(--green); padding: 0.35rem 1.1rem; border-radius: 99px;
-    cursor: pointer; margin-bottom: 1rem; transition: all 0.2s; font-size: 1rem;
-  }
-  .fc-speak-pill:hover { background: var(--green); color: #fff; border-color: var(--green); }
-  .fc-note {
-    font-size: 0.8rem; color: var(--muted); font-style: italic;
-    filter: blur(5px); transition: filter 0.3s;
-  }
-  .fc-note.revealed { filter: blur(0); }
-
-  .fc-nav { display: flex; gap: 0.75rem; justify-content: center; margin-top: 1.25rem; flex-wrap: wrap; }
-  .nav-btn {
-    font-family: var(--mono); font-size: 0.8rem; padding: 0.5rem 1.1rem;
-    background: var(--surface); border: 1px solid var(--border);
-    color: var(--text); border-radius: 4px; cursor: pointer; transition: all 0.15s;
-  }
-  .nav-btn:hover { border-color: var(--green); color: var(--green); }
+  .flashcard-wrap { max-width: 480px; margin: 0 auto; }
+  .vfc-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+  .vfc-counter { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+  .vfc-controls { display: flex; gap: 0.5rem; }
+  .vfc-ctrl { font-family: var(--mono); font-size: 0.72rem; background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 0.35rem 0.85rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .vfc-ctrl:hover { border-color: var(--green); color: var(--green); }
+  .vfc-progress { height: 2px; background: var(--border); border-radius: 1px; margin-bottom: 1.25rem; overflow: hidden; }
+  .vfc-progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
+  .vfc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; min-height: 300px; display: flex; flex-direction: column; align-items: center; padding: 1.5rem 2rem; text-align: center; gap: 0; }
+  .vfc-hints { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 1.25rem; }
+  .vfc-cat { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); align-self: flex-start; margin-bottom: 0.75rem; }
+  .vfc-en { font-size: 1.05rem; color: var(--text); font-weight: 300; line-height: 1.5; margin-bottom: 1.1rem; }
+  .vfc-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1.1rem; }
+  .vfc-pt { font-family: var(--mono); font-size: 1.5rem; color: var(--green); font-weight: 700; filter: blur(7px); transition: filter 0.3s; cursor: pointer; margin-bottom: 1.1rem; background: var(--border); border-radius: 4px; padding: 0.1rem 0.5rem; display: inline-block; }
+  .vfc-pt.revealed { filter: blur(0); background: transparent; }
+  .vfc-speak { background: var(--bg); border: 1px solid var(--border); color: var(--green); padding: 0.35rem 1.2rem; border-radius: 99px; cursor: pointer; transition: all 0.2s; font-size: 1rem; margin-bottom: 1rem; }
+  .vfc-speak:hover, .vfc-speak.playing { background: var(--green); color: #fff; border-color: var(--green); }
+  .vfc-ex-pt { font-style: italic; font-size: 0.82rem; color: var(--text); filter: blur(5px); transition: filter 0.3s; cursor: pointer; margin-bottom: 0.2rem; background: var(--border); border-radius: 3px; padding: 0.05rem 0.3rem; display: inline-block; }
+  .vfc-ex-pt.revealed { filter: blur(0); background: transparent; }
+  .vfc-ex-en { font-size: 0.75rem; color: var(--muted); filter: blur(5px); transition: filter 0.3s; background: var(--border); border-radius: 3px; padding: 0.05rem 0.3rem; display: inline-block; margin-bottom: 1rem; cursor: pointer; }
+  .vfc-ex-en.revealed { filter: blur(0); background: transparent; }
+  .vfc-nav { display: flex; gap: 1rem; margin-top: auto; }
+  .vfc-nav-btn { font-family: var(--mono); font-size: 0.82rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 0.55rem 1.25rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .vfc-nav-btn:hover { border-color: var(--green); color: var(--green); }
 
   /* DESAFIO */
   .desafio-wrap { max-width: 520px; margin: 0 auto; }
@@ -411,22 +395,28 @@
 <!-- ══ FLASHCARDS ══ -->
 <div id="flashcards" class="view">
 <div class="flashcard-wrap">
-  <div class="progress-bar"><div class="progress-fill" id="fc-progress"></div></div>
-  <div class="fc-card">
-    <span class="fc-cat" id="fc-cat"></span>
-    <div class="fc-hints">click word to reveal · 🔊 to hear</div>
-    <div class="fc-en" id="fc-en"></div>
-    <div class="fc-divider"></div>
-    <div class="fc-pt" id="fc-pt" onclick="revealFC()"></div>
-    <button class="fc-speak-pill" onclick="speakFC()">🔊</button>
-    <div class="fc-note" id="fc-note"></div>
+  <div class="vfc-topbar">
+    <span class="vfc-counter" id="vfcCounter">1 / 10</span>
+    <div class="vfc-controls">
+      <button class="vfc-ctrl" onclick="vfcShuffle()">⇄ Baralhar</button>
+      <button class="vfc-ctrl" onclick="vfcReset()">↺ Reiniciar</button>
+    </div>
   </div>
-  <div class="fc-nav">
-    <button class="nav-btn" onclick="fcMove(-1)">← Anterior</button>
-    <button class="nav-btn" onclick="shuffleFC()">Baralhar</button>
-    <button class="nav-btn" onclick="fcMove(1)">Próximo →</button>
+  <div class="vfc-progress"><div class="vfc-progress-fill" id="vfcFill"></div></div>
+  <div class="vfc-card">
+    <div class="vfc-hints" id="vfcHints">clique na palavra para revelar · clique no exemplo para ouvir</div>
+    <div class="vfc-cat" id="vfcCat"></div>
+    <div class="vfc-en" id="vfcEn"></div>
+    <div class="vfc-divider"></div>
+    <div class="vfc-pt" id="vfcPt" onclick="vfcReveal()"></div>
+    <button class="vfc-speak" id="vfcSpeak" onclick="vfcSpeakAnswer()">🔊</button>
+    <div class="vfc-ex-pt" id="vfcExPt" onclick="vfcSpeakEx()"></div>
+    <div class="vfc-ex-en" id="vfcExEn" onclick="document.getElementById('vfcExEn').classList.add('revealed')"></div>
+    <div class="vfc-nav">
+      <button class="vfc-nav-btn" onclick="vfcMove(-1)">← Anterior</button>
+      <button class="vfc-nav-btn" onclick="vfcMove(1)">Próximo →</button>
+    </div>
   </div>
-  <p style="text-align:center;margin-top:0.5rem;font-family:var(--mono);font-size:0.65rem;color:var(--muted)" id="fc-counter"></p>
 </div>
 </div>
 
@@ -529,20 +519,27 @@ const ESTAR_SENTENCES = {
 function buildEstarGrid(sents, gridId) {
   const grid = document.getElementById(gridId);
   grid.innerHTML = '';
-  sents.forEach((s, i) => {
+  sents.forEach((s) => {
     const card = document.createElement('div');
     card.className = 'estar-card';
     const parts = s.text.split('___');
+    const spoken = s.text.replace('___', s.answer);
     card.innerHTML = `
       <span class="context-tag">${s.hint}</span>
       <div class="estar-sentence">
         ${parts[0]}<span class="blank hidden" data-answer="${s.answer}" onclick="toggleBlank(this)">${s.answer}</span>${parts[1] || ''}
+        <button class="estar-audio" onclick="speakEstar(this, \`${spoken.replace(/`/g,"'")}\`)" title="Ouvir">🔊</button>
       </div>`;
     grid.appendChild(card);
   });
 }
 
 function toggleBlank(el) { el.classList.toggle('hidden'); }
+function speakEstar(btn, text) {
+  btn.classList.add('playing');
+  speak(text).finally ? speak(text).finally(() => btn.classList.remove('playing')) : speak(text);
+  setTimeout(() => btn.classList.remove('playing'), 3000);
+}
 function revealAll() { document.querySelectorAll('.blank').forEach(b => b.classList.remove('hidden')); }
 function hideAll() { document.querySelectorAll('.blank').forEach(b => b.classList.add('hidden')); }
 
@@ -552,44 +549,57 @@ buildEstarGrid(ESTAR_SENTENCES.rua, 'rua-grid');
 
 // ── FLASHCARDS
 const CARDS = [
-  { cat: 'Advérbio', pt: 'aqui', en: 'here (near me)', note: 'A Sofia está aqui.' },
-  { cat: 'Advérbio', pt: 'aí', en: 'there (near you)', note: 'O livro está aí?' },
-  { cat: 'Advérbio', pt: 'ali', en: 'over there (far from both)', note: 'O gato está ali!' },
-  { cat: 'Advérbio', pt: 'lá', en: 'there / over there (general)', note: 'Ele está lá fora.' },
-  { cat: 'Expressão', pt: 'Pode ser.', en: 'Could be. / Sure. / That works.', note: 'Noncommittal agreement — very common.' },
-  { cat: 'Estar', pt: 'estou', en: 'I am (state/location)', note: 'eu estou' },
-  { cat: 'Estar', pt: 'estás', en: 'you are (informal)', note: 'tu estás' },
-  { cat: 'Estar', pt: 'está', en: 'he/she/you are (state/location)', note: 'você/ele/ela está' },
-  { cat: 'Estar', pt: 'estamos', en: 'we are', note: 'nós estamos' },
-  { cat: 'Estar', pt: 'estão', en: 'they/you (pl.) are', note: 'vocês/eles/elas estão' },
+  { cat: 'Advérbio', pt: 'aqui', en: 'here (near me)', note: 'A Sofia está aqui.', en_note: 'Sofia is here.' },
+  { cat: 'Advérbio', pt: 'aí', en: 'there (near you)', note: 'O livro está aí?', en_note: 'Is the book there (near you)?' },
+  { cat: 'Advérbio', pt: 'ali', en: 'over there (far from both)', note: 'O gato está ali!', en_note: 'The cat is over there!' },
+  { cat: 'Advérbio', pt: 'lá', en: 'there / over there (general)', note: 'Ele está lá fora.', en_note: 'He is outside.' },
+  { cat: 'Expressão', pt: 'Pode ser.', en: 'Could be. / Sure. / That works.', note: '— Almoçamos à uma? — Pode ser.', en_note: 'Shall we have lunch at one? — Sure.' },
+  { cat: 'Estar', pt: 'estou', en: 'I am (state/location)', note: 'Estou muito cansado hoje.', en_note: 'I am very tired today.' },
+  { cat: 'Estar', pt: 'estás', en: 'you are (informal)', note: 'Estás bem?', en_note: 'Are you OK?' },
+  { cat: 'Estar', pt: 'está', en: 'he/she/you are (state/location)', note: 'O livro está no chão.', en_note: 'The book is on the floor.' },
+  { cat: 'Estar', pt: 'estamos', en: 'we are', note: 'Estamos de férias. Finalmente!', en_note: 'We are on holiday. Finally!' },
+  { cat: 'Estar', pt: 'estão', en: 'they/you (pl.) are', note: 'Os centros comerciais estão abertos.', en_note: 'The shopping centres are open.' },
 ];
 
-let deck = [...CARDS], cur = 0;
+let vfcDeck = [...CARDS], vfcIdx = 0, vfcRevealed = false;
 
-function renderFC() {
-  const c = deck[cur];
-  document.getElementById('fc-cat').textContent = c.cat;
-  document.getElementById('fc-en').textContent = c.en;
-  const ptEl = document.getElementById('fc-pt');
-  ptEl.textContent = c.pt;
-  ptEl.classList.remove('revealed');
-  const noteEl = document.getElementById('fc-note');
-  noteEl.textContent = c.note;
-  noteEl.classList.remove('revealed');
-  document.getElementById('fc-counter').textContent = `${cur+1} / ${deck.length}`;
-  document.getElementById('fc-progress').style.width = `${((cur+1)/deck.length)*100}%`;
+function vfcRender() {
+  const c = vfcDeck[vfcIdx];
+  vfcRevealed = false;
+  document.getElementById('vfcCounter').textContent = `${vfcIdx + 1} / ${vfcDeck.length}`;
+  document.getElementById('vfcFill').style.width = `${((vfcIdx + 1) / vfcDeck.length) * 100}%`;
+  document.getElementById('vfcCat').textContent = c.cat;
+  document.getElementById('vfcEn').textContent = c.en;
+  const pt = document.getElementById('vfcPt');
+  pt.textContent = c.pt; pt.className = 'vfc-pt';
+  const exPt = document.getElementById('vfcExPt');
+  exPt.textContent = c.note || ''; exPt.className = 'vfc-ex-pt';
+  const exEn = document.getElementById('vfcExEn');
+  exEn.textContent = c.en_note || '';
+  exEn.className = 'vfc-ex-en';
+  exEn.onclick = () => exEn.classList.add('revealed');
+  document.getElementById('vfcHints').textContent = 'clique na palavra para revelar · clique no exemplo para ouvir';
+  document.getElementById('vfcSpeak').classList.remove('playing');
 }
 
-function revealFC() {
-  document.getElementById('fc-pt').classList.add('revealed');
-  document.getElementById('fc-note').classList.add('revealed');
+function vfcReveal() {
+  if (vfcRevealed) return;
+  vfcRevealed = true;
+  document.getElementById('vfcPt').classList.add('revealed');
+  document.getElementById('vfcExPt').classList.add('revealed');
+  document.getElementById('vfcHints').textContent = '';
 }
 
-function speakFC() { speak(deck[cur].pt); }
-function fcMove(d) { cur = (cur+d+deck.length)%deck.length; renderFC(); }
-function shuffleFC() { deck = [...CARDS].sort(()=>Math.random()-0.5); cur=0; renderFC(); }
+function vfcSpeakAnswer() { speak(vfcDeck[vfcIdx].pt, document.getElementById('vfcSpeak')); }
+function vfcSpeakEx() {
+  vfcReveal();
+  speak(vfcDeck[vfcIdx].note || vfcDeck[vfcIdx].pt, document.getElementById('vfcExPt'));
+}
+function vfcMove(dir) { vfcIdx = (vfcIdx + dir + vfcDeck.length) % vfcDeck.length; vfcRender(); }
+function vfcShuffle() { vfcDeck = [...CARDS].sort(() => Math.random() - 0.5); vfcIdx = 0; vfcRender(); }
+function vfcReset() { vfcDeck = [...CARDS]; vfcIdx = 0; vfcRender(); }
 
-renderFC();
+vfcRender();
 
 // ── DESAFIO ──────────────────────────────────────────────────────
 const DESAFIO_CARDS = [
@@ -645,7 +655,13 @@ function loadDesafioCard() {
     fill.style.strokeDashoffset = circumference * (1 - dSecondsLeft / 5);
     if (dSecondsLeft <= 2) fill.classList.add('warn');
     if (dSecondsLeft <= 1) { fill.classList.remove('warn'); fill.classList.add('danger'); }
-    if (dSecondsLeft <= 0) { clearInterval(dTimer); revealDesafio(); }
+    if (dSecondsLeft <= 0) {
+      clearInterval(dTimer);
+      // Time's up — do NOT auto-reveal. Signal it and wait for tap.
+      txt.textContent = '✓';
+      fill.style.stroke = 'var(--border)';
+      document.getElementById('d-hint').textContent = 'tempo — toca para revelar';
+    }
   }, 1000);
 }
 
@@ -653,8 +669,7 @@ function revealDesafio() {
   if (dRevealed) return;
   dRevealed = true;
   clearInterval(dTimer);
-  document.getElementById('d-timer-text').textContent = '•';
-  document.getElementById('d-timer-fill').style.strokeDashoffset = 0;
+  document.getElementById('d-timer-text').textContent = '✓';
   document.getElementById('d-answer').classList.add('revealed');
   document.getElementById('d-actions').style.display = 'flex';
   document.getElementById('d-hint').style.display = 'none';
