@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="pt" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aula 12 de Maio · Aqui, Aí, Ali · Estar</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0;
+    --surface: #ffffff;
+    --border: #e2ddd6;
+    --green: #2d7a50;
+    --red: #a03428;
+    --text: #1a1a1a;
+    --muted: #6b6560;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+  header {
+    background: var(--surface);
+    border-bottom: 2px solid var(--green);
+    padding: 1.25rem 2rem;
+    display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+  }
+  .flag { font-size: 1.4rem; }
+  .header-text h1 { font-family: var(--mono); font-size: 0.95rem; font-weight: 600; color: var(--green); }
+  .header-text p { font-size: 0.8rem; color: var(--muted); margin-top: 0.15rem; }
+
+  .tabs {
+    display: flex; border-bottom: 1px solid var(--border);
+    background: var(--surface); padding: 0 2rem;
+  }
+  .tab {
+    font-family: var(--mono); font-size: 0.8rem; padding: 0.75rem 1.25rem;
+    cursor: pointer; color: var(--muted); border: none; background: none;
+    border-bottom: 2px solid transparent; transition: all 0.2s; letter-spacing: 0.03em;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  .view { display: none; padding: 2rem; max-width: 720px; margin: 0 auto; }
+  .view.active { display: block; }
+
+  /* SECTION TITLES */
+  .section-title {
+    font-family: var(--mono); font-size: 0.68rem; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--green); margin: 2rem 0 0.75rem;
+    border-left: 3px solid var(--green); padding-left: 0.6rem;
+  }
+  .section-title:first-child { margin-top: 0; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; max-width: 600px; }
+  th {
+    font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--muted); text-align: left;
+    padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);
+  }
+  td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td.pt-word {
+    font-family: var(--mono); font-size: 0.95rem; color: var(--green);
+    font-weight: 600; cursor: pointer; width: 30%;
+  }
+  td.pt-word:hover { text-decoration: underline; text-decoration-color: var(--green); text-underline-offset: 3px; }
+  td.en-word { color: var(--text); width: 25%; }
+  td.note-cell { color: var(--muted); font-size: 0.85rem; width: 45%; }
+  tbody tr:hover { background: #f4f0ea; }
+
+  /* DISTANCE VISUAL */
+  .distance-visual {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;
+    display: flex; align-items: center; justify-content: space-around;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .dist-item { text-align: center; }
+  .dist-word { font-family: var(--mono); font-size: 1.5rem; font-weight: 600; margin-bottom: 0.25rem; }
+  .dist-word.aqui { color: var(--green); }
+  .dist-word.ai { color: #c47a00; }
+  .dist-word.ali { color: var(--red); }
+  .dist-label { font-size: 0.75rem; color: var(--muted); font-style: italic; }
+  .dist-arrow {
+    font-size: 1.5rem; color: var(--border);
+    display: flex; align-items: center;
+  }
+
+  /* NOTE BLOCK */
+  .note-block {
+    background: #eef6f1; border-left: 3px solid var(--green);
+    padding: 0.9rem 1.1rem; border-radius: 0 6px 6px 0;
+    margin: 1rem 0;
+  }
+  .note-block .note-label {
+    font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.35rem;
+  }
+  .note-block p { font-size: 0.88rem; line-height: 1.6; color: var(--text); }
+  .note-block .pt { font-family: var(--mono); color: var(--green); font-weight: 600; }
+  .note-block .en { color: var(--muted); font-style: italic; }
+
+  /* EXPRESSAO */
+  .expressao-block {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem; margin: 1rem 0;
+    display: flex; align-items: flex-start; gap: 1rem;
+  }
+  .exp-label {
+    font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--red); white-space: nowrap; padding-top: 0.2rem;
+  }
+  .exp-pt { font-family: var(--mono); font-size: 1.2rem; font-weight: 600; color: var(--green); }
+  .exp-en { font-size: 0.85rem; color: var(--muted); margin-top: 0.2rem; }
+  .exp-note { font-size: 0.82rem; color: var(--text); margin-top: 0.4rem; line-height: 1.5; }
+
+  /* ESTAR EXERCISE */
+  .estar-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 560px) { .estar-grid { grid-template-columns: 1fr; } }
+
+  .estar-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.9rem 1rem;
+  }
+  .estar-card .context-tag {
+    font-family: var(--mono); font-size: 0.58rem; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.4rem; display: block;
+  }
+  .estar-sentence { font-size: 0.88rem; line-height: 1.5; color: var(--text); }
+  .estar-sentence .blank {
+    display: inline-block; min-width: 80px; border-bottom: 2px solid var(--green);
+    color: var(--green); font-family: var(--mono); font-weight: 600;
+    text-align: center; padding: 0 0.25rem; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .estar-sentence .blank.hidden { color: transparent; background: #e8f4ee; border-radius: 3px; }
+  .estar-sentence .blank.hidden:hover { color: var(--green); background: transparent; }
+
+  .estar-controls { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+  .ctrl-btn {
+    font-family: var(--mono); font-size: 0.75rem; padding: 0.4rem 1rem;
+    border: 1px solid var(--border); background: var(--surface);
+    color: var(--muted); border-radius: 4px; cursor: pointer; transition: all 0.15s;
+  }
+  .ctrl-btn:hover { border-color: var(--green); color: var(--green); }
+  .ctrl-btn.active { background: var(--green); color: #fff; border-color: var(--green); }
+
+  .context-heading {
+    font-family: var(--mono); font-size: 0.68rem; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--muted); margin: 1.25rem 0 0.6rem;
+    padding-bottom: 0.3rem; border-bottom: 1px solid var(--border);
+  }
+
+  /* FLASHCARDS */
+  .flashcard-wrap { max-width: 560px; margin: 0 auto; }
+  .progress-bar { height: 3px; background: var(--border); border-radius: 2px; margin-bottom: 1.5rem; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
+
+  .fc-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; min-height: 280px;
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: flex-start; padding: 1.25rem 2rem 1.5rem;
+    text-align: center; position: relative;
+  }
+  .fc-cat {
+    font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--green); align-self: flex-start;
+    margin-bottom: 0.75rem;
+  }
+  .fc-hints {
+    font-family: var(--mono); font-size: 0.6rem; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem;
+  }
+  .fc-en { font-size: 1.1rem; color: var(--text); margin-bottom: 1rem; }
+  .fc-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1rem; }
+  .fc-pt {
+    font-family: var(--mono); font-size: 1.8rem; font-weight: 600;
+    color: var(--green); filter: blur(7px); transition: filter 0.3s;
+    cursor: pointer; margin-bottom: 1rem;
+  }
+  .fc-pt.revealed { filter: blur(0); }
+  .fc-speak-pill {
+    background: var(--bg); border: 1px solid var(--border);
+    color: var(--green); padding: 0.35rem 1.1rem; border-radius: 99px;
+    cursor: pointer; margin-bottom: 1rem; transition: all 0.2s; font-size: 1rem;
+  }
+  .fc-speak-pill:hover { background: var(--green); color: #fff; border-color: var(--green); }
+  .fc-note {
+    font-size: 0.8rem; color: var(--muted); font-style: italic;
+    filter: blur(5px); transition: filter 0.3s;
+  }
+  .fc-note.revealed { filter: blur(0); }
+
+  .fc-nav { display: flex; gap: 0.75rem; justify-content: center; margin-top: 1.25rem; flex-wrap: wrap; }
+  .nav-btn {
+    font-family: var(--mono); font-size: 0.8rem; padding: 0.5rem 1.1rem;
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); border-radius: 4px; cursor: pointer; transition: all 0.15s;
+  }
+  .nav-btn:hover { border-color: var(--green); color: var(--green); }
+
+  /* DESAFIO */
+  .desafio-wrap { max-width: 520px; margin: 0 auto; }
+  .d-meta { display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem; }
+  .d-streak { color: var(--green); font-weight: 600; }
+  .d-score-bad { color: var(--red); }
+  .d-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1.75rem 1.5rem 1.5rem; text-align: center; position: relative; min-height: 280px;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+  }
+  .d-cat { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.75rem; align-self: flex-start; }
+  .d-prompt { font-size: 1rem; color: var(--text); margin-bottom: 1.25rem; line-height: 1.5; }
+  .d-timer-ring { width: 52px; height: 52px; margin: 0 auto 1.25rem; position: relative; }
+  .d-timer-ring svg { transform: rotate(-90deg); }
+  .d-timer-ring circle { fill: none; stroke-width: 4; }
+  .d-timer-track { stroke: var(--border); }
+  .d-timer-fill { stroke: var(--green); stroke-dasharray: 138; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke 0.3s; stroke-linecap: round; }
+  .d-timer-fill.warn { stroke: #c47a00; }
+  .d-timer-fill.danger { stroke: var(--red); }
+  .d-timer-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 0.9rem; font-weight: 600; color: var(--text); }
+  .d-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1.25rem; }
+  .d-answer {
+    font-family: var(--mono); font-size: 1.5rem; font-weight: 600; color: var(--green);
+    filter: blur(8px); background: #e8f4ee; border-radius: 6px; padding: 0.35rem 1rem;
+    cursor: pointer; transition: filter 0.3s, background 0.3s; margin-bottom: 0.75rem;
+    user-select: none;
+  }
+  .d-answer.revealed { filter: blur(0); background: transparent; }
+  .d-speak { background: var(--bg); border: 1px solid var(--border); color: var(--green); padding: 0.3rem 1rem; border-radius: 99px; cursor: pointer; font-size: 0.9rem; margin-bottom: 1.25rem; transition: all 0.2s; }
+  .d-speak:hover { background: var(--green); color: #fff; }
+  .d-note { font-size: 0.78rem; color: var(--muted); font-style: italic; margin-bottom: 1.25rem; min-height: 1.2rem; }
+  .d-actions { display: flex; gap: 0.75rem; }
+  .d-btn { font-family: var(--mono); font-size: 0.82rem; font-weight: 600; padding: 0.6rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; transition: opacity 0.15s; }
+  .d-btn.disse { background: var(--green); color: #fff; }
+  .d-btn.nao { background: #fdf0ef; color: var(--red); border: 1px solid #dba09a; }
+  .d-btn:hover { opacity: 0.85; }
+  .d-hint { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); margin-top: 1rem; letter-spacing: 0.05em; }
+
+  .quiz-wrap { max-width: 520px; margin: 0 auto; }
+  .quiz-score { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); margin-bottom: 1.5rem; }
+  .quiz-q {
+    font-family: var(--mono); font-size: 1.1rem; color: var(--green);
+    text-align: center; margin-bottom: 1.25rem; min-height: 50px;
+  }
+  .quiz-prompt { font-size: 0.82rem; color: var(--muted); text-align: center; margin-bottom: 0.75rem; }
+  .quiz-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; margin-bottom: 1rem; }
+  .quiz-opt {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+    padding: 0.8rem 0.9rem; cursor: pointer; font-size: 0.88rem; color: var(--text);
+    transition: all 0.15s; text-align: center;
+  }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--green); }
+  .quiz-opt.correct { border-color: var(--green); background: #eef6f1; color: var(--green); }
+  .quiz-opt.wrong { border-color: var(--red); background: #fdf0ef; color: var(--red); }
+  .quiz-opt:disabled { cursor: default; }
+  .quiz-feedback { text-align: center; font-family: var(--mono); font-size: 0.82rem; min-height: 1.4rem; margin-bottom: 1rem; }
+  .quiz-feedback.ok { color: var(--green); }
+  .quiz-feedback.bad { color: var(--red); }
+  .quiz-next {
+    display: block; margin: 0 auto; font-family: var(--mono); font-size: 0.85rem;
+    padding: 0.6rem 2rem; background: var(--green); color: #fff;
+    border: none; border-radius: 4px; cursor: pointer; font-weight: 600;
+  }
+  .quiz-next:disabled { opacity: 0.3; cursor: default; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="flag">
+    <svg width="32" height="22" viewBox="0 0 32 22" xmlns="http://www.w3.org/2000/svg">
+      <rect width="12" height="22" fill="#006600"/>
+      <rect x="12" width="20" height="22" fill="#FF0000"/>
+      <circle cx="12" cy="11" r="5" fill="#FFD700" stroke="#00008B" stroke-width="0.5"/>
+      <circle cx="12" cy="11" r="3" fill="#00008B"/>
+      <circle cx="12" cy="11" r="1.5" fill="#FFD700"/>
+    </svg>
+  </div>
+  <div class="header-text">
+    <h1>Aula — 12 de Maio · Aqui, Aí, Ali · Estar</h1>
+    <p>A1.1 · Unidade 2 · Primeiras palavras em português</p>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('tabela', this)">Tabela</button>
+  <button class="tab" onclick="switchTab('estar', this)">Estar</button>
+  <button class="tab" onclick="switchTab('flashcards', this)">Flashcards</button>
+  <button class="tab" onclick="switchTab('quiz', this)">Quiz</button>
+  <button class="tab" onclick="switchTab('desafio', this)">⚡ Desafio</button>
+</div>
+
+<!-- ══ TABELA ══ -->
+<div id="tabela" class="view active">
+
+  <div class="section-title">Advérbios de Lugar — Adverbs of Place</div>
+
+  <div class="distance-visual">
+    <div class="dist-item">
+      <div class="dist-word aqui" onclick="speak('aqui')" style="cursor:pointer">aqui</div>
+      <div class="dist-label">perto de mim<br>near me (speaker)</div>
+    </div>
+    <div class="dist-arrow">→</div>
+    <div class="dist-item">
+      <div class="dist-word ai" onclick="speak('aí')" style="cursor:pointer">aí</div>
+      <div class="dist-label">perto de ti<br>near you (listener)</div>
+    </div>
+    <div class="dist-arrow">→</div>
+    <div class="dist-item">
+      <div class="dist-word ali" onclick="speak('ali')" style="cursor:pointer">ali</div>
+      <div class="dist-label">longe de nós<br>far from both</div>
+    </div>
+  </div>
+
+  <table>
+    <thead><tr><th>Português</th><th>English</th><th>Distância</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="pt-word" onclick="speak('aqui')">aqui</td>
+        <td class="en-word">here</td>
+        <td class="note-cell">perto — near the speaker. <em>A Sofia está aqui.</em></td>
+      </tr>
+      <tr>
+        <td class="pt-word" onclick="speak('aí')">aí</td>
+        <td class="en-word">there (near you)</td>
+        <td class="note-cell">perto do ouvinte — near the listener. <em>O livro está aí, não está?</em></td>
+      </tr>
+      <tr>
+        <td class="pt-word" onclick="speak('ali')">ali</td>
+        <td class="en-word">over there</td>
+        <td class="note-cell">longe de ambos — far from both. <em>O gato está ali!</em></td>
+      </tr>
+      <tr>
+        <td class="pt-word" onclick="speak('lá')">lá</td>
+        <td class="en-word">there / over there</td>
+        <td class="note-cell">também longe — similar to ali, often more general or fixed. <em>Ele está lá fora.</em></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note-block">
+    <div class="note-label">Aula — O que a professora ensinou</div>
+    <p>Na aula de 12 de maio, a professora ensinou <span class="pt">aqui</span> (perto) e <span class="pt">ali</span> (longe). O sistema completo tem três graus: <span class="pt">aqui → aí → ali/lá</span>. Ao contrário do inglês (here / there), o português distingue se "there" está perto de quem ouve ou longe dos dois.</p>
+  </div>
+
+  <div class="note-block">
+    <div class="note-label">Nota Gramatical — Com estar</div>
+    <p>Estes advérbios aparecem sempre com o verbo <span class="pt">estar</span>:<br>
+    <span class="pt">O livro está aqui.</span> <span class="en">— The book is here.</span><br>
+    <span class="pt">A chave está aí?</span> <span class="en">— Is the key there (near you)?</span><br>
+    <span class="pt">O táxi está ali.</span> <span class="en">— The taxi is over there.</span></p>
+  </div>
+
+  <div class="section-title">Diz-se Assim! — Expression of the Day</div>
+
+  <div class="expressao-block">
+    <div class="exp-label">Expressão</div>
+    <div>
+      <div class="exp-pt" onclick="speak('Pode ser.')" style="cursor:pointer">Pode ser.</div>
+      <div class="exp-en">Could be. / That works. / Sure.</div>
+      <div class="exp-note">Used to agree tentatively or accept a suggestion without much enthusiasm. More noncommittal than <em>sim</em> — somewhere between "sure, fine" and "I suppose so." Very common in everyday Portuguese. Example: <em>— Almoçamos às 13h? — Pode ser.</em></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ ESTAR EXERCISE ══ -->
+<div id="estar" class="view">
+
+  <div class="section-title">Exercício D — Verbo Irregular: estar</div>
+  <p style="font-size:0.85rem; color:var(--muted); margin-bottom:1rem;">Click a blank to reveal the answer. Use "Esconder Tudo" to practice again.</p>
+
+  <div class="estar-controls">
+    <button class="ctrl-btn" onclick="revealAll()">Revelar Tudo</button>
+    <button class="ctrl-btn" onclick="hideAll()">Esconder Tudo</button>
+  </div>
+
+  <div class="context-heading">Na escola</div>
+  <div class="estar-grid" id="escola-grid"></div>
+
+  <div class="context-heading">No restaurante</div>
+  <div class="estar-grid" id="restaurante-grid"></div>
+
+  <div class="context-heading">Na rua</div>
+  <div class="estar-grid" id="rua-grid"></div>
+
+  <div class="note-block" style="margin-top:1.5rem">
+    <div class="note-label">Conjugação — estar (presente do indicativo)</div>
+    <p>
+      eu <span class="pt">estou</span> &nbsp;·&nbsp;
+      tu <span class="pt">estás</span> &nbsp;·&nbsp;
+      você/ele/ela <span class="pt">está</span><br>
+      nós <span class="pt">estamos</span> &nbsp;·&nbsp;
+      vocês/eles/elas <span class="pt">estão</span>
+    </p>
+  </div>
+
+</div>
+
+<!-- ══ FLASHCARDS ══ -->
+<div id="flashcards" class="view">
+<div class="flashcard-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="fc-progress"></div></div>
+  <div class="fc-card">
+    <span class="fc-cat" id="fc-cat"></span>
+    <div class="fc-hints">click word to reveal · 🔊 to hear</div>
+    <div class="fc-en" id="fc-en"></div>
+    <div class="fc-divider"></div>
+    <div class="fc-pt" id="fc-pt" onclick="revealFC()"></div>
+    <button class="fc-speak-pill" onclick="speakFC()">🔊</button>
+    <div class="fc-note" id="fc-note"></div>
+  </div>
+  <div class="fc-nav">
+    <button class="nav-btn" onclick="fcMove(-1)">← Anterior</button>
+    <button class="nav-btn" onclick="shuffleFC()">Baralhar</button>
+    <button class="nav-btn" onclick="fcMove(1)">Próximo →</button>
+  </div>
+  <p style="text-align:center;margin-top:0.5rem;font-family:var(--mono);font-size:0.65rem;color:var(--muted)" id="fc-counter"></p>
+</div>
+</div>
+
+<!-- ══ DESAFIO ══ -->
+<div id="desafio" class="view">
+<div class="desafio-wrap">
+  <div class="d-meta">
+    <span id="d-score-display">Score: 0 / 0</span>
+    <span class="d-streak" id="d-streak-display"></span>
+  </div>
+  <div class="d-card">
+    <span class="d-cat" id="d-cat"></span>
+    <div class="d-prompt" id="d-prompt"></div>
+    <div class="d-timer-ring">
+      <svg width="52" height="52" viewBox="0 0 52 52">
+        <circle class="d-timer-track" cx="26" cy="26" r="22"/>
+        <circle class="d-timer-fill" id="d-timer-fill" cx="26" cy="26" r="22"/>
+      </svg>
+      <div class="d-timer-text" id="d-timer-text">5</div>
+    </div>
+    <div class="d-divider"></div>
+    <div class="d-answer" id="d-answer" onclick="revealDesafio()"></div>
+    <button class="d-speak" id="d-speak" onclick="speakDesafio()">🔊</button>
+    <div class="d-note" id="d-note"></div>
+    <div class="d-actions" id="d-actions" style="display:none">
+      <button class="d-btn disse" onclick="scoreDesafio(true)">✓ Disse</button>
+      <button class="d-btn nao" onclick="scoreDesafio(false)">✗ Não disse</button>
+    </div>
+    <div class="d-hint" id="d-hint">diz em voz alta · depois clica para revelar</div>
+  </div>
+</div>
+</div>
+
+
+<div id="quiz" class="view">
+<div class="quiz-wrap">
+  <div class="quiz-score" id="quiz-score">Score: 0 / 0</div>
+  <div class="quiz-q" id="quiz-q"></div>
+  <div class="quiz-prompt" id="quiz-prompt"></div>
+  <div class="quiz-opts" id="quiz-opts"></div>
+  <div class="quiz-feedback" id="quiz-fb"></div>
+  <button class="quiz-next" id="quiz-next" onclick="nextQuiz()" disabled>Próximo →</button>
+</div>
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+const audioCache = {};
+
+async function speak(text) {
+  if (!text) return;
+  if (audioCache[text]) { audioCache[text].currentTime = 0; audioCache[text].play(); return; }
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
+    });
+    if (!res.ok) throw new Error();
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    audioCache[text] = audio;
+    audio.play();
+  } catch(e) { console.warn('TTS error', e); }
+}
+
+// ── TAB SWITCH
+function switchTab(id, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'flashcards') renderFC();
+  if (id === 'quiz') startQuiz();
+  if (id === 'desafio') initDesafio();
+}
+
+// ── ESTAR SENTENCES
+const ESTAR_SENTENCES = {
+  escola: [
+    { text: "Desculpa, Hannah, podes repetir? Eu hoje ___ super cansado.", answer: "estou", hint: "eu → ?" },
+    { text: "Julius, o livro ___ no chão…", answer: "está", hint: "o livro → ?" },
+    { text: "Professor, eu ___ com uma dúvida!", answer: "estou", hint: "eu → ?" },
+  ],
+  restaurante: [
+    { text: "O Restaurante «O Solar dos Presuntos» ___ aberto!", answer: "está", hint: "o restaurante → ?" },
+    { text: "Não te preocupes. A mesa no restaurante já ___ reservada.", answer: "está", hint: "a mesa → ?" },
+    { text: "Como ___ o teu bitoque, querido?", answer: "está", hint: "o bitoque → ?" },
+  ],
+  rua: [
+    { text: "— Como ___ a senhora? — ___ muito bem. Obrigadíssima.", answer: "está / Estou", hint: "a senhora / eu" },
+    { text: "Vai-se andando, Carlos. ___ meio constipado. Mas já estou melhor agora.", answer: "Estou", hint: "eu → ?" },
+    { text: "Em Portugal, os centros comerciais ___ abertos aos fins de semana.", answer: "estão", hint: "os centros → ?" },
+    { text: "Eu e a Sandra ___ de férias. Finalmente!", answer: "estamos", hint: "eu e a Sandra → ?" },
+    { text: "Hoje ___ muito calor! 35º C em Lisboa?! Que insuportável!", answer: "está", hint: "impersonal → ?" },
+    { text: "Amanhã, o tempo ___ horrível: só chuva e vento.", answer: "vai estar", hint: "futuro próximo → ?" },
+  ]
+};
+
+function buildEstarGrid(sents, gridId) {
+  const grid = document.getElementById(gridId);
+  grid.innerHTML = '';
+  sents.forEach((s, i) => {
+    const card = document.createElement('div');
+    card.className = 'estar-card';
+    const parts = s.text.split('___');
+    card.innerHTML = `
+      <span class="context-tag">${s.hint}</span>
+      <div class="estar-sentence">
+        ${parts[0]}<span class="blank hidden" data-answer="${s.answer}" onclick="toggleBlank(this)">${s.answer}</span>${parts[1] || ''}
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+function toggleBlank(el) { el.classList.toggle('hidden'); }
+function revealAll() { document.querySelectorAll('.blank').forEach(b => b.classList.remove('hidden')); }
+function hideAll() { document.querySelectorAll('.blank').forEach(b => b.classList.add('hidden')); }
+
+buildEstarGrid(ESTAR_SENTENCES.escola, 'escola-grid');
+buildEstarGrid(ESTAR_SENTENCES.restaurante, 'restaurante-grid');
+buildEstarGrid(ESTAR_SENTENCES.rua, 'rua-grid');
+
+// ── FLASHCARDS
+const CARDS = [
+  { cat: 'Advérbio', pt: 'aqui', en: 'here (near me)', note: 'A Sofia está aqui.' },
+  { cat: 'Advérbio', pt: 'aí', en: 'there (near you)', note: 'O livro está aí?' },
+  { cat: 'Advérbio', pt: 'ali', en: 'over there (far from both)', note: 'O gato está ali!' },
+  { cat: 'Advérbio', pt: 'lá', en: 'there / over there (general)', note: 'Ele está lá fora.' },
+  { cat: 'Expressão', pt: 'Pode ser.', en: 'Could be. / Sure. / That works.', note: 'Noncommittal agreement — very common.' },
+  { cat: 'Estar', pt: 'estou', en: 'I am (state/location)', note: 'eu estou' },
+  { cat: 'Estar', pt: 'estás', en: 'you are (informal)', note: 'tu estás' },
+  { cat: 'Estar', pt: 'está', en: 'he/she/you are (state/location)', note: 'você/ele/ela está' },
+  { cat: 'Estar', pt: 'estamos', en: 'we are', note: 'nós estamos' },
+  { cat: 'Estar', pt: 'estão', en: 'they/you (pl.) are', note: 'vocês/eles/elas estão' },
+];
+
+let deck = [...CARDS], cur = 0;
+
+function renderFC() {
+  const c = deck[cur];
+  document.getElementById('fc-cat').textContent = c.cat;
+  document.getElementById('fc-en').textContent = c.en;
+  const ptEl = document.getElementById('fc-pt');
+  ptEl.textContent = c.pt;
+  ptEl.classList.remove('revealed');
+  const noteEl = document.getElementById('fc-note');
+  noteEl.textContent = c.note;
+  noteEl.classList.remove('revealed');
+  document.getElementById('fc-counter').textContent = `${cur+1} / ${deck.length}`;
+  document.getElementById('fc-progress').style.width = `${((cur+1)/deck.length)*100}%`;
+}
+
+function revealFC() {
+  document.getElementById('fc-pt').classList.add('revealed');
+  document.getElementById('fc-note').classList.add('revealed');
+}
+
+function speakFC() { speak(deck[cur].pt); }
+function fcMove(d) { cur = (cur+d+deck.length)%deck.length; renderFC(); }
+function shuffleFC() { deck = [...CARDS].sort(()=>Math.random()-0.5); cur=0; renderFC(); }
+
+renderFC();
+
+// ── DESAFIO ──────────────────────────────────────────────────────
+const DESAFIO_CARDS = [
+  { cat:'Advérbio', prompt:'You are pointing to something right next to you. Say "it\'s here."', answer:'Está aqui.', note:'aqui = near the speaker' },
+  { cat:'Advérbio', prompt:'Something is near the person you\'re talking to. Say "it\'s there (near you)."', answer:'Está aí.', note:'aí = near the listener' },
+  { cat:'Advérbio', prompt:'Point to something far from both of you. Say "the taxi is over there."', answer:'O táxi está ali.', note:'ali = far from both' },
+  { cat:'Advérbio', prompt:'Someone asks where your keys are. They\'re right next to you. Say it.', answer:'As minhas chaves estão aqui.', note:'aqui + estar' },
+  { cat:'Expressão', prompt:'Someone suggests meeting at 2pm. You\'re not sure but it works. Say the expression.', answer:'Pode ser.', note:'noncommittal agreement — very common' },
+  { cat:'Expressão', prompt:'Your instructor suggests trying an exercise. You go along with it. Say it.', answer:'Pode ser.', note:'could be / sure / that works' },
+  { cat:'Estar', prompt:'Say "I am very tired today."', answer:'Estou muito cansado hoje.', note:'eu → estou' },
+  { cat:'Estar', prompt:'Say "the book is on the floor."', answer:'O livro está no chão.', note:'o livro → está' },
+  { cat:'Estar', prompt:'Say "we are on holiday."', answer:'Estamos de férias.', note:'nós → estamos' },
+  { cat:'Estar', prompt:'Say "the shopping centres are open at weekends."', answer:'Os centros comerciais estão abertos aos fins de semana.', note:'plural → estão' },
+  { cat:'Estar', prompt:'Say "how are you?" (formal, to a stranger).', answer:'Como está?', note:'você → está — used in polite register' },
+  { cat:'Estar', prompt:'Say "I\'m fine, many thanks." (you are male).', answer:'Estou muito bem. Obrigado.', note:'estou + obrigado (male speaker)' },
+];
+
+let dDeck = [], dIdx = 0, dCorrect = 0, dTotal = 0, dStreak = 0, dTimer = null, dSecondsLeft = 5, dRevealed = false;
+
+function initDesafio() {
+  dDeck = [...DESAFIO_CARDS].sort(() => Math.random() - 0.5);
+  dIdx = 0; dCorrect = 0; dTotal = 0; dStreak = 0;
+  loadDesafioCard();
+}
+
+function loadDesafioCard() {
+  dRevealed = false;
+  clearInterval(dTimer);
+  dSecondsLeft = 5;
+
+  const c = dDeck[dIdx % dDeck.length];
+  document.getElementById('d-cat').textContent = c.cat;
+  document.getElementById('d-prompt').textContent = c.prompt;
+  document.getElementById('d-answer').textContent = c.answer;
+  document.getElementById('d-answer').classList.remove('revealed');
+  document.getElementById('d-note').textContent = c.note || '';
+  document.getElementById('d-actions').style.display = 'none';
+  document.getElementById('d-hint').style.display = 'block';
+  document.getElementById('d-score-display').textContent = `Score: ${dCorrect} / ${dTotal}`;
+  document.getElementById('d-streak-display').textContent = dStreak >= 3 ? `🔥 ${dStreak}` : '';
+
+  // Timer
+  const fill = document.getElementById('d-timer-fill');
+  const txt = document.getElementById('d-timer-text');
+  const circumference = 138;
+  fill.style.strokeDashoffset = 0;
+  fill.className = 'd-timer-fill';
+  txt.textContent = 5;
+
+  dTimer = setInterval(() => {
+    dSecondsLeft--;
+    txt.textContent = dSecondsLeft;
+    fill.style.strokeDashoffset = circumference * (1 - dSecondsLeft / 5);
+    if (dSecondsLeft <= 2) fill.classList.add('warn');
+    if (dSecondsLeft <= 1) { fill.classList.remove('warn'); fill.classList.add('danger'); }
+    if (dSecondsLeft <= 0) { clearInterval(dTimer); revealDesafio(); }
+  }, 1000);
+}
+
+function revealDesafio() {
+  if (dRevealed) return;
+  dRevealed = true;
+  clearInterval(dTimer);
+  document.getElementById('d-timer-text').textContent = '•';
+  document.getElementById('d-timer-fill').style.strokeDashoffset = 0;
+  document.getElementById('d-answer').classList.add('revealed');
+  document.getElementById('d-actions').style.display = 'flex';
+  document.getElementById('d-hint').style.display = 'none';
+  speak(dDeck[dIdx % dDeck.length].answer);
+}
+
+function speakDesafio() { speak(dDeck[dIdx % dDeck.length].answer); }
+
+function scoreDesafio(correct) {
+  dTotal++;
+  if (correct) { dCorrect++; dStreak++; } else { dStreak = 0; }
+  dIdx++;
+  loadDesafioCard();
+}
+
+const QUIZ_POOL = CARDS.map(c => ({ q: c.pt, a: c.en, cat: c.cat }));
+let qDeck=[], qIdx=0, qScore=0, qTotal=0, qAnswered=false;
+
+function startQuiz() {
+  qDeck = [...QUIZ_POOL].sort(()=>Math.random()-0.5);
+  qIdx=0; qScore=0; qTotal=0; qAnswered=false;
+  loadQuiz();
+}
+
+function loadQuiz() {
+  qAnswered = false;
+  document.getElementById('quiz-fb').textContent = '';
+  document.getElementById('quiz-fb').className = 'quiz-feedback';
+  document.getElementById('quiz-next').disabled = true;
+
+  const item = qDeck[qIdx % qDeck.length];
+  document.getElementById('quiz-q').textContent = item.q;
+  document.getElementById('quiz-prompt').textContent = 'Choose the correct English meaning:';
+
+  const others = QUIZ_POOL.filter(x=>x.a!==item.a).sort(()=>Math.random()-0.5).slice(0,3).map(x=>x.a);
+  const opts = [item.a, ...others].sort(()=>Math.random()-0.5);
+
+  const container = document.getElementById('quiz-opts');
+  container.innerHTML = '';
+  opts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = opt;
+    btn.onclick = () => checkAnswer(btn, opt, item);
+    container.appendChild(btn);
+  });
+  document.getElementById('quiz-score').textContent = `Score: ${qScore} / ${qTotal}`;
+}
+
+function checkAnswer(btn, chosen, item) {
+  if (qAnswered) return;
+  qAnswered = true; qTotal++;
+  const fb = document.getElementById('quiz-fb');
+  if (chosen === item.a) {
+    btn.classList.add('correct');
+    fb.textContent = 'Correto! ✓'; fb.className='quiz-feedback ok'; qScore++;
+    speak(item.q);
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = `Errado. Resposta: "${item.a}"`; fb.className='quiz-feedback bad';
+    document.querySelectorAll('.quiz-opt').forEach(b=>{ if(b.textContent===item.a) b.classList.add('correct'); });
+    speak(item.q);
+  }
+  document.querySelectorAll('.quiz-opt').forEach(b=>b.disabled=true);
+  document.getElementById('quiz-next').disabled = false;
+  document.getElementById('quiz-score').textContent = `Score: ${qScore} / ${qTotal}`;
+}
+
+function nextQuiz() {
+  qIdx++;
+  if (qIdx >= qDeck.length) { qDeck=[...QUIZ_POOL].sort(()=>Math.random()-0.5); qIdx=0; }
+  loadQuiz();
+}
+</script>
+</body>
+</html>

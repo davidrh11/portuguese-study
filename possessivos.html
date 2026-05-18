@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="pt" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Possessivos · Português Europeu</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0;
+    --surface: #ffffff;
+    --border: #e2ddd6;
+    --green: #2d7a50;
+    --red: #a03428;
+    --text: #1a1a1a;
+    --muted: #6b6560;
+    --highlight: #eef6f1;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+  header {
+    background: var(--surface); border-bottom: 2px solid var(--green);
+    padding: 1.25rem 2rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+  }
+  .header-text h1 { font-family: var(--mono); font-size: 0.95rem; font-weight: 600; color: var(--green); }
+  .header-text p { font-size: 0.8rem; color: var(--muted); margin-top: 0.15rem; }
+
+  .tabs {
+    display: flex; border-bottom: 1px solid var(--border);
+    background: var(--surface); padding: 0 2rem;
+  }
+  .tab {
+    font-family: var(--mono); font-size: 0.8rem; padding: 0.75rem 1.25rem;
+    cursor: pointer; color: var(--muted); border: none; background: none;
+    border-bottom: 2px solid transparent; transition: all 0.2s;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  .view { display: none; padding: 2rem; max-width: 760px; margin: 0 auto; }
+  .view.active { display: block; }
+
+  .section-title {
+    font-family: var(--mono); font-size: 0.68rem; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--green); margin: 2rem 0 0.75rem;
+    border-left: 3px solid var(--green); padding-left: 0.6rem;
+  }
+  .section-title:first-child { margin-top: 0; }
+
+  /* PRIMARY FOCUS CARDS (eu / você) */
+  .focus-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;
+  }
+  @media (max-width: 520px) { .focus-grid { grid-template-columns: 1fr; } }
+
+  .focus-card {
+    background: var(--surface); border: 2px solid var(--green);
+    border-radius: 10px; padding: 1.25rem 1.5rem;
+  }
+  .focus-card h3 {
+    font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.75rem;
+  }
+  .poss-row { display: flex; justify-content: space-between; align-items: baseline; padding: 0.3rem 0; border-bottom: 1px solid var(--border); }
+  .poss-row:last-child { border-bottom: none; }
+  .poss-pt {
+    font-family: var(--mono); font-size: 0.95rem; color: var(--green);
+    font-weight: 600; cursor: pointer;
+  }
+  .poss-pt:hover { text-decoration: underline; text-decoration-color: var(--green); }
+  .poss-en { font-size: 0.82rem; color: var(--muted); }
+  .poss-gender { font-family: var(--mono); font-size: 0.65rem; color: var(--red); }
+
+  /* FULL REFERENCE TABLE */
+  .full-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; margin-bottom: 1.5rem; overflow-x: auto; display: block; }
+  .full-table thead th {
+    font-family: var(--mono); font-size: 0.63rem; text-transform: uppercase;
+    letter-spacing: 0.08em; padding: 0.55rem 0.8rem; background: var(--surface);
+    border-bottom: 2px solid var(--border); text-align: center; white-space: nowrap;
+    color: var(--muted);
+  }
+  .full-table thead th:first-child { text-align: left; color: var(--green); }
+  .full-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  .full-table tbody tr:hover { background: var(--highlight); }
+  .full-table td { padding: 0.55rem 0.8rem; text-align: center; vertical-align: middle; }
+  .full-table td:first-child { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); text-align: left; font-weight: 600; white-space: nowrap; }
+  .full-table td.pt-cell {
+    font-family: var(--mono); color: var(--green); font-weight: 600;
+    cursor: pointer;
+  }
+  .full-table td.pt-cell:hover { background: var(--highlight); text-decoration: underline; }
+  .full-table td.focus-col { background: #eef6f1; }
+  .full-table thead th.focus-col { background: #eef6f1; color: var(--green); }
+
+  /* NOTE BLOCK */
+  .note-block {
+    background: var(--highlight); border-left: 3px solid var(--green);
+    padding: 0.9rem 1.1rem; border-radius: 0 6px 6px 0; margin: 1rem 0;
+  }
+  .note-block .note-label {
+    font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.35rem;
+  }
+  .note-block p { font-size: 0.87rem; line-height: 1.6; color: var(--text); }
+  .note-block .pt { font-family: var(--mono); color: var(--green); font-weight: 600; }
+
+  /* EXAMPLES */
+  .example-list { list-style: none; margin: 0.5rem 0 1rem; }
+  .example-list li {
+    padding: 0.55rem 0.75rem; border-left: 2px solid var(--border);
+    margin-bottom: 0.4rem; cursor: pointer; transition: border-color 0.15s;
+  }
+  .example-list li:hover { border-left-color: var(--green); background: var(--highlight); }
+  .example-list .ex-pt { font-family: var(--mono); font-size: 0.88rem; color: var(--green); }
+  .example-list .ex-en { font-size: 0.78rem; color: var(--muted); margin-top: 0.1rem; }
+
+  /* DESAFIO */
+  .desafio-wrap { max-width: 520px; margin: 0 auto; }
+  .d-meta { display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem; }
+  .d-streak { color: var(--green); font-weight: 600; }
+  .d-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.75rem 1.5rem 1.5rem; text-align: center; position: relative; min-height: 280px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+  .d-cat { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.75rem; align-self: flex-start; }
+  .d-prompt { font-size: 1rem; color: var(--text); margin-bottom: 1.25rem; line-height: 1.5; }
+  .d-timer-ring { width: 52px; height: 52px; margin: 0 auto 1.25rem; position: relative; }
+  .d-timer-ring svg { transform: rotate(-90deg); }
+  .d-timer-ring circle { fill: none; stroke-width: 4; }
+  .d-timer-track { stroke: var(--border); }
+  .d-timer-fill { stroke: var(--green); stroke-dasharray: 138; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke 0.3s; stroke-linecap: round; }
+  .d-timer-fill.warn { stroke: #c47a00; }
+  .d-timer-fill.danger { stroke: var(--red); }
+  .d-timer-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 0.9rem; font-weight: 600; color: var(--text); }
+  .d-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1.25rem; }
+  .d-answer { font-family: var(--mono); font-size: 1.5rem; font-weight: 600; color: var(--green); filter: blur(8px); background: #e8f4ee; border-radius: 6px; padding: 0.35rem 1rem; cursor: pointer; transition: filter 0.3s, background 0.3s; margin-bottom: 0.75rem; user-select: none; }
+  .d-answer.revealed { filter: blur(0); background: transparent; }
+  .d-speak { background: var(--bg); border: 1px solid var(--border); color: var(--green); padding: 0.3rem 1rem; border-radius: 99px; cursor: pointer; font-size: 0.9rem; margin-bottom: 1.25rem; transition: all 0.2s; }
+  .d-speak:hover { background: var(--green); color: #fff; }
+  .d-note { font-size: 0.78rem; color: var(--muted); font-style: italic; margin-bottom: 1.25rem; min-height: 1.2rem; }
+  .d-actions { display: flex; gap: 0.75rem; }
+  .d-btn { font-family: var(--mono); font-size: 0.82rem; font-weight: 600; padding: 0.6rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; transition: opacity 0.15s; }
+  .d-btn.disse { background: var(--green); color: #fff; }
+  .d-btn.nao { background: #fdf0ef; color: var(--red); border: 1px solid #dba09a; }
+  .d-btn:hover { opacity: 0.85; }
+  .d-hint { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); margin-top: 1rem; letter-spacing: 0.05em; }
+
+  .flashcard-wrap { max-width: 540px; margin: 0 auto; }
+  .progress-bar { height: 3px; background: var(--border); border-radius: 2px; margin-bottom: 1.5rem; }
+  .progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
+  .fc-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    min-height: 260px; display: flex; flex-direction: column; align-items: center;
+    justify-content: flex-start; padding: 1.25rem 2rem 1.5rem; text-align: center;
+  }
+  .fc-cat { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); align-self: flex-start; margin-bottom: 0.75rem; }
+  .fc-hints { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+  .fc-en { font-size: 1.05rem; color: var(--text); margin-bottom: 1rem; line-height: 1.4; }
+  .fc-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1rem; }
+  .fc-pt { font-family: var(--mono); font-size: 1.7rem; font-weight: 600; color: var(--green); filter: blur(7px); transition: filter 0.3s; cursor: pointer; margin-bottom: 0.75rem; }
+  .fc-pt.revealed { filter: blur(0); }
+  .fc-speak-pill { background: var(--bg); border: 1px solid var(--border); color: var(--green); padding: 0.35rem 1.1rem; border-radius: 99px; cursor: pointer; margin-bottom: 0.75rem; font-size: 1rem; transition: all 0.2s; }
+  .fc-speak-pill:hover { background: var(--green); color: #fff; border-color: var(--green); }
+  .fc-note { font-size: 0.8rem; color: var(--muted); font-style: italic; filter: blur(4px); transition: filter 0.3s; }
+  .fc-note.revealed { filter: blur(0); }
+  .fc-nav { display: flex; gap: 0.75rem; justify-content: center; margin-top: 1.25rem; flex-wrap: wrap; }
+  .nav-btn { font-family: var(--mono); font-size: 0.8rem; padding: 0.5rem 1.1rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .nav-btn:hover { border-color: var(--green); color: var(--green); }
+
+  /* QUIZ */
+  .quiz-wrap { max-width: 520px; margin: 0 auto; }
+  .quiz-score { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); margin-bottom: 1.5rem; }
+  .quiz-q { font-family: var(--mono); font-size: 1.1rem; color: var(--green); text-align: center; margin-bottom: 1.25rem; min-height: 50px; }
+  .quiz-prompt { font-size: 0.82rem; color: var(--muted); text-align: center; margin-bottom: 0.75rem; }
+  .quiz-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; margin-bottom: 1rem; }
+  .quiz-opt { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 0.8rem; cursor: pointer; font-size: 0.85rem; color: var(--text); transition: all 0.15s; text-align: center; }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--green); }
+  .quiz-opt.correct { border-color: var(--green); background: var(--highlight); color: var(--green); }
+  .quiz-opt.wrong { border-color: var(--red); background: #fdf0ef; color: var(--red); }
+  .quiz-opt:disabled { cursor: default; }
+  .quiz-feedback { text-align: center; font-family: var(--mono); font-size: 0.82rem; min-height: 1.4rem; margin-bottom: 1rem; }
+  .quiz-feedback.ok { color: var(--green); }
+  .quiz-feedback.bad { color: var(--red); }
+  .quiz-next { display: block; margin: 0 auto; font-family: var(--mono); font-size: 0.85rem; padding: 0.6rem 2rem; background: var(--green); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+  .quiz-next:disabled { opacity: 0.3; cursor: default; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <svg width="32" height="22" viewBox="0 0 32 22" xmlns="http://www.w3.org/2000/svg">
+      <rect width="12" height="22" fill="#006600"/>
+      <rect x="12" width="20" height="22" fill="#FF0000"/>
+      <circle cx="12" cy="11" r="5" fill="#FFD700" stroke="#00008B" stroke-width="0.5"/>
+      <circle cx="12" cy="11" r="3" fill="#00008B"/>
+      <circle cx="12" cy="11" r="1.5" fill="#FFD700"/>
+    </svg>
+  </div>
+  <div class="header-text">
+    <h1>Possessivos · Possessive Adjectives &amp; Pronouns</h1>
+    <p>A1.1 · Referência permanente</p>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('tabela', this)">Tabela</button>
+  <button class="tab" onclick="switchTab('exemplos', this)">Exemplos</button>
+  <button class="tab" onclick="switchTab('flashcards', this)">Flashcards</button>
+  <button class="tab" onclick="switchTab('quiz', this)">Quiz</button>
+  <button class="tab" onclick="switchTab('desafio', this)">⚡ Desafio</button>
+</div>
+
+<!-- ══ TABELA ══ -->
+<div id="tabela" class="view active">
+
+  <div class="section-title">Foco Principal — Eu &amp; Você (eu/você first)</div>
+
+  <div class="focus-grid">
+    <div class="focus-card">
+      <h3>Eu → meu / minha</h3>
+      <div class="poss-row">
+        <span class="poss-pt" onclick="speak('o meu livro')">meu</span>
+        <span class="poss-en">my (masc. noun)</span>
+        <span class="poss-gender">m.</span>
+      </div>
+      <div class="poss-row">
+        <span class="poss-pt" onclick="speak('a minha casa')">minha</span>
+        <span class="poss-en">my (fem. noun)</span>
+        <span class="poss-gender">f.</span>
+      </div>
+      <div class="poss-row">
+        <span class="poss-pt" onclick="speak('os meus amigos')">meus</span>
+        <span class="poss-en">my (masc. pl.)</span>
+        <span class="poss-gender">m. pl.</span>
+      </div>
+      <div class="poss-row">
+        <span class="poss-pt" onclick="speak('as minhas chaves')">minhas</span>
+        <span class="poss-en">my (fem. pl.)</span>
+        <span class="poss-gender">f. pl.</span>
+      </div>
+    </div>
+    <div class="focus-card">
+      <h3>Você → seu / sua</h3>
+      <div class="poss-row">
+        <span class="poss-pt" onclick="speak('o seu livro')">seu</span>
+        <span class="poss-en">your (masc. noun)</span>
+        <span class="poss-gender">m.</span>
+      </div>
+      <div class="poss-row">
+        <span class="poss-pt" onclick="speak('a sua casa')">sua</span>
+        <span class="poss-en">your (fem. noun)</span>
+        <span class="poss-gender">f.</span>
+      </div>
+      <div class="poss-row">
+        <span class="poss-pt" onclick="speak('os seus amigos')">seus</span>
+        <span class="poss-en">your (masc. pl.)</span>
+        <span class="poss-gender">m. pl.</span>
+      </div>
+      <div class="poss-row">
+        <span class="poss-pt" onclick="speak('as suas chaves')">suas</span>
+        <span class="poss-en">your (fem. pl.)</span>
+        <span class="poss-gender">f. pl.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="note-block">
+    <div class="note-label">Regra fundamental</div>
+    <p>The possessive agrees with the <strong>thing owned</strong>, not the owner.<br>
+    <span class="pt">o meu livro</span> — my book (livro is masculine)<br>
+    <span class="pt">a minha casa</span> — my house (casa is feminine)<br>
+    In European Portuguese, possessives always take the definite article: <span class="pt">o meu / a minha</span>, not just <span class="pt">meu / minha</span> alone.</p>
+  </div>
+
+  <div class="section-title">Tabela Completa — All Persons</div>
+
+  <table class="full-table">
+    <thead>
+      <tr>
+        <th>Pessoa</th>
+        <th class="focus-col">m. sg.</th>
+        <th class="focus-col">f. sg.</th>
+        <th>m. pl.</th>
+        <th>f. pl.</th>
+        <th>English</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>eu</td>
+        <td class="pt-cell focus-col" onclick="speak('meu')">meu</td>
+        <td class="pt-cell focus-col" onclick="speak('minha')">minha</td>
+        <td class="pt-cell" onclick="speak('meus')">meus</td>
+        <td class="pt-cell" onclick="speak('minhas')">minhas</td>
+        <td style="color:var(--muted);font-size:0.82rem">my</td>
+      </tr>
+      <tr>
+        <td>tu</td>
+        <td class="pt-cell" onclick="speak('teu')">teu</td>
+        <td class="pt-cell" onclick="speak('tua')">tua</td>
+        <td class="pt-cell" onclick="speak('teus')">teus</td>
+        <td class="pt-cell" onclick="speak('tuas')">tuas</td>
+        <td style="color:var(--muted);font-size:0.82rem">your (informal)</td>
+      </tr>
+      <tr>
+        <td>você / ele / ela</td>
+        <td class="pt-cell focus-col" onclick="speak('seu')">seu</td>
+        <td class="pt-cell focus-col" onclick="speak('sua')">sua</td>
+        <td class="pt-cell" onclick="speak('seus')">seus</td>
+        <td class="pt-cell" onclick="speak('suas')">suas</td>
+        <td style="color:var(--muted);font-size:0.82rem">your / his / her</td>
+      </tr>
+      <tr>
+        <td>nós</td>
+        <td class="pt-cell" onclick="speak('nosso')">nosso</td>
+        <td class="pt-cell" onclick="speak('nossa')">nossa</td>
+        <td class="pt-cell" onclick="speak('nossos')">nossos</td>
+        <td class="pt-cell" onclick="speak('nossas')">nossas</td>
+        <td style="color:var(--muted);font-size:0.82rem">our</td>
+      </tr>
+      <tr>
+        <td>vocês / eles / elas</td>
+        <td class="pt-cell" onclick="speak('seu')">seu</td>
+        <td class="pt-cell" onclick="speak('sua')">sua</td>
+        <td class="pt-cell" onclick="speak('seus')">seus</td>
+        <td class="pt-cell" onclick="speak('suas')">suas</td>
+        <td style="color:var(--muted);font-size:0.82rem">your (pl.) / their</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note-block">
+    <div class="note-label">Atenção — seu/sua é ambíguo</div>
+    <p><span class="pt">o seu livro</span> can mean your, his, her, or their book depending on context. To avoid ambiguity, Portuguese speakers often use <span class="pt">o livro dele</span> (his), <span class="pt">o livro dela</span> (her), <span class="pt">o livro deles</span> (their). You will hear this constantly.</p>
+  </div>
+
+</div>
+
+<!-- ══ EXEMPLOS ══ -->
+<div id="exemplos" class="view">
+
+  <div class="section-title">Eu — meu / minha / meus / minhas</div>
+  <ul class="example-list">
+    <li onclick="speak('O meu nome é Dave.')"><div class="ex-pt">O meu nome é Dave.</div><div class="ex-en">My name is Dave.</div></li>
+    <li onclick="speak('A minha casa é em Lisboa.')"><div class="ex-pt">A minha casa é em Lisboa.</div><div class="ex-en">My house is in Lisbon.</div></li>
+    <li onclick="speak('Os meus amigos são americanos.')"><div class="ex-pt">Os meus amigos são americanos.</div><div class="ex-en">My friends are American.</div></li>
+    <li onclick="speak('As minhas chaves estão aqui.')"><div class="ex-pt">As minhas chaves estão aqui.</div><div class="ex-en">My keys are here.</div></li>
+  </ul>
+
+  <div class="section-title">Você — seu / sua / seus / suas</div>
+  <ul class="example-list">
+    <li onclick="speak('Qual é o seu nome?')"><div class="ex-pt">Qual é o seu nome?</div><div class="ex-en">What is your name?</div></li>
+    <li onclick="speak('A sua mesa está reservada.')"><div class="ex-pt">A sua mesa está reservada.</div><div class="ex-en">Your table is reserved.</div></li>
+    <li onclick="speak('Os seus amigos já chegaram.')"><div class="ex-pt">Os seus amigos já chegaram.</div><div class="ex-en">Your friends have already arrived.</div></li>
+    <li onclick="speak('As suas chaves estão aí.')"><div class="ex-pt">As suas chaves estão aí?</div><div class="ex-en">Are your keys there (near you)?</div></li>
+  </ul>
+
+  <div class="section-title">Nós — nosso / nossa / nossos / nossas</div>
+  <ul class="example-list">
+    <li onclick="speak('O nosso professor é ótimo.')"><div class="ex-pt">O nosso professor é ótimo.</div><div class="ex-en">Our teacher is great.</div></li>
+    <li onclick="speak('A nossa aula começa à uma.')"><div class="ex-pt">A nossa aula começa à uma.</div><div class="ex-en">Our class starts at one.</div></li>
+  </ul>
+
+  <div class="section-title">Seu vs. Dele/Dela — Avoiding Ambiguity</div>
+  <ul class="example-list">
+    <li onclick="speak('O livro dele está aqui.')"><div class="ex-pt">O livro dele está aqui.</div><div class="ex-en">His book is here. (não: o seu livro)</div></li>
+    <li onclick="speak('A casa dela é grande.')"><div class="ex-pt">A casa dela é grande.</div><div class="ex-en">Her house is big. (não: a sua casa)</div></li>
+    <li onclick="speak('O carro deles está ali.')"><div class="ex-pt">O carro deles está ali.</div><div class="ex-en">Their car is over there. (não: o seu carro)</div></li>
+  </ul>
+
+</div>
+
+<!-- ══ FLASHCARDS ══ -->
+<div id="flashcards" class="view">
+<div class="flashcard-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="fc-progress"></div></div>
+  <div class="fc-card">
+    <span class="fc-cat" id="fc-cat"></span>
+    <div class="fc-hints">click word to reveal · 🔊 to hear</div>
+    <div class="fc-en" id="fc-en"></div>
+    <div class="fc-divider"></div>
+    <div class="fc-pt" id="fc-pt" onclick="revealFC()"></div>
+    <button class="fc-speak-pill" onclick="speakFC()">🔊</button>
+    <div class="fc-note" id="fc-note"></div>
+  </div>
+  <div class="fc-nav">
+    <button class="nav-btn" onclick="fcMove(-1)">← Anterior</button>
+    <button class="nav-btn" onclick="shuffleFC()">Baralhar</button>
+    <button class="nav-btn" onclick="fcMove(1)">Próximo →</button>
+  </div>
+  <p style="text-align:center;margin-top:0.5rem;font-family:var(--mono);font-size:0.65rem;color:var(--muted)" id="fc-counter"></p>
+</div>
+</div>
+
+<!-- ══ QUIZ ══ -->
+<div id="quiz" class="view">
+<div class="quiz-wrap">
+  <div class="quiz-score" id="quiz-score">Score: 0 / 0</div>
+  <div class="quiz-q" id="quiz-q"></div>
+  <div class="quiz-prompt" id="quiz-prompt"></div>
+  <div class="quiz-opts" id="quiz-opts"></div>
+  <div class="quiz-feedback" id="quiz-fb"></div>
+  <button class="quiz-next" id="quiz-next" onclick="nextQuiz()" disabled>Próximo →</button>
+</div>
+</div>
+
+<!-- ══ DESAFIO ══ -->
+<div id="desafio" class="view">
+<div class="desafio-wrap">
+  <div class="d-meta">
+    <span id="d-score-display">Score: 0 / 0</span>
+    <span class="d-streak" id="d-streak-display"></span>
+  </div>
+  <div class="d-card">
+    <span class="d-cat" id="d-cat"></span>
+    <div class="d-prompt" id="d-prompt"></div>
+    <div class="d-timer-ring">
+      <svg width="52" height="52" viewBox="0 0 52 52">
+        <circle class="d-timer-track" cx="26" cy="26" r="22"/>
+        <circle class="d-timer-fill" id="d-timer-fill" cx="26" cy="26" r="22"/>
+      </svg>
+      <div class="d-timer-text" id="d-timer-text">5</div>
+    </div>
+    <div class="d-divider"></div>
+    <div class="d-answer" id="d-answer" onclick="revealDesafio()"></div>
+    <button class="d-speak" id="d-speak" onclick="speakDesafio()">🔊</button>
+    <div class="d-note" id="d-note"></div>
+    <div class="d-actions" id="d-actions" style="display:none">
+      <button class="d-btn disse" onclick="scoreDesafio(true)">✓ Disse</button>
+      <button class="d-btn nao" onclick="scoreDesafio(false)">✗ Não disse</button>
+    </div>
+    <div class="d-hint" id="d-hint">diz em voz alta · depois clica para revelar</div>
+  </div>
+</div>
+</div>
+
+
+  if (!text) return;
+  if (audioCache[text]) { audioCache[text].currentTime = 0; audioCache[text].play(); return; }
+  try {
+    const res = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({text}) });
+    if (!res.ok) throw new Error();
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    audioCache[text] = audio;
+    audio.play();
+  } catch(e) {}
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if (id==='flashcards') renderFC();
+  if (id==='quiz') startQuiz();
+  if (id==='desafio') initDesafio();
+}
+
+const DESAFIO_CARDS = [
+  { cat:'eu', prompt:'Say "my name is Dave."', answer:'O meu nome é Dave.', note:'meu — livro/nome are masculine' },
+  { cat:'eu', prompt:'Say "my house is in Lisbon."', answer:'A minha casa é em Lisboa.', note:'minha — casa is feminine' },
+  { cat:'eu', prompt:'Say "my keys are here."', answer:'As minhas chaves estão aqui.', note:'minhas — chaves is feminine plural' },
+  { cat:'eu', prompt:'Say "my friends are American." (masc. friends)', answer:'Os meus amigos são americanos.', note:'meus — amigos is masculine plural' },
+  { cat:'você', prompt:'Ask "what is your name?" (formal).', answer:'Qual é o seu nome?', note:'seu — nome is masculine' },
+  { cat:'você', prompt:'Say "your table is reserved."', answer:'A sua mesa está reservada.', note:'sua — mesa is feminine' },
+  { cat:'você', prompt:'Say "your friends have already arrived."', answer:'Os seus amigos já chegaram.', note:'seus — amigos is masculine plural' },
+  { cat:'nós', prompt:'Say "our teacher is great."', answer:'O nosso professor é ótimo.', note:'nosso — professor is masculine' },
+  { cat:'nós', prompt:'Say "our class starts at one."', answer:'A nossa aula começa à uma.', note:'nossa — aula is feminine' },
+  { cat:'dele/dela', prompt:'Say "his book is here" — avoiding ambiguity.', answer:'O livro dele está aqui.', note:'use dele, not seu — avoids ambiguity' },
+  { cat:'dele/dela', prompt:'Say "her house is big" — avoiding ambiguity.', answer:'A casa dela é grande.', note:'use dela, not sua — avoids ambiguity' },
+  { cat:'dele/dela', prompt:'Say "their car is over there" — avoiding ambiguity.', answer:'O carro deles está ali.', note:'use deles, not seu — avoids ambiguity' },
+];
+
+let dDeck=[], dIdx=0, dCorrect=0, dTotal=0, dStreak=0, dTimer=null, dSecondsLeft=5, dRevealed=false;
+
+function initDesafio() {
+  dDeck=[...DESAFIO_CARDS].sort(()=>Math.random()-0.5);
+  dIdx=0; dCorrect=0; dTotal=0; dStreak=0;
+  loadDesafioCard();
+}
+
+function loadDesafioCard() {
+  dRevealed=false; clearInterval(dTimer); dSecondsLeft=5;
+  const c=dDeck[dIdx%dDeck.length];
+  document.getElementById('d-cat').textContent=c.cat;
+  document.getElementById('d-prompt').textContent=c.prompt;
+  document.getElementById('d-answer').textContent=c.answer;
+  document.getElementById('d-answer').classList.remove('revealed');
+  document.getElementById('d-note').textContent=c.note||'';
+  document.getElementById('d-actions').style.display='none';
+  document.getElementById('d-hint').style.display='block';
+  document.getElementById('d-score-display').textContent=`Score: ${dCorrect} / ${dTotal}`;
+  document.getElementById('d-streak-display').textContent=dStreak>=3?`🔥 ${dStreak}`:'';
+  const fill=document.getElementById('d-timer-fill'), txt=document.getElementById('d-timer-text');
+  fill.style.strokeDashoffset=0; fill.className='d-timer-fill'; txt.textContent=5;
+  dTimer=setInterval(()=>{
+    dSecondsLeft--;
+    txt.textContent=dSecondsLeft;
+    fill.style.strokeDashoffset=138*(1-dSecondsLeft/5);
+    if(dSecondsLeft<=2) fill.classList.add('warn');
+    if(dSecondsLeft<=1){fill.classList.remove('warn');fill.classList.add('danger');}
+    if(dSecondsLeft<=0){clearInterval(dTimer);revealDesafio();}
+  },1000);
+}
+
+function revealDesafio() {
+  if(dRevealed) return; dRevealed=true; clearInterval(dTimer);
+  document.getElementById('d-timer-text').textContent='•';
+  document.getElementById('d-timer-fill').style.strokeDashoffset=0;
+  document.getElementById('d-answer').classList.add('revealed');
+  document.getElementById('d-actions').style.display='flex';
+  document.getElementById('d-hint').style.display='none';
+  speak(dDeck[dIdx%dDeck.length].answer);
+}
+
+function speakDesafio(){speak(dDeck[dIdx%dDeck.length].answer);}
+
+function scoreDesafio(correct){
+  dTotal++; if(correct){dCorrect++;dStreak++;}else{dStreak=0;}
+  dIdx++; loadDesafioCard();
+}
+
+const CARDS = [
+  { cat:'eu', pt:'meu', en:'my (masc. noun) — o meu livro', note:'eu → meu/minha/meus/minhas' },
+  { cat:'eu', pt:'minha', en:'my (fem. noun) — a minha casa', note:'eu → meu/minha/meus/minhas' },
+  { cat:'eu', pt:'meus', en:'my (masc. pl.) — os meus amigos', note:'plural of meu' },
+  { cat:'eu', pt:'minhas', en:'my (fem. pl.) — as minhas chaves', note:'plural of minha' },
+  { cat:'você', pt:'seu', en:'your (masc. noun) — o seu nome', note:'você/ele/ela → seu/sua/seus/suas' },
+  { cat:'você', pt:'sua', en:'your (fem. noun) — a sua casa', note:'você/ele/ela → seu/sua/seus/suas' },
+  { cat:'você', pt:'seus', en:'your (masc. pl.) — os seus amigos', note:'plural of seu' },
+  { cat:'você', pt:'suas', en:'your (fem. pl.) — as suas chaves', note:'plural of sua' },
+  { cat:'nós', pt:'nosso', en:'our (masc.) — o nosso professor', note:'nós → nosso/nossa/nossos/nossas' },
+  { cat:'nós', pt:'nossa', en:'our (fem.) — a nossa aula', note:'nós → nosso/nossa/nossos/nossas' },
+  { cat:'dele/dela', pt:'o livro dele', en:'his book (unambiguous)', note:'use dele/dela/deles instead of seu when clarity matters' },
+  { cat:'dele/dela', pt:'a casa dela', en:'her house (unambiguous)', note:'use dele/dela/deles instead of sua when clarity matters' },
+];
+
+let deck=[...CARDS], cur=0;
+
+function renderFC() {
+  const c=deck[cur];
+  document.getElementById('fc-cat').textContent=c.cat;
+  document.getElementById('fc-en').textContent=c.en;
+  const ptEl=document.getElementById('fc-pt');
+  ptEl.textContent=c.pt; ptEl.classList.remove('revealed');
+  const noteEl=document.getElementById('fc-note');
+  noteEl.textContent=c.note; noteEl.classList.remove('revealed');
+  document.getElementById('fc-counter').textContent=`${cur+1} / ${deck.length}`;
+  document.getElementById('fc-progress').style.width=`${((cur+1)/deck.length)*100}%`;
+}
+function revealFC() { document.getElementById('fc-pt').classList.add('revealed'); document.getElementById('fc-note').classList.add('revealed'); }
+function speakFC() { speak(deck[cur].pt); }
+function fcMove(d) { cur=(cur+d+deck.length)%deck.length; renderFC(); }
+function shuffleFC() { deck=[...CARDS].sort(()=>Math.random()-0.5); cur=0; renderFC(); }
+renderFC();
+
+const QUIZ_POOL = CARDS.map(c=>({q:c.pt, a:c.en}));
+let qDeck=[],qIdx=0,qScore=0,qTotal=0,qAnswered=false;
+function startQuiz() { qDeck=[...QUIZ_POOL].sort(()=>Math.random()-0.5); qIdx=0;qScore=0;qTotal=0;qAnswered=false; loadQuiz(); }
+function loadQuiz() {
+  qAnswered=false;
+  document.getElementById('quiz-fb').textContent='';
+  document.getElementById('quiz-fb').className='quiz-feedback';
+  document.getElementById('quiz-next').disabled=true;
+  const item=qDeck[qIdx%qDeck.length];
+  document.getElementById('quiz-q').textContent=item.q;
+  document.getElementById('quiz-prompt').textContent='Choose the correct meaning:';
+  const others=QUIZ_POOL.filter(x=>x.a!==item.a).sort(()=>Math.random()-0.5).slice(0,3).map(x=>x.a);
+  const opts=[item.a,...others].sort(()=>Math.random()-0.5);
+  const c=document.getElementById('quiz-opts'); c.innerHTML='';
+  opts.forEach(opt=>{
+    const btn=document.createElement('button'); btn.className='quiz-opt'; btn.textContent=opt;
+    btn.onclick=()=>checkAnswer(btn,opt,item); c.appendChild(btn);
+  });
+  document.getElementById('quiz-score').textContent=`Score: ${qScore} / ${qTotal}`;
+}
+function checkAnswer(btn,chosen,item) {
+  if(qAnswered) return;
+  qAnswered=true; qTotal++;
+  const fb=document.getElementById('quiz-fb');
+  if(chosen===item.a){ btn.classList.add('correct'); fb.textContent='Correto! ✓'; fb.className='quiz-feedback ok'; qScore++; speak(item.q); }
+  else { btn.classList.add('wrong'); fb.textContent=`Errado — "${item.a}"`; fb.className='quiz-feedback bad'; document.querySelectorAll('.quiz-opt').forEach(b=>{if(b.textContent===item.a)b.classList.add('correct');}); speak(item.q); }
+  document.querySelectorAll('.quiz-opt').forEach(b=>b.disabled=true);
+  document.getElementById('quiz-next').disabled=false;
+  document.getElementById('quiz-score').textContent=`Score: ${qScore} / ${qTotal}`;
+}
+function nextQuiz() { qIdx++; if(qIdx>=qDeck.length){qDeck=[...QUIZ_POOL].sort(()=>Math.random()-0.5);qIdx=0;} loadQuiz(); }
+</script>
+</body>
+</html>

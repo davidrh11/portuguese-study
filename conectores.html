@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pt" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conectores · Português Europeu</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0;
+    --surface: #ffffff;
+    --border: #e2ddd6;
+    --green: #2d7a50;
+    --red: #a03428;
+    --text: #1a1a1a;
+    --muted: #6b6560;
+    --highlight: #eef6f1;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+  header {
+    background: var(--surface); border-bottom: 2px solid var(--green);
+    padding: 1.25rem 2rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+  }
+  .header-text h1 { font-family: var(--mono); font-size: 0.95rem; font-weight: 600; color: var(--green); }
+  .header-text p { font-size: 0.8rem; color: var(--muted); margin-top: 0.15rem; }
+
+  .tabs {
+    display: flex; border-bottom: 1px solid var(--border);
+    background: var(--surface); padding: 0 2rem;
+  }
+  .tab {
+    font-family: var(--mono); font-size: 0.8rem; padding: 0.75rem 1.25rem;
+    cursor: pointer; color: var(--muted); border: none; background: none;
+    border-bottom: 2px solid transparent; transition: all 0.2s;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  .view { display: none; padding: 2rem; max-width: 720px; margin: 0 auto; }
+  .view.active { display: block; }
+
+  .section-title {
+    font-family: var(--mono); font-size: 0.68rem; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--green); margin: 2rem 0 0.75rem;
+    border-left: 3px solid var(--green); padding-left: 0.6rem;
+  }
+  .section-title:first-child { margin-top: 0; }
+  .section-title.red { color: var(--red); border-left-color: var(--red); }
+
+  /* CONECTOR CARDS */
+  table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+  th {
+    font-family: var(--mono); font-size: 0.63rem; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--muted); text-align: left;
+    padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);
+  }
+  td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td.pt-word {
+    font-family: var(--mono); font-size: 0.92rem; font-weight: 600;
+    cursor: pointer; width: 22%;
+  }
+  td.pt-word:hover { text-decoration: underline; }
+  td.en-word { width: 25%; font-size: 0.88rem; color: var(--text); }
+  td.use-cell { font-size: 0.82rem; color: var(--muted); width: 53%; }
+  tbody tr:hover { background: var(--highlight); }
+
+  .green { color: var(--green); }
+  .red { color: var(--red); }
+  .orange { color: #c47a00; }
+  .blue { color: #2a5f9e; }
+
+  /* EXAMPLE BLOCKS */
+  .example-list { list-style: none; margin: 0.5rem 0 1rem; }
+  .example-list li {
+    padding: 0.6rem 0.75rem; border-left: 2px solid var(--border);
+    margin-bottom: 0.4rem; cursor: pointer; transition: border-color 0.15s;
+  }
+  .example-list li:hover { border-left-color: var(--green); background: var(--highlight); }
+  .ex-pt { font-family: var(--mono); font-size: 0.87rem; color: var(--green); }
+  .ex-en { font-size: 0.78rem; color: var(--muted); margin-top: 0.15rem; }
+  .ex-connector { background: #eef6f1; border-radius: 3px; padding: 0 3px; }
+
+  /* NOTE */
+  .note-block {
+    background: var(--highlight); border-left: 3px solid var(--green);
+    padding: 0.9rem 1.1rem; border-radius: 0 6px 6px 0; margin: 1rem 0;
+  }
+  .note-block .note-label { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.35rem; }
+  .note-block p { font-size: 0.87rem; line-height: 1.6; }
+  .note-block .pt { font-family: var(--mono); color: var(--green); font-weight: 600; }
+
+  /* DESAFIO */
+  .desafio-wrap { max-width: 520px; margin: 0 auto; }
+  .d-meta { display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem; }
+  .d-streak { color: var(--green); font-weight: 600; }
+  .d-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.75rem 1.5rem 1.5rem; text-align: center; position: relative; min-height: 280px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+  .d-cat { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.75rem; align-self: flex-start; }
+  .d-prompt { font-size: 1rem; color: var(--text); margin-bottom: 1.25rem; line-height: 1.5; }
+  .d-timer-ring { width: 52px; height: 52px; margin: 0 auto 1.25rem; position: relative; }
+  .d-timer-ring svg { transform: rotate(-90deg); }
+  .d-timer-ring circle { fill: none; stroke-width: 4; }
+  .d-timer-track { stroke: var(--border); }
+  .d-timer-fill { stroke: var(--green); stroke-dasharray: 138; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke 0.3s; stroke-linecap: round; }
+  .d-timer-fill.warn { stroke: #c47a00; }
+  .d-timer-fill.danger { stroke: var(--red); }
+  .d-timer-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 0.9rem; font-weight: 600; color: var(--text); }
+  .d-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1.25rem; }
+  .d-answer { font-family: var(--mono); font-size: 1.5rem; font-weight: 600; color: var(--green); filter: blur(8px); background: #e8f4ee; border-radius: 6px; padding: 0.35rem 1rem; cursor: pointer; transition: filter 0.3s, background 0.3s; margin-bottom: 0.75rem; user-select: none; }
+  .d-answer.revealed { filter: blur(0); background: transparent; }
+  .d-speak { background: var(--bg); border: 1px solid var(--border); color: var(--green); padding: 0.3rem 1rem; border-radius: 99px; cursor: pointer; font-size: 0.9rem; margin-bottom: 1.25rem; transition: all 0.2s; }
+  .d-speak:hover { background: var(--green); color: #fff; }
+  .d-note { font-size: 0.78rem; color: var(--muted); font-style: italic; margin-bottom: 1.25rem; min-height: 1.2rem; }
+  .d-actions { display: flex; gap: 0.75rem; }
+  .d-btn { font-family: var(--mono); font-size: 0.82rem; font-weight: 600; padding: 0.6rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; transition: opacity 0.15s; }
+  .d-btn.disse { background: var(--green); color: #fff; }
+  .d-btn.nao { background: #fdf0ef; color: var(--red); border: 1px solid #dba09a; }
+  .d-btn:hover { opacity: 0.85; }
+  .d-hint { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); margin-top: 1rem; letter-spacing: 0.05em; }
+
+  .flashcard-wrap { max-width: 540px; margin: 0 auto; }
+  .progress-bar { height: 3px; background: var(--border); border-radius: 2px; margin-bottom: 1.5rem; }
+  .progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
+  .fc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; min-height: 270px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 1.25rem 2rem 1.5rem; text-align: center; }
+  .fc-cat { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); align-self: flex-start; margin-bottom: 0.75rem; }
+  .fc-hints { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+  .fc-en { font-size: 1.05rem; color: var(--text); margin-bottom: 0.5rem; }
+  .fc-use { font-size: 0.8rem; color: var(--muted); font-style: italic; margin-bottom: 1rem; }
+  .fc-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1rem; }
+  .fc-pt { font-family: var(--mono); font-size: 1.8rem; font-weight: 600; color: var(--green); filter: blur(7px); transition: filter 0.3s; cursor: pointer; margin-bottom: 0.75rem; }
+  .fc-pt.revealed { filter: blur(0); }
+  .fc-speak-pill { background: var(--bg); border: 1px solid var(--border); color: var(--green); padding: 0.35rem 1.1rem; border-radius: 99px; cursor: pointer; margin-bottom: 0.75rem; font-size: 1rem; transition: all 0.2s; }
+  .fc-speak-pill:hover { background: var(--green); color: #fff; border-color: var(--green); }
+  .fc-example { font-size: 0.8rem; color: var(--muted); font-style: italic; filter: blur(4px); transition: filter 0.3s; }
+  .fc-example.revealed { filter: blur(0); }
+  .fc-nav { display: flex; gap: 0.75rem; justify-content: center; margin-top: 1.25rem; flex-wrap: wrap; }
+  .nav-btn { font-family: var(--mono); font-size: 0.8rem; padding: 0.5rem 1.1rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .nav-btn:hover { border-color: var(--green); color: var(--green); }
+
+  /* QUIZ */
+  .quiz-wrap { max-width: 520px; margin: 0 auto; }
+  .quiz-score { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); margin-bottom: 1.5rem; }
+  .quiz-q { font-family: var(--mono); font-size: 1.2rem; color: var(--green); text-align: center; margin-bottom: 1.25rem; min-height: 50px; }
+  .quiz-prompt { font-size: 0.82rem; color: var(--muted); text-align: center; margin-bottom: 0.75rem; }
+  .quiz-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; margin-bottom: 1rem; }
+  .quiz-opt { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 0.8rem; cursor: pointer; font-size: 0.85rem; color: var(--text); transition: all 0.15s; text-align: center; }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--green); }
+  .quiz-opt.correct { border-color: var(--green); background: var(--highlight); color: var(--green); }
+  .quiz-opt.wrong { border-color: var(--red); background: #fdf0ef; color: var(--red); }
+  .quiz-opt:disabled { cursor: default; }
+  .quiz-feedback { text-align: center; font-family: var(--mono); font-size: 0.82rem; min-height: 1.4rem; margin-bottom: 1rem; }
+  .quiz-feedback.ok { color: var(--green); }
+  .quiz-feedback.bad { color: var(--red); }
+  .quiz-next { display: block; margin: 0 auto; font-family: var(--mono); font-size: 0.85rem; padding: 0.6rem 2rem; background: var(--green); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+  .quiz-next:disabled { opacity: 0.3; cursor: default; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <svg width="32" height="22" viewBox="0 0 32 22" xmlns="http://www.w3.org/2000/svg">
+      <rect width="12" height="22" fill="#006600"/>
+      <rect x="12" width="20" height="22" fill="#FF0000"/>
+      <circle cx="12" cy="11" r="5" fill="#FFD700" stroke="#00008B" stroke-width="0.5"/>
+      <circle cx="12" cy="11" r="3" fill="#00008B"/>
+      <circle cx="12" cy="11" r="1.5" fill="#FFD700"/>
+    </svg>
+  </div>
+  <div class="header-text">
+    <h1>Conectores · Connectors &amp; Linking Words</h1>
+    <p>A1.1 · Referência permanente</p>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('tabela', this)">Tabela</button>
+  <button class="tab" onclick="switchTab('exemplos', this)">Exemplos</button>
+  <button class="tab" onclick="switchTab('flashcards', this)">Flashcards</button>
+  <button class="tab" onclick="switchTab('quiz', this)">Quiz</button>
+  <button class="tab" onclick="switchTab('desafio', this)">⚡ Desafio</button>
+</div>
+
+<!-- ══ TABELA ══ -->
+<div id="tabela" class="view active">
+
+  <div class="section-title">Adição — Adding Information</div>
+  <table>
+    <thead><tr><th>Conector</th><th>English</th><th>Uso</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-word green" onclick="speak('e')">e</td><td class="en-word">and</td><td class="use-cell">Joins two equal elements. <em>Eu falo inglês e português.</em></td></tr>
+      <tr><td class="pt-word green" onclick="speak('também')">também</td><td class="en-word">also; too</td><td class="use-cell">Adds agreement or extra info. <em>Eu também falo espanhol.</em></td></tr>
+      <tr><td class="pt-word green" onclick="speak('além disso')">além disso</td><td class="en-word">furthermore; besides</td><td class="use-cell">Adds a new point. <em>É barato. Além disso, é perto.</em></td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title red">Contraste — Contrasting</div>
+  <table>
+    <thead><tr><th>Conector</th><th>English</th><th>Uso</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-word red" onclick="speak('mas')">mas</td><td class="en-word">but</td><td class="use-cell">The most common contrast. <em>Gosto de Lisboa, mas prefiro o Porto.</em></td></tr>
+      <tr><td class="pt-word red" onclick="speak('no entanto')">no entanto</td><td class="en-word">however; nevertheless</td><td class="use-cell">More formal than mas. <em>Está frio. No entanto, o sol está a brilhar.</em></td></tr>
+      <tr><td class="pt-word red" onclick="speak('embora')">embora</td><td class="en-word">although; even though</td><td class="use-cell">Requires subjunctive. <em>Embora esteja frio, vou à praia.</em></td></tr>
+      <tr><td class="pt-word red" onclick="speak('apesar de')">apesar de</td><td class="en-word">despite; in spite of</td><td class="use-cell">Followed by noun or infinitive. <em>Apesar do frio, saí de casa.</em></td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title" style="color:#c47a00;border-left-color:#c47a00">Causa e Consequência — Cause &amp; Result</div>
+  <table>
+    <thead><tr><th>Conector</th><th>English</th><th>Uso</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-word orange" onclick="speak('porque')">porque</td><td class="en-word">because</td><td class="use-cell">Most common cause connector. <em>Estou cansado porque trabalhei muito.</em></td></tr>
+      <tr><td class="pt-word orange" onclick="speak('por isso')">por isso</td><td class="en-word">so; therefore; that's why</td><td class="use-cell">Shows consequence. <em>Está a chover, por isso fico em casa.</em></td></tr>
+      <tr><td class="pt-word orange" onclick="speak('como')">como</td><td class="en-word">since; as (causal)</td><td class="use-cell">Starts the sentence. <em>Como está frio, visto um casaco.</em></td></tr>
+      <tr><td class="pt-word orange" onclick="speak('logo')">logo</td><td class="en-word">therefore; so</td><td class="use-cell">Logical conclusion. <em>Penso, logo existo.</em></td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title" style="color:#2a5f9e;border-left-color:#2a5f9e">Tempo — Time &amp; Sequence</div>
+  <table>
+    <thead><tr><th>Conector</th><th>English</th><th>Uso</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-word blue" onclick="speak('primeiro')">primeiro</td><td class="en-word">first; firstly</td><td class="use-cell"><em>Primeiro, tomo o pequeno-almoço.</em></td></tr>
+      <tr><td class="pt-word blue" onclick="speak('depois')">depois</td><td class="en-word">then; afterwards; after</td><td class="use-cell"><em>Depois, vou ao trabalho.</em></td></tr>
+      <tr><td class="pt-word blue" onclick="speak('finalmente')">finalmente</td><td class="en-word">finally; at last</td><td class="use-cell"><em>Finalmente, chego a casa às 19h.</em></td></tr>
+      <tr><td class="pt-word blue" onclick="speak('quando')">quando</td><td class="en-word">when</td><td class="use-cell"><em>Quando chego a casa, jantar.</em></td></tr>
+      <tr><td class="pt-word blue" onclick="speak('enquanto')">enquanto</td><td class="en-word">while; whilst</td><td class="use-cell"><em>Enquanto trabalho, ouço música.</em></td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Condição — Condition</div>
+  <table>
+    <thead><tr><th>Conector</th><th>English</th><th>Uso</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-word green" onclick="speak('se')">se</td><td class="en-word">if</td><td class="use-cell"><em>Se está sol, vou à praia.</em></td></tr>
+      <tr><td class="pt-word green" onclick="speak('caso')">caso</td><td class="en-word">in case; if (hypothetical)</td><td class="use-cell">More formal / hypothetical. <em>Caso chegues tarde, avisa-me.</em></td></tr>
+    </tbody>
+  </table>
+
+  <div class="note-block" style="margin-top:1.5rem">
+    <div class="note-label">Conselho para A1</div>
+    <p>Master these five first — they cover 80% of real conversation:<br>
+    <span class="pt">e</span> (and) · <span class="pt">mas</span> (but) · <span class="pt">porque</span> (because) · <span class="pt">por isso</span> (so) · <span class="pt">depois</span> (then/after)<br><br>
+    <span class="pt">no entanto, embora, apesar de</span> are important to recognise at A1, but don't stress about producing them yet.</p>
+  </div>
+
+</div>
+
+<!-- ══ EXEMPLOS ══ -->
+<div id="exemplos" class="view">
+
+  <div class="section-title">e · também · além disso</div>
+  <ul class="example-list">
+    <li onclick="speak('Eu gosto de café e de pastéis de nata.')"><div class="ex-pt">Eu gosto de café <span class="ex-connector">e</span> de pastéis de nata.</div><div class="ex-en">I like coffee and pastéis de nata.</div></li>
+    <li onclick="speak('Ela fala português e inglês.')"><div class="ex-pt">Ela fala português <span class="ex-connector">e</span> inglês.</div><div class="ex-en">She speaks Portuguese and English.</div></li>
+    <li onclick="speak('Eu também moro em Lisboa.')"><div class="ex-pt">Eu <span class="ex-connector">também</span> moro em Lisboa.</div><div class="ex-en">I also live in Lisbon.</div></li>
+    <li onclick="speak('O restaurante é bom. Além disso, é barato.')"><div class="ex-pt">O restaurante é bom. <span class="ex-connector">Além disso</span>, é barato.</div><div class="ex-en">The restaurant is good. Furthermore, it's cheap.</div></li>
+  </ul>
+
+  <div class="section-title red">mas · no entanto</div>
+  <ul class="example-list">
+    <li onclick="speak('Gosto de Lisboa, mas prefiro o Porto.')"><div class="ex-pt">Gosto de Lisboa, <span class="ex-connector">mas</span> prefiro o Porto.</div><div class="ex-en">I like Lisbon, but I prefer Porto.</div></li>
+    <li onclick="speak('Estou cansado, mas vou à aula.')"><div class="ex-pt">Estou cansado, <span class="ex-connector">mas</span> vou à aula.</div><div class="ex-en">I'm tired, but I'm going to class.</div></li>
+    <li onclick="speak('Está frio. No entanto, o sol está a brilhar.')"><div class="ex-pt">Está frio. <span class="ex-connector">No entanto</span>, o sol está a brilhar.</div><div class="ex-en">It's cold. However, the sun is shining.</div></li>
+  </ul>
+
+  <div class="section-title" style="color:#c47a00;border-left-color:#c47a00">porque · por isso</div>
+  <ul class="example-list">
+    <li onclick="speak('Não vou à praia porque está a chover.')"><div class="ex-pt">Não vou à praia <span class="ex-connector">porque</span> está a chover.</div><div class="ex-en">I'm not going to the beach because it's raining.</div></li>
+    <li onclick="speak('Estou com fome porque não almocei.')"><div class="ex-pt">Estou com fome <span class="ex-connector">porque</span> não almocei.</div><div class="ex-en">I'm hungry because I didn't have lunch.</div></li>
+    <li onclick="speak('Está a chover, por isso fico em casa.')"><div class="ex-pt">Está a chover, <span class="ex-connector">por isso</span> fico em casa.</div><div class="ex-en">It's raining, so I'm staying home.</div></li>
+    <li onclick="speak('Estou cansado, por isso vou dormir cedo.')"><div class="ex-pt">Estou cansado, <span class="ex-connector">por isso</span> vou dormir cedo.</div><div class="ex-en">I'm tired, so I'm going to bed early.</div></li>
+  </ul>
+
+  <div class="section-title" style="color:#2a5f9e;border-left-color:#2a5f9e">primeiro · depois · finalmente</div>
+  <ul class="example-list">
+    <li onclick="speak('Primeiro, tomo o pequeno-almoço. Depois, vou ao trabalho. Finalmente, chego a casa às sete.')"><div class="ex-pt"><span class="ex-connector">Primeiro</span>, tomo o pequeno-almoço. <span class="ex-connector">Depois</span>, vou ao trabalho. <span class="ex-connector">Finalmente</span>, chego a casa às sete.</div><div class="ex-en">First, I have breakfast. Then, I go to work. Finally, I get home at seven.</div></li>
+  </ul>
+
+</div>
+
+<!-- ══ FLASHCARDS ══ -->
+<div id="flashcards" class="view">
+<div class="flashcard-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="fc-progress"></div></div>
+  <div class="fc-card">
+    <span class="fc-cat" id="fc-cat"></span>
+    <div class="fc-hints">click word to reveal · 🔊 to hear</div>
+    <div class="fc-en" id="fc-en"></div>
+    <div class="fc-use" id="fc-use"></div>
+    <div class="fc-divider"></div>
+    <div class="fc-pt" id="fc-pt" onclick="revealFC()"></div>
+    <button class="fc-speak-pill" onclick="speakFC()">🔊</button>
+    <div class="fc-example" id="fc-example"></div>
+  </div>
+  <div class="fc-nav">
+    <button class="nav-btn" onclick="fcMove(-1)">← Anterior</button>
+    <button class="nav-btn" onclick="shuffleFC()">Baralhar</button>
+    <button class="nav-btn" onclick="fcMove(1)">Próximo →</button>
+  </div>
+  <p style="text-align:center;margin-top:0.5rem;font-family:var(--mono);font-size:0.65rem;color:var(--muted)" id="fc-counter"></p>
+</div>
+</div>
+
+<!-- ══ QUIZ ══ -->
+<div id="quiz" class="view">
+<div class="quiz-wrap">
+  <div class="quiz-score" id="quiz-score">Score: 0 / 0</div>
+  <div class="quiz-q" id="quiz-q"></div>
+  <div class="quiz-prompt" id="quiz-prompt"></div>
+  <div class="quiz-opts" id="quiz-opts"></div>
+  <div class="quiz-feedback" id="quiz-fb"></div>
+  <button class="quiz-next" id="quiz-next" onclick="nextQuiz()" disabled>Próximo →</button>
+</div>
+</div>
+
+<!-- ══ DESAFIO ══ -->
+<div id="desafio" class="view">
+<div class="desafio-wrap">
+  <div class="d-meta">
+    <span id="d-score-display">Score: 0 / 0</span>
+    <span class="d-streak" id="d-streak-display"></span>
+  </div>
+  <div class="d-card">
+    <span class="d-cat" id="d-cat"></span>
+    <div class="d-prompt" id="d-prompt"></div>
+    <div class="d-timer-ring">
+      <svg width="52" height="52" viewBox="0 0 52 52">
+        <circle class="d-timer-track" cx="26" cy="26" r="22"/>
+        <circle class="d-timer-fill" id="d-timer-fill" cx="26" cy="26" r="22"/>
+      </svg>
+      <div class="d-timer-text" id="d-timer-text">5</div>
+    </div>
+    <div class="d-divider"></div>
+    <div class="d-answer" id="d-answer" onclick="revealDesafio()"></div>
+    <button class="d-speak" onclick="speakDesafio()">🔊</button>
+    <div class="d-note" id="d-note"></div>
+    <div class="d-actions" id="d-actions" style="display:none">
+      <button class="d-btn disse" onclick="scoreDesafio(true)">✓ Disse</button>
+      <button class="d-btn nao" onclick="scoreDesafio(false)">✗ Não disse</button>
+    </div>
+    <div class="d-hint" id="d-hint">diz em voz alta · depois clica para revelar</div>
+  </div>
+</div>
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+const audioCache = {};
+async function speak(text) {
+  if (!text) return;
+  if (audioCache[text]) { audioCache[text].currentTime=0; audioCache[text].play(); return; }
+  try {
+    const res = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({text}) });
+    if (!res.ok) throw new Error();
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    audioCache[text] = audio; audio.play();
+  } catch(e) {}
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if (id==='flashcards') renderFC();
+  if (id==='quiz') startQuiz();
+  if (id==='desafio') initDesafio();
+}
+
+const CARDS = [
+  { cat:'Adição', pt:'e', en:'and', use:'joins equal elements', ex:'Eu falo inglês e português.' },
+  { cat:'Adição', pt:'também', en:'also; too', use:'adds agreement or extra info', ex:'Eu também moro em Lisboa.' },
+  { cat:'Adição', pt:'além disso', en:'furthermore; besides', use:'adds a new point', ex:'É barato. Além disso, é perto.' },
+  { cat:'Contraste', pt:'mas', en:'but', use:'most common contrast connector', ex:'Gosto de Lisboa, mas prefiro o Porto.' },
+  { cat:'Contraste', pt:'no entanto', en:'however; nevertheless', use:'more formal than mas', ex:'Está frio. No entanto, o sol brilha.' },
+  { cat:'Contraste', pt:'embora', en:'although; even though', use:'requires subjunctive', ex:'Embora esteja frio, vou à praia.' },
+  { cat:'Contraste', pt:'apesar de', en:'despite; in spite of', use:'followed by noun or infinitive', ex:'Apesar do frio, saí de casa.' },
+  { cat:'Causa', pt:'porque', en:'because', use:'most common cause connector', ex:'Estou cansado porque trabalhei muito.' },
+  { cat:'Consequência', pt:'por isso', en:'so; therefore; that\'s why', use:'shows consequence', ex:'Está a chover, por isso fico em casa.' },
+  { cat:'Causa', pt:'como', en:'since; as (causal)', use:'starts the sentence', ex:'Como está frio, visto um casaco.' },
+  { cat:'Tempo', pt:'primeiro', en:'first; firstly', use:'sequence — first step', ex:'Primeiro, tomo o pequeno-almoço.' },
+  { cat:'Tempo', pt:'depois', en:'then; afterwards', use:'sequence — next step', ex:'Depois, vou ao trabalho.' },
+  { cat:'Tempo', pt:'finalmente', en:'finally; at last', use:'sequence — last step', ex:'Finalmente, chego a casa.' },
+  { cat:'Tempo', pt:'quando', en:'when', use:'time clause', ex:'Quando chego a casa, janto.' },
+  { cat:'Tempo', pt:'enquanto', en:'while; whilst', use:'simultaneous actions', ex:'Enquanto trabalho, ouço música.' },
+  { cat:'Condição', pt:'se', en:'if', use:'conditional clause', ex:'Se está sol, vou à praia.' },
+];
+
+let deck=[...CARDS], cur=0;
+
+function renderFC() {
+  const c=deck[cur];
+  document.getElementById('fc-cat').textContent=c.cat;
+  document.getElementById('fc-en').textContent=c.en;
+  document.getElementById('fc-use').textContent=c.use;
+  const ptEl=document.getElementById('fc-pt');
+  ptEl.textContent=c.pt; ptEl.classList.remove('revealed');
+  const exEl=document.getElementById('fc-example');
+  exEl.textContent=c.ex; exEl.classList.remove('revealed');
+  document.getElementById('fc-counter').textContent=`${cur+1} / ${deck.length}`;
+  document.getElementById('fc-progress').style.width=`${((cur+1)/deck.length)*100}%`;
+}
+function revealFC() {
+  document.getElementById('fc-pt').classList.add('revealed');
+  document.getElementById('fc-example').classList.add('revealed');
+}
+function speakFC() { speak(deck[cur].ex); }
+function fcMove(d) { cur=(cur+d+deck.length)%deck.length; renderFC(); }
+function shuffleFC() { deck=[...CARDS].sort(()=>Math.random()-0.5); cur=0; renderFC(); }
+renderFC();
+
+const QUIZ_POOL = CARDS.map(c=>({q:c.pt, a:c.en, ex:c.ex}));
+let qDeck=[],qIdx=0,qScore=0,qTotal=0,qAnswered=false;
+function startQuiz() { qDeck=[...QUIZ_POOL].sort(()=>Math.random()-0.5); qIdx=0;qScore=0;qTotal=0;qAnswered=false; loadQuiz(); }
+function loadQuiz() {
+  qAnswered=false;
+  document.getElementById('quiz-fb').textContent='';
+  document.getElementById('quiz-fb').className='quiz-feedback';
+  document.getElementById('quiz-next').disabled=true;
+  const item=qDeck[qIdx%qDeck.length];
+  document.getElementById('quiz-q').textContent=item.q;
+  document.getElementById('quiz-prompt').textContent='Choose the correct English meaning:';
+  const others=QUIZ_POOL.filter(x=>x.a!==item.a).sort(()=>Math.random()-0.5).slice(0,3).map(x=>x.a);
+  const opts=[item.a,...others].sort(()=>Math.random()-0.5);
+  const c=document.getElementById('quiz-opts'); c.innerHTML='';
+  opts.forEach(opt=>{
+    const btn=document.createElement('button'); btn.className='quiz-opt'; btn.textContent=opt;
+    btn.onclick=()=>checkAnswer(btn,opt,item); c.appendChild(btn);
+  });
+  document.getElementById('quiz-score').textContent=`Score: ${qScore} / ${qTotal}`;
+}
+function checkAnswer(btn,chosen,item) {
+  if(qAnswered) return;
+  qAnswered=true; qTotal++;
+  const fb=document.getElementById('quiz-fb');
+  if(chosen===item.a){ btn.classList.add('correct'); fb.textContent='Correto! ✓'; fb.className='quiz-feedback ok'; qScore++; speak(item.q); }
+  else { btn.classList.add('wrong'); fb.textContent=`Errado — "${item.a}"`; fb.className='quiz-feedback bad'; document.querySelectorAll('.quiz-opt').forEach(b=>{if(b.textContent===item.a)b.classList.add('correct');}); speak(item.q); }
+  document.querySelectorAll('.quiz-opt').forEach(b=>b.disabled=true);
+  document.getElementById('quiz-next').disabled=false;
+  document.getElementById('quiz-score').textContent=`Score: ${qScore} / ${qTotal}`;
+}
+function nextQuiz() { qIdx++; if(qIdx>=qDeck.length){qDeck=[...QUIZ_POOL].sort(()=>Math.random()-0.5);qIdx=0;} loadQuiz(); }
+
+// ── DESAFIO ──────────────────────────────────────────────────────
+const DESAFIO_CARDS = [
+  { cat:'Adição', prompt:'Complete: "I like coffee ___ pastéis de nata."', answer:'e', note:'e = and — joins equal elements' },
+  { cat:'Adição', prompt:'Complete: "I ___ live in Lisbon." (adding yourself)', answer:'também', note:'também = also / too' },
+  { cat:'Contraste', prompt:'Complete: "I like Lisbon, ___ I prefer Porto."', answer:'mas', note:'mas = but — most common contrast' },
+  { cat:'Contraste', prompt:'Complete: "It\'s cold. ___, the sun is shining." (formal)', answer:'No entanto,', note:'no entanto = however' },
+  { cat:'Causa', prompt:'Complete: "I\'m not going to the beach ___ it\'s raining."', answer:'porque', note:'porque = because' },
+  { cat:'Causa', prompt:'Complete: "___ it\'s cold, I\'m wearing a coat." (sentence start)', answer:'Como', note:'como = since/as — starts the clause' },
+  { cat:'Consequência', prompt:'Complete: "It\'s raining, ___ I\'m staying home."', answer:'por isso', note:'por isso = so / therefore' },
+  { cat:'Consequência', prompt:'Complete: "I\'m tired, ___ I\'m going to bed early."', answer:'por isso', note:'por isso = that\'s why' },
+  { cat:'Tempo', prompt:'Give the three sequence connectors in order.', answer:'Primeiro… Depois… Finalmente…', note:'first / then / finally — essential for storytelling' },
+  { cat:'Tempo', prompt:'Complete: "___ I get home, I have dinner."', answer:'Quando', note:'quando = when' },
+  { cat:'Tempo', prompt:'Complete: "___ I work, I listen to music."', answer:'Enquanto', note:'enquanto = while' },
+  { cat:'Condição', prompt:'Complete: "___ it\'s sunny, I\'ll go to the beach."', answer:'Se', note:'se = if — conditional' },
+];
+
+let dDeck=[], dIdx=0, dCorrect=0, dTotal=0, dStreak=0, dTimer=null, dSecondsLeft=5, dRevealed=false;
+
+function initDesafio(){
+  dDeck=[...DESAFIO_CARDS].sort(()=>Math.random()-0.5);
+  dIdx=0; dCorrect=0; dTotal=0; dStreak=0;
+  loadDesafioCard();
+}
+
+function loadDesafioCard(){
+  dRevealed=false; clearInterval(dTimer); dSecondsLeft=5;
+  const c=dDeck[dIdx%dDeck.length];
+  document.getElementById('d-cat').textContent=c.cat;
+  document.getElementById('d-prompt').textContent=c.prompt;
+  document.getElementById('d-answer').textContent=c.answer;
+  document.getElementById('d-answer').classList.remove('revealed');
+  document.getElementById('d-note').textContent=c.note||'';
+  document.getElementById('d-actions').style.display='none';
+  document.getElementById('d-hint').style.display='block';
+  document.getElementById('d-score-display').textContent=`Score: ${dCorrect} / ${dTotal}`;
+  document.getElementById('d-streak-display').textContent=dStreak>=3?`🔥 ${dStreak}`:'';
+  const fill=document.getElementById('d-timer-fill'), txt=document.getElementById('d-timer-text');
+  fill.style.strokeDashoffset=0; fill.className='d-timer-fill'; txt.textContent=5;
+  dTimer=setInterval(()=>{
+    dSecondsLeft--;
+    txt.textContent=dSecondsLeft;
+    fill.style.strokeDashoffset=138*(1-dSecondsLeft/5);
+    if(dSecondsLeft<=2) fill.classList.add('warn');
+    if(dSecondsLeft<=1){fill.classList.remove('warn');fill.classList.add('danger');}
+    if(dSecondsLeft<=0){clearInterval(dTimer);revealDesafio();}
+  },1000);
+}
+
+function revealDesafio(){
+  if(dRevealed) return; dRevealed=true; clearInterval(dTimer);
+  document.getElementById('d-timer-text').textContent='•';
+  document.getElementById('d-timer-fill').style.strokeDashoffset=0;
+  document.getElementById('d-answer').classList.add('revealed');
+  document.getElementById('d-actions').style.display='flex';
+  document.getElementById('d-hint').style.display='none';
+  speak(dDeck[dIdx%dDeck.length].answer);
+}
+
+function speakDesafio(){speak(dDeck[dIdx%dDeck.length].answer);}
+
+function scoreDesafio(correct){
+  dTotal++; if(correct){dCorrect++;dStreak++;}else{dStreak=0;}
+  dIdx++; loadDesafioCard();
+}
+</script>
+</body>
+</html>
