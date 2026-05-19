@@ -249,6 +249,32 @@
     </div>
   </div>
 
+  <div class="section-title">No Trabalho — Work Phrases &amp; Vocabulary</div>
+
+  <table>
+    <thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-word" onclick="speak('Estou atrasado cinco minutos.')">Estou atrasado cinco minutos.</td><td class="en-word">I'm five minutes late.</td><td class="note-cell">atrasado = late (masc.). Woman says: estou atrasada.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Vou sair às duas e meia.')">Vou sair às 2h30.</td><td class="en-word">I'm leaving at 2:30.</td><td class="note-cell">Futuro próximo + time. Às 2h30 = às duas e meia.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Chego dentro de cinco minutos.')">Chego dentro de 5 minutos.</td><td class="en-word">I'll be there in 5 minutes.</td><td class="note-cell">dentro de = in / within (time). Very common.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Estás no silêncio.')">Estás no silêncio.</td><td class="en-word">You're on silent. (phone)</td><td class="note-cell">no silêncio = on silent mode — natural everyday expression.</td></tr>
+      <tr><td class="pt-word" onclick="speak('uma reunião')">uma reunião</td><td class="en-word">a meeting</td><td class="note-cell">feminine noun. Tenho uma reunião às três.</td></tr>
+      <tr><td class="pt-word" onclick="speak('o escritório')">o escritório</td><td class="en-word">the office</td><td class="note-cell">Estou no escritório.</td></tr>
+      <tr><td class="pt-word" onclick="speak('o colega, a colega')">o/a colega</td><td class="en-word">the colleague</td><td class="note-cell">Same form for masc/fem — article changes. Os meus colegas.</td></tr>
+      <tr><td class="pt-word" onclick="speak('infelizmente')">infelizmente</td><td class="en-word">unfortunately</td><td class="note-cell">Infelizmente, não posso. — Unfortunately, I can't.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Verbos do Caderno</div>
+  <table>
+    <thead><tr><th>Infinitivo</th><th>English</th><th>Exemplo</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-word" onclick="speak('apanhar')">apanhar</td><td class="en-word">to catch</td><td class="note-cell">Vou apanhar o metro. — I'm going to catch the metro.</td></tr>
+      <tr><td class="pt-word" onclick="speak('lanchar')">lanchar</td><td class="en-word">to have a snack</td><td class="note-cell">Vamos lanchar juntos? — Shall we have a snack together?</td></tr>
+      <tr><td class="pt-word" onclick="speak('ficar')">ficar</td><td class="en-word">to stay / to remain / to become</td><td class="note-cell">Vou ficar no escritório. — I'm going to stay at the office.</td></tr>
+    </tbody>
+  </table>
+
 </div>
 
 <!-- ══ FUTURO ══ -->
@@ -448,6 +474,18 @@ const CARDS = [
   { cat:'Futuro', pt:'vai', en:'he/she/you is going to', note:'Amanhã vai estar sol.', en_note:'Tomorrow it\'s going to be sunny.' },
   { cat:'Futuro', pt:'vamos', en:'we are going to', note:'Vamos organizar uma viagem.', en_note:'We\'re going to organize a trip.' },
   { cat:'Futuro', pt:'vão', en:'they/you are going to', note:'Vocês vão ficar aqui.', en_note:'You\'re going to stay here.' },
+  // Work vocab
+  { cat:'Trabalho', pt:'Estou atrasado cinco minutos.', en:'I\'m five minutes late.', note:'Estou atrasado cinco minutos.', en_note:'atrasado (m) / atrasada (f)' },
+  { cat:'Trabalho', pt:'Chego dentro de 5 minutos.', en:'I\'ll be there in 5 minutes.', note:'Chego dentro de cinco minutos.', en_note:'dentro de = in / within (time)' },
+  { cat:'Trabalho', pt:'Vou sair às 2h30.', en:'I\'m leaving at 2:30.', note:'Vou sair às duas e meia.', en_note:'Futuro próximo + time expression' },
+  { cat:'Trabalho', pt:'Estás no silêncio.', en:'You\'re on silent. (phone)', note:'Estás no silêncio.', en_note:'no silêncio = on silent mode' },
+  { cat:'Trabalho', pt:'uma reunião', en:'a meeting', note:'Tenho uma reunião às três.', en_note:'I have a meeting at three.' },
+  { cat:'Trabalho', pt:'o escritório', en:'the office', note:'Estou no escritório.', en_note:'I\'m at the office.' },
+  { cat:'Trabalho', pt:'o/a colega', en:'the colleague', note:'Os meus colegas são simpáticos.', en_note:'My colleagues are nice.' },
+  { cat:'Trabalho', pt:'infelizmente', en:'unfortunately', note:'Infelizmente, não posso.', en_note:'Unfortunately, I can\'t.' },
+  { cat:'Trabalho', pt:'apanhar', en:'to catch', note:'Vou apanhar o metro.', en_note:'I\'m going to catch the metro.' },
+  { cat:'Trabalho', pt:'lanchar', en:'to have a snack', note:'Vamos lanchar juntos?', en_note:'Shall we have a snack together?' },
+  { cat:'Trabalho', pt:'ficar', en:'to stay / remain / become', note:'Vou ficar no escritório.', en_note:'I\'m going to stay at the office.' },
 ];
 
 // ── FLASHCARDS ────────────────────────────────────────────────────
@@ -532,6 +570,13 @@ const DESAFIO_CARDS = [
   { cat:'Dias', prompt:'Say "my class is on Tuesday."', answer:'A minha aula é à terça.', note:'à terça = on Tuesday' },
   { cat:'Dias', prompt:'Ask "what\'s the best day of the week for you?"', answer:'Para ti, qual é o melhor dia da semana?', note:'para ti = for you (informal)' },
   { cat:'Dias', prompt:'Answer: "for me it\'s Friday, because I go out with friends."', answer:'Para mim, é a sexta, porque saio com os amigos.', note:'é a sexta — feminine article' },
+  { cat:'Trabalho', prompt:'You\'re running late. Tell someone you\'re five minutes late.', answer:'Estou atrasado cinco minutos.', note:'atrasado (m) — woman says: atrasada' },
+  { cat:'Trabalho', prompt:'Someone is trying to call you but you\'re on silent. How would they say it?', answer:'Estás no silêncio.', note:'no silêncio = on silent mode' },
+  { cat:'Trabalho', prompt:'Tell someone you\'ll be there in 5 minutes.', answer:'Chego dentro de 5 minutos.', note:'dentro de = in / within (time)' },
+  { cat:'Trabalho', prompt:'Say "unfortunately I can\'t."', answer:'Infelizmente, não posso.', note:'infelizmente = unfortunately — sentence starter' },
+  { cat:'Trabalho', prompt:'Say "I\'m going to catch the metro."', answer:'Vou apanhar o metro.', note:'apanhar = to catch — works for transport' },
+  { cat:'Trabalho', prompt:'Say "I\'m going to stay at the office."', answer:'Vou ficar no escritório.', note:'ficar = to stay/remain — very versatile verb' },
+  { cat:'Trabalho', prompt:'Suggest having a snack together.', answer:'Vamos lanchar juntos?', note:'lanchar = to have a snack — mid-morning or afternoon' },
 ];
 
 let dDeck=[], dIdx=0, dCorrect=0, dTotal=0, dStreak=0, dTimer=null, dSecondsLeft=5, dRevealed=false;
