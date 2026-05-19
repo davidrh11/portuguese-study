@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="pt" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aula 15 de Maio · Tempo · Futuro Próximo</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0; --surface: #ffffff; --border: #e2ddd6;
+    --green: #2d7a50; --red: #a03428; --text: #1a1a1a; --muted: #6b6560;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+  header { background: var(--surface); border-bottom: 2px solid var(--green); padding: 1.25rem 2rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .header-text h1 { font-family: var(--mono); font-size: 0.95rem; font-weight: 600; color: var(--green); }
+  .header-text p { font-size: 0.8rem; color: var(--muted); margin-top: 0.15rem; }
+
+  .tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--surface); padding: 0 2rem; overflow-x: auto; }
+  .tab { font-family: var(--mono); font-size: 0.8rem; padding: 0.75rem 1.25rem; cursor: pointer; color: var(--muted); border: none; background: none; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  .view { display: none; padding: 2rem; max-width: 720px; margin: 0 auto; }
+  .view.active { display: block; }
+
+  .section-title { font-family: var(--mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--green); margin: 2rem 0 0.75rem; border-left: 3px solid var(--green); padding-left: 0.6rem; }
+  .section-title:first-child { margin-top: 0; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; max-width: 620px; }
+  th { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); text-align: left; padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); }
+  td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td.pt-word { font-family: var(--mono); font-size: 0.92rem; color: var(--green); font-weight: 600; cursor: pointer; width: 28%; }
+  td.pt-word:hover { text-decoration: underline; text-decoration-color: var(--green); }
+  td.en-word { color: var(--text); font-size: 0.88rem; width: 25%; }
+  td.note-cell { color: var(--muted); font-size: 0.82rem; width: 47%; }
+  tbody tr:hover { background: #f4f0ea; }
+
+  /* NOTE BLOCK */
+  .note-block { background: #eef6f1; border-left: 3px solid var(--green); padding: 0.9rem 1.1rem; border-radius: 0 6px 6px 0; margin: 1rem 0; }
+  .note-block .note-label { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.35rem; }
+  .note-block p { font-size: 0.87rem; line-height: 1.6; }
+  .note-block .pt { font-family: var(--mono); color: var(--green); font-weight: 600; }
+  .note-block .en { color: var(--muted); font-style: italic; }
+
+  /* EXPRESSAO */
+  .expressao-block { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem 1.5rem; margin: 1rem 0; display: flex; align-items: flex-start; gap: 1rem; }
+  .exp-label { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--red); white-space: nowrap; padding-top: 0.2rem; }
+  .exp-pt { font-family: var(--mono); font-size: 1.2rem; font-weight: 600; color: var(--green); cursor: pointer; }
+  .exp-pt:hover { text-decoration: underline; }
+  .exp-en { font-size: 0.85rem; color: var(--muted); margin-top: 0.2rem; }
+  .exp-note { font-size: 0.82rem; color: var(--text); margin-top: 0.4rem; line-height: 1.5; }
+
+  /* FUTURO TABLE */
+  .futuro-table { width: 100%; border-collapse: collapse; max-width: 560px; margin-bottom: 1rem; font-size: 0.88rem; }
+  .futuro-table th { font-family: var(--mono); font-size: 0.63rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding: 0.5rem 0.9rem; border-bottom: 2px solid var(--border); text-align: left; }
+  .futuro-table td { padding: 0.6rem 0.9rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .futuro-table tr:last-child td { border-bottom: none; }
+  .futuro-table .subj { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); width: 30%; }
+  .futuro-table .ir-form { font-family: var(--mono); font-weight: 600; color: var(--green); width: 20%; cursor: pointer; }
+  .futuro-table .ir-form:hover { text-decoration: underline; }
+  .futuro-table .example { color: var(--text); font-size: 0.85rem; }
+  .futuro-table .example em { color: var(--green); font-style: normal; font-weight: 600; }
+  .futuro-table tbody tr:hover { background: #f4f0ea; }
+
+  /* TIME MARKERS */
+  .markers-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+  .marker-pill { font-family: var(--mono); font-size: 0.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: 99px; padding: 0.3rem 0.8rem; color: var(--green); cursor: pointer; transition: all 0.15s; }
+  .marker-pill:hover { background: var(--green); color: #fff; border-color: var(--green); }
+
+  /* DIAS DA SEMANA */
+  .dias-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.5rem; margin-bottom: 1rem; max-width: 560px; }
+  .dia-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 0.7rem 0.9rem; cursor: pointer; transition: border-color 0.15s; }
+  .dia-card:hover { border-color: var(--green); }
+  .dia-pt { font-family: var(--mono); font-size: 0.88rem; color: var(--green); font-weight: 600; }
+  .dia-art { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); }
+
+  /* FLASHCARD — vfc pattern */
+  .flashcard-wrap { max-width: 480px; margin: 0 auto; }
+  .vfc-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+  .vfc-counter { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+  .vfc-controls { display: flex; gap: 0.5rem; }
+  .vfc-ctrl { font-family: var(--mono); font-size: 0.72rem; background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 0.35rem 0.85rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .vfc-ctrl:hover { border-color: var(--green); color: var(--green); }
+  .vfc-progress { height: 2px; background: var(--border); border-radius: 1px; margin-bottom: 1.25rem; overflow: hidden; }
+  .vfc-progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
+  .vfc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; min-height: 300px; display: flex; flex-direction: column; align-items: center; padding: 1.5rem 2rem; text-align: center; gap: 0; }
+  .vfc-hints { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 1.25rem; }
+  .vfc-cat { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); align-self: flex-start; margin-bottom: 0.75rem; }
+  .vfc-en { font-size: 1.05rem; color: var(--text); font-weight: 300; line-height: 1.5; margin-bottom: 1.1rem; }
+  .vfc-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1.1rem; }
+  .vfc-pt { font-family: var(--mono); font-size: 1.5rem; color: var(--green); font-weight: 700; filter: blur(7px); transition: filter 0.3s; cursor: pointer; margin-bottom: 1.1rem; background: var(--border); border-radius: 4px; padding: 0.1rem 0.5rem; display: inline-block; }
+  .vfc-pt.revealed { filter: blur(0); background: transparent; }
+  .vfc-speak { background: var(--bg); border: 1px solid var(--border); color: var(--green); padding: 0.35rem 1.2rem; border-radius: 99px; cursor: pointer; transition: all 0.2s; font-size: 1rem; margin-bottom: 1rem; }
+  .vfc-speak:hover, .vfc-speak.playing { background: var(--green); color: #fff; border-color: var(--green); }
+  .vfc-ex-pt { font-style: italic; font-size: 0.82rem; color: var(--text); filter: blur(5px); transition: filter 0.3s; cursor: pointer; margin-bottom: 0.2rem; background: var(--border); border-radius: 3px; padding: 0.05rem 0.3rem; display: inline-block; }
+  .vfc-ex-pt.revealed { filter: blur(0); background: transparent; }
+  .vfc-ex-en { font-size: 0.75rem; color: var(--muted); filter: blur(5px); transition: filter 0.3s; background: var(--border); border-radius: 3px; padding: 0.05rem 0.3rem; display: inline-block; margin-bottom: 1rem; cursor: pointer; }
+  .vfc-ex-en.revealed { filter: blur(0); background: transparent; }
+  .vfc-nav { display: flex; gap: 1rem; margin-top: auto; }
+  .vfc-nav-btn { font-family: var(--mono); font-size: 0.82rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 0.55rem 1.25rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .vfc-nav-btn:hover { border-color: var(--green); color: var(--green); }
+
+  /* QUIZ */
+  .quiz-wrap { max-width: 520px; margin: 0 auto; }
+  .quiz-score { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); margin-bottom: 1.5rem; }
+  .quiz-q { font-family: var(--mono); font-size: 1.1rem; color: var(--green); text-align: center; margin-bottom: 1.25rem; min-height: 50px; }
+  .quiz-prompt { font-size: 0.82rem; color: var(--muted); text-align: center; margin-bottom: 0.75rem; }
+  .quiz-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; margin-bottom: 1rem; }
+  .quiz-opt { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 0.8rem; cursor: pointer; font-size: 0.85rem; color: var(--text); transition: all 0.15s; text-align: center; }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--green); }
+  .quiz-opt.correct { border-color: var(--green); background: #eef6f1; color: var(--green); }
+  .quiz-opt.wrong { border-color: var(--red); background: #fdf0ef; color: var(--red); }
+  .quiz-opt:disabled { cursor: default; }
+  .quiz-feedback { text-align: center; font-family: var(--mono); font-size: 0.82rem; min-height: 1.4rem; margin-bottom: 1rem; }
+  .quiz-feedback.ok { color: var(--green); }
+  .quiz-feedback.bad { color: var(--red); }
+  .quiz-next { display: block; margin: 0 auto; font-family: var(--mono); font-size: 0.85rem; padding: 0.6rem 2rem; background: var(--green); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+  .quiz-next:disabled { opacity: 0.3; cursor: default; }
+
+  /* DESAFIO */
+  .desafio-wrap { max-width: 520px; margin: 0 auto; }
+  .d-meta { display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem; }
+  .d-streak { color: var(--green); font-weight: 600; }
+  .d-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.75rem 1.5rem 1.5rem; text-align: center; min-height: 280px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+  .d-cat { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.75rem; align-self: flex-start; }
+  .d-prompt { font-size: 1rem; color: var(--text); margin-bottom: 1.25rem; line-height: 1.5; }
+  .d-timer-ring { width: 52px; height: 52px; margin: 0 auto 1.25rem; position: relative; }
+  .d-timer-ring svg { transform: rotate(-90deg); }
+  .d-timer-ring circle { fill: none; stroke-width: 4; }
+  .d-timer-track { stroke: var(--border); }
+  .d-timer-fill { stroke: var(--green); stroke-dasharray: 138; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke 0.3s; stroke-linecap: round; }
+  .d-timer-fill.warn { stroke: #c47a00; }
+  .d-timer-fill.danger { stroke: var(--red); }
+  .d-timer-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 0.9rem; font-weight: 600; color: var(--text); }
+  .d-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1.25rem; }
+  .d-answer { font-family: var(--mono); font-size: 1.4rem; font-weight: 600; color: var(--green); filter: blur(8px); background: #e8f4ee; border-radius: 6px; padding: 0.35rem 1rem; cursor: pointer; transition: filter 0.3s, background 0.3s; margin-bottom: 0.75rem; user-select: none; }
+  .d-answer.revealed { filter: blur(0); background: transparent; }
+  .d-speak { background: var(--bg); border: 1px solid var(--border); color: var(--green); padding: 0.3rem 1rem; border-radius: 99px; cursor: pointer; font-size: 0.9rem; margin-bottom: 1.25rem; transition: all 0.2s; }
+  .d-speak:hover { background: var(--green); color: #fff; }
+  .d-note { font-size: 0.78rem; color: var(--muted); font-style: italic; margin-bottom: 1.25rem; min-height: 1.2rem; }
+  .d-actions { display: flex; gap: 0.75rem; }
+  .d-btn { font-family: var(--mono); font-size: 0.82rem; font-weight: 600; padding: 0.6rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; transition: opacity 0.15s; }
+  .d-btn.disse { background: var(--green); color: #fff; }
+  .d-btn.nao { background: #fdf0ef; color: var(--red); border: 1px solid #dba09a; }
+  .d-btn:hover { opacity: 0.85; }
+  .d-hint { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); margin-top: 1rem; letter-spacing: 0.05em; }
+</style>
+</head>
+<body>
+
+<header>
+  <svg width="32" height="22" viewBox="0 0 32 22" xmlns="http://www.w3.org/2000/svg">
+    <rect width="12" height="22" fill="#006600"/>
+    <rect x="12" width="20" height="22" fill="#FF0000"/>
+    <circle cx="12" cy="11" r="5" fill="#FFD700" stroke="#00008B" stroke-width="0.5"/>
+    <circle cx="12" cy="11" r="3" fill="#00008B"/>
+    <circle cx="12" cy="11" r="1.5" fill="#FFD700"/>
+  </svg>
+  <div class="header-text">
+    <h1>Aula — 15 de Maio · O Tempo · Futuro Próximo</h1>
+    <p>A1.1 · Unidade 2 · Weather · Days of the Week · ir + infinitivo</p>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('tabela', this)">Tabela</button>
+  <button class="tab" onclick="switchTab('futuro', this)">Futuro</button>
+  <button class="tab" onclick="switchTab('flashcards', this)">Flashcards</button>
+  <button class="tab" onclick="switchTab('quiz', this)">Quiz</button>
+  <button class="tab" onclick="switchTab('desafio', this)">⚡ Desafio</button>
+</div>
+
+<!-- ══ TABELA ══ -->
+<div id="tabela" class="view active">
+
+  <div class="section-title">O Tempo — Weather</div>
+  <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.75rem">Structure: <strong style="color:var(--green);font-family:var(--mono)">Está ___.</strong> &nbsp;·&nbsp; Question: <strong style="color:var(--green);font-family:var(--mono)">Como está o tempo hoje?</strong></p>
+
+  <table>
+    <thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-word" onclick="speak('Está sol.')">sol</td><td class="en-word">sun / sunny</td><td class="note-cell">Está sol. — It's sunny.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Está soalheiro.')">soalheiro</td><td class="en-word">sunny / bathed in sun</td><td class="note-cell">Está soalheiro. — More poetic/specific than sol.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Está chuva.')">chuva</td><td class="en-word">rain / raining</td><td class="note-cell">Está chuva. / Está a chover.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Está vento.')">vento</td><td class="en-word">wind / windy</td><td class="note-cell">Está muito vento hoje.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Está nublado.')">nublado</td><td class="en-word">cloudy / overcast</td><td class="note-cell">Está nublado — adj., invariable here.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Está nevoeiro.')">nevoeiro</td><td class="en-word">fog / foggy</td><td class="note-cell">Está nevoeiro. Common on Lisbon mornings.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Está trovoada.')">trovoada</td><td class="en-word">thunderstorm</td><td class="note-cell">Está trovoada. — thunder + lightning.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Está frio.')">frio</td><td class="en-word">cold</td><td class="note-cell">Está muito frio! — adj., agrees with nothing here.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Está calor.')">calor</td><td class="en-word">hot / warm</td><td class="note-cell">Está calor. / Está muito calor! — noun used as predicate.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Está abafado.')">abafado</td><td class="en-word">muggy / stuffy / stifling</td><td class="note-cell">Diz-se assim: <em>Sábado vai estar muito abafado.</em></td></tr>
+      <tr><td class="pt-word" onclick="speak('Está neve.')">neve</td><td class="en-word">snow / snowing</td><td class="note-cell">Rare in Lisbon. Comum na Serra da Estrela.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note-block">
+    <div class="note-label">Concordo / Não concordo</div>
+    <p>
+      <span class="pt">Como está o tempo hoje?</span><br>
+      <span class="pt">Hoje o tempo está bom. / ótimo!</span> <span class="en">— Today the weather is good. / great!</span><br>
+      <span class="pt">Hoje o tempo está mau. / péssimo!</span> <span class="en">— Today the weather is bad. / awful!</span><br><br>
+      <span class="pt">Concordo! Para mim, também.</span> <span class="en">— I agree! For me too.</span><br>
+      <span class="pt">Não concordo. Para mim, está…</span> <span class="en">— I disagree. For me, it's…</span>
+    </p>
+  </div>
+
+  <div class="section-title">Dias da Semana — Days of the Week</div>
+  <div class="dias-grid">
+    <div class="dia-card" onclick="speak('segunda-feira')"><div class="dia-art">(a)</div><div class="dia-pt">segunda</div></div>
+    <div class="dia-card" onclick="speak('terça-feira')"><div class="dia-art">(a)</div><div class="dia-pt">terça</div></div>
+    <div class="dia-card" onclick="speak('quarta-feira')"><div class="dia-art">(a)</div><div class="dia-pt">quarta</div></div>
+    <div class="dia-card" onclick="speak('quinta-feira')"><div class="dia-art">(a)</div><div class="dia-pt">quinta</div></div>
+    <div class="dia-card" onclick="speak('sexta-feira')"><div class="dia-art">(a)</div><div class="dia-pt">sexta</div></div>
+    <div class="dia-card" onclick="speak('sábado')"><div class="dia-art">(o)</div><div class="dia-pt">sábado</div></div>
+    <div class="dia-card" onclick="speak('domingo')"><div class="dia-art">(o)</div><div class="dia-pt">domingo</div></div>
+  </div>
+
+  <div class="note-block">
+    <div class="note-label">Para ti, qual é o melhor dia da semana?</div>
+    <p><span class="pt">Para mim, é a sexta, porque…</span> <span class="en">— For me, it's Friday, because…</span><br>
+    Mon–Fri take feminine article <span class="pt">a</span>. Sábado and domingo take masculine <span class="pt">o</span>.</p>
+  </div>
+
+  <div class="section-title">Palavra do Dia — Calão</div>
+  <div class="expressao-block">
+    <div class="exp-label">Calão</div>
+    <div>
+      <div class="exp-pt" onclick="speak('briol')">o briol</div>
+      <div class="exp-en">freezing cold weather (slang)</div>
+      <div class="exp-note">Used informally to describe bitter cold. <em>Amanhã vai estar um grande briol!</em> — Tomorrow it's going to be absolutely freezing!</div>
+    </div>
+  </div>
+
+  <div class="section-title">Diz-se Assim!</div>
+  <div class="expressao-block">
+    <div class="exp-label">Expressão</div>
+    <div>
+      <div class="exp-pt" onclick="speak('Sábado vai estar muito abafado.')">Sábado vai estar muito abafado.</div>
+      <div class="exp-en">Saturday is going to be very muggy.</div>
+      <div class="exp-note"><em>Abafado</em> = hot, humid, and stifling — the Lisbon August feeling. Distinct from just <em>calor</em>. You'll hear it constantly in summer weather forecasts.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ FUTURO ══ -->
+<div id="futuro" class="view">
+
+  <div class="section-title">Futuro Próximo — ir + infinitivo</div>
+
+  <div class="note-block">
+    <div class="note-label">Estrutura</div>
+    <p><span class="pt">ir</span> (present tense) + infinitive = near future. Equivalent to English "going to."<br>
+    <span class="pt">Vou jantar fora.</span> <span class="en">— I'm going to eat out.</span></p>
+  </div>
+
+  <table class="futuro-table">
+    <thead><tr><th>Sujeito</th><th>ir</th><th>Exemplo</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="subj">eu</td>
+        <td class="ir-form" onclick="speak('eu vou jantar fora')">vou</td>
+        <td class="example"><em>Vou</em> jantar fora.</td>
+      </tr>
+      <tr>
+        <td class="subj">tu</td>
+        <td class="ir-form" onclick="speak('tu vais sair com os teus amigos')">vais</td>
+        <td class="example"><em>Vais</em> sair com os teus amigos?</td>
+      </tr>
+      <tr>
+        <td class="subj">você / ele / ela</td>
+        <td class="ir-form" onclick="speak('você vai fazer o trabalho de casa')">vai</td>
+        <td class="example"><em>Vai</em> fazer o trabalho de casa.</td>
+      </tr>
+      <tr>
+        <td class="subj">nós</td>
+        <td class="ir-form" onclick="speak('nós vamos organizar uma viagem aos Açores')">vamos</td>
+        <td class="example"><em>Vamos</em> organizar uma viagem aos Açores.</td>
+      </tr>
+      <tr>
+        <td class="subj">vocês / eles / elas</td>
+        <td class="ir-form" onclick="speak('vocês vão ficar aqui na escola até às dezoito horas')">vão</td>
+        <td class="example"><em>Vão</em> ficar aqui até às 18h.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Marcadores de Tempo — Time Markers</div>
+  <div class="markers-grid">
+    <span class="marker-pill" onclick="speak('amanhã')">amanhã</span>
+    <span class="marker-pill" onclick="speak('depois de amanhã')">depois de amanhã</span>
+    <span class="marker-pill" onclick="speak('no próximo fim de semana')">no próximo fim de semana</span>
+    <span class="marker-pill" onclick="speak('na próxima semana')">na próxima semana</span>
+    <span class="marker-pill" onclick="speak('esta tarde')">esta tarde</span>
+    <span class="marker-pill" onclick="speak('logo à noite')">logo à noite</span>
+    <span class="marker-pill" onclick="speak('este sábado')">este sábado</span>
+    <span class="marker-pill" onclick="speak('no próximo domingo')">no próximo domingo</span>
+  </div>
+
+  <div class="section-title">Exemplos em Contexto</div>
+  <table>
+    <thead><tr><th>Português</th><th>English</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-word" style="width:60%;white-space:normal;font-size:0.85rem" onclick="speak('Amanhã vou apanhar o barco para Cacilhas no Cais do Sodré.')">Amanhã vou apanhar o barco para Cacilhas no Cais do Sodré.</td><td class="en-word" style="width:40%">Tomorrow I'm going to catch the boat to Cacilhas at Cais do Sodré.</td></tr>
+      <tr><td class="pt-word" style="width:60%;white-space:normal;font-size:0.85rem" onclick="speak('No próximo domingo, nós vamos almoçar num restaurante em Cascais.')">No próximo domingo, nós vamos almoçar num restaurante em Cascais.</td><td class="en-word" style="width:40%">Next Sunday we're going to have lunch at a restaurant in Cascais.</td></tr>
+      <tr><td class="pt-word" style="width:60%;white-space:normal;font-size:0.85rem" onclick="speak('Infelizmente, no sábado vai estar a chover, por isso vou jantar no restaurante perto da minha casa.')">Infelizmente, no sábado vai estar a chover, por isso vou jantar no restaurante perto da minha casa.</td><td class="en-word" style="width:40%">Unfortunately on Saturday it's going to rain, so I'm going to have dinner at the restaurant near my house.</td></tr>
+      <tr><td class="pt-word" style="width:60%;white-space:normal;font-size:0.85rem" onclick="speak('No sábado à noite, vou beber uns copos com uns amigos no Lx Factory.')">No sábado à noite, vou beber uns copos com uns amigos no Lx Factory.</td><td class="en-word" style="width:40%">On Saturday night I'm going to have some drinks with friends at Lx Factory.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note-block">
+    <div class="note-label">Tempo + Futuro Próximo</div>
+    <p>
+      <span class="pt">E amanhã, como vai estar o tempo em Lisboa?</span><br>
+      <span class="pt">Amanhã vai estar sol / vento / chuva / nublado / trovoada / nevoeiro.</span><br>
+      <span class="en">— Tomorrow it's going to be sunny / windy / rainy / cloudy / stormy / foggy.</span>
+    </p>
+  </div>
+
+</div>
+
+<!-- ══ FLASHCARDS ══ -->
+<div id="flashcards" class="view">
+<div class="flashcard-wrap">
+  <div class="vfc-topbar">
+    <span class="vfc-counter" id="vfcCounter">1 / 1</span>
+    <div class="vfc-controls">
+      <button class="vfc-ctrl" onclick="vfcShuffle()">⇄ Baralhar</button>
+      <button class="vfc-ctrl" onclick="vfcReset()">↺ Reiniciar</button>
+    </div>
+  </div>
+  <div class="vfc-progress"><div class="vfc-progress-fill" id="vfcFill"></div></div>
+  <div class="vfc-card">
+    <div class="vfc-hints" id="vfcHints">clique na palavra para revelar · clique no exemplo para ouvir</div>
+    <div class="vfc-cat" id="vfcCat"></div>
+    <div class="vfc-en" id="vfcEn"></div>
+    <div class="vfc-divider"></div>
+    <div class="vfc-pt" id="vfcPt" onclick="vfcReveal()"></div>
+    <button class="vfc-speak" id="vfcSpeak" onclick="vfcSpeakAnswer()">🔊</button>
+    <div class="vfc-ex-pt" id="vfcExPt" onclick="vfcSpeakEx()"></div>
+    <div class="vfc-ex-en" id="vfcExEn"></div>
+    <div class="vfc-nav">
+      <button class="vfc-nav-btn" onclick="vfcMove(-1)">← Anterior</button>
+      <button class="vfc-nav-btn" onclick="vfcMove(1)">Próximo →</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ QUIZ ══ -->
+<div id="quiz" class="view">
+<div class="quiz-wrap">
+  <div class="quiz-score" id="quiz-score">Score: 0 / 0</div>
+  <div class="quiz-q" id="quiz-q"></div>
+  <div class="quiz-prompt" id="quiz-prompt"></div>
+  <div class="quiz-opts" id="quiz-opts"></div>
+  <div class="quiz-feedback" id="quiz-fb"></div>
+  <button class="quiz-next" id="quiz-next" onclick="nextQuiz()" disabled>Próximo →</button>
+</div>
+</div>
+
+<!-- ══ DESAFIO ══ -->
+<div id="desafio" class="view">
+<div class="desafio-wrap">
+  <div class="d-meta">
+    <span id="d-score-display">Score: 0 / 0</span>
+    <span class="d-streak" id="d-streak-display"></span>
+  </div>
+  <div class="d-card">
+    <span class="d-cat" id="d-cat"></span>
+    <div class="d-prompt" id="d-prompt"></div>
+    <div class="d-timer-ring">
+      <svg width="52" height="52" viewBox="0 0 52 52">
+        <circle class="d-timer-track" cx="26" cy="26" r="22"/>
+        <circle class="d-timer-fill" id="d-timer-fill" cx="26" cy="26" r="22"/>
+      </svg>
+      <div class="d-timer-text" id="d-timer-text">5</div>
+    </div>
+    <div class="d-divider"></div>
+    <div class="d-answer" id="d-answer" onclick="revealDesafio()"></div>
+    <button class="d-speak" onclick="speakDesafio()">🔊</button>
+    <div class="d-note" id="d-note"></div>
+    <div class="d-actions" id="d-actions" style="display:none">
+      <button class="d-btn disse" onclick="scoreDesafio(true)">✓ Disse</button>
+      <button class="d-btn nao" onclick="scoreDesafio(false)">✗ Não disse</button>
+    </div>
+    <div class="d-hint" id="d-hint">diz em voz alta · depois clica para revelar</div>
+  </div>
+</div>
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+const audioCache = {};
+async function speak(text) {
+  if (!text) return;
+  if (audioCache[text]) { audioCache[text].currentTime = 0; audioCache[text].play(); return; }
+  try {
+    const res = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({text}) });
+    if (!res.ok) throw new Error();
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url); audioCache[text] = audio; audio.play();
+  } catch(e) {}
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'flashcards') vfcRender();
+  if (id === 'quiz') startQuiz();
+  if (id === 'desafio') initDesafio();
+}
+
+// ── CARDS DATA ────────────────────────────────────────────────────
+const CARDS = [
+  // Weather
+  { cat:'Tempo', pt:'sol', en:'sun / sunny', note:'Está sol.', en_note:'It\'s sunny.' },
+  { cat:'Tempo', pt:'soalheiro', en:'bathed in sunshine', note:'Está soalheiro.', en_note:'It\'s lovely and sunny.' },
+  { cat:'Tempo', pt:'chuva', en:'rain / raining', note:'Está chuva. / Está a chover.', en_note:'It\'s raining.' },
+  { cat:'Tempo', pt:'vento', en:'wind / windy', note:'Está muito vento hoje.', en_note:'It\'s very windy today.' },
+  { cat:'Tempo', pt:'nublado', en:'cloudy / overcast', note:'Está nublado.', en_note:'It\'s cloudy.' },
+  { cat:'Tempo', pt:'nevoeiro', en:'fog / foggy', note:'Está nevoeiro em Lisboa.', en_note:'There\'s fog in Lisbon.' },
+  { cat:'Tempo', pt:'trovoada', en:'thunderstorm', note:'Está trovoada.', en_note:'There\'s a thunderstorm.' },
+  { cat:'Tempo', pt:'abafado', en:'muggy / stuffy / stifling', note:'Sábado vai estar muito abafado.', en_note:'Saturday is going to be very muggy.' },
+  { cat:'Tempo', pt:'briol', en:'freezing cold (calão)', note:'Amanhã vai estar um grande briol!', en_note:'Tomorrow it\'s going to be absolutely freezing!' },
+  // Dias
+  { cat:'Dias', pt:'segunda', en:'Monday (a segunda-feira)', note:'Para mim, é a segunda.', en_note:'For me, it\'s Monday.' },
+  { cat:'Dias', pt:'terça', en:'Tuesday (a terça-feira)', note:'A minha aula é à terça.', en_note:'My class is on Tuesday.' },
+  { cat:'Dias', pt:'quarta', en:'Wednesday (a quarta-feira)', note:'Às quartas fico em casa.', en_note:'On Wednesdays I stay home.' },
+  { cat:'Dias', pt:'quinta', en:'Thursday (a quinta-feira)', note:'Saio às quintas.', en_note:'I go out on Thursdays.' },
+  { cat:'Dias', pt:'sexta', en:'Friday (a sexta-feira)', note:'Sexta é o melhor dia!', en_note:'Friday is the best day!' },
+  { cat:'Dias', pt:'sábado', en:'Saturday (o sábado)', note:'No sábado vou ao mercado.', en_note:'On Saturday I\'m going to the market.' },
+  { cat:'Dias', pt:'domingo', en:'Sunday (o domingo)', note:'No domingo descanso.', en_note:'On Sunday I rest.' },
+  // Futuro
+  { cat:'Futuro', pt:'vou', en:'I am going to (eu)', note:'Vou jantar fora.', en_note:'I\'m going to eat out.' },
+  { cat:'Futuro', pt:'vais', en:'you are going to (tu)', note:'Vais sair esta noite?', en_note:'Are you going out tonight?' },
+  { cat:'Futuro', pt:'vai', en:'he/she/you is going to', note:'Amanhã vai estar sol.', en_note:'Tomorrow it\'s going to be sunny.' },
+  { cat:'Futuro', pt:'vamos', en:'we are going to', note:'Vamos organizar uma viagem.', en_note:'We\'re going to organize a trip.' },
+  { cat:'Futuro', pt:'vão', en:'they/you are going to', note:'Vocês vão ficar aqui.', en_note:'You\'re going to stay here.' },
+];
+
+// ── FLASHCARDS ────────────────────────────────────────────────────
+let vfcDeck = [...CARDS], vfcIdx = 0, vfcRevealed = false;
+
+function vfcRender() {
+  const c = vfcDeck[vfcIdx];
+  vfcRevealed = false;
+  document.getElementById('vfcCounter').textContent = `${vfcIdx+1} / ${vfcDeck.length}`;
+  document.getElementById('vfcFill').style.width = `${((vfcIdx+1)/vfcDeck.length)*100}%`;
+  document.getElementById('vfcCat').textContent = c.cat;
+  document.getElementById('vfcEn').textContent = c.en;
+  const pt = document.getElementById('vfcPt');
+  pt.textContent = c.pt; pt.className = 'vfc-pt';
+  const exPt = document.getElementById('vfcExPt');
+  exPt.textContent = c.note || ''; exPt.className = 'vfc-ex-pt';
+  const exEn = document.getElementById('vfcExEn');
+  exEn.textContent = c.en_note || ''; exEn.className = 'vfc-ex-en';
+  exEn.onclick = () => exEn.classList.add('revealed');
+  document.getElementById('vfcHints').textContent = 'clique na palavra para revelar · clique no exemplo para ouvir';
+  document.getElementById('vfcSpeak').classList.remove('playing');
+}
+
+function vfcReveal() {
+  if (vfcRevealed) return; vfcRevealed = true;
+  document.getElementById('vfcPt').classList.add('revealed');
+  document.getElementById('vfcExPt').classList.add('revealed');
+  document.getElementById('vfcHints').textContent = '';
+}
+function vfcSpeakAnswer() { speak(vfcDeck[vfcIdx].pt, document.getElementById('vfcSpeak')); }
+function vfcSpeakEx() { vfcReveal(); speak(vfcDeck[vfcIdx].note || vfcDeck[vfcIdx].pt, document.getElementById('vfcExPt')); }
+function vfcMove(dir) { vfcIdx = (vfcIdx+dir+vfcDeck.length)%vfcDeck.length; vfcRender(); }
+function vfcShuffle() { vfcDeck = [...CARDS].sort(()=>Math.random()-0.5); vfcIdx=0; vfcRender(); }
+function vfcReset() { vfcDeck = [...CARDS]; vfcIdx=0; vfcRender(); }
+vfcRender();
+
+// ── QUIZ ─────────────────────────────────────────────────────────
+const QUIZ_POOL = CARDS.map(c => ({ q:c.pt, a:c.en }));
+let qDeck=[], qIdx=0, qScore=0, qTotal=0, qAnswered=false;
+
+function startQuiz() { qDeck=[...QUIZ_POOL].sort(()=>Math.random()-0.5); qIdx=0; qScore=0; qTotal=0; qAnswered=false; loadQuiz(); }
+
+function loadQuiz() {
+  qAnswered=false;
+  document.getElementById('quiz-fb').textContent=''; document.getElementById('quiz-fb').className='quiz-feedback';
+  document.getElementById('quiz-next').disabled=true;
+  const item=qDeck[qIdx%qDeck.length];
+  document.getElementById('quiz-q').textContent=item.q;
+  document.getElementById('quiz-prompt').textContent='Choose the correct English meaning:';
+  const others=QUIZ_POOL.filter(x=>x.a!==item.a).sort(()=>Math.random()-0.5).slice(0,3).map(x=>x.a);
+  const opts=[item.a,...others].sort(()=>Math.random()-0.5);
+  const c=document.getElementById('quiz-opts'); c.innerHTML='';
+  opts.forEach(opt=>{ const btn=document.createElement('button'); btn.className='quiz-opt'; btn.textContent=opt; btn.onclick=()=>checkAnswer(btn,opt,item); c.appendChild(btn); });
+  document.getElementById('quiz-score').textContent=`Score: ${qScore} / ${qTotal}`;
+}
+
+function checkAnswer(btn,chosen,item) {
+  if(qAnswered) return; qAnswered=true; qTotal++;
+  const fb=document.getElementById('quiz-fb');
+  if(chosen===item.a){ btn.classList.add('correct'); fb.textContent='Correto! ✓'; fb.className='quiz-feedback ok'; qScore++; speak(item.q); }
+  else { btn.classList.add('wrong'); fb.textContent=`Errado — "${item.a}"`; fb.className='quiz-feedback bad'; document.querySelectorAll('.quiz-opt').forEach(b=>{if(b.textContent===item.a)b.classList.add('correct');}); speak(item.q); }
+  document.querySelectorAll('.quiz-opt').forEach(b=>b.disabled=true);
+  document.getElementById('quiz-next').disabled=false;
+  document.getElementById('quiz-score').textContent=`Score: ${qScore} / ${qTotal}`;
+}
+
+function nextQuiz() { qIdx++; if(qIdx>=qDeck.length){qDeck=[...QUIZ_POOL].sort(()=>Math.random()-0.5);qIdx=0;} loadQuiz(); }
+
+// ── DESAFIO ───────────────────────────────────────────────────────
+const DESAFIO_CARDS = [
+  { cat:'Tempo', prompt:'Say "it\'s very windy today."', answer:'Está muito vento hoje.', note:'vento = wind, used with está' },
+  { cat:'Tempo', prompt:'Someone asks about the weather. Say "it\'s foggy."', answer:'Está nevoeiro.', note:'nevoeiro = fog — common in Lisbon mornings' },
+  { cat:'Tempo', prompt:'Say "today the weather is awful."', answer:'Hoje o tempo está péssimo.', note:'péssimo = awful / terrible' },
+  { cat:'Tempo', prompt:'Say "it\'s going to be very muggy on Saturday."', answer:'Sábado vai estar muito abafado.', note:'abafado = muggy/stifling — Diz-se assim!' },
+  { cat:'Tempo', prompt:'Say "tomorrow it\'s going to be absolutely freezing!" (use calão)', answer:'Amanhã vai estar um grande briol!', note:'briol = freezing cold (calão)' },
+  { cat:'Tempo', prompt:'Someone says the weather is great. Agree.', answer:'Concordo! Para mim, também.', note:'concordo = I agree' },
+  { cat:'Tempo', prompt:'Someone says the weather is great. Disagree and say it\'s cold.', answer:'Não concordo. Para mim, está frio.', note:'não concordo = I disagree' },
+  { cat:'Futuro', prompt:'Say "I\'m going to eat out tonight."', answer:'Vou jantar fora esta noite.', note:'eu → vou + infinitivo' },
+  { cat:'Futuro', prompt:'Say "we\'re going to organise a trip to the Azores."', answer:'Vamos organizar uma viagem aos Açores.', note:'nós → vamos + infinitivo' },
+  { cat:'Futuro', prompt:'Say "tomorrow it\'s going to rain, so I\'m going to stay home."', answer:'Amanhã vai estar chuva, por isso vou ficar em casa.', note:'vai estar + por isso + vou + infinitivo' },
+  { cat:'Futuro', prompt:'Say "next Sunday we\'re going to have lunch in Cascais."', answer:'No próximo domingo, vamos almoçar em Cascais.', note:'no próximo domingo + vamos + infinitivo' },
+  { cat:'Dias', prompt:'Say "my class is on Tuesday."', answer:'A minha aula é à terça.', note:'à terça = on Tuesday' },
+  { cat:'Dias', prompt:'Ask "what\'s the best day of the week for you?"', answer:'Para ti, qual é o melhor dia da semana?', note:'para ti = for you (informal)' },
+  { cat:'Dias', prompt:'Answer: "for me it\'s Friday, because I go out with friends."', answer:'Para mim, é a sexta, porque saio com os amigos.', note:'é a sexta — feminine article' },
+];
+
+let dDeck=[], dIdx=0, dCorrect=0, dTotal=0, dStreak=0, dTimer=null, dSecondsLeft=5, dRevealed=false;
+
+function initDesafio() {
+  dDeck=[...DESAFIO_CARDS].sort(()=>Math.random()-0.5);
+  dIdx=0; dCorrect=0; dTotal=0; dStreak=0;
+  loadDesafioCard();
+}
+
+function loadDesafioCard() {
+  dRevealed=false; clearInterval(dTimer); dSecondsLeft=5;
+  const c=dDeck[dIdx%dDeck.length];
+  document.getElementById('d-cat').textContent=c.cat;
+  document.getElementById('d-prompt').textContent=c.prompt;
+  document.getElementById('d-answer').textContent=c.answer;
+  document.getElementById('d-answer').classList.remove('revealed');
+  document.getElementById('d-note').textContent=c.note||'';
+  document.getElementById('d-actions').style.display='none';
+  document.getElementById('d-hint').style.display='block';
+  document.getElementById('d-hint').textContent='diz em voz alta · depois clica para revelar';
+  document.getElementById('d-score-display').textContent=`Score: ${dCorrect} / ${dTotal}`;
+  document.getElementById('d-streak-display').textContent=dStreak>=3?`🔥 ${dStreak}`:'';
+  const fill=document.getElementById('d-timer-fill'), txt=document.getElementById('d-timer-text');
+  fill.style.strokeDashoffset=0; fill.className='d-timer-fill'; txt.textContent=5;
+  dTimer=setInterval(()=>{
+    dSecondsLeft--;
+    txt.textContent=dSecondsLeft;
+    fill.style.strokeDashoffset=138*(1-dSecondsLeft/5);
+    if(dSecondsLeft<=2) fill.classList.add('warn');
+    if(dSecondsLeft<=1){fill.classList.remove('warn');fill.classList.add('danger');}
+    if(dSecondsLeft<=0){
+      clearInterval(dTimer);
+      txt.textContent='✓';
+      fill.style.stroke='var(--border)';
+      document.getElementById('d-hint').textContent='tempo — toca para revelar';
+    }
+  },1000);
+}
+
+function revealDesafio() {
+  if(dRevealed) return; dRevealed=true; clearInterval(dTimer);
+  document.getElementById('d-timer-text').textContent='✓';
+  document.getElementById('d-answer').classList.add('revealed');
+  document.getElementById('d-actions').style.display='flex';
+  document.getElementById('d-hint').style.display='none';
+  speak(dDeck[dIdx%dDeck.length].answer);
+}
+
+function speakDesafio(){speak(dDeck[dIdx%dDeck.length].answer);}
+
+function scoreDesafio(correct){
+  dTotal++; if(correct){dCorrect++;dStreak++;}else{dStreak=0;}
+  dIdx++; loadDesafioCard();
+}
+</script>
+</body>
+</html>
