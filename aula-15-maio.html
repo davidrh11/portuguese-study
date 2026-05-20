@@ -41,6 +41,7 @@
   td.pt-word:hover { text-decoration: underline; text-decoration-color: var(--green); }
   td.en-word { color: var(--text); font-size: 0.88rem; width: 25%; }
   td.note-cell { color: var(--muted); font-size: 0.82rem; width: 47%; }
+  td.note-cell[onclick]:hover { color: var(--green); text-decoration: underline; text-decoration-color: var(--green); text-underline-offset: 3px; }
   tbody tr:hover { background: #f4f0ea; }
 
   /* NOTE BLOCK */
@@ -187,16 +188,16 @@
   <table>
     <thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead>
     <tbody>
-      <tr><td class="pt-word" onclick="speak('Está sol.')">sol</td><td class="en-word">sun / sunny</td><td class="note-cell">Está sol. — It's sunny.</td></tr>
-      <tr><td class="pt-word" onclick="speak('Está soalheiro.')">soalheiro</td><td class="en-word">sunny / bathed in sun</td><td class="note-cell">Está soalheiro. — More poetic/specific than sol.</td></tr>
-      <tr><td class="pt-word" onclick="speak('Está chuva.')">chuva</td><td class="en-word">rain / raining</td><td class="note-cell">Está chuva. / Está a chover.</td></tr>
-      <tr><td class="pt-word" onclick="speak('Está vento.')">vento</td><td class="en-word">wind / windy</td><td class="note-cell">Está muito vento hoje.</td></tr>
-      <tr><td class="pt-word" onclick="speak('Está nublado.')">nublado</td><td class="en-word">cloudy / overcast</td><td class="note-cell">Está nublado — adj., invariable here.</td></tr>
-      <tr><td class="pt-word" onclick="speak('Está nevoeiro.')">nevoeiro</td><td class="en-word">fog / foggy</td><td class="note-cell">Está nevoeiro. Common on Lisbon mornings.</td></tr>
-      <tr><td class="pt-word" onclick="speak('Está trovoada.')">trovoada</td><td class="en-word">thunderstorm</td><td class="note-cell">Está trovoada. — thunder + lightning.</td></tr>
-      <tr><td class="pt-word" onclick="speak('Está frio.')">frio</td><td class="en-word">cold</td><td class="note-cell">Está muito frio! — adj., agrees with nothing here.</td></tr>
-      <tr><td class="pt-word" onclick="speak('Está calor.')">calor</td><td class="en-word">hot / warm</td><td class="note-cell">Está calor. / Está muito calor! — noun used as predicate.</td></tr>
-      <tr><td class="pt-word" onclick="speak('Está abafado.')">abafado</td><td class="en-word">muggy / stuffy / stifling</td><td class="note-cell">Diz-se assim: <em>Sábado vai estar muito abafado.</em></td></tr>
+      <tr><td class="pt-word" onclick="speak('Está sol.')">sol</td><td class="en-word">sun / sunny</td><td class="note-cell" onclick="speak('Está sol.')" style="cursor:pointer" title="🔊 ouvir">Está sol.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Está soalheiro.')">soalheiro</td><td class="en-word">sunny / bathed in sun</td><td class="note-cell" onclick="speak('Está soalheiro.')" style="cursor:pointer" title="🔊 ouvir">Está soalheiro.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Está chuva.')">chuva</td><td class="en-word">rain / raining</td><td class="note-cell" onclick="speak('Está chuva. Está a chover.')" style="cursor:pointer" title="🔊 ouvir">Está chuva. / Está a chover.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Está vento.')">vento</td><td class="en-word">wind / windy</td><td class="note-cell" onclick="speak('Está muito vento hoje.')" style="cursor:pointer" title="🔊 ouvir">Está muito vento hoje.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Está nublado.')">nublado</td><td class="en-word">cloudy / overcast</td><td class="note-cell" onclick="speak('Está nublado.')" style="cursor:pointer" title="🔊 ouvir">Está nublado — adj., invariable here.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Está nevoeiro.')">nevoeiro</td><td class="en-word">fog / foggy</td><td class="note-cell" onclick="speak('Está nevoeiro.')" style="cursor:pointer" title="🔊 ouvir">Está nevoeiro. Common on Lisbon mornings.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Está trovoada.')">trovoada</td><td class="en-word">thunderstorm</td><td class="note-cell" onclick="speak('Está trovoada.')" style="cursor:pointer" title="🔊 ouvir">Está trovoada. — thunder + lightning.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Está frio.')">frio</td><td class="en-word">cold</td><td class="note-cell" onclick="speak('Está muito frio!')" style="cursor:pointer" title="🔊 ouvir">Está muito frio! — adj., agrees with nothing here.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Está calor.')">calor</td><td class="en-word">hot / warm</td><td class="note-cell" onclick="speak('Está calor.')" style="cursor:pointer" title="🔊 ouvir">Está calor. / Está muito calor! — noun used as predicate.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Está abafado.')">abafado</td><td class="en-word">muggy / stuffy / stifling</td><td class="note-cell" onclick="speak('Sábado vai estar muito abafado.')" style="cursor:pointer" title="🔊 ouvir">Sábado vai estar muito abafado.</td></tr>
       <tr><td class="pt-word" onclick="speak('Está neve.')">neve</td><td class="en-word">snow / snowing</td><td class="note-cell">Rare in Lisbon. Comum na Serra da Estrela.</td></tr>
     </tbody>
   </table>
@@ -255,13 +256,13 @@
     <thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead>
     <tbody>
       <tr><td class="pt-word" onclick="speak('Estou atrasado cinco minutos.')">Estou atrasado cinco minutos.</td><td class="en-word">I'm five minutes late.</td><td class="note-cell">atrasado = late (masc.). Woman says: estou atrasada.</td></tr>
-      <tr><td class="pt-word" onclick="speak('Vou sair às duas e meia.')">Vou sair às 2h30.</td><td class="en-word">I'm leaving at 2:30.</td><td class="note-cell">Futuro próximo + time. Às 2h30 = às duas e meia.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Vou sair às duas e meia.')">Vou sair às 2h30.</td><td class="en-word">I'm leaving at 2:30.</td><td class="note-cell" onclick="speak('Às duas e meia.')" style="cursor:pointer" title="🔊 ouvir">Futuro próximo + time. Às 2h30 = às duas e meia.</td></tr>
       <tr><td class="pt-word" onclick="speak('Chego dentro de cinco minutos.')">Chego dentro de 5 minutos.</td><td class="en-word">I'll be there in 5 minutes.</td><td class="note-cell">dentro de = in / within (time). Very common.</td></tr>
       <tr><td class="pt-word" onclick="speak('Estás no silêncio.')">Estás no silêncio.</td><td class="en-word">You're on silent. (phone)</td><td class="note-cell">no silêncio = on silent mode — natural everyday expression.</td></tr>
-      <tr><td class="pt-word" onclick="speak('uma reunião')">uma reunião</td><td class="en-word">a meeting</td><td class="note-cell">feminine noun. Tenho uma reunião às três.</td></tr>
-      <tr><td class="pt-word" onclick="speak('o escritório')">o escritório</td><td class="en-word">the office</td><td class="note-cell">Estou no escritório.</td></tr>
-      <tr><td class="pt-word" onclick="speak('o colega, a colega')">o/a colega</td><td class="en-word">the colleague</td><td class="note-cell">Same form for masc/fem — article changes. Os meus colegas.</td></tr>
-      <tr><td class="pt-word" onclick="speak('infelizmente')">infelizmente</td><td class="en-word">unfortunately</td><td class="note-cell">Infelizmente, não posso. — Unfortunately, I can't.</td></tr>
+      <tr><td class="pt-word" onclick="speak('uma reunião')">uma reunião</td><td class="en-word">a meeting</td><td class="note-cell" onclick="speak('Tenho uma reunião às três.')" style="cursor:pointer" title="🔊 ouvir">feminine noun. Tenho uma reunião às três.</td></tr>
+      <tr><td class="pt-word" onclick="speak('o escritório')">o escritório</td><td class="en-word">the office</td><td class="note-cell" onclick="speak('Estou no escritório.')" style="cursor:pointer" title="🔊 ouvir">Estou no escritório.</td></tr>
+      <tr><td class="pt-word" onclick="speak('o colega, a colega')">o/a colega</td><td class="en-word">the colleague</td><td class="note-cell" onclick="speak('Os meus colegas.')" style="cursor:pointer" title="🔊 ouvir">Same form for masc/fem — article changes. Os meus colegas.</td></tr>
+      <tr><td class="pt-word" onclick="speak('infelizmente')">infelizmente</td><td class="en-word">unfortunately</td><td class="note-cell" onclick="speak('Infelizmente, não posso.')" style="cursor:pointer" title="🔊 ouvir">Infelizmente, não posso. — Unfortunately, I can't.</td></tr>
     </tbody>
   </table>
 
@@ -269,9 +270,9 @@
   <table>
     <thead><tr><th>Infinitivo</th><th>English</th><th>Exemplo</th></tr></thead>
     <tbody>
-      <tr><td class="pt-word" onclick="speak('apanhar')">apanhar</td><td class="en-word">to catch</td><td class="note-cell">Vou apanhar o metro. — I'm going to catch the metro.</td></tr>
-      <tr><td class="pt-word" onclick="speak('lanchar')">lanchar</td><td class="en-word">to have a snack</td><td class="note-cell">Vamos lanchar juntos? — Shall we have a snack together?</td></tr>
-      <tr><td class="pt-word" onclick="speak('ficar')">ficar</td><td class="en-word">to stay / to remain / to become</td><td class="note-cell">Vou ficar no escritório. — I'm going to stay at the office.</td></tr>
+      <tr><td class="pt-word" onclick="speak('apanhar')">apanhar</td><td class="en-word">to catch</td><td class="note-cell" onclick="speak('Vou apanhar o metro.')" style="cursor:pointer" title="🔊 ouvir">Vou apanhar o metro. — I'm going to catch the metro.</td></tr>
+      <tr><td class="pt-word" onclick="speak('lanchar')">lanchar</td><td class="en-word">to have a snack</td><td class="note-cell" onclick="speak('Vamos lanchar juntos?')" style="cursor:pointer" title="🔊 ouvir">Vamos lanchar juntos? — Shall we have a snack together?</td></tr>
+      <tr><td class="pt-word" onclick="speak('ficar')">ficar</td><td class="en-word">to stay / to remain / to become</td><td class="note-cell" onclick="speak('Vou ficar no escritório.')" style="cursor:pointer" title="🔊 ouvir">Vou ficar no escritório. — I'm going to stay at the office.</td></tr>
     </tbody>
   </table>
 
