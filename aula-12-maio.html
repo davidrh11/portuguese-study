@@ -357,6 +357,22 @@
     </div>
   </div>
 
+
+  <div class="section-title">Verbos das Profissões — From the Audio Transcript</div>
+  <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.75rem">Third-person present tense — ele/ela. From the Exercício A listening activity.</p>
+  <table>
+    <thead><tr><th>Português</th><th>English</th><th>Exemplo do áudio</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-word" onclick="speak('adora')">adora</td><td class="en-word">loves / adores (ele/ela)</td><td class="note-cell" onclick="speak('O Rogério adora trabalhar ao ar livre.')" style="cursor:pointer" title="🔊 ouvir">O Rogério adora trabalhar ao ar livre.</td></tr>
+      <tr><td class="pt-word" onclick="speak('cuida de')">cuida de</td><td class="en-word">takes care of (ele/ela)</td><td class="note-cell" onclick="speak('A Carla cuida das doenças dos animais.')" style="cursor:pointer" title="🔊 ouvir">A Carla cuida das doenças dos animais.</td></tr>
+      <tr><td class="pt-word" onclick="speak('trabalha')">trabalha</td><td class="en-word">works (ele/ela)</td><td class="note-cell" onclick="speak('O Rui trabalha na TAP, a companhia aérea portuguesa.')" style="cursor:pointer" title="🔊 ouvir">O Rui trabalha na TAP, a companhia aérea portuguesa.</td></tr>
+      <tr><td class="pt-word" onclick="speak('cria')">cria</td><td class="en-word">creates (ele/ela)</td><td class="note-cell" onclick="speak('A Mariana cria novas start-ups.')" style="cursor:pointer" title="🔊 ouvir">A Mariana cria novas start-ups.</td></tr>
+      <tr><td class="pt-word" onclick="speak('trabalha à distância')">trabalha à distância</td><td class="en-word">works remotely</td><td class="note-cell" onclick="speak('A Andreia analisa dados e trabalha à distância.')" style="cursor:pointer" title="🔊 ouvir">A Andreia analisa dados e trabalha à distância.</td></tr>
+      <tr><td class="pt-word" onclick="speak('analisa')">analisa</td><td class="en-word">analyses (ele/ela)</td><td class="note-cell" onclick="speak('A Andreia analisa dados.')" style="cursor:pointer" title="🔊 ouvir">A Andreia analisa dados.</td></tr>
+      <tr><td class="pt-word" onclick="speak('telefona')">telefona</td><td class="en-word">calls / phones (ele/ela)</td><td class="note-cell" onclick="speak('O Bruno telefona a cem clientes todos os dias.')" style="cursor:pointer" title="🔊 ouvir">O Bruno telefona a cem clientes todos os dias.</td></tr>
+    </tbody>
+  </table>
+
 </div>
 
 <!-- ══ ESTAR EXERCISE ══ -->
@@ -559,6 +575,14 @@ const CARDS = [
   { cat: 'Estar', pt: 'está', en: 'he/she/you are (state/location)', note: 'O livro está no chão.', en_note: 'The book is on the floor.' },
   { cat: 'Estar', pt: 'estamos', en: 'we are', note: 'Estamos de férias. Finalmente!', en_note: 'We are on holiday. Finally!' },
   { cat: 'Estar', pt: 'estão', en: 'they/you (pl.) are', note: 'Os centros comerciais estão abertos.', en_note: 'The shopping centres are open.' },
+  // Professions verbs
+  { cat: 'Verbos', pt: 'adora', en: 'loves / adores (ele/ela)', note: 'O Rogério adora trabalhar ao ar livre.', en_note: 'Rogério loves working outdoors.' },
+  { cat: 'Verbos', pt: 'cuida de', en: 'takes care of (ele/ela)', note: 'A Carla cuida das doenças dos animais.', en_note: 'Carla takes care of animal illnesses.' },
+  { cat: 'Verbos', pt: 'trabalha', en: 'works (ele/ela)', note: 'O Rui trabalha na TAP.', en_note: 'Rui works at TAP.' },
+  { cat: 'Verbos', pt: 'cria', en: 'creates (ele/ela)', note: 'A Mariana cria novas start-ups.', en_note: 'Mariana creates new start-ups.' },
+  { cat: 'Verbos', pt: 'trabalha à distância', en: 'works remotely', note: 'A Andreia trabalha à distância.', en_note: 'Andreia works remotely.' },
+  { cat: 'Verbos', pt: 'analisa', en: 'analyses (ele/ela)', note: 'A Andreia analisa dados.', en_note: 'Andreia analyses data.' },
+  { cat: 'Verbos', pt: 'telefona', en: 'calls / phones (ele/ela)', note: 'O Bruno telefona a cem clientes todos os dias.', en_note: 'Bruno calls a hundred clients every day.' },
 ];
 
 let vfcDeck = [...CARDS], vfcIdx = 0, vfcRevealed = false;
@@ -615,6 +639,10 @@ const DESAFIO_CARDS = [
   { cat:'Estar', prompt:'Say "the shopping centres are open at weekends."', answer:'Os centros comerciais estão abertos aos fins de semana.', note:'plural → estão' },
   { cat:'Estar', prompt:'Say "how are you?" (formal, to a stranger).', answer:'Como está?', note:'você → está — used in polite register' },
   { cat:'Estar', prompt:'Say "I\'m fine, many thanks." (you are male).', answer:'Estou muito bem. Obrigado.', note:'estou + obrigado (male speaker)' },
+  { cat:'Verbos', prompt:'Say that Rogério loves working outdoors.', answer:'O Rogério adora trabalhar ao ar livre.', note:'adora = loves — 3rd person -AR verb' },
+  { cat:'Verbos', prompt:'Say that Carla takes care of animal illnesses.', answer:'A Carla cuida das doenças dos animais.', note:'cuida de = takes care of' },
+  { cat:'Verbos', prompt:'Say that Andreia analyses data and works remotely.', answer:'A Andreia analisa dados e trabalha à distância.', note:'two 3rd-person -AR verbs' },
+  { cat:'Verbos', prompt:'Say that Bruno phones a hundred clients every day.', answer:'O Bruno telefona a cem clientes todos os dias.', note:'telefona a = phones (with preposition a)' },
 ];
 
 let dDeck = [], dIdx = 0, dCorrect = 0, dTotal = 0, dStreak = 0, dTimer = null, dSecondsLeft = 5, dRevealed = false;

@@ -276,6 +276,20 @@
     </tbody>
   </table>
 
+
+  <div class="section-title">Vocabulário Extra — From Your Notes</div>
+  <table>
+    <thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-word" onclick="speak('o chão')">o chão</td><td class="en-word">the floor / the ground</td><td class="note-cell" onclick="speak('O livro está no chão.')" style="cursor:pointer" title="🔊 ouvir">O livro está no chão. — The book is on the floor.</td></tr>
+      <tr><td class="pt-word" onclick="speak('não te preocupes')">não te preocupes</td><td class="en-word">don't worry</td><td class="note-cell" onclick="speak('Não te preocupes. A mesa já está reservada.')" style="cursor:pointer" title="🔊 ouvir">Não te preocupes. A mesa já está reservada.</td></tr>
+      <tr><td class="pt-word" onclick="speak('há tanto tempo')">há tanto tempo</td><td class="en-word">it's been a while / long time no see</td><td class="note-cell" onclick="speak('Manuel, há tanto tempo. Tudo bem?')" style="cursor:pointer" title="🔊 ouvir">Manuel, há tanto tempo. Tudo bem?</td></tr>
+      <tr><td class="pt-word" onclick="speak('assim')">assim</td><td class="en-word">like this / so / thus / that way</td><td class="note-cell" onclick="speak('Não precisa ser assim.')" style="cursor:pointer" title="🔊 ouvir">Não precisa ser assim. — It doesn't have to be like this.</td></tr>
+      <tr><td class="pt-word" onclick="speak('uma caminhada')">uma caminhada</td><td class="en-word">a walk</td><td class="note-cell" onclick="speak('Vamos fazer uma caminhada à beira-rio.')" style="cursor:pointer" title="🔊 ouvir">Vamos fazer uma caminhada à beira-rio.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Obrigado pelo convite.')">Obrigado pelo convite.</td><td class="en-word">Thank you for the invitation.</td><td class="note-cell" onclick="speak('Obrigado pelo convite. Mas não posso.')" style="cursor:pointer" title="🔊 ouvir">Obrigado pelo convite. Mas não posso.</td></tr>
+    </tbody>
+  </table>
+
 </div>
 
 <!-- ══ FUTURO ══ -->
@@ -487,6 +501,13 @@ const CARDS = [
   { cat:'Trabalho', pt:'apanhar', en:'to catch', note:'Vou apanhar o metro.', en_note:'I\'m going to catch the metro.' },
   { cat:'Trabalho', pt:'lanchar', en:'to have a snack', note:'Vamos lanchar juntos?', en_note:'Shall we have a snack together?' },
   { cat:'Trabalho', pt:'ficar', en:'to stay / remain / become', note:'Vou ficar no escritório.', en_note:'I\'m going to stay at the office.' },
+  // Extra vocab
+  { cat:'Vocabulário', pt:'o chão', en:'the floor / the ground', note:'O livro está no chão.', en_note:'The book is on the floor.' },
+  { cat:'Vocabulário', pt:'não te preocupes', en:"don't worry", note:'Não te preocupes. A mesa já está reservada.', en_note:"Don't worry. The table is already reserved." },
+  { cat:'Vocabulário', pt:'há tanto tempo', en:"it's been a while / long time no see", note:'Manuel, há tanto tempo. Tudo bem?', en_note:"Manuel, long time no see. All good?" },
+  { cat:'Vocabulário', pt:'assim', en:'like this / so / that way', note:'Não precisa ser assim.', en_note:"It doesn't have to be like this." },
+  { cat:'Vocabulário', pt:'uma caminhada', en:'a walk', note:'Vamos fazer uma caminhada à beira-rio.', en_note:"Let's go for a walk along the river." },
+  { cat:'Vocabulário', pt:'Obrigado pelo convite.', en:'Thank you for the invitation.', note:'Obrigado pelo convite. Mas não posso.', en_note:"Thank you for the invitation. But I can't." },
 ];
 
 // ── FLASHCARDS ────────────────────────────────────────────────────
@@ -578,6 +599,10 @@ const DESAFIO_CARDS = [
   { cat:'Trabalho', prompt:'Say "I\'m going to catch the metro."', answer:'Vou apanhar o metro.', note:'apanhar = to catch — works for transport' },
   { cat:'Trabalho', prompt:'Say "I\'m going to stay at the office."', answer:'Vou ficar no escritório.', note:'ficar = to stay/remain — very versatile verb' },
   { cat:'Trabalho', prompt:'Suggest having a snack together.', answer:'Vamos lanchar juntos?', note:'lanchar = to have a snack — mid-morning or afternoon' },
+  { cat:'Vocabulário', prompt:"Say "don't worry, the table is already reserved."", answer:'Não te preocupes. A mesa já está reservada.', note:'não te preocupes — informal, very common' },
+  { cat:'Vocabulário', prompt:'Greet someone you haven\'t seen in a long time.', answer:'Há tanto tempo! Tudo bem?', note:'há tanto tempo = long time no see' },
+  { cat:'Vocabulário', prompt:"Say "thank you for the invitation, but I can't."", answer:'Obrigado pelo convite. Mas não posso.', note:'pelo = por + o — contraction' },
+  { cat:'Vocabulário', prompt:"Say "let's go for a walk along the river."", answer:'Vamos fazer uma caminhada à beira-rio.', note:'uma caminhada = a walk' },
 ];
 
 let dDeck=[], dIdx=0, dCorrect=0, dTotal=0, dStreak=0, dTimer=null, dSecondsLeft=5, dRevealed=false;
