@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="pt" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>No Restaurante · Português Europeu</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0; --surface: #ffffff; --border: #e2ddd6;
+    --green: #2d7a50; --red: #a03428; --text: #1a1a1a; --muted: #6b6560;
+    --highlight: #eef6f1;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+  header { background: var(--surface); border-bottom: 2px solid var(--green); padding: 1.25rem 2rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .header-text h1 { font-family: var(--mono); font-size: 0.95rem; font-weight: 600; color: var(--green); }
+  .header-text p { font-size: 0.8rem; color: var(--muted); margin-top: 0.15rem; }
+
+  .tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--surface); padding: 0 2rem; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { font-family: var(--mono); font-size: 0.8rem; padding: 0.75rem 1.25rem; cursor: pointer; color: var(--muted); border: none; background: none; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  .view { display: none; padding: 2rem; max-width: 720px; margin: 0 auto; }
+  .view.active { display: block; }
+
+  .section-title { font-family: var(--mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--green); margin: 2rem 0 0.75rem; border-left: 3px solid var(--green); padding-left: 0.6rem; }
+  .section-title:first-child { margin-top: 0; }
+  .section-title.red { color: var(--red); border-left-color: var(--red); }
+
+  /* PHRASE TABLE */
+  table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; max-width: 680px; }
+  th { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); text-align: left; padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); }
+  td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td.pt-phrase { font-family: var(--mono); font-size: 0.88rem; color: var(--green); font-weight: 600; cursor: pointer; width: 50%; }
+  td.pt-phrase:hover { text-decoration: underline; text-decoration-color: var(--green); text-underline-offset: 3px; }
+  td.en-phrase { color: var(--text); font-size: 0.85rem; width: 30%; }
+  td.note-cell { color: var(--muted); font-size: 0.8rem; width: 20%; }
+  td.note-cell[onclick] { cursor: pointer; }
+  td.note-cell[onclick]:hover { color: var(--green); }
+  tbody tr:hover { background: #f4f0ea; }
+
+  /* VOCAB GRID */
+  .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.6rem; margin-bottom: 1.5rem; max-width: 680px; }
+  .vocab-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 0.8rem 1rem; cursor: pointer; transition: border-color 0.15s; }
+  .vocab-card:hover { border-color: var(--green); }
+  .vocab-pt { font-family: var(--mono); font-size: 0.88rem; color: var(--green); font-weight: 600; }
+  .vocab-en { font-size: 0.78rem; color: var(--muted); margin-top: 0.2rem; }
+
+  /* NOTE BLOCK */
+  .note-block { background: var(--highlight); border-left: 3px solid var(--green); padding: 0.9rem 1.1rem; border-radius: 0 6px 6px 0; margin: 1rem 0; }
+  .note-block .note-label { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.35rem; }
+  .note-block p { font-size: 0.87rem; line-height: 1.7; }
+  .note-block .pt { font-family: var(--mono); color: var(--green); font-weight: 600; }
+  .note-block .en { color: var(--muted); font-style: italic; }
+
+  /* FLASHCARD — vfc pattern */
+  .flashcard-wrap { max-width: 480px; margin: 0 auto; }
+  .vfc-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+  .vfc-counter { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+  .vfc-controls { display: flex; gap: 0.5rem; }
+  .vfc-ctrl { font-family: var(--mono); font-size: 0.72rem; background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 0.35rem 0.85rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .vfc-ctrl:hover { border-color: var(--green); color: var(--green); }
+  .vfc-progress { height: 2px; background: var(--border); border-radius: 1px; margin-bottom: 1.25rem; overflow: hidden; }
+  .vfc-progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
+  .vfc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; min-height: 300px; display: flex; flex-direction: column; align-items: center; padding: 1.5rem 2rem; text-align: center; }
+  .vfc-hints { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 1.25rem; }
+  .vfc-cat { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); align-self: flex-start; margin-bottom: 0.75rem; }
+  .vfc-en { font-size: 1rem; color: var(--text); font-weight: 300; line-height: 1.5; margin-bottom: 1.1rem; }
+  .vfc-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1.1rem; }
+  .vfc-pt { font-family: var(--mono); font-size: 1.3rem; color: var(--green); font-weight: 700; filter: blur(7px); transition: filter 0.3s; cursor: pointer; margin-bottom: 1.1rem; background: var(--border); border-radius: 4px; padding: 0.15rem 0.6rem; display: inline-block; line-height: 1.5; }
+  .vfc-pt.revealed { filter: blur(0); background: transparent; }
+  .vfc-speak { background: var(--bg); border: 1px solid var(--border); color: var(--green); padding: 0.35rem 1.2rem; border-radius: 99px; cursor: pointer; transition: all 0.2s; font-size: 1rem; margin-bottom: 1rem; }
+  .vfc-speak:hover, .vfc-speak.playing { background: var(--green); color: #fff; border-color: var(--green); }
+  .vfc-ex-pt { font-style: italic; font-size: 0.82rem; color: var(--text); filter: blur(5px); transition: filter 0.3s; cursor: pointer; margin-bottom: 0.2rem; background: var(--border); border-radius: 3px; padding: 0.05rem 0.3rem; display: inline-block; }
+  .vfc-ex-pt.revealed { filter: blur(0); background: transparent; }
+  .vfc-ex-en { font-size: 0.75rem; color: var(--muted); filter: blur(5px); transition: filter 0.3s; background: var(--border); border-radius: 3px; padding: 0.05rem 0.3rem; display: inline-block; margin-bottom: 1rem; cursor: pointer; }
+  .vfc-ex-en.revealed { filter: blur(0); background: transparent; }
+  .vfc-nav { display: flex; gap: 1rem; margin-top: auto; }
+  .vfc-nav-btn { font-family: var(--mono); font-size: 0.82rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 0.55rem 1.25rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .vfc-nav-btn:hover { border-color: var(--green); color: var(--green); }
+
+  /* QUIZ */
+  .quiz-wrap { max-width: 520px; margin: 0 auto; }
+  .quiz-score { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); margin-bottom: 1.5rem; }
+  .quiz-q { font-family: var(--mono); font-size: 1rem; color: var(--green); text-align: center; margin-bottom: 1.25rem; min-height: 60px; line-height: 1.5; }
+  .quiz-prompt { font-size: 0.82rem; color: var(--muted); text-align: center; margin-bottom: 0.75rem; }
+  .quiz-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; margin-bottom: 1rem; }
+  .quiz-opt { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 0.8rem; cursor: pointer; font-size: 0.82rem; color: var(--text); transition: all 0.15s; text-align: center; }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--green); }
+  .quiz-opt.correct { border-color: var(--green); background: var(--highlight); color: var(--green); }
+  .quiz-opt.wrong { border-color: var(--red); background: #fdf0ef; color: var(--red); }
+  .quiz-opt:disabled { cursor: default; }
+  .quiz-feedback { text-align: center; font-family: var(--mono); font-size: 0.82rem; min-height: 1.4rem; margin-bottom: 1rem; }
+  .quiz-feedback.ok { color: var(--green); }
+  .quiz-feedback.bad { color: var(--red); }
+  .quiz-next { display: block; margin: 0 auto; font-family: var(--mono); font-size: 0.85rem; padding: 0.6rem 2rem; background: var(--green); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+  .quiz-next:disabled { opacity: 0.3; cursor: default; }
+
+  /* DESAFIO */
+  .desafio-wrap { max-width: 520px; margin: 0 auto; }
+  .d-meta { display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem; }
+  .d-streak { color: var(--green); font-weight: 600; }
+  .d-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.75rem 1.5rem 1.5rem; text-align: center; min-height: 280px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+  .d-cat { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.75rem; align-self: flex-start; }
+  .d-prompt { font-size: 1rem; color: var(--text); margin-bottom: 1.25rem; line-height: 1.6; max-width: 400px; }
+  .d-timer-ring { width: 52px; height: 52px; margin: 0 auto 1.25rem; position: relative; }
+  .d-timer-ring svg { transform: rotate(-90deg); }
+  .d-timer-ring circle { fill: none; stroke-width: 4; }
+  .d-timer-track { stroke: var(--border); }
+  .d-timer-fill { stroke: var(--green); stroke-dasharray: 138; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke 0.3s; stroke-linecap: round; }
+  .d-timer-fill.warn { stroke: #c47a00; }
+  .d-timer-fill.danger { stroke: var(--red); }
+  .d-timer-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 0.9rem; font-weight: 600; color: var(--text); }
+  .d-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1.25rem; }
+  .d-answer { font-family: var(--mono); font-size: 1.2rem; font-weight: 600; color: var(--green); filter: blur(8px); background: #e8f4ee; border-radius: 6px; padding: 0.4rem 1rem; cursor: pointer; transition: filter 0.3s, background 0.3s; margin-bottom: 0.75rem; user-select: none; line-height: 1.6; }
+  .d-answer.revealed { filter: blur(0); background: transparent; }
+  .d-speak { background: var(--bg); border: 1px solid var(--border); color: var(--green); padding: 0.3rem 1rem; border-radius: 99px; cursor: pointer; font-size: 0.9rem; margin-bottom: 1.25rem; transition: all 0.2s; }
+  .d-speak:hover { background: var(--green); color: #fff; }
+  .d-note { font-size: 0.78rem; color: var(--muted); font-style: italic; margin-bottom: 1.25rem; min-height: 1.2rem; }
+  .d-actions { display: flex; gap: 0.75rem; }
+  .d-btn { font-family: var(--mono); font-size: 0.82rem; font-weight: 600; padding: 0.6rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; transition: opacity 0.15s; }
+  .d-btn.disse { background: var(--green); color: #fff; }
+  .d-btn.nao { background: #fdf0ef; color: var(--red); border: 1px solid #dba09a; }
+  .d-btn:hover { opacity: 0.85; }
+  .d-hint { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); margin-top: 1rem; letter-spacing: 0.05em; }
+</style>
+</head>
+<body>
+
+<header>
+  <svg width="32" height="22" viewBox="0 0 32 22" xmlns="http://www.w3.org/2000/svg">
+    <rect width="12" height="22" fill="#006600"/>
+    <rect x="12" width="20" height="22" fill="#FF0000"/>
+    <circle cx="12" cy="11" r="5" fill="#FFD700" stroke="#00008B" stroke-width="0.5"/>
+    <circle cx="12" cy="11" r="3" fill="#00008B"/>
+    <circle cx="12" cy="11" r="1.5" fill="#FFD700"/>
+  </svg>
+  <div class="header-text">
+    <h1>No Restaurante · Restaurant Portuguese</h1>
+    <p>A1.1 · Referência prática · Survival phrases for eating out in Lisbon</p>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('tabela', this)">Tabela</button>
+  <button class="tab" onclick="switchTab('flashcards', this)">Flashcards</button>
+  <button class="tab" onclick="switchTab('quiz', this)">Quiz</button>
+  <button class="tab" onclick="switchTab('desafio', this)">⚡ Desafio</button>
+</div>
+
+<!-- ══ TABELA ══ -->
+<div id="tabela" class="view active">
+
+  <div class="section-title">Chegada — Arriving</div>
+  <table>
+    <thead><tr><th>Português</th><th>English</th><th>Contexto</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-phrase" onclick="speak('Eu tenho uma reserva, em nome de Dave Harris.')">Eu tenho uma reserva, em nome de Dave Harris.</td><td class="en-phrase">I have a reservation, in the name of Dave Harris.</td><td class="note-cell">arriving with booking</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Queria uma mesa para um, por favor.')">Queria uma mesa para um, por favor.</td><td class="en-phrase">I'd like a table for one, please.</td><td class="note-cell">walk-in, solo</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Queria uma mesa para duas pessoas, por favor.')">Queria uma mesa para duas pessoas, por favor.</td><td class="en-phrase">I'd like a table for two, please.</td><td class="note-cell">walk-in, two</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Tem mesa disponível?')">Tem mesa disponível?</td><td class="en-phrase">Do you have a table available?</td><td class="note-cell">checking availability</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Menu e Pedido — Ordering</div>
+  <table>
+    <thead><tr><th>Português</th><th>English</th><th>Contexto</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-phrase" onclick="speak('Queria o menu, por favor.')">Queria o menu, por favor.</td><td class="en-phrase">I'd like the menu, please.</td><td class="note-cell">on arrival</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Posso ver o menu, por favor?')">Posso ver o menu, por favor?</td><td class="en-phrase">Can I see the menu, please?</td><td class="note-cell">slightly softer</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Queria a carta de vinhos, por favor.')">Queria a carta de vinhos, por favor.</td><td class="en-phrase">I'd like the wine list, please.</td><td class="note-cell">wine list</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Que vinho tinto recomendaria?')">Que vinho tinto recomendaria?</td><td class="en-phrase">What red wine would you recommend?</td><td class="note-cell" onclick="speak('Que vinho branco recomendaria?')" title="🔊 branco">→ branco for white</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Que peixe recomendaria?')">Que peixe recomendaria?</td><td class="en-phrase">What fish would you recommend?</td><td class="note-cell">peixe = fish</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Que carne recomendaria?')">Que carne recomendaria?</td><td class="en-phrase">What meat would you recommend?</td><td class="note-cell">carne = meat</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('O que recomendaria?')">O que recomendaria?</td><td class="en-phrase">What would you recommend?</td><td class="note-cell">open recommendation</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Queria isto, por favor.')">Queria isto, por favor.</td><td class="en-phrase">I'd like this, please.</td><td class="note-cell">pointing at menu</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note-block">
+    <div class="note-label">Queria vs. Quero</div>
+    <p><span class="pt">Queria</span> (conditional — I would like) is far more polite than <span class="pt">quero</span> (I want). Always use <span class="pt">queria</span> in a restaurant — it's the standard register. Same as "I'd like" vs "I want" in English, but the gap feels even more marked in Portuguese.</p>
+  </div>
+
+  <div class="section-title">Água e Bebidas — Drinks</div>
+  <table>
+    <thead><tr><th>Português</th><th>English</th><th>Contexto</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-phrase" onclick="speak('Queria a água, por favor.')">Queria a água, por favor.</td><td class="en-phrase">I'd like some water, please.</td><td class="note-cell"></td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Sem gás, por favor.')">Sem gás, por favor.</td><td class="en-phrase">Still, please.</td><td class="note-cell" onclick="speak('Com gás, por favor.')" title="🔊 ouvir">↔ com gás = sparkling</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Com gás, por favor.')">Com gás, por favor.</td><td class="en-phrase">Sparkling, please.</td><td class="note-cell"></td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Queria um copo de vinho tinto, por favor.')">Queria um copo de vinho tinto, por favor.</td><td class="en-phrase">I'd like a glass of red wine, please.</td><td class="note-cell">tinto = red</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Queria um copo de vinho branco, por favor.')">Queria um copo de vinho branco, por favor.</td><td class="en-phrase">I'd like a glass of white wine, please.</td><td class="note-cell">branco = white</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Queria uma imperial, por favor.')">Queria uma imperial, por favor.</td><td class="en-phrase">I'd like a draught beer, please.</td><td class="note-cell">imperial = draught beer (Lisbon)</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Queria um café, por favor.')">Queria um café, por favor.</td><td class="en-phrase">I'd like a coffee, please.</td><td class="note-cell">= espresso in PT</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Durante a Refeição — During the Meal</div>
+  <table>
+    <thead><tr><th>Português</th><th>English</th><th>Contexto</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-phrase" onclick="speak('Posso repetir, por favor?')">Posso repetir, por favor?</td><td class="en-phrase">Can I have some more, please?</td><td class="note-cell">asking for seconds</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Está tudo bem?')">Está tudo bem?</td><td class="en-phrase">Is everything OK?</td><td class="note-cell">waiter asks you</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Está ótimo, obrigado.')">Está ótimo, obrigado.</td><td class="en-phrase">It's great, thank you.</td><td class="note-cell">replying</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Estou satisfeito, obrigado.')">Estou satisfeito, obrigado.</td><td class="en-phrase">I've had enough, thank you.</td><td class="note-phrase">satisfeito (m)</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Estava delicioso.')">Estava delicioso.</td><td class="en-phrase">That was delicious.</td><td class="note-cell">compliment at end</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Desculpe.')">Desculpe.</td><td class="en-phrase">Excuse me.</td><td class="note-cell">to get waiter's attention</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Tenho alergia a frutos secos.')">Tenho alergia a ___.</td><td class="en-phrase">I'm allergic to ___.</td><td class="note-cell" onclick="speak('Tenho alergia a frutos secos.')" title="🔊 ouvir">e.g. frutos secos (nuts)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">A Conta — The Bill</div>
+  <table>
+    <thead><tr><th>Português</th><th>English</th><th>Contexto</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-phrase" onclick="speak('A conta, por favor.')">A conta, por favor.</td><td class="en-phrase">The bill, please.</td><td class="note-cell">most common</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Pode trazer a conta, por favor?')">Pode trazer a conta, por favor?</td><td class="en-phrase">Can you bring the bill, please?</td><td class="note-cell">politer version</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('É separado, por favor.')">É separado, por favor.</td><td class="en-phrase">Separate bills, please.</td><td class="note-cell">splitting the bill</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Junto, por favor.')">Junto, por favor.</td><td class="en-phrase">Together, please.</td><td class="note-cell">one bill</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Aceita cartão?')">Aceita cartão?</td><td class="en-phrase">Do you accept card?</td><td class="note-cell">payment</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Pode passar recibo, por favor?')">Pode passar recibo, por favor?</td><td class="en-phrase">Can I have a receipt, please?</td><td class="note-cell">for expenses</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Outras Frases Úteis — More Useful Phrases</div>
+  <table>
+    <thead><tr><th>Português</th><th>English</th><th>Contexto</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-phrase" onclick="speak('Há uma ementa de preço fixo?')">Há uma ementa de preço fixo?</td><td class="en-phrase">Is there a fixed-price menu?</td><td class="note-cell">tourist menu</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Tem pratos vegetarianos?')">Tem pratos vegetarianos?</td><td class="en-phrase">Do you have any vegetarian dishes?</td><td class="note-cell">dietary</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Podia trazer-me a conta, por favor?')">Podia trazer-me a conta, por favor?</td><td class="en-phrase">Could you bring me the bill, please?</td><td class="note-cell">podia = even politer than pode</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Podia trazer-me o recibo, por favor?')">Podia trazer-me o recibo, por favor?</td><td class="en-phrase">Could I have a receipt, please?</td><td class="note-cell">for expenses</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Podemos pagar separadamente?')">Podemos pagar separadamente?</td><td class="en-phrase">Can we pay separately?</td><td class="note-cell">splitting</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('Onde ficam as casas de banho, por favor?')">Onde ficam as casas de banho, por favor?</td><td class="en-phrase">Where are the toilets, please?</td><td class="note-cell">essential</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('A gorjeta está incluída?')">A gorjeta está incluída?</td><td class="en-phrase">Is the tip included?</td><td class="note-cell">gorjeta = tip</td></tr>
+      <tr><td class="pt-phrase" onclick="speak('O serviço está incluído?')">O serviço está incluído?</td><td class="en-phrase">Is service included?</td><td class="note-cell" onclick="speak('Serviço não incluído.')" title="🔊 ouvir">↔ serviço não incluído</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Vocabulário — Key Words</div>
+  <div class="vocab-grid">
+    <div class="vocab-card" onclick="speak('o menu')"><div class="vocab-pt">o menu</div><div class="vocab-en">the menu</div></div>
+    <div class="vocab-card" onclick="speak('a carta de vinhos')"><div class="vocab-pt">a carta de vinhos</div><div class="vocab-en">the wine list</div></div>
+    <div class="vocab-card" onclick="speak('a conta')"><div class="vocab-pt">a conta</div><div class="vocab-en">the bill</div></div>
+    <div class="vocab-card" onclick="speak('a reserva')"><div class="vocab-pt">a reserva</div><div class="vocab-en">the reservation</div></div>
+    <div class="vocab-card" onclick="speak('o empregado de mesa')"><div class="vocab-pt">o empregado de mesa</div><div class="vocab-en">the waiter</div></div>
+    <div class="vocab-card" onclick="speak('a empregada de mesa')"><div class="vocab-pt">a empregada de mesa</div><div class="vocab-en">the waitress</div></div>
+    <div class="vocab-card" onclick="speak('a entrada')"><div class="vocab-pt">a entrada</div><div class="vocab-en">the starter</div></div>
+    <div class="vocab-card" onclick="speak('o prato principal')"><div class="vocab-pt">o prato principal</div><div class="vocab-en">the main course</div></div>
+    <div class="vocab-card" onclick="speak('a sobremesa')"><div class="vocab-pt">a sobremesa</div><div class="vocab-en">the dessert</div></div>
+    <div class="vocab-card" onclick="speak('o peixe')"><div class="vocab-pt">o peixe</div><div class="vocab-en">fish</div></div>
+    <div class="vocab-card" onclick="speak('a carne')"><div class="vocab-pt">a carne</div><div class="vocab-en">meat</div></div>
+    <div class="vocab-card" onclick="speak('o vinho tinto')"><div class="vocab-pt">vinho tinto</div><div class="vocab-en">red wine</div></div>
+    <div class="vocab-card" onclick="speak('o vinho branco')"><div class="vocab-pt">vinho branco</div><div class="vocab-en">white wine</div></div>
+    <div class="vocab-card" onclick="speak('a imperial')"><div class="vocab-pt">uma imperial</div><div class="vocab-en">draught beer (Lisbon)</div></div>
+    <div class="vocab-card" onclick="speak('sem gás')"><div class="vocab-pt">sem gás</div><div class="vocab-en">still (water)</div></div>
+    <div class="vocab-card" onclick="speak('com gás')"><div class="vocab-pt">com gás</div><div class="vocab-en">sparkling (water)</div></div>
+    <div class="vocab-card" onclick="speak('o aperitivo')"><div class="vocab-pt">o aperitivo</div><div class="vocab-en">aperitif</div></div>
+    <div class="vocab-card" onclick="speak('a sopa')"><div class="vocab-pt">a sopa</div><div class="vocab-en">soup</div></div>
+    <div class="vocab-card" onclick="speak('o acompanhamento')"><div class="vocab-pt">o acompanhamento</div><div class="vocab-en">side dish</div></div>
+    <div class="vocab-card" onclick="speak('os pratos do dia')"><div class="vocab-pt">os pratos do dia</div><div class="vocab-en">dishes of the day</div></div>
+    <div class="vocab-card" onclick="speak('a gorjeta')"><div class="vocab-pt">a gorjeta</div><div class="vocab-en">the tip</div></div>
+    <div class="vocab-card" onclick="speak('o recibo')"><div class="vocab-pt">o recibo</div><div class="vocab-en">the receipt</div></div>
+    <div class="vocab-card" onclick="speak('serviço incluído')"><div class="vocab-pt">serviço incluído</div><div class="vocab-en">service included</div></div>
+    <div class="vocab-card" onclick="speak('o chefe de cozinha')"><div class="vocab-pt">o chefe de cozinha</div><div class="vocab-en">the chef</div></div>
+    <div class="vocab-card" onclick="speak('o tabuleiro')"><div class="vocab-pt">o tabuleiro</div><div class="vocab-en">the tray</div></div>
+    <div class="vocab-card" onclick="speak('pedir')"><div class="vocab-pt">pedir</div><div class="vocab-en">to order</div></div>
+    <div class="vocab-card" onclick="speak('pagar')"><div class="vocab-pt">pagar</div><div class="vocab-en">to pay</div></div>
+    <div class="vocab-card" onclick="speak('as casas de banho')"><div class="vocab-pt">as casas de banho</div><div class="vocab-en">the toilets</div></div>
+    <div class="vocab-card" onclick="speak('a faca')"><div class="vocab-pt">a faca</div><div class="vocab-en">knife</div></div>
+    <div class="vocab-card" onclick="speak('o garfo')"><div class="vocab-pt">o garfo</div><div class="vocab-en">fork</div></div>
+    <div class="vocab-card" onclick="speak('a colher')"><div class="vocab-pt">a colher</div><div class="vocab-en">spoon</div></div>
+    <div class="vocab-card" onclick="speak('o guardanapo')"><div class="vocab-pt">o guardanapo</div><div class="vocab-en">napkin</div></div>
+  </div>
+
+  <div class="note-block">
+    <div class="note-label">Recomendaria — Conditional Tense</div>
+    <p><span class="pt">recomendaria</span> is the conditional of <span class="pt">recomendar</span> — "would recommend." You don't need to produce this yet, but you'll hear it constantly in restaurants. The pattern: <span class="pt">Que ___ recomendaria?</span> — What ___ would you recommend?</p>
+  </div>
+
+</div>
+
+<!-- ══ FLASHCARDS ══ -->
+<div id="flashcards" class="view">
+<div class="flashcard-wrap">
+  <div class="vfc-topbar">
+    <span class="vfc-counter" id="vfcCounter">1 / 1</span>
+    <div class="vfc-controls">
+      <button class="vfc-ctrl" onclick="vfcShuffle()">⇄ Baralhar</button>
+      <button class="vfc-ctrl" onclick="vfcReset()">↺ Reiniciar</button>
+    </div>
+  </div>
+  <div class="vfc-progress"><div class="vfc-progress-fill" id="vfcFill"></div></div>
+  <div class="vfc-card">
+    <div class="vfc-hints" id="vfcHints">clique na frase para revelar · clique no exemplo para ouvir</div>
+    <div class="vfc-cat" id="vfcCat"></div>
+    <div class="vfc-en" id="vfcEn"></div>
+    <div class="vfc-divider"></div>
+    <div class="vfc-pt" id="vfcPt" onclick="vfcReveal()"></div>
+    <button class="vfc-speak" id="vfcSpeak" onclick="vfcSpeakAnswer()">🔊</button>
+    <div class="vfc-ex-pt" id="vfcExPt" onclick="vfcSpeakEx()"></div>
+    <div class="vfc-ex-en" id="vfcExEn"></div>
+    <div class="vfc-nav">
+      <button class="vfc-nav-btn" onclick="vfcMove(-1)">← Anterior</button>
+      <button class="vfc-nav-btn" onclick="vfcMove(1)">Próximo →</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ QUIZ ══ -->
+<div id="quiz" class="view">
+<div class="quiz-wrap">
+  <div class="quiz-score" id="quiz-score">Score: 0 / 0</div>
+  <div class="quiz-q" id="quiz-q"></div>
+  <div class="quiz-prompt" id="quiz-prompt"></div>
+  <div class="quiz-opts" id="quiz-opts"></div>
+  <div class="quiz-feedback" id="quiz-fb"></div>
+  <button class="quiz-next" id="quiz-next" onclick="nextQuiz()" disabled>Próximo →</button>
+</div>
+</div>
+
+<!-- ══ DESAFIO ══ -->
+<div id="desafio" class="view">
+<div class="desafio-wrap">
+  <div class="d-meta">
+    <span id="d-score-display">Score: 0 / 0</span>
+    <span class="d-streak" id="d-streak-display"></span>
+  </div>
+  <div class="d-card">
+    <span class="d-cat" id="d-cat"></span>
+    <div class="d-prompt" id="d-prompt"></div>
+    <div class="d-timer-ring">
+      <svg width="52" height="52" viewBox="0 0 52 52">
+        <circle class="d-timer-track" cx="26" cy="26" r="22"/>
+        <circle class="d-timer-fill" id="d-timer-fill" cx="26" cy="26" r="22"/>
+      </svg>
+      <div class="d-timer-text" id="d-timer-text">5</div>
+    </div>
+    <div class="d-divider"></div>
+    <div class="d-answer" id="d-answer" onclick="revealDesafio()"></div>
+    <button class="d-speak" onclick="speakDesafio()">🔊</button>
+    <div class="d-note" id="d-note"></div>
+    <div class="d-actions" id="d-actions" style="display:none">
+      <button class="d-btn disse" onclick="scoreDesafio(true)">✓ Disse</button>
+      <button class="d-btn nao" onclick="scoreDesafio(false)">✗ Não disse</button>
+    </div>
+    <div class="d-hint" id="d-hint">diz em voz alta · depois clica para revelar</div>
+  </div>
+</div>
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+const audioCache = {};
+async function speak(text) {
+  if (!text) return;
+  if (audioCache[text]) { audioCache[text].currentTime = 0; audioCache[text].play(); return; }
+  try {
+    const res = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({text}) });
+    if (!res.ok) throw new Error();
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url); audioCache[text] = audio; audio.play();
+  } catch(e) {}
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'flashcards') vfcRender();
+  if (id === 'quiz') startQuiz();
+  if (id === 'desafio') initDesafio();
+}
+
+// ── CARDS DATA ────────────────────────────────────────────────────
+const CARDS = [
+  // Chegada
+  { cat:'Chegada', pt:'Eu tenho uma reserva, em nome de Dave Harris.', en:'I have a reservation, in the name of Dave Harris.', note:'Eu tenho uma reserva, em nome de Dave Harris.', en_note:'Swap in your own name.' },
+  { cat:'Chegada', pt:'Queria uma mesa para um, por favor.', en:"I'd like a table for one, please.", note:'Queria uma mesa para um, por favor.', en_note:'Walk-in, solo.' },
+  { cat:'Chegada', pt:'Queria uma mesa para duas pessoas, por favor.', en:"I'd like a table for two, please.", note:'Queria uma mesa para duas pessoas, por favor.', en_note:'Walk-in, two people.' },
+  { cat:'Chegada', pt:'Tem mesa disponível?', en:'Do you have a table available?', note:'Tem mesa disponível?', en_note:'Checking without a reservation.' },
+  // Pedido
+  { cat:'Pedido', pt:'Queria o menu, por favor.', en:"I'd like the menu, please.", note:'Queria o menu, por favor.', en_note:'Standard on arrival.' },
+  { cat:'Pedido', pt:'Posso ver o menu, por favor?', en:'Can I see the menu, please?', note:'Posso ver o menu, por favor?', en_note:'Slightly softer register.' },
+  { cat:'Pedido', pt:'Queria a carta de vinhos, por favor.', en:"I'd like the wine list, please.", note:'Queria a carta de vinhos, por favor.', en_note:'carta de vinhos = wine list' },
+  { cat:'Pedido', pt:'Que vinho tinto recomendaria?', en:'What red wine would you recommend?', note:'Que vinho tinto recomendaria?', en_note:'recomendaria = conditional of recomendar' },
+  { cat:'Pedido', pt:'Que peixe recomendaria?', en:'What fish would you recommend?', note:'Que peixe recomendaria?', en_note:'peixe = fish' },
+  { cat:'Pedido', pt:'O que recomendaria?', en:'What would you recommend?', note:'O que recomendaria?', en_note:'Open — let them choose.' },
+  { cat:'Pedido', pt:'Queria isto, por favor.', en:"I'd like this, please.", note:'Queria isto, por favor.', en_note:'Point at the menu.' },
+  // Bebidas
+  { cat:'Bebidas', pt:'Queria a água, sem gás, por favor.', en:"I'd like still water, please.", note:'Queria a água, sem gás, por favor.', en_note:'sem gás = still' },
+  { cat:'Bebidas', pt:'Com gás, por favor.', en:'Sparkling, please.', note:'Com gás, por favor.', en_note:'com gás = sparkling' },
+  { cat:'Bebidas', pt:'Queria um copo de vinho tinto, por favor.', en:"I'd like a glass of red wine, please.", note:'Queria um copo de vinho tinto, por favor.', en_note:'tinto = red' },
+  { cat:'Bebidas', pt:'Queria uma imperial, por favor.', en:"I'd like a draught beer, please.", note:'Queria uma imperial, por favor.', en_note:'imperial = draught beer in Lisbon' },
+  // Durante
+  { cat:'Durante', pt:'Posso repetir, por favor?', en:'Can I have some more, please?', note:'Posso repetir, por favor?', en_note:'Asking for seconds.' },
+  { cat:'Durante', pt:'Estava delicioso.', en:'That was delicious.', note:'Estava delicioso.', en_note:'Compliment at end of meal.' },
+  { cat:'Durante', pt:'Estou satisfeito, obrigado.', en:"I've had enough, thank you.", note:'Estou satisfeito, obrigado.', en_note:'satisfeito (m) / satisfeita (f)' },
+  { cat:'Durante', pt:'Desculpe.', en:'Excuse me.', note:'Desculpe.', en_note:'To get the waiter\'s attention.' },
+  // Conta
+  { cat:'A Conta', pt:'A conta, por favor.', en:'The bill, please.', note:'A conta, por favor.', en_note:'Most common way to ask.' },
+  { cat:'A Conta', pt:'Pode trazer a conta, por favor?', en:'Can you bring the bill, please?', note:'Pode trazer a conta, por favor?', en_note:'Politer version.' },
+  { cat:'A Conta', pt:'Aceita cartão?', en:'Do you accept card?', note:'Aceita cartão?', en_note:'Payment question.' },
+  { cat:'A Conta', pt:'É separado, por favor.', en:'Separate bills, please.', note:'É separado, por favor.', en_note:'Splitting the bill.' },
+  // Vocab
+  { cat:'Vocabulário', pt:'o empregado de mesa', en:'the waiter', note:'O empregado de mesa já veio?', en_note:'Has the waiter come yet?' },
+  { cat:'Vocabulário', pt:'a entrada', en:'the starter', note:'Queria a sopa como entrada.', en_note:"I'd like the soup as a starter." },
+  { cat:'Vocabulário', pt:'o prato principal', en:'the main course', note:'Qual é o prato principal do dia?', en_note:"What's today's main course?" },
+  { cat:'Vocabulário', pt:'a sobremesa', en:'the dessert', note:'Queria ver a lista de sobremesas.', en_note:"I'd like to see the dessert menu." },
+  { cat:'Vocabulário', pt:'sem gás', en:'still (water)', note:'Sem gás, por favor.', en_note:'Still water, please.' },
+  { cat:'Vocabulário', pt:'com gás', en:'sparkling (water)', note:'Com gás, por favor.', en_note:'Sparkling water, please.' },
+  { cat:'Vocabulário', pt:'a gorjeta', en:'the tip', note:'A gorjeta está incluída?', en_note:'Is the tip included?' },
+  { cat:'Vocabulário', pt:'o recibo', en:'the receipt', note:'Podia trazer-me o recibo, por favor?', en_note:'Could I have a receipt, please?' },
+  { cat:'Vocabulário', pt:'os pratos do dia', en:'dishes of the day / specials', note:'Quais são os pratos do dia?', en_note:'What are the dishes of the day?' },
+  { cat:'Vocabulário', pt:'o acompanhamento', en:'side dish', note:'Que acompanhamento vem com o prato?', en_note:'What side dish comes with the meal?' },
+  { cat:'Vocabulário', pt:'pedir', en:'to order', note:'Posso pedir, por favor?', en_note:"Can I order, please?" },
+  { cat:'Vocabulário', pt:'pagar', en:'to pay', note:'Onde se paga?', en_note:'Where do you pay?' },
+  { cat:'Frases', pt:'Há uma ementa de preço fixo?', en:'Is there a fixed-price menu?', note:'Há uma ementa de preço fixo?', en_note:'Useful for tourist menus.' },
+  { cat:'Frases', pt:'Tem pratos vegetarianos?', en:'Do you have any vegetarian dishes?', note:'Tem pratos vegetarianos?', en_note:'Dietary requirements.' },
+  { cat:'Frases', pt:'Podemos pagar separadamente?', en:'Can we pay separately?', note:'Podemos pagar separadamente?', en_note:'Splitting the bill.' },
+  { cat:'Frases', pt:'Onde ficam as casas de banho?', en:'Where are the toilets?', note:'Onde ficam as casas de banho, por favor?', en_note:'Essential in any situation.' },
+  { cat:'Frases', pt:'O serviço está incluído?', en:'Is service included?', note:'O serviço está incluído?', en_note:'serviço não incluído = service not included' },
+];
+
+// ── FLASHCARDS ────────────────────────────────────────────────────
+let vfcDeck = [...CARDS], vfcIdx = 0, vfcRevealed = false;
+
+function vfcRender() {
+  const c = vfcDeck[vfcIdx];
+  vfcRevealed = false;
+  document.getElementById('vfcCounter').textContent = `${vfcIdx+1} / ${vfcDeck.length}`;
+  document.getElementById('vfcFill').style.width = `${((vfcIdx+1)/vfcDeck.length)*100}%`;
+  document.getElementById('vfcCat').textContent = c.cat;
+  document.getElementById('vfcEn').textContent = c.en;
+  const pt = document.getElementById('vfcPt');
+  pt.textContent = c.pt; pt.className = 'vfc-pt';
+  const exPt = document.getElementById('vfcExPt');
+  exPt.textContent = c.note || ''; exPt.className = 'vfc-ex-pt';
+  const exEn = document.getElementById('vfcExEn');
+  exEn.textContent = c.en_note || ''; exEn.className = 'vfc-ex-en';
+  exEn.onclick = () => exEn.classList.add('revealed');
+  document.getElementById('vfcHints').textContent = 'clique na frase para revelar · clique no exemplo para ouvir';
+  document.getElementById('vfcSpeak').classList.remove('playing');
+}
+
+function vfcReveal() {
+  if (vfcRevealed) return; vfcRevealed = true;
+  document.getElementById('vfcPt').classList.add('revealed');
+  document.getElementById('vfcExPt').classList.add('revealed');
+  document.getElementById('vfcHints').textContent = '';
+}
+function vfcSpeakAnswer() { speak(vfcDeck[vfcIdx].pt, document.getElementById('vfcSpeak')); }
+function vfcSpeakEx() { vfcReveal(); speak(vfcDeck[vfcIdx].note || vfcDeck[vfcIdx].pt, document.getElementById('vfcExPt')); }
+function vfcMove(dir) { vfcIdx = (vfcIdx+dir+vfcDeck.length)%vfcDeck.length; vfcRender(); }
+function vfcShuffle() { vfcDeck = [...CARDS].sort(()=>Math.random()-0.5); vfcIdx=0; vfcRender(); }
+function vfcReset() { vfcDeck = [...CARDS]; vfcIdx=0; vfcRender(); }
+vfcRender();
+
+// ── QUIZ ─────────────────────────────────────────────────────────
+const QUIZ_POOL = CARDS.map(c => ({ q:c.pt, a:c.en }));
+let qDeck=[], qIdx=0, qScore=0, qTotal=0, qAnswered=false;
+
+function startQuiz() { qDeck=[...QUIZ_POOL].sort(()=>Math.random()-0.5); qIdx=0; qScore=0; qTotal=0; qAnswered=false; loadQuiz(); }
+
+function loadQuiz() {
+  qAnswered=false;
+  document.getElementById('quiz-fb').textContent=''; document.getElementById('quiz-fb').className='quiz-feedback';
+  document.getElementById('quiz-next').disabled=true;
+  const item=qDeck[qIdx%qDeck.length];
+  document.getElementById('quiz-q').textContent=item.q;
+  document.getElementById('quiz-prompt').textContent='Choose the correct English meaning:';
+  const others=QUIZ_POOL.filter(x=>x.a!==item.a).sort(()=>Math.random()-0.5).slice(0,3).map(x=>x.a);
+  const opts=[item.a,...others].sort(()=>Math.random()-0.5);
+  const c=document.getElementById('quiz-opts'); c.innerHTML='';
+  opts.forEach(opt=>{ const btn=document.createElement('button'); btn.className='quiz-opt'; btn.textContent=opt; btn.onclick=()=>checkAnswer(btn,opt,item); c.appendChild(btn); });
+  document.getElementById('quiz-score').textContent=`Score: ${qScore} / ${qTotal}`;
+}
+
+function checkAnswer(btn,chosen,item) {
+  if(qAnswered) return; qAnswered=true; qTotal++;
+  const fb=document.getElementById('quiz-fb');
+  if(chosen===item.a){ btn.classList.add('correct'); fb.textContent='Correto! ✓'; fb.className='quiz-feedback ok'; qScore++; speak(item.q); }
+  else { btn.classList.add('wrong'); fb.textContent=`Errado — "${item.a}"`; fb.className='quiz-feedback bad'; document.querySelectorAll('.quiz-opt').forEach(b=>{if(b.textContent===item.a)b.classList.add('correct');}); speak(item.q); }
+  document.querySelectorAll('.quiz-opt').forEach(b=>b.disabled=true);
+  document.getElementById('quiz-next').disabled=false;
+  document.getElementById('quiz-score').textContent=`Score: ${qScore} / ${qTotal}`;
+}
+
+function nextQuiz() { qIdx++; if(qIdx>=qDeck.length){qDeck=[...QUIZ_POOL].sort(()=>Math.random()-0.5);qIdx=0;} loadQuiz(); }
+
+// ── DESAFIO ───────────────────────────────────────────────────────
+const DESAFIO_CARDS = [
+  { cat:'Chegada', prompt:'You have a reservation. Tell them your name is Dave Harris.', answer:'Eu tenho uma reserva, em nome de Dave Harris.', note:'em nome de = in the name of' },
+  { cat:'Chegada', prompt:'You want a table for one. No reservation.', answer:'Queria uma mesa para um, por favor.', note:'queria = I would like — always use this, not quero' },
+  { cat:'Chegada', prompt:'You want a table for two. No reservation.', answer:'Queria uma mesa para duas pessoas, por favor.', note:'duas pessoas = two people' },
+  { cat:'Chegada', prompt:'You want to check if there\'s a table available.', answer:'Tem mesa disponível?', note:'disponível = available' },
+  { cat:'Pedido', prompt:'Ask for the menu as soon as you sit down.', answer:'Queria o menu, por favor.', note:'standard opening request' },
+  { cat:'Pedido', prompt:'Ask for the wine list.', answer:'Queria a carta de vinhos, por favor.', note:'carta de vinhos = wine list' },
+  { cat:'Pedido', prompt:'Ask the waiter what red wine they would recommend.', answer:'Que vinho tinto recomendaria?', note:'recomendaria = conditional — you just need to recognise it' },
+  { cat:'Pedido', prompt:'Ask what fish they would recommend.', answer:'Que peixe recomendaria?', note:'peixe = fish' },
+  { cat:'Pedido', prompt:'Ask for an open recommendation — anything on the menu.', answer:'O que recomendaria?', note:'the most open version' },
+  { cat:'Bebidas', prompt:'Order still water.', answer:'Queria a água, sem gás, por favor.', note:'sem gás = still' },
+  { cat:'Bebidas', prompt:'Order sparkling water.', answer:'Queria a água, com gás, por favor.', note:'com gás = sparkling' },
+  { cat:'Bebidas', prompt:'Order a glass of white wine.', answer:'Queria um copo de vinho branco, por favor.', note:'branco = white' },
+  { cat:'Bebidas', prompt:'Order a draught beer (you\'re in Lisbon).', answer:'Queria uma imperial, por favor.', note:'imperial = draught beer in Lisbon specifically' },
+  { cat:'Bebidas', prompt:'Order an espresso.', answer:'Queria um café, por favor.', note:'café = espresso in Portugal' },
+  { cat:'Durante', prompt:'The food is good. Tell the waiter.', answer:'Está ótimo, obrigado.', note:'ótimo = great' },
+  { cat:'Durante', prompt:'You want seconds. Ask politely.', answer:'Posso repetir, por favor?', note:'posso repetir = can I have more' },
+  { cat:'Durante', prompt:'You\'ve had enough. Tell the waiter.', answer:'Estou satisfeito, obrigado.', note:'satisfeito (m) / satisfeita (f)' },
+  { cat:'Durante', prompt:'The meal was delicious. Say so.', answer:'Estava delicioso.', note:'estava = imperfect of estar — it was' },
+  { cat:'Durante', prompt:'You need to get the waiter\'s attention.', answer:'Desculpe.', note:'desculpe = excuse me — not "oi" or clicking fingers' },
+  { cat:'A Conta', prompt:'Ask for the bill.', answer:'A conta, por favor.', note:'the most important phrase in any restaurant' },
+  { cat:'A Conta', prompt:'Ask if they accept card.', answer:'Aceita cartão?', note:'aceita = do you accept (3rd person used as polite 2nd)' },
+  { cat:'A Conta', prompt:'You want separate bills.', answer:'É separado, por favor.', note:'separado = separate' },
+  { cat:'A Conta', prompt:'You\'re paying together — one bill.', answer:'Junto, por favor.', note:'junto = together' },
+  { cat:'A Conta', prompt:'Ask if service is included.', answer:'O serviço está incluído?', note:'serviço incluído / não incluído — check before tipping' },
+  { cat:'A Conta', prompt:'Ask if the tip is included.', answer:'A gorjeta está incluída?', note:'gorjeta = tip' },
+  { cat:'A Conta', prompt:'Ask for a receipt (for expenses).', answer:'Podia trazer-me o recibo, por favor?', note:'podia = could you — even politer than pode' },
+  { cat:'A Conta', prompt:'Ask if you can pay separately.', answer:'Podemos pagar separadamente?', note:'podemos = we can — separadamente = separately' },
+  { cat:'Frases', prompt:'Ask if there\'s a fixed-price menu.', answer:'Há uma ementa de preço fixo?', note:'ementa de preço fixo = fixed-price / tourist menu' },
+  { cat:'Frases', prompt:'Ask if they have vegetarian dishes.', answer:'Tem pratos vegetarianos?', note:'vegetariano/a — useful to know' },
+  { cat:'Frases', prompt:'Ask where the toilets are.', answer:'Onde ficam as casas de banho, por favor?', note:'casas de banho = toilets' },
+];
+
+let dDeck=[], dIdx=0, dCorrect=0, dTotal=0, dStreak=0, dTimer=null, dSecondsLeft=5, dRevealed=false;
+
+function initDesafio() {
+  dDeck=[...DESAFIO_CARDS].sort(()=>Math.random()-0.5);
+  dIdx=0; dCorrect=0; dTotal=0; dStreak=0;
+  loadDesafioCard();
+}
+
+function loadDesafioCard() {
+  dRevealed=false; clearInterval(dTimer); dSecondsLeft=5;
+  const c=dDeck[dIdx%dDeck.length];
+  document.getElementById('d-cat').textContent=c.cat;
+  document.getElementById('d-prompt').textContent=c.prompt;
+  document.getElementById('d-answer').textContent=c.answer;
+  document.getElementById('d-answer').classList.remove('revealed');
+  document.getElementById('d-note').textContent=c.note||'';
+  document.getElementById('d-actions').style.display='none';
+  document.getElementById('d-hint').style.display='block';
+  document.getElementById('d-hint').textContent='diz em voz alta · depois clica para revelar';
+  document.getElementById('d-score-display').textContent=`Score: ${dCorrect} / ${dTotal}`;
+  document.getElementById('d-streak-display').textContent=dStreak>=3?`🔥 ${dStreak}`:'';
+  const fill=document.getElementById('d-timer-fill'), txt=document.getElementById('d-timer-text');
+  fill.style.strokeDashoffset=0; fill.className='d-timer-fill'; txt.textContent=5;
+  dTimer=setInterval(()=>{
+    dSecondsLeft--;
+    txt.textContent=dSecondsLeft;
+    fill.style.strokeDashoffset=138*(1-dSecondsLeft/5);
+    if(dSecondsLeft<=2) fill.classList.add('warn');
+    if(dSecondsLeft<=1){fill.classList.remove('warn');fill.classList.add('danger');}
+    if(dSecondsLeft<=0){
+      clearInterval(dTimer);
+      txt.textContent='✓';
+      fill.style.stroke='var(--border)';
+      document.getElementById('d-hint').textContent='tempo — toca para revelar';
+    }
+  },1000);
+}
+
+function revealDesafio() {
+  if(dRevealed) return; dRevealed=true; clearInterval(dTimer);
+  document.getElementById('d-timer-text').textContent='✓';
+  document.getElementById('d-answer').classList.add('revealed');
+  document.getElementById('d-actions').style.display='flex';
+  document.getElementById('d-hint').style.display='none';
+  speak(dDeck[dIdx%dDeck.length].answer);
+}
+
+function speakDesafio(){speak(dDeck[dIdx%dDeck.length].answer);}
+
+function scoreDesafio(correct){
+  dTotal++; if(correct){dCorrect++;dStreak++;}else{dStreak=0;}
+  dIdx++; loadDesafioCard();
+}
+</script>
+</body>
+</html>
