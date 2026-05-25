@@ -458,6 +458,42 @@ const CATEGORIES = [
       { pt: "o descascador",    en: "peeler",         img: "Vegetable_peeler" },
       { pt: "o ralador",        en: "grater",         img: "Cheese_grater" }
     ]
+  },
+  {
+    id: "sala_jantar", label: "Sala de Jantar",
+    words: [
+      { pt: "a mesa de jantar",      en: "dining table",    img: "Dining_table" },
+      { pt: "a cadeira de jantar",   en: "dining chair",    img: "Dining_chair" },
+      { pt: "a toalha de mesa",      en: "tablecloth",      img: "Tablecloth" },
+      { pt: "o guardanapo",          en: "napkin",          img: "Cloth_napkin" },
+      { pt: "o lugar à mesa",        en: "place setting",   img: "Place_setting" },
+      { pt: "o sal",                 en: "salt",            img: "Salt_shaker" },
+      { pt: "a pimenta",             en: "pepper",          img: "Peppercorn" },
+      { pt: "o anfitrião",           en: "host",            img: "Dinner_party" },
+      { pt: "o convidado",           en: "guest",           img: "Dinner_guest" }
+    ]
+  },
+  {
+    id: "loca_talheres", label: "Loiça & Talheres",
+    words: [
+      { pt: "o prato raso",           en: "dinner plate",   img: "Dinner_plate" },
+      { pt: "o prato de sopa",        en: "soup bowl",      img: "Soup_bowl" },
+      { pt: "o prato de pão",         en: "side plate",     img: "Side_plate" },
+      { pt: "a tigela",               en: "bowl",           img: "Bowl" },
+      { pt: "a chávena",              en: "mug",            img: "Mug" },
+      { pt: "a chávena de café",      en: "coffee cup",     img: "Coffee_cup" },
+      { pt: "a chávena de chá",       en: "teacup",         img: "Teacup" },
+      { pt: "o copo de vinho",        en: "wine glass",     img: "Wine_glass" },
+      { pt: "o copo de água",         en: "tumbler",        img: "Drinking_glass" },
+      { pt: "o jarro",                en: "jug",            img: "Pitcher_(container)" },
+      { pt: "o bule",                 en: "teapot",         img: "Teapot" },
+      { pt: "a cafeteira",            en: "cafetière",      img: "French_press" },
+      { pt: "o oveiro",               en: "egg cup",        img: "Egg_cup" },
+      { pt: "o garfo de mesa",        en: "dinner fork",    img: "Fork" },
+      { pt: "a faca de mesa",         en: "dinner knife",   img: "Table_knife" },
+      { pt: "a colher de sopa",       en: "soup spoon",     img: "Soup_spoon" },
+      { pt: "a argola de guardanapo", en: "napkin ring",    img: "Napkin_ring" }
+    ]
   }
 ];
 
@@ -581,6 +617,38 @@ function renderTabela() {
   const container = document.getElementById('mode-tabela');
   container.innerHTML = '';
   const words = getActiveWords();
+
+  // Sala de Jantar: inject phrases block at top
+  if (activeCatId === 'sala_jantar') {
+    const ph = document.createElement('div');
+    ph.className = 'section-heading'; ph.textContent = 'Frases à Mesa';
+    container.appendChild(ph);
+    const phrases = [
+      { pt: 'Posso repetir, por favor?',      en: 'Can I have some more, please?' },
+      { pt: 'Estou satisfeito, obrigado.',     en: "I've had enough, thank you. (m)" },
+      { pt: 'Estava delicioso.',               en: 'That was delicious.' },
+      { pt: 'pôr a mesa',                      en: 'to set the table' },
+      { pt: 'servir',                          en: 'to serve' },
+      { pt: 'a refeição',                      en: 'the meal' },
+      { pt: 'o jantar',                        en: 'dinner' },
+      { pt: 'o almoço',                        en: 'lunch' },
+      { pt: 'o pequeno-almoço',                en: 'breakfast' },
+    ];
+    const pGrid = document.createElement('div');
+    pGrid.className = 'table-grid';
+    phrases.forEach(p => {
+      const card = document.createElement('div'); card.className = 'table-card';
+      const ptEl = document.createElement('span'); ptEl.className = 'pt-word'; ptEl.textContent = p.pt;
+      ptEl.onclick = () => speakText(p.pt, ptEl);
+      const enEl = document.createElement('div'); enEl.className = 'en-word'; enEl.textContent = p.en;
+      card.appendChild(ptEl); card.appendChild(enEl);
+      pGrid.appendChild(card);
+    });
+    container.appendChild(pGrid);
+    const h2 = document.createElement('div');
+    h2.className = 'section-heading'; h2.textContent = 'Vocabulário';
+    container.appendChild(h2);
+  }
 
   const addGroup = (label, gw) => {
     if (label) {
