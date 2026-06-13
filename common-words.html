@@ -544,7 +544,7 @@ function buildTable(words) {
       </td>
       <td class="def-cell">${w.def}</td>
       <td class="ex-cell">
-        <span class="ex-pt" onclick="event.stopPropagation(); speak('${w.ex_pt.replace(/'/g,"\\'")}', this)" style="cursor:pointer" title="🔊 ouvir">${w.ex_pt}</span>
+        <span class="ex-pt" onclick="event.stopPropagation(); speak('${w.ex_pt.replace(/'/g,"\\'").replace(/"/g,'&quot;')}', this)" style="cursor:pointer" title="🔊 ouvir">${w.ex_pt}</span>
         <span class="ex-en">${w.ex_en}</span>
       </td>
     `;
