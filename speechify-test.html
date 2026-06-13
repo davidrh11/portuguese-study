@@ -98,7 +98,7 @@
   <button class="btn secondary" onclick="fetchVoices()">Fetch Available Voices</button>
   <div class="status" id="voicesStatus"></div>
 
-  <label style="margin-top:1.25rem">Portuguese Voices — click to select, ▶ to preview</label>
+  <label style="margin-top:1.25rem">European Portuguese (pt-PT) Voices — click to select, ▶ to preview</label>
   <div class="voice-picker-empty" id="voicePickerEmpty">Fetch voices to see Portuguese-capable options here.</div>
   <div class="voice-picker-grid" id="voicePickerGrid"></div>
 
@@ -316,12 +316,12 @@ function renderVoicePicker() {
   const empty = document.getElementById('voicePickerEmpty');
   const currentVoiceId = document.getElementById('voiceId').value.trim();
 
-  const ptVoices = ALL_VOICES.filter(v => getLocales(v).some(l => l.toLowerCase().startsWith('pt')));
+  const ptVoices = ALL_VOICES.filter(v => getLocales(v).some(l => l.toLowerCase() === 'pt-pt'));
 
   if (!ptVoices.length) {
     grid.innerHTML = '';
     empty.style.display = 'block';
-    empty.textContent = 'No voices with Portuguese (pt-*) support found in this account.';
+    empty.textContent = 'No voices with European Portuguese (pt-PT) support found in this account.';
     return;
   }
   empty.style.display = 'none';
@@ -329,7 +329,7 @@ function renderVoicePicker() {
 
   ptVoices.forEach(v => {
     const id = v.id || v.voice_id || v.name;
-    const locales = getLocales(v).filter(l => l.toLowerCase().startsWith('pt'));
+    const locales = getLocales(v).filter(l => l.toLowerCase() === 'pt-pt');
     const gender = v.gender || '';
     const displayName = v.display_name || id;
 
