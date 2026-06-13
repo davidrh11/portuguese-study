@@ -572,15 +572,15 @@ function buildFlashDeck() {
 }
 
 // ── TTS ────────────────────────────────────────────────────────────────────
-// ElevenLabs via Cloudflare Worker — pt-PT voice, natural quality
+// TTS via Cloudflare Worker — pt-PT voice
 
-const WORKER_URL = "https://portuguese-tts.drh-dave.workers.dev";
+const WORKER_URL = "https://portuguese-tts-speechify.drh-dave.workers.dev";
 
 let currentAudio = null;
 
 function initVoice() {
   const status = document.getElementById('voiceStatus');
-  if (status) status.textContent = 'Voz: ElevenLabs pt-PT';
+  if (status) status.textContent = 'Voz: Português Europeu';
 }
 
 async function speak(text, btnId) {

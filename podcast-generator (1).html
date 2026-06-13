@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="pt" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Podcast Generator — Português</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<!-- LAME MP3 encoder -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"></script>
+<style>
+  :root {
+    --bg: #f9f6f0; --surface: #ffffff; --surface2: #f2ede6;
+    --border: #e0d8cc; --border2: #ccc4b4;
+    --green: #2d7a50; --green-light: #eef5f1; --green-mid: #9acbb0;
+    --red: #a03428; --red-light: #fdf2f1;
+    --text: #2e2820; --muted: #8a7a68; --muted2: #b0a090;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+  header { padding: 1.5rem 2rem 1rem; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; }
+  .header-text h1 { font-family: var(--mono); font-size: 1rem; font-weight: 400; color: var(--muted); }
+  .header-text h1 span { color: var(--green); }
+  .header-text p { font-size: 0.82rem; color: var(--muted2); margin-top: 0.2rem; }
+  .pt-flag { flex-shrink: 0; width: 48px; height: 32px; border-radius: 3px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.15); margin-top: 2px; }
+
+  .wrap { max-width: 600px; margin: 0 auto; padding: 2rem; }
+
+  /* EPISODE CARDS */
+  .ep-grid { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+  .ep-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1.25rem 1.5rem; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 1.25rem;
+  }
+  .ep-card:hover { border-color: var(--green-mid); }
+  .ep-card.selected { border-color: var(--green); background: var(--green-light); }
+  .ep-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .ep-info { flex: 1; }
+  .ep-title { font-family: var(--mono); font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 0.2rem; }
+  .ep-desc { font-size: 0.78rem; color: var(--muted); }
+  .ep-duration { font-family: var(--mono); font-size: 0.7rem; color: var(--muted2); }
+
+  /* SECTION TITLE */
+  .section-title { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--red); margin: 1.5rem 0 0.75rem; border-left: 3px solid var(--red); padding-left: 0.65rem; }
+  .section-title:first-child { margin-top: 0; }
+
+  /* GENERATE BUTTON */
+  .btn-generate {
+    width: 100%; padding: 0.9rem; font-family: var(--mono); font-size: 0.9rem; font-weight: 600;
+    background: var(--green); color: #fff; border: none; border-radius: 6px;
+    cursor: pointer; transition: all 0.2s; margin-bottom: 1.5rem;
+  }
+  .btn-generate:hover { filter: brightness(1.1); }
+  .btn-generate:disabled { opacity: 0.4; cursor: default; }
+
+  /* PROGRESS */
+  .progress-wrap { display: none; margin-bottom: 1.5rem; }
+  .progress-wrap.visible { display: block; }
+  .progress-header { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-bottom: 0.5rem; }
+  .progress-track { width: 100%; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 0.75rem; }
+  .progress-fill { height: 100%; background: var(--green); border-radius: 3px; transition: width 0.3s; }
+  .progress-log { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 0.75rem 1rem; max-height: 160px; overflow-y: auto; }
+  .log-line { font-family: var(--mono); font-size: 0.68rem; color: var(--muted); padding: 0.15rem 0; border-bottom: 1px solid var(--border); }
+  .log-line:last-child { border-bottom: none; color: var(--text); }
+  .log-line.done { color: var(--green); }
+  .log-line.error { color: var(--red); }
+
+  /* DOWNLOAD */
+  .download-wrap { display: none; background: var(--green-light); border: 1px solid var(--green-mid); border-radius: 8px; padding: 1.5rem; text-align: center; }
+  .download-wrap.visible { display: block; }
+  .download-wrap h3 { font-family: var(--mono); font-size: 0.9rem; color: var(--green); margin-bottom: 0.5rem; }
+  .download-wrap p { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.25rem; }
+  .btn-download {
+    display: inline-block; font-family: var(--mono); font-size: 0.85rem; font-weight: 600;
+    padding: 0.7rem 2rem; background: var(--green); color: #fff;
+    border: none; border-radius: 4px; cursor: pointer; text-decoration: none;
+    transition: filter 0.2s;
+  }
+  .btn-download:hover { filter: brightness(1.1); }
+  .file-size { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); margin-top: 0.75rem; }
+
+  /* NOTE */
+  .note-block { background: var(--surface2); border-left: 3px solid var(--green); padding: 0.85rem 1.1rem; border-radius: 0 4px 4px 0; font-size: 0.82rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.5rem; }
+  .note-block strong { color: var(--green); font-family: var(--mono); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-text">
+    <h1>Podcast <span>Generator</span></h1>
+    <p>Gera episódios MP3 para ouvir a caminhar</p>
+  </div>
+  <svg class="pt-flag" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="19.2" height="32" fill="#006600"/>
+    <rect x="19.2" y="0" width="28.8" height="32" fill="#FF0000"/>
+    <circle cx="19.2" cy="16" r="7" fill="none" stroke="#FFCC00" stroke-width="1.2"/>
+    <circle cx="19.2" cy="16" r="4.5" fill="none" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="19.2" y1="11.5" x2="19.2" y2="20.5" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="14.7" y1="16" x2="23.7" y2="16" stroke="#FFCC00" stroke-width="0.8"/>
+    <line x1="16" y1="12.8" x2="22.4" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <line x1="22.4" y1="12.8" x2="16" y2="19.2" stroke="#FFCC00" stroke-width="0.6"/>
+    <rect x="17" y="13.5" width="4.4" height="5" fill="white" rx="0.5"/>
+    <circle cx="19.2" cy="16" r="0.8" fill="#003399"/>
+    <circle cx="17.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="14.5" r="0.5" fill="#003399"/>
+    <circle cx="17.7" cy="17.5" r="0.5" fill="#003399"/>
+    <circle cx="20.7" cy="17.5" r="0.5" fill="#003399"/>
+  </svg>
+</header>
+
+<div class="wrap">
+
+  <div class="note-block">
+    Use this on <strong>desktop Chrome</strong>. Select an episode, click Generate, wait for all segments to download and stitch, then download the MP3. Transfer to your phone via AirDrop, cable, or cloud.
+  </div>
+
+  <div class="section-title">Escolhe o Episódio</div>
+  <div class="ep-grid" id="epGrid"></div>
+
+  <button class="btn-generate" id="btnGenerate" onclick="generate()" disabled>
+    🎙 Gerar MP3
+  </button>
+
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-header">
+      <span id="progressLabel">A gerar…</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-log" id="progressLog"></div>
+  </div>
+
+  <div class="download-wrap" id="downloadWrap">
+    <h3>✓ MP3 pronto!</h3>
+    <p id="downloadDesc"></p>
+    <a class="btn-download" id="downloadBtn" download>⬇ Download MP3</a>
+    <div class="file-size" id="fileSize"></div>
+  </div>
+
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts-speechify.drh-dave.workers.dev";
+
+// ── EPISODE DATA ──────────────────────────────────────────────────
+const VERBS = [
+  { inf: 'saber',     en: 'to know facts',          ex_pt: 'Não sei.',                           ex_en: "I don't know." },
+  { inf: 'vir',       en: 'to come',                ex_pt: 'Pode vir aqui?',                     ex_en: 'Can you come here?' },
+  { inf: 'falar',     en: 'to speak',               ex_pt: 'Estou a falar português.',            ex_en: "I'm speaking Portuguese." },
+  { inf: 'ver',       en: 'to see, to understand',  ex_pt: 'Estou a ver.',                       ex_en: 'I see. I understand.' },
+  { inf: 'ficar',     en: 'to stay, to become',     ex_pt: 'Vou ficar aqui.',                    ex_en: "I'm going to stay here." },
+  { inf: 'gostar',    en: 'to like',                ex_pt: 'Gosto muito de Lisboa.',              ex_en: 'I really like Lisbon.' },
+  { inf: 'precisar',  en: 'to need',                ex_pt: 'Preciso de ajuda.',                  ex_en: 'I need help.' },
+  { inf: 'trazer',    en: 'to bring',               ex_pt: 'Pode trazer a conta?',                ex_en: 'Can you bring the bill?' },
+  { inf: 'pedir',     en: 'to ask for, to order',   ex_pt: 'Posso pedir, por favor?',             ex_en: 'Can I order, please?' },
+  { inf: 'comer',     en: 'to eat',                 ex_pt: 'Vamos comer algo?',                  ex_en: 'Shall we eat something?' },
+  { inf: 'beber',     en: 'to drink',               ex_pt: 'Queria beber um copo.',               ex_en: "I'd like to have a drink." },
+  { inf: 'andar',     en: 'to walk, to get around', ex_pt: 'Estou a andar pela cidade.',          ex_en: "I'm walking around the city." },
+  { inf: 'começar',   en: 'to begin',               ex_pt: 'Estou a começar a aprender.',         ex_en: "I'm starting to learn." },
+  { inf: 'perceber',  en: 'to understand',          ex_pt: 'Não percebo.',                       ex_en: "I don't understand." },
+  { inf: 'trabalhar', en: 'to work',                ex_pt: 'Vou trabalhar amanhã.',               ex_en: "I'm going to work tomorrow." },
+  { inf: 'morar',     en: 'to live, to reside',     ex_pt: 'Moro em Lisboa.',                    ex_en: 'I live in Lisbon.' },
+  { inf: 'comprar',   en: 'to buy',                 ex_pt: 'Vou comprar pão.',                   ex_en: "I'm going to buy bread." },
+  { inf: 'ajudar',    en: 'to help',                ex_pt: 'Pode ajudar-me?',                    ex_en: 'Can you help me?' },
+  { inf: 'esperar',   en: 'to wait, to hope',       ex_pt: 'Estou a esperar.',                   ex_en: "I'm waiting." },
+  { inf: 'conhecer',  en: 'to know a person or place', ex_pt: 'Conhece Lisboa bem?',             ex_en: 'Do you know Lisbon well?' },
+  { inf: 'chegar',    en: 'to arrive',              ex_pt: 'Estou a chegar.',                    ex_en: "I'm on my way." },
+  { inf: 'sentar',    en: 'to sit',                 ex_pt: 'Posso sentar-me aqui?',              ex_en: 'May I sit here?' },
+  { inf: 'sair',      en: 'to leave, to go out',    ex_pt: 'Devo sair por aqui?',                ex_en: 'Should I leave this way?' },
+  { inf: 'voltar',    en: 'to return, to come back',ex_pt: 'Vou voltar às seis.',                ex_en: "I'm coming back at six." },
+  { inf: 'abrir',     en: 'to open',                ex_pt: 'Pode abrir a janela?',               ex_en: 'Can you open the window?' },
+];
+
+// Pause durations in seconds (will become silence buffers)
+const P_REPEAT  = 4.0;   // +1s — time to say it aloud
+const P_CONFIRM = 1.5;   // after EN — let it land
+const P_BETWEEN = 1.2;   // between verbs
+const P_SHORT   = 0.6;   // brief gap
+
+// Each episode is an array of { text, pause_after }
+// text: string to speak via TTS | null for silence-only
+// pause_after: seconds of silence to add after this segment
+function buildEp1Segments() {
+  const segs = [];
+  segs.push({ text: 'Verbos em português europeu. Vinte e cinco verbos essenciais. Ouve cada verbo, repete em voz alta, e ouve a tradução.', lang: 'pt', pause_after: 1.5 });
+  segs.push({ text: 'Vamos começar.', pause_after: 2.0 });
+
+  VERBS.forEach((v, i) => {
+    segs.push({ text: `Verbo ${i + 1}.`, pause_after: P_SHORT });
+    segs.push({ text: v.inf,   pause_after: P_REPEAT });
+    segs.push({ text: v.en,    lang: 'en', pause_after: P_CONFIRM });
+    segs.push({ text: v.ex_pt, pause_after: P_REPEAT });
+    segs.push({ text: v.ex_en, lang: 'en', pause_after: P_CONFIRM });
+    segs.push({ text: v.ex_pt, pause_after: P_REPEAT });
+    segs.push({ text: v.ex_pt, pause_after: i < VERBS.length - 1 ? P_BETWEEN : 1.0 });
+  });
+
+  segs.push({ text: 'Muito bem. Vinte e cinco verbos completos. Continua a praticar. Até já.', pause_after: 0 });
+  return segs;
+}
+
+// ── EP2 DATA ──────────────────────────────────────────────────────
+const VERBS_IRR = [
+  { inf: 'ser',   en: 'to be, permanent', pres_eu: 'sou',   pres_voc: 'é',     past_eu: 'fui',   past_voc: 'foi',
+    ex_pres: { pt: 'Sou de Miami, mas moro em Lisboa.', en: 'I am from Miami, but I live in Lisbon.' },
+    ex_past: { pt: 'Foi uma boa aula de português.', en: 'It was a good Portuguese class.' } },
+  { inf: 'estar', en: 'to be, temporary', pres_eu: 'estou', pres_voc: 'está',  past_eu: 'estive', past_voc: 'esteve',
+    ex_pres: { pt: 'Estou a aprender português frequentemente.', en: 'I am learning Portuguese frequently.' },
+    ex_past: { pt: 'Estive no café da Praça das Flores.', en: 'I was at the café in Praça das Flores.' } },
+  { inf: 'ir',    en: 'to go',            pres_eu: 'vou',   pres_voc: 'vai',   past_eu: 'fui',   past_voc: 'foi',
+    ex_pres: { pt: 'Vou ao supermercado comprar pão e manteiga.', en: 'I am going to the supermarket to buy bread and butter.' },
+    ex_past: { pt: 'Fui ao restaurante jantar fora ontem.', en: 'I went to the restaurant for dinner yesterday.' } },
+  { inf: 'ter',   en: 'to have',          pres_eu: 'tenho', pres_voc: 'tem',   past_eu: 'tive',  past_voc: 'teve',
+    ex_pres: { pt: 'Tenho aula de português às sextas-feiras.', en: 'I have Portuguese class on Fridays.' },
+    ex_past: { pt: 'Tive a barriga a dar horas antes do jantar.', en: 'I was starving before dinner.' } },
+  { inf: 'fazer', en: 'to do, to make',   pres_eu: 'faço',  pres_voc: 'faz',   past_eu: 'fiz',   past_voc: 'fez',
+    ex_pres: { pt: 'Faço sempre café de manhã antes de trabalhar.', en: 'I always make coffee in the morning before working.' },
+    ex_past: { pt: 'Fiz uma lista de supermercado antes de sair.', en: 'I made a shopping list before leaving.' } },
+  { inf: 'dar',   en: 'to give',          pres_eu: 'dou',   pres_voc: 'dá',    past_eu: 'dei',   past_voc: 'deu',
+    ex_pres: { pt: 'Dou sempre uma gorjeta quando o serviço é bom.', en: 'I always give a tip when the service is good.' },
+    ex_past: { pt: 'Dei a conta ao empregado e fui embora.', en: 'I gave the bill to the waiter and left.' } },
+  { inf: 'dizer', en: 'to say',           pres_eu: 'digo',  pres_voc: 'diz',   past_eu: 'disse', past_voc: 'disse',
+    ex_pres: { pt: 'Digo sempre obrigado quando alguém me ajuda.', en: 'I always say thank you when someone helps me.' },
+    ex_past: { pt: 'Disse ao empregado que queria a carta de vinhos.', en: 'I told the waiter I wanted the wine list.' } },
+];
+
+function buildEp2Segments() {
+  const segs = [];
+  const P2_REPEAT = 4.0, P2_CONFIRM = 1.5, P2_SHORT = 0.8, P2_BETWEEN = 2.0;
+
+  segs.push({ text: 'Sete verbos irregulares em português europeu. Para cada verbo vais ouvir o presente e o passado, nas formas eu e você. Repete cada forma em voz alta.', pause_after: 1.5 });
+  segs.push({ text: 'Vamos começar.', pause_after: 2.0 });
+
+  VERBS_IRR.forEach((v, i) => {
+    segs.push({ text: `Verbo ${i + 1}. ${v.inf}.`, pause_after: 2.0 });
+    segs.push({ text: v.en, lang: 'en', pause_after: P2_SHORT });
+    segs.push({ text: 'Presente do indicativo.', pause_after: P2_SHORT });
+    segs.push({ text: `Eu ${v.pres_eu}.`, pause_after: P2_REPEAT });
+    segs.push({ text: `Você ${v.pres_voc}.`, pause_after: P2_REPEAT });
+    // presente example — PT → pause → EN → PT → pause
+    segs.push({ text: v.ex_pres.pt, pause_after: P2_REPEAT });
+    segs.push({ text: v.ex_pres.en, lang: 'en', pause_after: P2_CONFIRM });
+    segs.push({ text: v.ex_pres.pt, pause_after: P2_REPEAT });
+    segs.push({ text: 'Pretérito perfeito.', pause_after: P2_SHORT });
+    segs.push({ text: `Eu ${v.past_eu}.`, pause_after: P2_REPEAT });
+    segs.push({ text: `Você ${v.past_voc}.`, pause_after: P2_REPEAT });
+    // passado example — PT → pause → EN → PT → pause
+    segs.push({ text: v.ex_past.pt, pause_after: P2_REPEAT });
+    segs.push({ text: v.ex_past.en, lang: 'en', pause_after: P2_CONFIRM });
+    segs.push({ text: v.ex_past.pt, pause_after: i < VERBS_IRR.length - 1 ? P2_REPEAT : 1.0 });
+  });
+
+  segs.push({ text: 'Muito bem. Sete verbos irregulares — presente e passado — completos. Continua a praticar.', pause_after: 0 });
+  return segs;
+}
+
+// ── EP3 DATA ──────────────────────────────────────────────────────
+const FRAMES_EP3 = [
+  {
+    label: 'Estou a',
+    intro: 'Frame um. Estou a, mais o infinitivo. O presente contínuo — o que está a fazer agora.',
+    examples: [
+      { pt: 'Estou a aprender português.', en: "I'm learning Portuguese." },
+      { pt: 'Estou a esperar o autocarro na paragem.', en: "I'm waiting for the bus at the stop." },
+      { pt: 'Estou a cozinhar o jantar na cozinha.', en: "I'm cooking dinner in the kitchen." },
+      { pt: 'Estou a andar pela Baixa de Lisboa.', en: "I'm walking through downtown Lisbon." },
+    ],
+    prompts: [
+      { en: "I'm buying bread at the supermarket.", pt: 'Estou a comprar pão no supermercado.' },
+      { en: "I'm drinking coffee.", pt: 'Estou a beber café.' },
+      { en: "I'm opening the window.", pt: 'Estou a abrir a janela.' },
+    ]
+  },
+  {
+    label: 'Posso',
+    intro: 'Frame dois. Posso, mais o infinitivo. Permissão ou pedido educado. Pode também usar pode para pedir ao outro.',
+    examples: [
+      { pt: 'Posso pedir, por favor?', en: 'Can I order, please?' },
+      { pt: 'Pode trazer a carta de vinhos?', en: 'Can you bring the wine list?' },
+      { pt: 'Posso sentar-me aqui?', en: 'May I sit here?' },
+      { pt: 'Pode ajudar-me a encontrar a farmácia?', en: 'Can you help me find the pharmacy?' },
+    ],
+    prompts: [
+      { en: 'Can I ask a question?', pt: 'Posso fazer uma pergunta?' },
+      { en: 'Can you bring the bill?', pt: 'Pode trazer a conta?' },
+      { en: 'May I sit in the living room?', pt: 'Posso sentar-me na sala de estar?' },
+    ]
+  },
+  {
+    label: 'Queria',
+    intro: 'Frame três. Queria, mais o infinitivo ou um substantivo. O equivalente de I would like. Muito educado e natural.',
+    examples: [
+      { pt: 'Queria uma garrafa de vinho tinto, por favor.', en: "I'd like a bottle of red wine, please." },
+      { pt: 'Queria ir jantar fora esta noite.', en: "I'd like to go out for dinner tonight." },
+      { pt: 'Queria comprar pão e manteiga no supermercado.', en: "I'd like to buy bread and butter at the supermarket." },
+      { pt: 'Queria morar mais perto do rio Tejo.', en: "I'd like to live closer to the Tagus river." },
+    ],
+    prompts: [
+      { en: "I'd like a coffee, please.", pt: 'Queria um café, por favor.' },
+      { en: "I'd like to know Lisbon better.", pt: 'Queria conhecer Lisboa melhor.' },
+      { en: "I'd like to order the bacalhau.", pt: 'Queria pedir o bacalhau.' },
+    ]
+  },
+  {
+    label: 'Devo',
+    intro: 'Frame quatro. Devo, mais o infinitivo. Conselho ou obrigação moral.',
+    examples: [
+      { pt: 'Devo sair por aqui?', en: 'Should I leave this way?' },
+      { pt: 'Não deve falar inglês sempre. Deve praticar o português.', en: "You shouldn't always speak English. You should practise Portuguese." },
+      { pt: 'Deve pedir o peixe do dia. É o melhor.', en: "You should order the fish of the day. It's the best." },
+      { pt: 'Devo comprar mais azeite? Há muito pouco em casa.', en: 'Should I buy more olive oil? There is very little at home.' },
+    ],
+    prompts: [
+      { en: 'Should I wait here?', pt: 'Devo esperar aqui?' },
+      { en: 'You should try the vinho verde.', pt: 'Deve experimentar o vinho verde.' },
+      { en: 'Should I open the window?', pt: 'Devo abrir a janela?' },
+    ]
+  },
+  {
+    label: 'Vou',
+    intro: 'Frame cinco. Vou, mais o infinitivo. O futuro próximo — o que vai fazer a seguir, hoje, amanhã.',
+    examples: [
+      { pt: 'Vou ter aula de português amanhã.', en: "I'm going to have Portuguese class tomorrow." },
+      { pt: 'Vou comprar pão e leite no supermercado a seguir.', en: "I'm going to buy bread and milk at the supermarket next." },
+      { pt: 'Vamos beber um copo esta noite?', en: 'Shall we have a drink tonight?' },
+      { pt: 'Vou voltar para casa às seis. Há bacalhau para o jantar.', en: "I'm going home at six. There's bacalhau for dinner." },
+    ],
+    prompts: [
+      { en: "I'm going to work tomorrow.", pt: 'Vou trabalhar amanhã.' },
+      { en: "I'm going to stay here a little bit.", pt: 'Vou ficar aqui um bocadinho.' },
+      { en: "We're going to eat out tonight.", pt: 'Vamos comer fora esta noite.' },
+    ]
+  },
+];
+
+function buildEp3Segments() {
+  const segs = [];
+  const P3_EXAMPLE = 6.0, P3_CONFIRM = 3.0, P3_SHORT = 0.8, P3_PROMPT = 10.0, P3_BETWEEN = 4.0;
+
+  segs.push({ text: 'Combinações de verbos em português europeu. Cinco frames. Para cada frame, ouves exemplos reais e depois tentas produzir frases em português. Ouve o prompt em inglês, faz uma pausa, e diz a frase em português. Depois ouves a resposta correcta.', pause_after: 2.0 });
+
+  FRAMES_EP3.forEach((f, fi) => {
+    segs.push({ text: f.intro, pause_after: P3_SHORT });
+    segs.push({ text: 'Exemplos.', pause_after: P3_SHORT });
+    f.examples.forEach(ex => {
+      // PT → pause → EN → PT → pause
+      segs.push({ text: ex.pt, pause_after: P3_EXAMPLE });
+      segs.push({ text: ex.en, lang: 'en', pause_after: P3_CONFIRM });
+      segs.push({ text: ex.pt, pause_after: P3_EXAMPLE });
+    });
+    segs.push({ text: 'Agora és tu. Ouve o inglês e diz a frase em português.', pause_after: P3_SHORT });
+    f.prompts.forEach(p => {
+      // EN → long pause → PT → pause
+      segs.push({ text: p.en, lang: 'en', pause_after: P3_PROMPT });
+      segs.push({ text: p.pt, pause_after: P3_EXAMPLE });
+    });
+    if (fi < FRAMES_EP3.length - 1) {
+      segs.push({ text: 'Frame seguinte.', pause_after: P3_BETWEEN });
+    }
+  });
+
+  segs.push({ text: 'Muito bem. Cinco frames, vinte e cinco combinações. Continua a praticar. Usa estes frames em todas as conversas.', pause_after: 0 });
+  return segs;
+}
+
+// ── EP4 DATA ──────────────────────────────────────────────────────
+const EXPRESSIONS_EP4 = [
+  { pt:'um bocadinho',                   en:'a little bit / just a moment',          cat:'Essenciais',  context:'Diminutive of bocado. Use this constantly — it immediately sounds more native than pouco. Softens any request.',         examples:[{pt:'Espera um bocadinho.',en:"Wait a moment."},{pt:'Fala um bocadinho mais devagar.',en:'Speak a little more slowly.'},{pt:'Só um bocadinho de vinho, obrigado.',en:'Just a little wine, thank you.'}] },
+  { pt:'Obrigadíssimo.',                 en:'Many thanks. I am extremely grateful.',  cat:'Essenciais',  context:'The superlative of obrigado. The suffix íssimo intensifies — extremely grateful. Dave says obrigadíssimo. A woman says obrigadíssima.',  examples:[{pt:'Obrigadíssimo pela ajuda!',en:'Many thanks for the help!'}] },
+  { pt:'Sem problema.',                  en:'No problem.',                            cat:'Essenciais',  context:'The standard casual response when someone thanks you or apologises. Interchangeable with na boa in most contexts.',           examples:[{pt:'Desculpe o atraso. Sem problema!',en:"Sorry I'm late. No problem!"}] },
+  { pt:'Na boa.',                        en:"It's fine. No worries. All good.",       cat:'Essenciais',  context:'More casual than sem problema. Signals relaxed acceptance. Works as a standalone yes to posso: just say na boa.',             examples:[{pt:'Posso sentar aqui? Na boa!',en:"Can I sit here? Sure, go ahead!"},{pt:'Tudo bem? Na boa.',en:'Everything okay? All good.'}] },
+  { pt:'Até já.',                        en:'See you in a bit.',                      cat:'Despedidas',  context:'Use when you will see the person again the same day, or very soon. Sounds odd if you will not see them until next week.',         examples:[{pt:'Vou ao café. Até já!',en:"I'm going to the café. See you in a bit!"}] },
+  { pt:'Até logo.',                      en:'See you later.',                         cat:'Despedidas',  context:'Slightly more open-ended than até já — later today or in the near future.',                                                   examples:[{pt:'Tenho uma reunião. Até logo!',en:'I have a meeting. See you later!'}] },
+  { pt:'Até amanhã.',                    en:'See you tomorrow.',                      cat:'Despedidas',  context:'Straightforward — you will see them tomorrow. Common at end of workday or end of class.',                                        examples:[{pt:'Boa noite! Até amanhã!',en:'Good night! See you tomorrow!'}] },
+  { pt:'Até à próxima.',                 en:'Until next time.',                       cat:'Despedidas',  context:'The most open-ended farewell. More formal. Use with a shopkeeper, a neighbour you do not know well, a client.',                  examples:[{pt:'Foi um prazer. Até à próxima!',en:'It was a pleasure. Until next time!'}] },
+  { pt:'Prazer em vê-lo.',               en:'Nice to see you. Said to a man.',        cat:'Despedidas',  context:'For a woman: Prazer em vê-la. For a group: Prazer em vê-los. Use in formal contexts.',                                          examples:[{pt:'Ainda bem! Prazer em vê-lo! Até à próxima!',en:'Glad to hear it! Nice to see you! Until next time!'}] },
+  { pt:'Tenha um bom fim de semana.',    en:'Have a good weekend.',                   cat:'Despedidas',  context:'Tenha is the formal imperative of ter. Use with anyone you address as você.',                                                     examples:[{pt:'Tenha um bom fim de semana! Até segunda.',en:'Have a good weekend! See you Monday.'}] },
+  { pt:'Vai-se andando.',                en:'So-so. Getting by. One keeps going.',    cat:'Palavras do Dia', context:'The perfect answer when you are not great but not bad. Literally: one keeps walking. Very Portuguese in its understated resignation.', examples:[{pt:'Tudo bem? Vai-se andando.',en:'How are you? So-so, getting by.'}] },
+  { pt:'Estou de rastos.',               en:"I'm exhausted. I'm dragging myself along.", cat:'Palavras do Dia', context:'More vivid than estou cansado. Literally: I am crawling along the ground. Use after a long day, bad sleep, a tough week.',    examples:[{pt:'Hoje estou de rastos. Dormi muito mal.',en:"I'm exhausted today. I slept very badly."}] },
+  { pt:'Tenho a barriga a dar horas.',   en:"I'm absolutely starving.",               cat:'Palavras do Dia', context:'Literally: my belly is chiming the hours. Much more expressive than tenho fome.',                                                   examples:[{pt:'Ainda não almocei. Tenho a barriga a dar horas!',en:"I haven't had lunch yet. I'm absolutely starving!"}] },
+  { pt:'Mais vale feito que perfeito.',  en:'Done is better than perfect.',           cat:'Idiomáticas', context:'A proverb: finishing something imperfectly is better than not finishing it at all.',                                               examples:[{pt:'Não está perfeito, mas... mais vale feito que perfeito!',en:"It's not perfect, but... done is better than perfect!"}] },
+  { pt:'Isso são outros quinhentos.',    en:"That's a whole different story.",        cat:'Idiomáticas', context:'Used when a subject is completely different from what was being discussed. Old Portuguese currency — pure idiom now.',               examples:[{pt:'E o teu trabalho? Ah, isso são outros quinhentos!',en:"And your work? Ah, that's a whole different story!"}] },
+  { pt:'Um homem prevenido vale por dois.', en:'Forewarned is forearmed.',            cat:'Idiomáticas', context:'A proverb: someone who prepares in advance is worth twice as much.',                                                                  examples:[{pt:'Leva sempre um chapéu de chuva. Um homem prevenido vale por dois!',en:'Always bring an umbrella. Forewarned is forearmed!'}] },
+  { pt:'Estou a mais infinitivo.',       en:'I am doing something right now.',        cat:'Estrutura',   context:'One of the most generative structures in European Portuguese. Estou a, plus any infinitive, equals I am doing that thing right now.',examples:[{pt:'Estou a aprender português.',en:"I'm learning Portuguese."},{pt:'Estou a esperar o autocarro.',en:"I'm waiting for the bus."}] },
+  { pt:'adjectivo mais -mente.',         en:'adjective plus -ly — makes adverbs.',    cat:'Estrutura',   context:'Add -mente to the feminine form of an adjective. Frequente becomes frequentemente. Lenta becomes lentamente.',                         examples:[{pt:'Fala lentamente, por favor.',en:'Speak slowly, please.'},{pt:'É provavelmente o melhor restaurante.',en:"It's probably the best restaurant."}] },
+];
+
+function buildEp4Segments() {
+  const segs = [];
+  const P4_REPEAT = 4.5, P4_CONFIRM = 1.5, P4_SHORT = 0.8, P4_BETWEEN = 2.0;
+
+  segs.push({ text:'Dezoito expressões portuguesas. Para cada expressão, ouves o contexto, os exemplos, e depois repetes.', pause_after:2.0 });
+
+  let lastCat = null;
+  EXPRESSIONS_EP4.forEach((expr, i) => {
+    if (expr.cat !== lastCat) {
+      lastCat = expr.cat;
+      segs.push({ text:`${expr.cat}.`, pause_after:P4_SHORT });
+    }
+    // Expression name + pause to repeat
+    segs.push({ text:expr.pt, pause_after:P4_REPEAT });
+    // Context
+    segs.push({ text:expr.context, lang:'en', pause_after:P4_CONFIRM });
+    // Examples — PT → pause → EN → PT → pause
+    expr.examples.forEach(ex => {
+      segs.push({ text:ex.pt, pause_after:P4_REPEAT });
+      segs.push({ text:ex.en, lang:'en', pause_after:P4_CONFIRM });
+      segs.push({ text:ex.pt, pause_after:P4_REPEAT });
+    });
+    if (i < EXPRESSIONS_EP4.length - 1) {
+      segs.push({ text:null, pause_after:P4_BETWEEN });
+    }
+  });
+
+  segs.push({ text:'Muito bem. Dezoito expressões completas. Usa-as nas tuas conversas em Lisboa.', pause_after:0 });
+  return segs;
+}
+
+const EPISODES = [
+  {
+    id: 'ep1',
+    title: 'Ep. 1 — Verbos: Infinitivos',
+    desc: '25 verbos · infinitivo · tradução · exemplo',
+    icon: '🎧',
+    filename: 'pt-ep1-verbos-infinitivos.mp3',
+    buildSegments: buildEp1Segments,
+  },
+  {
+    id: 'ep2',
+    title: 'Ep. 2 — Conjugações Irregulares',
+    desc: '7 verbos · presente & passado · eu & você',
+    icon: '🎧',
+    filename: 'pt-ep2-conjugacoes.mp3',
+    buildSegments: buildEp2Segments,
+  },
+  {
+    id: 'ep3',
+    title: 'Ep. 3 — Combinações de Verbos',
+    desc: '5 frames · exemplos · produção EN→PT',
+    icon: '🎧',
+    filename: 'pt-ep3-combinacoes.mp3',
+    buildSegments: buildEp3Segments,
+  },
+  {
+    id: 'ep4',
+    title: 'Ep. 4 — Expressões',
+    desc: '18 expressões · contexto · exemplos · repetição',
+    icon: '🎧',
+    filename: 'pt-ep4-expressoes.mp3',
+    buildSegments: buildEp4Segments,
+  },
+];
+
+// ── STATE ─────────────────────────────────────────────────────────
+let selectedEp = null;
+
+// ── BUILD EPISODE LIST ────────────────────────────────────────────
+function buildEpGrid() {
+  const grid = document.getElementById('epGrid');
+  EPISODES.forEach(ep => {
+    const card = document.createElement('div');
+    card.className = 'ep-card';
+    card.innerHTML = `
+      <div class="ep-icon">${ep.icon}</div>
+      <div class="ep-info">
+        <div class="ep-title">${ep.title}</div>
+        <div class="ep-desc">${ep.desc}</div>
+      </div>`;
+    card.onclick = () => {
+      document.querySelectorAll('.ep-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedEp = ep;
+      document.getElementById('btnGenerate').disabled = false;
+    };
+    grid.appendChild(card);
+  });
+}
+
+// ── AUDIO FETCH ───────────────────────────────────────────────────
+const FETCH_DELAY_MS = 300;    // 300ms between requests — pacing to avoid TTS rate limits
+const MAX_RETRIES = 3;
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function fetchAudioBuffer(ctx, text, lang, attempt = 1) {
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, language: lang || 'pt' })
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const arrayBuf = await res.arrayBuffer();
+    return await ctx.decodeAudioData(arrayBuf);
+  } catch(e) {
+    if (attempt < MAX_RETRIES) {
+      const delay = attempt * 1000;
+      log(`↺ Retry ${attempt}/${MAX_RETRIES - 1} for: "${text.substring(0, 40)}…" (waiting ${delay/1000}s)`, false);
+      await sleep(delay);
+      return fetchAudioBuffer(ctx, text, lang, attempt + 1);
+    }
+    throw new Error(`Failed after ${MAX_RETRIES} attempts: ${text.substring(0, 40)}`);
+  }
+}
+
+function makeSilenceBuffer(ctx, seconds) {
+  const sampleRate = ctx.sampleRate;
+  const length = Math.floor(sampleRate * seconds);
+  const buffer = ctx.createBuffer(1, length, sampleRate);
+  return buffer;
+}
+
+// ── GENERATE ─────────────────────────────────────────────────────
+async function generate() {
+  if (!selectedEp) return;
+
+  const btn = document.getElementById('btnGenerate');
+  btn.disabled = true;
+
+  document.getElementById('progressWrap').classList.add('visible');
+  document.getElementById('downloadWrap').classList.remove('visible');
+  document.getElementById('progressLog').innerHTML = '';
+
+  const segments = selectedEp.buildSegments();
+  const totalSegs = segments.length;
+  const ctx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 44100 });
+
+  const buffers = [];
+  let done = 0;
+
+  for (const seg of segments) {
+    try {
+      // Silence-only segment (no TTS needed)
+      if (!seg.text) {
+        if (seg.pause_after > 0) buffers.push(makeSilenceBuffer(ctx, seg.pause_after));
+        done++; updateProgress(done, totalSegs);
+        continue;
+      }
+
+      log(`🔊 "${seg.text.substring(0, 50)}${seg.text.length > 50 ? '…' : ''}"`, false);
+
+      // Fetch TTS audio with rate limiting delay
+      await sleep(FETCH_DELAY_MS);
+      const audioBuf = await fetchAudioBuffer(ctx, seg.text, seg.lang || 'pt');
+      buffers.push(audioBuf);
+
+      // Add silence after
+      if (seg.pause_after > 0) {
+        buffers.push(makeSilenceBuffer(ctx, seg.pause_after));
+      }
+
+      done++;
+      updateProgress(done, totalSegs);
+      logDone();
+
+    } catch(e) {
+      log(`✗ Skipped: ${e.message}`, true);
+      // Add silence placeholder so timing isn't broken
+      buffers.push(makeSilenceBuffer(ctx, 1.0));
+      done++;
+      updateProgress(done, totalSegs);
+    }
+  }
+
+  log('Stitching audio…', false);
+
+  // Stitch all buffers into one
+  const totalSamples = buffers.reduce((sum, b) => sum + b.length, 0);
+  const sampleRate = ctx.sampleRate;
+  const channels = 1; // mono
+  const combined = ctx.createBuffer(channels, totalSamples, sampleRate);
+  const channelData = combined.getChannelData(0);
+
+  let offset = 0;
+  for (const buf of buffers) {
+    const src = buf.numberOfChannels > 0 ? buf.getChannelData(0) : new Float32Array(buf.length);
+    channelData.set(src, offset);
+    offset += buf.length;
+  }
+
+  log('Encoding MP3…', false);
+
+  // Encode to MP3 using lamejs
+  const mp3Data = encodeToMp3(channelData, sampleRate);
+  const mp3Blob = new Blob(mp3Data, { type: 'audio/mp3' });
+  const mp3Url = URL.createObjectURL(mp3Blob);
+
+  logDone();
+  updateProgress(totalSegs, totalSegs);
+
+  // Show download
+  const durationMin = Math.round(totalSamples / sampleRate / 60);
+  const sizeMB = (mp3Blob.size / 1024 / 1024).toFixed(1);
+  document.getElementById('downloadDesc').textContent = `${selectedEp.title} · ~${durationMin} min · ${sizeMB} MB`;
+  document.getElementById('downloadBtn').href = mp3Url;
+  document.getElementById('downloadBtn').download = selectedEp.filename;
+  document.getElementById('fileSize').textContent = `${sizeMB} MB — transfere para o telefone via AirDrop ou cabo`;
+  document.getElementById('downloadWrap').classList.add('visible');
+
+  btn.disabled = false;
+  log('✓ Pronto!', false);
+  document.querySelector('.log-line:last-child').classList.add('done');
+}
+
+// ── MP3 ENCODER (lamejs) ──────────────────────────────────────────
+function encodeToMp3(float32Array, sampleRate) {
+  const mp3enc = new lamejs.Mp3Encoder(1, sampleRate, 128); // mono, sampleRate, 128kbps
+  const blockSize = 1152;
+  const mp3Data = [];
+
+  // Convert Float32 → Int16
+  const int16 = new Int16Array(float32Array.length);
+  for (let i = 0; i < float32Array.length; i++) {
+    const s = Math.max(-1, Math.min(1, float32Array[i]));
+    int16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+  }
+
+  for (let i = 0; i < int16.length; i += blockSize) {
+    const chunk = int16.subarray(i, i + blockSize);
+    const encoded = mp3enc.encodeBuffer(chunk);
+    if (encoded.length > 0) mp3Data.push(new Int8Array(encoded));
+  }
+
+  const flushed = mp3enc.flush();
+  if (flushed.length > 0) mp3Data.push(new Int8Array(flushed));
+
+  return mp3Data;
+}
+
+// ── UI HELPERS ────────────────────────────────────────────────────
+function updateProgress(done, total) {
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressLabel').textContent = `Segmento ${done} de ${total}`;
+}
+
+function log(msg, isError) {
+  const log = document.getElementById('progressLog');
+  const line = document.createElement('div');
+  line.className = 'log-line' + (isError ? ' error' : '');
+  line.textContent = msg;
+  log.appendChild(line);
+  log.scrollTop = log.scrollHeight;
+}
+
+function logDone() {
+  const lines = document.querySelectorAll('.log-line');
+  if (lines.length > 0) lines[lines.length - 1].classList.add('done');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+buildEpGrid();
+</script>
+</body>
+</html>
