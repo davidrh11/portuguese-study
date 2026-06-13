@@ -132,6 +132,7 @@
     max-width: none; padding: 0.5rem 0.75rem 0.7rem 0;
   }
   .ex-pt { color: var(--text); display: block; margin-bottom: 0.2rem; font-style: italic; }
+  .ex-pt:hover { color: var(--yellow); text-decoration: underline; text-decoration-color: var(--yellow); text-underline-offset: 2px; }
   .ex-en { color: var(--muted); display: block; font-size: 0.78rem; }
 
   .expand-hint {
@@ -543,7 +544,7 @@ function buildTable(words) {
       </td>
       <td class="def-cell">${w.def}</td>
       <td class="ex-cell">
-        <span class="ex-pt">${w.ex_pt}</span>
+        <span class="ex-pt" onclick="event.stopPropagation(); speak('${w.ex_pt.replace(/'/g,"\\'")}', this)" style="cursor:pointer" title="🔊 ouvir">${w.ex_pt}</span>
         <span class="ex-en">${w.ex_en}</span>
       </td>
     `;
