@@ -51,6 +51,19 @@
   .voice-id { color: var(--green); font-weight: 600; }
   .voice-meta { color: var(--muted); margin-left: 0.5rem; }
 
+  /* PT-PT VOICE PICKER */
+  .voice-picker-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.6rem; margin-top: 0.75rem; }
+  .voice-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; cursor: pointer; transition: all 0.15s; }
+  .voice-card:hover { border-color: var(--green); }
+  .voice-card.selected { border-color: var(--green); background: var(--highlight); border-width: 2px; }
+  .voice-card-name { font-family: var(--mono); font-size: 0.95rem; font-weight: 600; color: var(--green); display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+  .voice-card-meta { font-size: 0.72rem; color: var(--muted); margin-top: 0.25rem; text-transform: capitalize; }
+  .voice-card-locales { font-family: var(--mono); font-size: 0.68rem; color: var(--muted); margin-top: 0.4rem; }
+  .voice-preview-btn { background: var(--bg); border: 1px solid var(--green); color: var(--green); font-family: var(--mono); font-size: 0.7rem; padding: 0.25rem 0.6rem; border-radius: 99px; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+  .voice-preview-btn:hover, .voice-preview-btn.playing { background: var(--green); color: #fff; }
+  .voice-card.selected .voice-card-name::after { content: '✓'; color: var(--green); font-weight: 700; }
+  .voice-picker-empty { font-size: 0.82rem; color: var(--muted); padding: 0.75rem 0; }
+
   .note-block { background: var(--highlight); border-left: 3px solid var(--green); padding: 0.9rem 1.1rem; border-radius: 0 6px 6px 0; margin: 1rem 0; font-size: 0.85rem; line-height: 1.6; }
   .note-block code { font-family: var(--mono); background: var(--border); padding: 0.1rem 0.3rem; border-radius: 3px; }
 </style>
@@ -84,6 +97,11 @@
 
   <button class="btn secondary" onclick="fetchVoices()">Fetch Available Voices</button>
   <div class="status" id="voicesStatus"></div>
+
+  <label style="margin-top:1.25rem">Portuguese Voices — click to select, ▶ to preview</label>
+  <div class="voice-picker-empty" id="voicePickerEmpty">Fetch voices to see Portuguese-capable options here.</div>
+  <div class="voice-picker-grid" id="voicePickerGrid"></div>
+
   <div class="voices-list" id="voicesList" style="display:none"></div>
 </div>
 
@@ -137,12 +155,12 @@ renderSentences();
 
 let currentAudio = null;
 
-async function synthesize(text) {
+async function synthesize(text, voiceIdOverride) {
   const apiKey = document.getElementById('apiKey').value.trim();
   if (!apiKey) {
     throw new Error('Enter your Speechify API key first.');
   }
-  const voiceId = document.getElementById('voiceId').value.trim() || 'george';
+  const voiceId = voiceIdOverride || document.getElementById('voiceId').value.trim() || 'george';
   const model = document.getElementById('model').value;
   const language = document.getElementById('language').value;
 
@@ -231,6 +249,9 @@ async function playCustom() {
   }
 }
 
+let ALL_VOICES = [];
+const PREVIEW_TEXT = "Boa tarde. Queria uma mesa para dois, por favor.";
+
 async function fetchVoices() {
   const apiKey = document.getElementById('apiKey').value.trim();
   const status = document.getElementById('voicesStatus');
@@ -256,10 +277,13 @@ async function fetchVoices() {
       status.className = 'status error';
       return;
     }
+    ALL_VOICES = voices;
+
+    // Full list (collapsed reference)
     list.innerHTML = '';
     voices.forEach(v => {
       const id = v.id || v.voice_id || v.name || JSON.stringify(v).slice(0, 30);
-      const langs = (v.models && v.models.map(m => (m.languages || []).map(l => l.locale).join(',')).join(' | ')) || '';
+      const langs = getLocales(v).join(', ');
       const gender = v.gender || '';
       const row = document.createElement('div');
       row.className = 'voice-row';
@@ -268,12 +292,87 @@ async function fetchVoices() {
       list.appendChild(row);
     });
     list.style.display = 'block';
-    status.textContent = `${voices.length} voices found. Click one to select it.`;
+
+    renderVoicePicker();
+
+    status.textContent = `${voices.length} voices found.`;
     status.className = 'status ok';
   } catch (e) {
     console.error(e);
     status.textContent = 'Error: ' + e.message;
     status.className = 'status error';
+  }
+}
+
+function getLocales(v) {
+  if (!v.models) return [];
+  const locales = new Set();
+  v.models.forEach(m => (m.languages || []).forEach(l => { if (l.locale) locales.add(l.locale); }));
+  return [...locales];
+}
+
+function renderVoicePicker() {
+  const grid = document.getElementById('voicePickerGrid');
+  const empty = document.getElementById('voicePickerEmpty');
+  const currentVoiceId = document.getElementById('voiceId').value.trim();
+
+  const ptVoices = ALL_VOICES.filter(v => getLocales(v).some(l => l.toLowerCase().startsWith('pt')));
+
+  if (!ptVoices.length) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    empty.textContent = 'No voices with Portuguese (pt-*) support found in this account.';
+    return;
+  }
+  empty.style.display = 'none';
+  grid.innerHTML = '';
+
+  ptVoices.forEach(v => {
+    const id = v.id || v.voice_id || v.name;
+    const locales = getLocales(v).filter(l => l.toLowerCase().startsWith('pt'));
+    const gender = v.gender || '';
+    const displayName = v.display_name || id;
+
+    const card = document.createElement('div');
+    card.className = 'voice-card' + (id === currentVoiceId ? ' selected' : '');
+    card.innerHTML = `
+      <div class="voice-card-name">
+        <span>${displayName}</span>
+        <button class="voice-preview-btn" data-id="${id}">▶</button>
+      </div>
+      <div class="voice-card-meta">${gender}</div>
+      <div class="voice-card-locales">${locales.join(' · ')}</div>
+    `;
+    card.onclick = (e) => {
+      if (e.target.classList.contains('voice-preview-btn')) return;
+      document.getElementById('voiceId').value = id;
+      renderVoicePicker();
+    };
+    card.querySelector('.voice-preview-btn').onclick = (e) => {
+      e.stopPropagation();
+      previewVoice(id, e.target);
+    };
+    grid.appendChild(card);
+  });
+}
+
+async function previewVoice(voiceId, btn) {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  document.querySelectorAll('.voice-preview-btn').forEach(b => b.classList.remove('playing'));
+  btn.classList.add('playing');
+  btn.textContent = '…';
+  try {
+    const url = await synthesize(PREVIEW_TEXT, voiceId);
+    const audio = new Audio(url);
+    currentAudio = audio;
+    audio.onended = () => { btn.classList.remove('playing'); btn.textContent = '▶'; };
+    audio.onerror = () => { btn.classList.remove('playing'); btn.textContent = '▶'; };
+    await audio.play();
+  } catch (e) {
+    console.error(e);
+    btn.classList.remove('playing');
+    btn.textContent = '✕';
+    setTimeout(() => { btn.textContent = '▶'; }, 1500);
   }
 }
 </script>
