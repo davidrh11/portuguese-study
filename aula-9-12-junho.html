@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="pt" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aula 9 & 12 de Junho · Lugar · Demonstrativos</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0; --surface: #ffffff; --border: #e2ddd6;
+    --green: #2d7a50; --red: #a03428; --text: #1a1a1a; --muted: #6b6560;
+    --highlight: #eef6f1;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+  header { background: var(--surface); border-bottom: 2px solid var(--green); padding: 1.25rem 2rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .header-text h1 { font-family: var(--mono); font-size: 0.95rem; font-weight: 600; color: var(--green); }
+  .header-text p { font-size: 0.8rem; color: var(--muted); margin-top: 0.15rem; }
+
+  .tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--surface); padding: 0 2rem; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { font-family: var(--mono); font-size: 0.8rem; padding: 0.75rem 1.25rem; cursor: pointer; color: var(--muted); border: none; background: none; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  .view { display: none; padding: 2rem; max-width: 720px; margin: 0 auto; }
+  .view.active { display: block; }
+
+  .section-title { font-family: var(--mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--green); margin: 2rem 0 0.75rem; border-left: 3px solid var(--green); padding-left: 0.6rem; }
+  .section-title:first-child { margin-top: 0; }
+  .section-title.red { color: var(--red); border-left-color: var(--red); }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; max-width: 680px; }
+  th { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); text-align: left; padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); }
+  td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td.pt-word { font-family: var(--mono); font-size: 0.92rem; color: var(--green); font-weight: 600; cursor: pointer; width: 30%; }
+  td.pt-word:hover { text-decoration: underline; text-decoration-color: var(--green); text-underline-offset: 3px; }
+  td.en-word { color: var(--text); font-size: 0.88rem; width: 28%; }
+  td.note-cell { color: var(--muted); font-size: 0.82rem; width: 42%; }
+  td.note-cell[onclick] { cursor: pointer; }
+  td.note-cell[onclick]:hover { color: var(--green); }
+  tbody tr:hover { background: #f4f0ea; }
+
+  /* NOTE BLOCK */
+  .note-block { background: var(--highlight); border-left: 3px solid var(--green); padding: 0.9rem 1.1rem; border-radius: 0 6px 6px 0; margin: 1rem 0; }
+  .note-block .note-label { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.35rem; }
+  .note-block p { font-size: 0.87rem; line-height: 1.7; }
+  .note-block .pt { font-family: var(--mono); color: var(--green); font-weight: 600; }
+  .note-block .en { color: var(--muted); font-style: italic; }
+
+  /* DEMONSTRATIVES GRID */
+  .dem-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-bottom: 1.25rem; max-width: 680px; }
+  .dem-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center; }
+  .dem-adv { font-family: var(--mono); font-size: 1.1rem; font-weight: 700; margin-bottom: 0.3rem; cursor: pointer; }
+  .dem-adv.aqui { color: var(--red); }
+  .dem-adv.ai { color: #2255aa; }
+  .dem-adv.ali { color: var(--green); }
+  .dem-dist { font-size: 0.72rem; color: var(--muted); font-style: italic; margin-bottom: 0.6rem; }
+  .dem-forms { display: grid; grid-template-columns: 1fr 1fr; gap: 0.3rem; }
+  .dem-form { font-family: var(--mono); font-size: 0.82rem; font-weight: 600; padding: 0.3rem; border-radius: 4px; cursor: pointer; }
+  .dem-form.aqui { color: var(--red); background: #fef0f0; }
+  .dem-form:hover { opacity: 0.75; }
+  .dem-form.ai { color: #2255aa; background: #eef0fc; }
+  .dem-form.ali { color: var(--green); background: var(--highlight); }
+  .dem-label { font-size: 0.65rem; color: var(--muted); text-align: center; margin-top: 0.15rem; }
+
+  /* DIALOGUE */
+  .dialogue { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; max-width: 600px; }
+  .dial-line { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; align-items: flex-start; }
+  .dial-line:last-child { margin-bottom: 0; }
+  .dial-speaker { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); width: 55px; flex-shrink: 0; padding-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .dial-pt { font-family: var(--mono); font-size: 0.88rem; color: var(--green); font-weight: 600; cursor: pointer; line-height: 1.5; flex: 1; }
+  .dial-pt:hover { text-decoration: underline; text-decoration-color: var(--green); }
+  .dial-en { font-size: 0.78rem; color: var(--muted); margin-top: 0.15rem; font-style: italic; }
+
+  /* EXPRESSAO BLOCK */
+  .expressao-block { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.1rem 1.5rem; margin: 0.75rem 0; max-width: 600px; }
+  .exp-label { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--red); margin-bottom: 0.3rem; }
+  .exp-pt { font-family: var(--mono); font-size: 1.1rem; font-weight: 600; color: var(--green); cursor: pointer; }
+  .exp-pt:hover { text-decoration: underline; }
+  .exp-en { font-size: 0.85rem; color: var(--muted); margin-top: 0.2rem; }
+  .exp-note { font-size: 0.82rem; color: var(--text); margin-top: 0.5rem; line-height: 1.5; }
+
+  /* FLASHCARD — vfc pattern */
+  .flashcard-wrap { max-width: 480px; margin: 0 auto; }
+  .vfc-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+  .vfc-counter { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+  .vfc-controls { display: flex; gap: 0.5rem; }
+  .vfc-ctrl { font-family: var(--mono); font-size: 0.72rem; background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 0.35rem 0.85rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .vfc-ctrl:hover { border-color: var(--green); color: var(--green); }
+  .vfc-progress { height: 2px; background: var(--border); border-radius: 1px; margin-bottom: 1.25rem; overflow: hidden; }
+  .vfc-progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
+  .vfc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; min-height: 300px; display: flex; flex-direction: column; align-items: center; padding: 1.5rem 2rem; text-align: center; }
+  .vfc-hints { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 1.25rem; }
+  .vfc-cat { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); align-self: flex-start; margin-bottom: 0.75rem; }
+  .vfc-en { font-size: 1rem; color: var(--text); font-weight: 300; line-height: 1.5; margin-bottom: 1.1rem; }
+  .vfc-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1.1rem; }
+  .vfc-pt { font-family: var(--mono); font-size: 1.3rem; color: var(--green); font-weight: 700; filter: blur(7px); transition: filter 0.3s; cursor: pointer; margin-bottom: 1.1rem; background: var(--border); border-radius: 4px; padding: 0.15rem 0.6rem; display: inline-block; line-height: 1.5; }
+  .vfc-pt.revealed { filter: blur(0); background: transparent; }
+  .vfc-speak { background: var(--bg); border: 1px solid var(--border); color: var(--green); padding: 0.35rem 1.2rem; border-radius: 99px; cursor: pointer; transition: all 0.2s; font-size: 1rem; margin-bottom: 1rem; }
+  .vfc-speak:hover, .vfc-speak.playing { background: var(--green); color: #fff; border-color: var(--green); }
+  .vfc-ex-pt { font-style: italic; font-size: 0.82rem; color: var(--text); filter: blur(5px); transition: filter 0.3s; cursor: pointer; margin-bottom: 0.2rem; background: var(--border); border-radius: 3px; padding: 0.05rem 0.3rem; display: inline-block; }
+  .vfc-ex-pt.revealed { filter: blur(0); background: transparent; }
+  .vfc-ex-en { font-size: 0.75rem; color: var(--muted); filter: blur(5px); transition: filter 0.3s; background: var(--border); border-radius: 3px; padding: 0.05rem 0.3rem; display: inline-block; margin-bottom: 1rem; cursor: pointer; }
+  .vfc-ex-en.revealed { filter: blur(0); background: transparent; }
+  .vfc-nav { display: flex; gap: 1rem; margin-top: auto; }
+  .vfc-nav-btn { font-family: var(--mono); font-size: 0.82rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 0.55rem 1.25rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .vfc-nav-btn:hover { border-color: var(--green); color: var(--green); }
+
+  /* QUIZ */
+  .quiz-wrap { max-width: 520px; margin: 0 auto; }
+  .quiz-score { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); margin-bottom: 1.5rem; }
+  .quiz-q { font-family: var(--mono); font-size: 1rem; color: var(--green); text-align: center; margin-bottom: 1.25rem; min-height: 60px; line-height: 1.5; }
+  .quiz-prompt { font-size: 0.82rem; color: var(--muted); text-align: center; margin-bottom: 0.75rem; }
+  .quiz-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; margin-bottom: 1rem; }
+  .quiz-opt { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 0.8rem; cursor: pointer; font-size: 0.82rem; color: var(--text); transition: all 0.15s; text-align: center; }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--green); }
+  .quiz-opt.correct { border-color: var(--green); background: var(--highlight); color: var(--green); }
+  .quiz-opt.wrong { border-color: var(--red); background: #fdf0ef; color: var(--red); }
+  .quiz-opt:disabled { cursor: default; }
+  .quiz-feedback { text-align: center; font-family: var(--mono); font-size: 0.82rem; min-height: 1.4rem; margin-bottom: 1rem; }
+  .quiz-feedback.ok { color: var(--green); }
+  .quiz-feedback.bad { color: var(--red); }
+  .quiz-next { display: block; margin: 0 auto; font-family: var(--mono); font-size: 0.85rem; padding: 0.6rem 2rem; background: var(--green); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+  .quiz-next:disabled { opacity: 0.3; cursor: default; }
+
+  /* DESAFIO */
+  .desafio-wrap { max-width: 520px; margin: 0 auto; }
+  .d-meta { display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem; }
+  .d-streak { color: var(--green); font-weight: 600; }
+  .d-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.75rem 1.5rem 1.5rem; text-align: center; min-height: 280px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+  .d-cat { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.75rem; align-self: flex-start; }
+  .d-prompt { font-size: 1rem; color: var(--text); margin-bottom: 1.25rem; line-height: 1.6; max-width: 400px; }
+  .d-timer-ring { width: 52px; height: 52px; margin: 0 auto 1.25rem; position: relative; }
+  .d-timer-ring svg { transform: rotate(-90deg); }
+  .d-timer-ring circle { fill: none; stroke-width: 4; }
+  .d-timer-track { stroke: var(--border); }
+  .d-timer-fill { stroke: var(--green); stroke-dasharray: 138; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke 0.3s; stroke-linecap: round; }
+  .d-timer-fill.warn { stroke: #c47a00; }
+  .d-timer-fill.danger { stroke: var(--red); }
+  .d-timer-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 0.9rem; font-weight: 600; color: var(--text); }
+  .d-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1.25rem; }
+  .d-answer { font-family: var(--mono); font-size: 1.2rem; font-weight: 600; color: var(--green); filter: blur(8px); background: #e8f4ee; border-radius: 6px; padding: 0.4rem 1rem; cursor: pointer; transition: filter 0.3s, background 0.3s; margin-bottom: 0.75rem; user-select: none; line-height: 1.6; }
+  .d-answer.revealed { filter: blur(0); background: transparent; }
+  .d-speak { background: var(--bg); border: 1px solid var(--border); color: var(--green); padding: 0.3rem 1rem; border-radius: 99px; cursor: pointer; font-size: 0.9rem; margin-bottom: 1.25rem; transition: all 0.2s; }
+  .d-speak:hover { background: var(--green); color: #fff; }
+  .d-note { font-size: 0.78rem; color: var(--muted); font-style: italic; margin-bottom: 1.25rem; min-height: 1.2rem; }
+  .d-actions { display: flex; gap: 0.75rem; }
+  .d-btn { font-family: var(--mono); font-size: 0.82rem; font-weight: 600; padding: 0.6rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; transition: opacity 0.15s; }
+  .d-btn.disse { background: var(--green); color: #fff; }
+  .d-btn.nao { background: #fdf0ef; color: var(--red); border: 1px solid #dba09a; }
+  .d-btn:hover { opacity: 0.85; }
+  .d-hint { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); margin-top: 1rem; letter-spacing: 0.05em; }
+</style>
+</head>
+<body>
+
+<header>
+  <svg width="32" height="22" viewBox="0 0 32 22" xmlns="http://www.w3.org/2000/svg">
+    <rect width="12" height="22" fill="#006600"/>
+    <rect x="12" width="20" height="22" fill="#FF0000"/>
+    <circle cx="12" cy="11" r="5" fill="#FFD700" stroke="#00008B" stroke-width="0.5"/>
+    <circle cx="12" cy="11" r="3" fill="#00008B"/>
+    <circle cx="12" cy="11" r="1.5" fill="#FFD700"/>
+  </svg>
+  <div class="header-text">
+    <h1>Aula — 9 & 12 de Junho · Lugar · Demonstrativos</h1>
+    <p>A1.1 · Unidade 2 · Preposições de Lugar · Advérbios · Este/Esse/Aquele · cá/lá</p>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('tabela', this)">Tabela</button>
+  <button class="tab" onclick="switchTab('demonstrativos', this)">Demonstrativos</button>
+  <button class="tab" onclick="switchTab('flashcards', this)">Flashcards</button>
+  <button class="tab" onclick="switchTab('quiz', this)">Quiz</button>
+  <button class="tab" onclick="switchTab('desafio', this)">⚡ Desafio</button>
+</div>
+
+<!-- ══ TABELA ══ -->
+<div id="tabela" class="view active">
+
+  <div class="section-title">Preposições de Lugar — Location Prepositions</div>
+  <table>
+    <thead><tr><th>Português</th><th>English</th><th>Exemplo</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-word" onclick="speak('à frente de')">à frente de</td><td class="en-word">in front of</td><td class="note-cell" onclick="speak('O gato está à frente da caixa.')" style="cursor:pointer" title="🔊">O gato está à frente da caixa.</td></tr>
+      <tr><td class="pt-word" onclick="speak('atrás de')">atrás de</td><td class="en-word">behind</td><td class="note-cell" onclick="speak('O gato está atrás da caixa.')" style="cursor:pointer" title="🔊">O gato está atrás da caixa.</td></tr>
+      <tr><td class="pt-word" onclick="speak('em cima de')">em cima de</td><td class="en-word">on top of</td><td class="note-cell" onclick="speak('O gato está em cima da caixa.')" style="cursor:pointer" title="🔊">O gato está em cima da caixa.</td></tr>
+      <tr><td class="pt-word" onclick="speak('debaixo de')">debaixo de</td><td class="en-word">under / beneath</td><td class="note-cell" onclick="speak('O gato está debaixo da caixa.')" style="cursor:pointer" title="🔊">O gato está debaixo da caixa.</td></tr>
+      <tr><td class="pt-word" onclick="speak('dentro de')">dentro de</td><td class="en-word">inside</td><td class="note-cell" onclick="speak('O gato está dentro da caixa.')" style="cursor:pointer" title="🔊">O gato está dentro da caixa.</td></tr>
+      <tr><td class="pt-word" onclick="speak('entre')">entre</td><td class="en-word">between</td><td class="note-cell" onclick="speak('O gato está entre as duas caixas.')" style="cursor:pointer" title="🔊">O gato está entre as duas caixas.</td></tr>
+      <tr><td class="pt-word" onclick="speak('ao lado de')">ao lado de</td><td class="en-word">beside / next to</td><td class="note-cell" onclick="speak('O gato está ao lado da caixa.')" style="cursor:pointer" title="🔊">O gato está ao lado da caixa.</td></tr>
+      <tr><td class="pt-word" onclick="speak('ao pé de')">ao pé de</td><td class="en-word">right next to (close)</td><td class="note-cell" onclick="speak('Estou ao pé de ti.')" style="cursor:pointer" title="🔊">Estou ao pé de ti. — very close proximity.</td></tr>
+      <tr><td class="pt-word" onclick="speak('à direita de')">à direita de</td><td class="en-word">to the right of</td><td class="note-cell" onclick="speak('O banco está à direita da farmácia.')" style="cursor:pointer" title="🔊">O banco está à direita da farmácia.</td></tr>
+      <tr><td class="pt-word" onclick="speak('à esquerda de')">à esquerda de</td><td class="en-word">to the left of</td><td class="note-cell" onclick="speak('O café está à esquerda da livraria.')" style="cursor:pointer" title="🔊">O café está à esquerda da livraria.</td></tr>
+      <tr><td class="pt-word" onclick="speak('na, no')">na / no</td><td class="en-word">in / on (contraction)</td><td class="note-cell" onclick="speak('Está na secretária.')" style="cursor:pointer" title="🔊">em + a = na · em + o = no</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note-block">
+    <div class="note-label">Contrações — Preposition + Article</div>
+    <p>
+      <span class="pt">ao lado de + o = ao lado do</span> <span class="en">— beside the (masc.)</span><br>
+      <span class="pt">ao lado de + a = ao lado da</span> <span class="en">— beside the (fem.)</span><br>
+      <span class="pt">em + o = no</span> · <span class="pt">em + a = na</span><br>
+      <span class="pt">de + o = do</span> · <span class="pt">de + a = da</span>
+    </p>
+  </div>
+
+  <div class="section-title">Advérbios de Lugar — aqui · aí · ali · cá · lá</div>
+  <table>
+    <thead><tr><th>Advérbio</th><th>English</th><th>Nota</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-word" onclick="speak('aqui')">aqui</td><td class="en-word">here (near speaker)</td><td class="note-cell" onclick="speak('A Sofia está aqui.')" style="cursor:pointer" title="🔊">A Sofia está aqui. — perto do falante</td></tr>
+      <tr><td class="pt-word" onclick="speak('aí')">aí</td><td class="en-word">there (near listener)</td><td class="note-cell" onclick="speak('O livro está aí?')" style="cursor:pointer" title="🔊">O livro está aí? — perto do ouvinte</td></tr>
+      <tr><td class="pt-word" onclick="speak('ali')">ali</td><td class="en-word">over there (far from both)</td><td class="note-cell" onclick="speak('O gato está ali!')" style="cursor:pointer" title="🔊">O gato está ali! — longe de todos</td></tr>
+      <tr><td class="pt-word" onclick="speak('cá')">cá</td><td class="en-word">here (general / in this country)</td><td class="note-cell" onclick="speak('Moro cá com a minha família.')" style="cursor:pointer" title="🔊">Moro cá com a minha família.</td></tr>
+      <tr><td class="pt-word" onclick="speak('lá')">lá</td><td class="en-word">there (general / in that country)</td><td class="note-cell" onclick="speak('Ela está lá de férias com a família.')" style="cursor:pointer" title="🔊">Ela está lá de férias com a família.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note-block">
+    <div class="note-label">cá vs aqui · lá vs ali</div>
+    <p><span class="pt">aqui / aí / ali</span> are precise — they indicate the speaker's exact physical reference point.<br>
+    <span class="pt">cá / lá</span> are vague/general — used for countries, regions, general whereabouts. <em>Moro cá</em> = I live here (in Portugal). <em>Ela está lá</em> = She's there (in another country).</p>
+  </div>
+
+  <div class="section-title">Expressões — Diz-se Assim!</div>
+
+  <div class="expressao-block">
+    <div class="exp-label">Diz-se Assim</div>
+    <div class="exp-pt" onclick="speak('Para mim.')">Para mim.</div>
+    <div class="exp-en">For me. / As for me. / In my opinion.</div>
+    <div class="exp-note">Used when expressing a personal opinion or preference. <em>Para mim, o melhor dia é a sexta.</em> — For me, Friday is the best day.</div>
+  </div>
+
+  <div class="expressao-block">
+    <div class="exp-label">Diz-se Assim</div>
+    <div class="exp-pt" onclick="speak('O que lá vai, lá vai.')">O que lá vai, lá vai.</div>
+    <div class="exp-en">What's gone is gone. / What's done is done.</div>
+    <div class="exp-note">Said to encourage someone — we can't change the past, better to look forward. Equivalent to "let it go" or "water under the bridge."</div>
+  </div>
+
+  <div class="section-title">Diálogo — Não encontro os meus óculos</div>
+  <div class="dialogue">
+    <div class="dial-line">
+      <div class="dial-speaker">Dave</div>
+      <div>
+        <div class="dial-pt" onclick="speak('Manuel, não encontro os meus óculos.')">Manuel, não encontro os meus óculos.</div>
+        <div class="dial-en">Manuel, I can't find my glasses.</div>
+      </div>
+    </div>
+    <div class="dial-line">
+      <div class="dial-speaker">Manuel</div>
+      <div>
+        <div class="dial-pt" onclick="speak('Estão em cima da secretária, ao lado do teu computador.')">Estão em cima da secretária, ao lado do teu computador.</div>
+        <div class="dial-en">They're on top of the desk, next to your computer.</div>
+      </div>
+    </div>
+    <div class="dial-line">
+      <div class="dial-speaker">Dave</div>
+      <div>
+        <div class="dial-pt" onclick="speak('Não estão, não.')">Não estão, não.</div>
+        <div class="dial-en">They're not there. (emphatic negative)</div>
+      </div>
+    </div>
+    <div class="dial-line">
+      <div class="dial-speaker">Manuel</div>
+      <div>
+        <div class="dial-pt" onclick="speak('E dentro da tua mala?')">E dentro da tua mala?</div>
+        <div class="dial-en">And inside your bag?</div>
+      </div>
+    </div>
+    <div class="dial-line">
+      <div class="dial-speaker">Dave</div>
+      <div>
+        <div class="dial-pt" onclick="speak('Também não.')">Também não.</div>
+        <div class="dial-en">Not there either.</div>
+      </div>
+    </div>
+    <div class="dial-line">
+      <div class="dial-speaker">Manuel</div>
+      <div>
+        <div class="dial-pt" onclick="speak('Ah, olha! Estão na tua cabeça.')">Ah, olha! Estão na tua cabeça.</div>
+        <div class="dial-en">Oh, look! They're on your head.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Vocabulário do Diálogo</div>
+  <table>
+    <thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-word" onclick="speak('os óculos')">os óculos</td><td class="en-word">glasses</td><td class="note-cell" onclick="speak('Não encontro os meus óculos.')" style="cursor:pointer" title="🔊">Always plural in PT. Os meus óculos.</td></tr>
+      <tr><td class="pt-word" onclick="speak('a secretária')">a secretária</td><td class="en-word">desk</td><td class="note-cell" onclick="speak('Está em cima da secretária.')" style="cursor:pointer" title="🔊">Also = secretary (fem.) — context clarifies.</td></tr>
+      <tr><td class="pt-word" onclick="speak('a mala')">a mala</td><td class="en-word">bag / briefcase / suitcase</td><td class="note-cell" onclick="speak('Está dentro da mala.')" style="cursor:pointer" title="🔊">Context-dependent: handbag, briefcase, suitcase.</td></tr>
+      <tr><td class="pt-word" onclick="speak('a cabeça')">a cabeça</td><td class="en-word">head</td><td class="note-cell" onclick="speak('Estão na tua cabeça!')" style="cursor:pointer" title="🔊">na tua cabeça = on your head</td></tr>
+      <tr><td class="pt-word" onclick="speak('o arraial')">o arraial</td><td class="en-word">street fair / summer festival</td><td class="note-cell" onclick="speak('Vamos ao arraial este fim de semana?')" style="cursor:pointer" title="🔊">Traditional Portuguese summer street party.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Mercado — Market Phrases</div>
+  <table>
+    <thead><tr><th>Português</th><th>English</th><th>Contexto</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-word" onclick="speak('Diga.')">Diga.</td><td class="en-word">Go ahead. / Yes? / Tell me.</td><td class="note-cell">Shopkeeper invites you to speak.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Aqui tem sete euros.')">Aqui tem 7€.</td><td class="en-word">Here you go, 7 euros.</td><td class="note-cell" onclick="speak('Aqui tem sete euros.')" style="cursor:pointer" title="🔊">Handing over money.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Pode ser dinheiro.')">Pode ser dinheiro.</td><td class="en-word">Cash is fine. / Can be paid in cash.</td><td class="note-cell">In response to payment method question.</td></tr>
+      <tr><td class="pt-word" onclick="speak('Fique com o troco.')">Fique com o troco.</td><td class="en-word">Keep the change.</td><td class="note-cell" onclick="speak('Fique com o troco.')" style="cursor:pointer" title="🔊">o troco = the change (money)</td></tr>
+      <tr><td class="pt-word" onclick="speak('as framboesas')">as framboesas</td><td class="en-word">raspberries</td><td class="note-cell" onclick="speak('Queria cem gramas de framboesas, por favor.')" style="cursor:pointer" title="🔊">Cem gramas de framboesas, por favor.</td></tr>
+    </tbody>
+  </table>
+
+</div>
+
+<!-- ══ DEMONSTRATIVOS ══ -->
+<div id="demonstrativos" class="view">
+
+  <div class="section-title">Advérbio → Demonstrativo → Acordo de Género</div>
+  <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.25rem">The adverb of place you use tells you which demonstrative to pick. Then the demonstrative agrees with the noun's gender.</p>
+
+  <div class="dem-grid">
+    <div class="dem-card">
+      <div class="dem-adv aqui" onclick="speak('aqui')">aqui</div>
+      <div class="dem-dist">perto do falante</div>
+      <div class="dem-forms">
+        <div>
+          <div class="dem-form aqui" onclick="speak('este')">este</div>
+          <div class="dem-label">masc.</div>
+        </div>
+        <div>
+          <div class="dem-form aqui" onclick="speak('esta')">esta</div>
+          <div class="dem-label">fem.</div>
+        </div>
+      </div>
+    </div>
+    <div class="dem-card">
+      <div class="dem-adv ai" onclick="speak('aí')">aí</div>
+      <div class="dem-dist">perto do ouvinte</div>
+      <div class="dem-forms">
+        <div>
+          <div class="dem-form ai" onclick="speak('esse')">esse</div>
+          <div class="dem-label">masc.</div>
+        </div>
+        <div>
+          <div class="dem-form ai" onclick="speak('essa')">essa</div>
+          <div class="dem-label">fem.</div>
+        </div>
+      </div>
+    </div>
+    <div class="dem-card">
+      <div class="dem-adv ali" onclick="speak('ali')">ali</div>
+      <div class="dem-dist">longe de todos</div>
+      <div class="dem-forms">
+        <div>
+          <div class="dem-form ali" onclick="speak('aquele')">aquele</div>
+          <div class="dem-label">masc.</div>
+        </div>
+        <div>
+          <div class="dem-form ali" onclick="speak('aquela')">aquela</div>
+          <div class="dem-label">fem.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Exemplos com Substantivos</div>
+  <table>
+    <thead><tr><th>Demonstrativo</th><th>+ Substantivo</th><th>English</th></tr></thead>
+    <tbody>
+      <tr><td class="pt-word" onclick="speak('este')">este</td><td class="en-word" onclick="speak('Este quadro é bonito.')" style="cursor:pointer;font-family:var(--mono);color:var(--green)">Este quadro</td><td class="note-cell">This picture (m, near me)</td></tr>
+      <tr><td class="pt-word" onclick="speak('esta')">esta</td><td class="en-word" onclick="speak('Esta janela está aberta.')" style="cursor:pointer;font-family:var(--mono);color:var(--green)">Esta janela</td><td class="note-cell">This window (f, near me)</td></tr>
+      <tr><td class="pt-word" onclick="speak('esse')">esse</td><td class="en-word" onclick="speak('Esse computador é teu?')" style="cursor:pointer;font-family:var(--mono);color:var(--green)">Esse computador</td><td class="note-cell">That computer (m, near you)</td></tr>
+      <tr><td class="pt-word" onclick="speak('essa')">essa</td><td class="en-word" onclick="speak('Essa borracha é minha.')" style="cursor:pointer;font-family:var(--mono);color:var(--green)">Essa borracha</td><td class="note-cell">That eraser (f, near you)</td></tr>
+      <tr><td class="pt-word" onclick="speak('aquele')">aquele</td><td class="en-word" onclick="speak('Aquele carro é vermelho.')" style="cursor:pointer;font-family:var(--mono);color:var(--green)">Aquele carro</td><td class="note-cell">That car over there (m, far)</td></tr>
+      <tr><td class="pt-word" onclick="speak('aquela')">aquela</td><td class="en-word" onclick="speak('Aquela rua é bonita.')" style="cursor:pointer;font-family:var(--mono);color:var(--green)">Aquela rua</td><td class="note-cell">That street over there (f, far)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note-block">
+    <div class="note-label">Plural Forms — recognize but don't produce yet</div>
+    <p>
+      <span class="pt">este/esta → estes/estas</span><br>
+      <span class="pt">esse/essa → esses/essas</span><br>
+      <span class="pt">aquele/aquela → aqueles/aquelas</span><br><br>
+      <span class="en">You'll hear and read these often. For now focus on the singular forms.</span>
+    </p>
+  </div>
+
+  <div class="note-block">
+    <div class="note-label">EP vs BR — Important Difference</div>
+    <p>Brazilian Portuguese often uses <span class="pt">esse</span> where EP uses <span class="pt">este</span> — Brazilian collapses the near-speaker/near-listener distinction. Don't let Brazilian resources confuse the system above, which is the European standard your instructor is teaching.</p>
+  </div>
+
+</div>
+
+<!-- ══ FLASHCARDS ══ -->
+<div id="flashcards" class="view">
+<div class="flashcard-wrap">
+  <div class="vfc-topbar">
+    <span class="vfc-counter" id="vfcCounter">1 / 1</span>
+    <div class="vfc-controls">
+      <button class="vfc-ctrl" onclick="vfcShuffle()">⇄ Baralhar</button>
+      <button class="vfc-ctrl" onclick="vfcReset()">↺ Reiniciar</button>
+    </div>
+  </div>
+  <div class="vfc-progress"><div class="vfc-progress-fill" id="vfcFill"></div></div>
+  <div class="vfc-card">
+    <div class="vfc-hints" id="vfcHints">clique na palavra para revelar · clique no exemplo para ouvir</div>
+    <div class="vfc-cat" id="vfcCat"></div>
+    <div class="vfc-en" id="vfcEn"></div>
+    <div class="vfc-divider"></div>
+    <div class="vfc-pt" id="vfcPt" onclick="vfcReveal()"></div>
+    <button class="vfc-speak" id="vfcSpeak" onclick="vfcSpeakAnswer()">🔊</button>
+    <div class="vfc-ex-pt" id="vfcExPt" onclick="vfcSpeakEx()"></div>
+    <div class="vfc-ex-en" id="vfcExEn"></div>
+    <div class="vfc-nav">
+      <button class="vfc-nav-btn" onclick="vfcMove(-1)">← Anterior</button>
+      <button class="vfc-nav-btn" onclick="vfcMove(1)">Próximo →</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ QUIZ ══ -->
+<div id="quiz" class="view">
+<div class="quiz-wrap">
+  <div class="quiz-score" id="quiz-score">Score: 0 / 0</div>
+  <div class="quiz-q" id="quiz-q"></div>
+  <div class="quiz-prompt" id="quiz-prompt"></div>
+  <div class="quiz-opts" id="quiz-opts"></div>
+  <div class="quiz-feedback" id="quiz-fb"></div>
+  <button class="quiz-next" id="quiz-next" onclick="nextQuiz()" disabled>Próximo →</button>
+</div>
+</div>
+
+<!-- ══ DESAFIO ══ -->
+<div id="desafio" class="view">
+<div class="desafio-wrap">
+  <div class="d-meta">
+    <span id="d-score-display">Score: 0 / 0</span>
+    <span class="d-streak" id="d-streak-display"></span>
+  </div>
+  <div class="d-card">
+    <span class="d-cat" id="d-cat"></span>
+    <div class="d-prompt" id="d-prompt"></div>
+    <div class="d-timer-ring">
+      <svg width="52" height="52" viewBox="0 0 52 52">
+        <circle class="d-timer-track" cx="26" cy="26" r="22"/>
+        <circle class="d-timer-fill" id="d-timer-fill" cx="26" cy="26" r="22"/>
+      </svg>
+      <div class="d-timer-text" id="d-timer-text">8</div>
+    </div>
+    <div class="d-divider"></div>
+    <div class="d-answer" id="d-answer" onclick="revealDesafio()"></div>
+    <button class="d-speak" onclick="speakDesafio()">🔊</button>
+    <div class="d-note" id="d-note"></div>
+    <div class="d-actions" id="d-actions" style="display:none">
+      <button class="d-btn disse" onclick="scoreDesafio(true)">✓ Disse</button>
+      <button class="d-btn nao" onclick="scoreDesafio(false)">✗ Não disse</button>
+    </div>
+    <div class="d-hint" id="d-hint">diz em voz alta · depois clica para revelar</div>
+  </div>
+</div>
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts-speechify.drh-dave.workers.dev";
+const audioCache = {};
+async function speak(text) {
+  if (!text) return;
+  if (audioCache[text]) { audioCache[text].currentTime = 0; audioCache[text].play(); return; }
+  try {
+    const res = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({text}) });
+    if (!res.ok) throw new Error();
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url); audioCache[text] = audio; audio.play();
+  } catch(e) {}
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'flashcards') vfcRender();
+  if (id === 'quiz') startQuiz();
+  if (id === 'desafio') initDesafio();
+}
+
+// ── CARDS DATA ────────────────────────────────────────────────────
+const CARDS = [
+  // Preposições
+  { cat:'Preposição', pt:'à frente de', en:'in front of', note:'O gato está à frente da caixa.', en_note:'The cat is in front of the box.' },
+  { cat:'Preposição', pt:'atrás de', en:'behind', note:'O gato está atrás da caixa.', en_note:'The cat is behind the box.' },
+  { cat:'Preposição', pt:'em cima de', en:'on top of', note:'O gato está em cima da caixa.', en_note:'The cat is on top of the box.' },
+  { cat:'Preposição', pt:'debaixo de', en:'under / beneath', note:'O gato está debaixo da caixa.', en_note:'The cat is under the box.' },
+  { cat:'Preposição', pt:'dentro de', en:'inside', note:'O gato está dentro da caixa.', en_note:'The cat is inside the box.' },
+  { cat:'Preposição', pt:'entre', en:'between', note:'O gato está entre as duas caixas.', en_note:'The cat is between the two boxes.' },
+  { cat:'Preposição', pt:'ao lado de', en:'beside / next to', note:'O gato está ao lado da caixa.', en_note:'The cat is beside the box.' },
+  { cat:'Preposição', pt:'ao pé de', en:'right next to (close)', note:'Estou ao pé de ti.', en_note:'I am right next to you.' },
+  { cat:'Preposição', pt:'à direita de', en:'to the right of', note:'O banco está à direita da farmácia.', en_note:'The bank is to the right of the pharmacy.' },
+  { cat:'Preposição', pt:'à esquerda de', en:'to the left of', note:'O café está à esquerda da livraria.', en_note:'The café is to the left of the bookshop.' },
+  // Advérbios
+  { cat:'Advérbio', pt:'aqui', en:'here (near speaker)', note:'A Sofia está aqui.', en_note:'Sofia is here.' },
+  { cat:'Advérbio', pt:'aí', en:'there (near listener)', note:'O livro está aí?', en_note:'Is the book there (near you)?' },
+  { cat:'Advérbio', pt:'ali', en:'over there (far from both)', note:'O gato está ali!', en_note:'The cat is over there!' },
+  { cat:'Advérbio', pt:'cá', en:'here (general / country)', note:'Moro cá com a minha família.', en_note:'I live here with my family.' },
+  { cat:'Advérbio', pt:'lá', en:'there (general / another country)', note:'Ela está lá de férias.', en_note:'She is on holiday there.' },
+  // Demonstrativos
+  { cat:'Demonstrativo', pt:'este / esta', en:'this (near me)', note:'Este quadro é bonito. Esta janela está aberta.', en_note:'This picture is nice. This window is open.' },
+  { cat:'Demonstrativo', pt:'esse / essa', en:'that (near you)', note:'Esse computador é teu? Essa borracha é minha.', en_note:'Is that your computer? That eraser is mine.' },
+  { cat:'Demonstrativo', pt:'aquele / aquela', en:'that over there (far)', note:'Aquele carro é vermelho. Aquela rua é bonita.', en_note:'That car is red. That street is beautiful.' },
+  // Expressões
+  { cat:'Expressão', pt:'Para mim.', en:'For me. / In my opinion.', note:'Para mim, o melhor dia é a sexta.', en_note:'For me, Friday is the best day.' },
+  { cat:'Expressão', pt:'O que lá vai, lá vai.', en:"What's gone is gone.", note:'O que lá vai, lá vai. Olha para a frente.', en_note:"What's done is done. Look forward." },
+  // Vocabulário
+  { cat:'Vocabulário', pt:'os óculos', en:'glasses (eyewear)', note:'Não encontro os meus óculos.', en_note:"I can't find my glasses." },
+  { cat:'Vocabulário', pt:'a secretária', en:'desk / secretary (f)', note:'Está em cima da secretária.', en_note:"It's on top of the desk." },
+  { cat:'Vocabulário', pt:'a mala', en:'bag / briefcase / suitcase', note:'Está dentro da mala?', en_note:'Is it inside the bag?' },
+  { cat:'Vocabulário', pt:'a cabeça', en:'head', note:'Estão na tua cabeça!', en_note:"They're on your head!" },
+  { cat:'Vocabulário', pt:'o arraial', en:'street fair / summer festival', note:'Vamos ao arraial este fim de semana?', en_note:"Shall we go to the street fair this weekend?" },
+  // Mercado
+  { cat:'Mercado', pt:'Diga.', en:'Go ahead. / Yes? / Tell me.', note:'Diga. O que deseja?', en_note:'Go ahead. What would you like?' },
+  { cat:'Mercado', pt:'Aqui tem 7€.', en:'Here you go, 7 euros.', note:'Aqui tem sete euros.', en_note:'Here you go, seven euros.' },
+  { cat:'Mercado', pt:'Fique com o troco.', en:'Keep the change.', note:'Fique com o troco, por favor.', en_note:'Please keep the change.' },
+  { cat:'Mercado', pt:'as framboesas', en:'raspberries', note:'Queria cem gramas de framboesas.', en_note:"I'd like 100g of raspberries." },
+];
+
+// ── FLASHCARDS ────────────────────────────────────────────────────
+let vfcDeck = [...CARDS], vfcIdx = 0, vfcRevealed = false;
+
+function vfcRender() {
+  const c = vfcDeck[vfcIdx];
+  vfcRevealed = false;
+  document.getElementById('vfcCounter').textContent = `${vfcIdx+1} / ${vfcDeck.length}`;
+  document.getElementById('vfcFill').style.width = `${((vfcIdx+1)/vfcDeck.length)*100}%`;
+  document.getElementById('vfcCat').textContent = c.cat;
+  document.getElementById('vfcEn').textContent = c.en;
+  const pt = document.getElementById('vfcPt');
+  pt.textContent = c.pt; pt.className = 'vfc-pt';
+  const exPt = document.getElementById('vfcExPt');
+  exPt.textContent = c.note || ''; exPt.className = 'vfc-ex-pt';
+  const exEn = document.getElementById('vfcExEn');
+  exEn.textContent = c.en_note || ''; exEn.className = 'vfc-ex-en';
+  exEn.onclick = () => exEn.classList.add('revealed');
+  document.getElementById('vfcHints').textContent = 'clique na palavra para revelar · clique no exemplo para ouvir';
+  document.getElementById('vfcSpeak').classList.remove('playing');
+}
+function vfcReveal() {
+  if (vfcRevealed) return; vfcRevealed = true;
+  document.getElementById('vfcPt').classList.add('revealed');
+  document.getElementById('vfcExPt').classList.add('revealed');
+  document.getElementById('vfcHints').textContent = '';
+}
+function vfcSpeakAnswer() { speak(vfcDeck[vfcIdx].pt); }
+function vfcSpeakEx() { vfcReveal(); speak(vfcDeck[vfcIdx].note || vfcDeck[vfcIdx].pt); }
+function vfcMove(dir) { vfcIdx = (vfcIdx+dir+vfcDeck.length)%vfcDeck.length; vfcRender(); }
+function vfcShuffle() { vfcDeck = [...CARDS].sort(()=>Math.random()-0.5); vfcIdx=0; vfcRender(); }
+function vfcReset() { vfcDeck = [...CARDS]; vfcIdx=0; vfcRender(); }
+vfcRender();
+
+// ── QUIZ ─────────────────────────────────────────────────────────
+const QUIZ_POOL = CARDS.map(c => ({ q:c.pt, a:c.en }));
+let qDeck=[], qIdx=0, qScore=0, qTotal=0, qAnswered=false;
+function startQuiz() { qDeck=[...QUIZ_POOL].sort(()=>Math.random()-0.5); qIdx=0; qScore=0; qTotal=0; qAnswered=false; loadQuiz(); }
+function loadQuiz() {
+  qAnswered=false;
+  document.getElementById('quiz-fb').textContent=''; document.getElementById('quiz-fb').className='quiz-feedback';
+  document.getElementById('quiz-next').disabled=true;
+  const item=qDeck[qIdx%qDeck.length];
+  document.getElementById('quiz-q').textContent=item.q;
+  document.getElementById('quiz-prompt').textContent='Choose the correct English meaning:';
+  const others=QUIZ_POOL.filter(x=>x.a!==item.a).sort(()=>Math.random()-0.5).slice(0,3).map(x=>x.a);
+  const opts=[item.a,...others].sort(()=>Math.random()-0.5);
+  const c=document.getElementById('quiz-opts'); c.innerHTML='';
+  opts.forEach(opt=>{ const btn=document.createElement('button'); btn.className='quiz-opt'; btn.textContent=opt; btn.onclick=()=>checkAnswer(btn,opt,item); c.appendChild(btn); });
+  document.getElementById('quiz-score').textContent=`Score: ${qScore} / ${qTotal}`;
+}
+function checkAnswer(btn,chosen,item) {
+  if(qAnswered) return; qAnswered=true; qTotal++;
+  const fb=document.getElementById('quiz-fb');
+  if(chosen===item.a){ btn.classList.add('correct'); fb.textContent='Correto! ✓'; fb.className='quiz-feedback ok'; qScore++; speak(item.q); }
+  else { btn.classList.add('wrong'); fb.textContent=`Errado — "${item.a}"`; fb.className='quiz-feedback bad'; document.querySelectorAll('.quiz-opt').forEach(b=>{if(b.textContent===item.a)b.classList.add('correct');}); speak(item.q); }
+  document.querySelectorAll('.quiz-opt').forEach(b=>b.disabled=true);
+  document.getElementById('quiz-next').disabled=false;
+  document.getElementById('quiz-score').textContent=`Score: ${qScore} / ${qTotal}`;
+}
+function nextQuiz() { qIdx++; if(qIdx>=qDeck.length){qDeck=[...QUIZ_POOL].sort(()=>Math.random()-0.5);qIdx=0;} loadQuiz(); }
+
+// ── DESAFIO ───────────────────────────────────────────────────────
+const DESAFIO_CARDS = [
+  { cat:'Preposição', prompt:'Say the cat is on top of the box.', answer:'O gato está em cima da caixa.', note:'em cima de + a caixa = em cima da caixa' },
+  { cat:'Preposição', prompt:'Say the cat is under the box.', answer:'O gato está debaixo da caixa.', note:'debaixo de + a caixa = debaixo da caixa' },
+  { cat:'Preposição', prompt:'Say the book is next to your computer.', answer:'O livro está ao lado do teu computador.', note:'ao lado de + o computador = ao lado do' },
+  { cat:'Preposição', prompt:'Say the café is to the left of the bookshop.', answer:'O café está à esquerda da livraria.', note:'à esquerda de + a livraria = à esquerda da' },
+  { cat:'Preposição', prompt:'Say the bank is to the right of the pharmacy.', answer:'O banco está à direita da farmácia.', note:'à direita de + a farmácia = à direita da' },
+  { cat:'Preposição', prompt:'Say your glasses are inside your bag.', answer:'Os óculos estão dentro da mala.', note:'dentro de + a mala = dentro da mala' },
+  { cat:'Advérbio', prompt:'Point to something right next to you — say it\'s here.', answer:'Está aqui.', note:'aqui = near the speaker' },
+  { cat:'Advérbio', prompt:'Point to something near the listener — say it\'s there.', answer:'Está aí.', note:'aí = near the listener' },
+  { cat:'Advérbio', prompt:'Point to something far from both of you — say it\'s over there.', answer:'Está ali.', note:'ali = far from both' },
+  { cat:'Advérbio', prompt:'Say you live here in Lisbon with your family.', answer:'Moro cá com a minha família.', note:'cá = here (general/country)' },
+  { cat:'Demonstrativo', prompt:'There\'s a picture near you. Say "this picture is beautiful."', answer:'Este quadro é bonito.', note:'aqui → este (masc.)' },
+  { cat:'Demonstrativo', prompt:'There\'s a window near you. Say "this window is open."', answer:'Esta janela está aberta.', note:'aqui → esta (fem.)' },
+  { cat:'Demonstrativo', prompt:'The listener has a computer. Ask "is that your computer?"', answer:'Esse computador é teu?', note:'aí → esse (masc.)' },
+  { cat:'Demonstrativo', prompt:'Point to a car far away. Say "that car is red."', answer:'Aquele carro é vermelho.', note:'ali → aquele (masc.)' },
+  { cat:'Demonstrativo', prompt:'Point to a street far away. Say "that street is beautiful."', answer:'Aquela rua é bonita.', note:'ali → aquela (fem.)' },
+  { cat:'Expressão', prompt:'Someone asks your preference. Start your answer.', answer:'Para mim,', note:'para mim = for me / in my opinion' },
+  { cat:'Expressão', prompt:'Your friend is upset about something that happened last week. Encourage them to move on.', answer:'O que lá vai, lá vai.', note:'what\'s gone is gone — look forward' },
+  { cat:'Diálogo', prompt:'Tell Manuel you can\'t find your glasses.', answer:'Manuel, não encontro os meus óculos.', note:'não encontro = I can\'t find (eu)' },
+  { cat:'Diálogo', prompt:'Tell someone the glasses are on the desk, next to their computer.', answer:'Estão em cima da secretária, ao lado do teu computador.', note:'two prepositions in one sentence' },
+  { cat:'Mercado', prompt:'A shopkeeper looks at you. They say one word to invite you to speak.', answer:'Diga.', note:'diga = go ahead / tell me' },
+  { cat:'Mercado', prompt:'Hand over 7 euros to the shopkeeper.', answer:'Aqui tem sete euros.', note:'aqui tem = here you have / here you go' },
+  { cat:'Mercado', prompt:'Tell the shopkeeper to keep the change.', answer:'Fique com o troco.', note:'fique = stay/keep (você) — imperative register' },
+];
+
+let dDeck=[], dIdx=0, dCorrect=0, dTotal=0, dStreak=0, dTimer=null, dSecondsLeft=8, dRevealed=false;
+
+function initDesafio() {
+  dDeck=[...DESAFIO_CARDS].sort(()=>Math.random()-0.5);
+  dIdx=0; dCorrect=0; dTotal=0; dStreak=0;
+  loadDesafioCard();
+}
+function loadDesafioCard() {
+  dRevealed=false; clearInterval(dTimer); dSecondsLeft=8;
+  const c=dDeck[dIdx%dDeck.length];
+  document.getElementById('d-cat').textContent=c.cat;
+  document.getElementById('d-prompt').textContent=c.prompt;
+  document.getElementById('d-answer').textContent=c.answer;
+  document.getElementById('d-answer').classList.remove('revealed');
+  document.getElementById('d-note').textContent=c.note||'';
+  document.getElementById('d-actions').style.display='none';
+  document.getElementById('d-hint').style.display='block';
+  document.getElementById('d-hint').textContent='diz em voz alta · depois clica para revelar';
+  document.getElementById('d-score-display').textContent=`Score: ${dCorrect} / ${dTotal}`;
+  document.getElementById('d-streak-display').textContent=dStreak>=3?`🔥 ${dStreak}`:'';
+  const fill=document.getElementById('d-timer-fill'), txt=document.getElementById('d-timer-text');
+  fill.style.strokeDashoffset=0; fill.className='d-timer-fill'; txt.textContent=8;
+  dTimer=setInterval(()=>{
+    dSecondsLeft--;
+    txt.textContent=dSecondsLeft;
+    fill.style.strokeDashoffset=138*(1-dSecondsLeft/8);
+    if(dSecondsLeft<=2) fill.classList.add('warn');
+    if(dSecondsLeft<=1){fill.classList.remove('warn');fill.classList.add('danger');}
+    if(dSecondsLeft<=0){
+      clearInterval(dTimer);
+      txt.textContent='✓';
+      fill.style.stroke='var(--border)';
+      document.getElementById('d-hint').textContent='tempo — toca para revelar';
+    }
+  },1000);
+}
+function revealDesafio() {
+  if(dRevealed) return; dRevealed=true; clearInterval(dTimer);
+  document.getElementById('d-timer-text').textContent='✓';
+  document.getElementById('d-answer').classList.add('revealed');
+  document.getElementById('d-actions').style.display='flex';
+  document.getElementById('d-hint').style.display='none';
+  speak(dDeck[dIdx%dDeck.length].answer);
+}
+function speakDesafio(){speak(dDeck[dIdx%dDeck.length].answer);}
+function scoreDesafio(correct){
+  dTotal++; if(correct){dCorrect++;dStreak++;}else{dStreak=0;}
+  dIdx++; loadDesafioCard();
+}
+</script>
+</body>
+</html>
