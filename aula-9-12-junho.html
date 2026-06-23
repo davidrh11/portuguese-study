@@ -325,7 +325,8 @@
 <div id="demonstrativos" class="view">
 
   <div class="section-title">Advérbio → Demonstrativo → Acordo de Género</div>
-  <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.25rem">The adverb of place you use tells you which demonstrative to pick. Then the demonstrative agrees with the noun's gender.</p>
+  <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.4rem">This is a key grammar point for A1.1. Get the chain right every time:</p>
+  <p style="font-family:var(--mono);font-size:0.88rem;color:var(--green);margin-bottom:1.25rem;background:var(--highlight);padding:0.6rem 1rem;border-radius:6px;display:inline-block"><strong>Where is it?</strong> → aqui / aí / ali → <strong>Which demonstrative?</strong> → gender of the noun</p>
 
   <div class="dem-grid">
     <div class="dem-card">
@@ -372,7 +373,27 @@
     </div>
   </div>
 
-  <div class="section-title">Exemplos com Substantivos</div>
+  <div class="section-title">Exemplos da Aula — Exact Slide Examples</div>
+  <table>
+    <thead><tr><th>Advérbio</th><th>Masc. + Substantivo</th><th>Fem. + Substantivo</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="pt-word" onclick="speak('aqui')"><span style="color:var(--red)">aqui</span></td>
+        <td class="en-word" onclick="speak('Este quadro.')" style="cursor:pointer;font-family:var(--mono);color:var(--red);font-weight:600">Este quadro</td>
+        <td class="note-cell" onclick="speak('Esta janela.')" style="cursor:pointer;font-family:var(--mono);color:var(--red);font-weight:600">Esta janela</td>
+      </tr>
+      <tr>
+        <td class="pt-word" onclick="speak('aí')"><span style="color:#2255aa">aí</span></td>
+        <td class="en-word" onclick="speak('Esse computador.')" style="cursor:pointer;font-family:var(--mono);color:#2255aa;font-weight:600">Esse computador</td>
+        <td class="note-cell" onclick="speak('Essa borracha.')" style="cursor:pointer;font-family:var(--mono);color:#2255aa;font-weight:600">Essa borracha</td>
+      </tr>
+      <tr>
+        <td class="pt-word" onclick="speak('ali')"><span style="color:var(--green)">ali</span></td>
+        <td class="en-word" onclick="speak('Aquele carro.')" style="cursor:pointer;font-family:var(--mono);color:var(--green);font-weight:600">Aquele carro</td>
+        <td class="note-cell" onclick="speak('Aquela rua.')" style="cursor:pointer;font-family:var(--mono);color:var(--green);font-weight:600">Aquela rua</td>
+      </tr>
+    </tbody>
+  </table>
   <table>
     <thead><tr><th>Demonstrativo</th><th>+ Substantivo</th><th>English</th></tr></thead>
     <tbody>
@@ -516,10 +537,16 @@ const CARDS = [
   { cat:'Advérbio', pt:'ali', en:'over there (far from both)', note:'O gato está ali!', en_note:'The cat is over there!' },
   { cat:'Advérbio', pt:'cá', en:'here (general / country)', note:'Moro cá com a minha família.', en_note:'I live here with my family.' },
   { cat:'Advérbio', pt:'lá', en:'there (general / another country)', note:'Ela está lá de férias.', en_note:'She is on holiday there.' },
-  // Demonstrativos
-  { cat:'Demonstrativo', pt:'este / esta', en:'this (near me)', note:'Este quadro é bonito. Esta janela está aberta.', en_note:'This picture is nice. This window is open.' },
-  { cat:'Demonstrativo', pt:'esse / essa', en:'that (near you)', note:'Esse computador é teu? Essa borracha é minha.', en_note:'Is that your computer? That eraser is mine.' },
-  { cat:'Demonstrativo', pt:'aquele / aquela', en:'that over there (far)', note:'Aquele carro é vermelho. Aquela rua é bonita.', en_note:'That car is red. That street is beautiful.' },
+  // Demonstrativos — individual cards for proper drilling
+  { cat:'Demonstrativo', pt:'este', en:'this (masc., near me)', note:'Este quadro é bonito.', en_note:'This picture is beautiful. — aqui → este' },
+  { cat:'Demonstrativo', pt:'esta', en:'this (fem., near me)', note:'Esta janela está aberta.', en_note:'This window is open. — aqui → esta' },
+  { cat:'Demonstrativo', pt:'esse', en:'that (masc., near you)', note:'Esse computador é teu?', en_note:'Is that your computer? — aí → esse' },
+  { cat:'Demonstrativo', pt:'essa', en:'that (fem., near you)', note:'Essa borracha é minha.', en_note:'That eraser is mine. — aí → essa' },
+  { cat:'Demonstrativo', pt:'aquele', en:'that over there (masc., far)', note:'Aquele carro é vermelho.', en_note:'That car is red. — ali → aquele' },
+  { cat:'Demonstrativo', pt:'aquela', en:'that over there (fem., far)', note:'Aquela rua é bonita.', en_note:'That street is beautiful. — ali → aquela' },
+  { cat:'Demonstrativo', pt:'aqui → este/esta', en:'near speaker → este (m) / esta (f)', note:'Aqui está este livro. Aqui está esta caneta.', en_note:'Here is this book. Here is this pen.' },
+  { cat:'Demonstrativo', pt:'aí → esse/essa', en:'near listener → esse (m) / essa (f)', note:'Aí está esse computador. Aí está essa borracha.', en_note:'There is that computer. There is that eraser.' },
+  { cat:'Demonstrativo', pt:'ali → aquele/aquela', en:'far from both → aquele (m) / aquela (f)', note:'Ali está aquele carro. Ali está aquela rua.', en_note:'Over there is that car. Over there is that street.' },
   // Expressões
   { cat:'Expressão', pt:'Para mim.', en:'For me. / In my opinion.', note:'Para mim, o melhor dia é a sexta.', en_note:'For me, Friday is the best day.' },
   { cat:'Expressão', pt:'O que lá vai, lá vai.', en:"What's gone is gone.", note:'O que lá vai, lá vai. Olha para a frente.', en_note:"What's done is done. Look forward." },
@@ -609,11 +636,18 @@ const DESAFIO_CARDS = [
   { cat:'Advérbio', prompt:'Point to something near the listener — say it\'s there.', answer:'Está aí.', note:'aí = near the listener' },
   { cat:'Advérbio', prompt:'Point to something far from both of you — say it\'s over there.', answer:'Está ali.', note:'ali = far from both' },
   { cat:'Advérbio', prompt:'Say you live here in Lisbon with your family.', answer:'Moro cá com a minha família.', note:'cá = here (general/country)' },
-  { cat:'Demonstrativo', prompt:'There\'s a picture near you. Say "this picture is beautiful."', answer:'Este quadro é bonito.', note:'aqui → este (masc.)' },
-  { cat:'Demonstrativo', prompt:'There\'s a window near you. Say "this window is open."', answer:'Esta janela está aberta.', note:'aqui → esta (fem.)' },
-  { cat:'Demonstrativo', prompt:'The listener has a computer. Ask "is that your computer?"', answer:'Esse computador é teu?', note:'aí → esse (masc.)' },
-  { cat:'Demonstrativo', prompt:'Point to a car far away. Say "that car is red."', answer:'Aquele carro é vermelho.', note:'ali → aquele (masc.)' },
-  { cat:'Demonstrativo', prompt:'Point to a street far away. Say "that street is beautiful."', answer:'Aquela rua é bonita.', note:'ali → aquela (fem.)' },
+  { cat:'Demonstrativo', prompt:'Point to a picture right next to you (masc.). Say "this picture is beautiful."', answer:'Este quadro é bonito.', note:'aqui → este — near speaker, masculine' },
+  { cat:'Demonstrativo', prompt:'Point to a window right next to you (fem.). Say "this window is open."', answer:'Esta janela está aberta.', note:'aqui → esta — near speaker, feminine' },
+  { cat:'Demonstrativo', prompt:'The listener has a pen near them (fem.). Say "that pen is mine."', answer:'Essa caneta é minha.', note:'aí → essa — near listener, feminine' },
+  { cat:'Demonstrativo', prompt:'The listener has a computer near them (masc.). Ask "is that your computer?"', answer:'Esse computador é teu?', note:'aí → esse — near listener, masculine' },
+  { cat:'Demonstrativo', prompt:'Point to a car far from everyone (masc.). Say "that car is red."', answer:'Aquele carro é vermelho.', note:'ali → aquele — far from both, masculine' },
+  { cat:'Demonstrativo', prompt:'Point to a street far from everyone (fem.). Say "that street is beautiful."', answer:'Aquela rua é bonita.', note:'ali → aquela — far from both, feminine' },
+  { cat:'Demonstrativo', prompt:'You\'re holding a book. What demonstrative do you use?', answer:'Este livro.', note:'near speaker + masculine = este' },
+  { cat:'Demonstrativo', prompt:'Your friend has a bag near them (fem.). What do you say?', answer:'Essa mala.', note:'near listener + feminine = essa' },
+  { cat:'Demonstrativo', prompt:'There\'s a building far in the distance (masc.). Point to it.', answer:'Aquele edifício.', note:'far from both + masculine = aquele' },
+  { cat:'Demonstrativo', prompt:'Quick: aqui → ___ (masc.) / ___ (fem.)', answer:'este / esta', note:'perto do falante — the speaker\'s side' },
+  { cat:'Demonstrativo', prompt:'Quick: aí → ___ (masc.) / ___ (fem.)', answer:'esse / essa', note:'perto do ouvinte — the listener\'s side' },
+  { cat:'Demonstrativo', prompt:'Quick: ali → ___ (masc.) / ___ (fem.)', answer:'aquele / aquela', note:'longe de todos — far from everyone' },
   { cat:'Expressão', prompt:'Someone asks your preference. Start your answer.', answer:'Para mim,', note:'para mim = for me / in my opinion' },
   { cat:'Expressão', prompt:'Your friend is upset about something that happened last week. Encourage them to move on.', answer:'O que lá vai, lá vai.', note:'what\'s gone is gone — look forward' },
   { cat:'Diálogo', prompt:'Tell Manuel you can\'t find your glasses.', answer:'Manuel, não encontro os meus óculos.', note:'não encontro = I can\'t find (eu)' },
