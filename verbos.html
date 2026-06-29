@@ -634,8 +634,8 @@ document.getElementById('er-ir-grid').innerHTML = ER_IR_VERBS.map(v => makeErIrC
 
 // Helper: build natural English prompt from verb infinitive + subject
 const EU_FORMS = {
-  'to be (permanent)': 'I am (permanent — ser)',
-  'to be (temporary)': 'I am (temporary — estar)',
+  'to be (permanent)': 'I am (permanent)',
+  'to be (temporary)': 'I am (temporary)',
   'to go':             'I am going / I go',
   'to have':           'I have',
   'to do / make':      'I do / I make',
@@ -672,8 +672,8 @@ const EU_FORMS = {
   'to open':           'I open',
 };
 const VOCE_FORMS = {
-  'to be (permanent)': 'you are (permanent — ser)',
-  'to be (temporary)': 'you are (temporary — estar)',
+  'to be (permanent)': 'you are (permanent)',
+  'to be (temporary)': 'you are (temporary)',
   'to go':             'you are going / you go',
   'to have':           'you have',
   'to do / make':      'you do / you make',
@@ -710,8 +710,8 @@ const VOCE_FORMS = {
   'to open':           'you open',
 };
 const PAST_EU_FORMS = {
-  'to be (permanent)': 'I was (ser — past)',
-  'to be (temporary)': 'I was (estar — past)',
+  'to be (permanent)': 'I was (permanent, past)',
+  'to be (temporary)': 'I was (temporary, past)',
   'to go':             'I went',
   'to have':           'I had',
   'to do / make':      'I did / I made',
