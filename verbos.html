@@ -88,6 +88,11 @@
   .vfc-controls { display: flex; gap: 0.5rem; flex-wrap: wrap; }
   .vfc-ctrl { font-family: var(--mono); font-size: 0.72rem; background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 0.35rem 0.85rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
   .vfc-ctrl:hover, .vfc-ctrl.active { border-color: var(--green); color: var(--green); background: var(--highlight); }
+  .vfc-mode-bar { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; }
+  .vfc-mode-btn { font-family: var(--mono); font-size: 0.72rem; padding: 0.35rem 0.9rem; border-radius: 4px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); cursor: pointer; transition: all 0.15s; flex: 1; text-align: center; }
+  .vfc-mode-btn.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .vfc-en-hidden { filter: blur(6px); background: var(--border); border-radius: 3px; padding: 0.05rem 0.4rem; cursor: pointer; transition: filter 0.3s, background 0.3s; display: inline-block; }
+  .vfc-en-hidden.revealed { filter: blur(0); background: transparent; }
   .vfc-progress { height: 2px; background: var(--border); border-radius: 1px; margin-bottom: 1.25rem; overflow: hidden; }
   .vfc-progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
   .vfc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; min-height: 300px; display: flex; flex-direction: column; align-items: center; padding: 1.5rem 2rem; text-align: center; }
@@ -251,6 +256,10 @@
 <!-- ══ FLASHCARDS ══ -->
 <div id="flashcards" class="view">
 <div class="flashcard-wrap">
+  <div class="vfc-mode-bar">
+    <button class="vfc-mode-btn active" id="mode-pt-eu" onclick="vfcSetMode('pt', this)">🇵🇹 PT → EN &nbsp;·&nbsp; eu produzo inglês</button>
+    <button class="vfc-mode-btn" id="mode-en-eu" onclick="vfcSetMode('en', this)">🇬🇧 EN → PT &nbsp;·&nbsp; eu produzo português</button>
+  </div>
   <div class="vfc-topbar">
     <span class="vfc-counter" id="vfcCounter">1 / 1</span>
     <div class="vfc-controls">
@@ -643,7 +652,14 @@ const ALL_CARDS = [
   ]),
 ];
 
-let vfcDeck = [...ALL_CARDS], vfcIdx=0, vfcRevealed=false, vfcCurrentFilter='all';
+let vfcDeck = [...ALL_CARDS], vfcIdx=0, vfcRevealed=false, vfcCurrentFilter='all', vfcMode='pt';
+
+function vfcSetMode(mode, btn) {
+  vfcMode = mode;
+  document.querySelectorAll('.vfc-mode-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  vfcIdx=0; vfcRender();
+}
 
 function vfcFilter(filter, btn) {
   document.querySelectorAll('.vfc-ctrl[id^=filter]').forEach(b=>b.classList.remove('active'));
@@ -660,13 +676,31 @@ function vfcRender() {
   document.getElementById('vfcCounter').textContent=`${vfcIdx+1} / ${vfcDeck.length}`;
   document.getElementById('vfcFill').style.width=`${((vfcIdx+1)/vfcDeck.length)*100}%`;
   document.getElementById('vfcCat').textContent=c.cat;
-  document.getElementById('vfcEn').textContent=c.en;
-  const pt=document.getElementById('vfcPt'); pt.textContent=c.pt; pt.className='vfc-pt';
-  const exPt=document.getElementById('vfcExPt'); exPt.textContent=c.note||''; exPt.className='vfc-ex-pt';
-  const exEn=document.getElementById('vfcExEn'); exEn.textContent=c.en_note||''; exEn.className='vfc-ex-en';
-  exEn.onclick=()=>exEn.classList.add('revealed');
-  document.getElementById('vfcHints').textContent='clique na palavra para revelar · clique no exemplo para ouvir';
+
+  const enEl = document.getElementById('vfcEn');
+  const ptEl = document.getElementById('vfcPt');
+  const exPt = document.getElementById('vfcExPt');
+  const exEn = document.getElementById('vfcExEn');
+
+  if (vfcMode === 'pt') {
+    // PT mode: show PT verb form as prompt, hide EN definition until clicked
+    enEl.innerHTML = `<span class="vfc-en-hidden" id="vfcEnHidden" onclick="document.getElementById('vfcEnHidden').classList.add('revealed')">${c.en}</span>`;
+    ptEl.textContent=c.pt; ptEl.className='vfc-pt'; // shown immediately — this is the thing to say in EN
+    exPt.textContent=c.note||''; exPt.className='vfc-ex-pt';
+    exEn.textContent=c.en_note||''; exEn.className='vfc-ex-en';
+    exEn.onclick=()=>exEn.classList.add('revealed');
+    document.getElementById('vfcHints').textContent='translate to english · tap EN to reveal · tap example to hear';
+  } else {
+    // EN mode: show English as prompt, blur the PT form — produce the PT verb
+    enEl.textContent=c.en;
+    ptEl.textContent=c.pt; ptEl.className='vfc-pt'; // blurred — produce this
+    exPt.textContent=c.note||''; exPt.className='vfc-ex-pt';
+    exEn.textContent=c.en_note||''; exEn.className='vfc-ex-en';
+    exEn.onclick=()=>exEn.classList.add('revealed');
+    document.getElementById('vfcHints').textContent='diz em português · clica para revelar · clica no exemplo para ouvir';
+  }
 }
+
 function vfcReveal() {
   if(vfcRevealed) return; vfcRevealed=true;
   document.getElementById('vfcPt').classList.add('revealed');
@@ -677,7 +711,7 @@ function vfcSpeakAnswer() { speak(vfcDeck[vfcIdx].pt); }
 function vfcSpeakEx() { vfcReveal(); speak(vfcDeck[vfcIdx].note||vfcDeck[vfcIdx].pt); }
 function vfcMove(dir) { vfcIdx=(vfcIdx+dir+vfcDeck.length)%vfcDeck.length; vfcRender(); }
 function vfcShuffle() { vfcDeck=[...vfcDeck].sort(()=>Math.random()-0.5); vfcIdx=0; vfcRender(); }
-function vfcReset() { vfcFilter(vfcCurrentFilter, document.getElementById(`filter-${vfcCurrentFilter==='all'?'all':vfcCurrentFilter.replace(/\//g,'-').replace(/-/g,'').toLowerCase()}`)||document.getElementById('filter-all')); }
+function vfcReset() { vfcFilter(vfcCurrentFilter, document.getElementById('filter-all')); }
 
 vfcRender();
 
