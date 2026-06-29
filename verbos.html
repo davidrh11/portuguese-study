@@ -47,8 +47,20 @@
   .form { font-family: var(--mono); font-size: 0.9rem; color: var(--green); font-weight: 600; cursor: pointer; }
   .form:hover { text-decoration: underline; }
   .form.irr { color: var(--red); }
-  .verb-ex { padding: 0 1rem 0.75rem; font-size: 0.78rem; color: var(--muted); font-style: italic; border-top: 1px solid var(--border); padding-top: 0.5rem; cursor: pointer; }
+  .verb-ex { padding: 0 1rem 0.5rem; font-size: 0.78rem; color: var(--muted); font-style: italic; border-top: 1px solid var(--border); padding-top: 0.5rem; cursor: pointer; }
   .verb-ex:hover { color: var(--green); }
+  .verb-expand-btn { width: 100%; background: none; border: none; border-top: 1px solid var(--border); padding: 0.4rem 1rem; font-family: var(--mono); font-size: 0.65rem; color: var(--muted); cursor: pointer; text-align: left; transition: all 0.15s; display: flex; align-items: center; gap: 0.4rem; }
+  .verb-expand-btn:hover { color: var(--green); background: var(--highlight); }
+  .verb-full-conj { display: none; padding: 0.5rem 1rem 0.75rem; border-top: 1px solid var(--border); }
+  .verb-full-conj.open { display: block; }
+  .verb-full-conj table { width: 100%; border-collapse: collapse; }
+  .verb-full-conj td { padding: 0.25rem 0.5rem; font-size: 0.8rem; border-bottom: 1px solid #f0ece6; }
+  .verb-full-conj tr:last-child td { border-bottom: none; }
+  .verb-full-conj .fc-subj { font-family: var(--mono); font-size: 0.68rem; color: var(--muted); width: 45%; }
+  .verb-full-conj .fc-form { font-family: var(--mono); font-weight: 600; color: var(--green); cursor: pointer; }
+  .verb-full-conj .fc-form:hover { text-decoration: underline; }
+  .verb-full-conj .fc-form.irr { color: var(--red); }
+  .verb-full-conj .fc-section { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding: 0.4rem 0.5rem 0.1rem; background: var(--bg); }
 
   /* PARADIGM TABLE (for -AR/-ER/-IR models) */
   .paradigm-wrap { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
@@ -328,58 +340,126 @@ function switchTab(id, btn) {
 // ── DATA ──────────────────────────────────────────────────────────
 
 const ESSENCIAIS = [
-  { inf:'ser',   en:'to be (permanent)',   eu_p:'sou',   vce_p:'é',     eu_pp:'fui',    vce_pp:'foi',    irr_eu:true, irr_vce:true,
+  { inf:'ser',   en:'to be (permanent)',
+    eu_p:'sou',   vce_p:'é',     eu_pp:'fui',    vce_pp:'foi',    irr_eu:true, irr_vce:true,
+    full_p:{eu:'sou',tu:'és',vce:'é',nos:'somos',vces:'são'},
+    full_pp:{eu:'fui',tu:'foste',vce:'foi',nos:'fomos',vces:'foram'},
+    irr_p:{eu:true,vce:true,nos:true,vces:true}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Eu sou de Miami, mas moro em Lisboa.', ex_eu_en:"I'm from Miami but I live in Lisbon.",
     ex_vce:'Você é o professor?', ex_vce_en:'Are you the teacher?' },
-  { inf:'estar', en:'to be (temporary)',   eu_p:'estou', vce_p:'está',  eu_pp:'estive', vce_pp:'esteve', irr_eu:true, irr_vce:true,
+  { inf:'estar', en:'to be (temporary)',
+    eu_p:'estou', vce_p:'está',  eu_pp:'estive', vce_pp:'esteve', irr_eu:true, irr_vce:true,
+    full_p:{eu:'estou',tu:'estás',vce:'está',nos:'estamos',vces:'estão'},
+    full_pp:{eu:'estive',tu:'estiveste',vce:'esteve',nos:'estivemos',vces:'estiveram'},
+    irr_p:{eu:true,tu:true,vce:true,nos:true,vces:true}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Estou um bocadinho cansado hoje.', ex_eu_en:"I'm a little tired today.",
     ex_vce:'Você está bem?', ex_vce_en:'Are you okay?' },
-  { inf:'ir',    en:'to go',              eu_p:'vou',   vce_p:'vai',   eu_pp:'fui',    vce_pp:'foi',    irr_eu:true, irr_vce:true,
+  { inf:'ir',    en:'to go',
+    eu_p:'vou',   vce_p:'vai',   eu_pp:'fui',    vce_pp:'foi',    irr_eu:true, irr_vce:true,
+    full_p:{eu:'vou',tu:'vais',vce:'vai',nos:'vamos',vces:'vão'},
+    full_pp:{eu:'fui',tu:'foste',vce:'foi',nos:'fomos',vces:'foram'},
+    irr_p:{eu:true,tu:true,vce:true,nos:true,vces:true}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Vou ao supermercado mais tarde.', ex_eu_en:"I'm going to the supermarket later.",
     ex_vce:'Vai jantar onde hoje?', ex_vce_en:'Where are you going for dinner today?' },
-  { inf:'ter',   en:'to have',            eu_p:'tenho', vce_p:'tem',   eu_pp:'tive',   vce_pp:'teve',   irr_eu:true, irr_vce:false,
+  { inf:'ter',   en:'to have',
+    eu_p:'tenho', vce_p:'tem',   eu_pp:'tive',   vce_pp:'teve',   irr_eu:true, irr_vce:false,
+    full_p:{eu:'tenho',tu:'tens',vce:'tem',nos:'temos',vces:'têm'},
+    full_pp:{eu:'tive',tu:'tiveste',vce:'teve',nos:'tivemos',vces:'tiveram'},
+    irr_p:{eu:true,vces:true}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Tenho aula de português às sextas.', ex_eu_en:'I have Portuguese class on Fridays.',
     ex_vce:'Você tem a conta, por favor?', ex_vce_en:'Do you have the bill, please?' },
-  { inf:'fazer', en:'to do / make',       eu_p:'faço',  vce_p:'faz',   eu_pp:'fiz',    vce_pp:'fez',    irr_eu:true, irr_vce:true,
+  { inf:'fazer', en:'to do / make',
+    eu_p:'faço',  vce_p:'faz',   eu_pp:'fiz',    vce_pp:'fez',    irr_eu:true, irr_vce:true,
+    full_p:{eu:'faço',tu:'fazes',vce:'faz',nos:'fazemos',vces:'fazem'},
+    full_pp:{eu:'fiz',tu:'fizeste',vce:'fez',nos:'fizemos',vces:'fizeram'},
+    irr_p:{eu:true}, irr_pp:{eu:true,vce:true},
     ex_eu:'Faço sempre café de manhã.', ex_eu_en:'I always make coffee in the morning.',
     ex_vce:'O que você faz da vida?', ex_vce_en:'What do you do for a living?' },
-  { inf:'dar',   en:'to give',            eu_p:'dou',   vce_p:'dá',    eu_pp:'dei',    vce_pp:'deu',    irr_eu:true, irr_vce:false,
+  { inf:'dar',   en:'to give',
+    eu_p:'dou',   vce_p:'dá',    eu_pp:'dei',    vce_pp:'deu',    irr_eu:true, irr_vce:false,
+    full_p:{eu:'dou',tu:'dás',vce:'dá',nos:'damos',vces:'dão'},
+    full_pp:{eu:'dei',tu:'deste',vce:'deu',nos:'demos',vces:'deram'},
+    irr_p:{eu:true,vces:true}, irr_pp:{eu:true,tu:true,vce:true},
     ex_eu:'Dou uma ajuda, sem problema.', ex_eu_en:"I'll give you a hand, no problem.",
     ex_vce:'Você dá aulas de português?', ex_vce_en:'Do you teach Portuguese?' },
-  { inf:'dizer', en:'to say',             eu_p:'digo',  vce_p:'diz',   eu_pp:'disse',  vce_pp:'disse',  irr_eu:true, irr_vce:false,
+  { inf:'dizer', en:'to say',
+    eu_p:'digo',  vce_p:'diz',   eu_pp:'disse',  vce_pp:'disse',  irr_eu:true, irr_vce:false,
+    full_p:{eu:'digo',tu:'dizes',vce:'diz',nos:'dizemos',vces:'dizem'},
+    full_pp:{eu:'disse',tu:'disseste',vce:'disse',nos:'dissemos',vces:'disseram'},
+    irr_p:{eu:true}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Digo sempre obrigado.', ex_eu_en:'I always say thank you.',
     ex_vce:'O que você diz? Não estou a perceber.', ex_vce_en:"What are you saying? I'm not understanding." },
-  { inf:'vir',   en:'to come',            eu_p:'venho', vce_p:'vem',   eu_pp:'vim',    vce_pp:'veio',   irr_eu:true, irr_vce:true,
+  { inf:'vir',   en:'to come',
+    eu_p:'venho', vce_p:'vem',   eu_pp:'vim',    vce_pp:'veio',   irr_eu:true, irr_vce:true,
+    full_p:{eu:'venho',tu:'vens',vce:'vem',nos:'vimos',vces:'vêm'},
+    full_pp:{eu:'vim',tu:'vieste',vce:'veio',nos:'viemos',vces:'vieram'},
+    irr_p:{eu:true,nos:true,vces:true}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Venho de autocarro.', ex_eu_en:'I come by bus.',
     ex_vce:'Você vem de onde?', ex_vce_en:'Where do you come from?' },
-  { inf:'trazer',en:'to bring',           eu_p:'trago', vce_p:'traz',  eu_pp:'trouxe', vce_pp:'trouxe', irr_eu:true, irr_vce:true,
+  { inf:'trazer',en:'to bring',
+    eu_p:'trago', vce_p:'traz',  eu_pp:'trouxe', vce_pp:'trouxe', irr_eu:true, irr_vce:true,
+    full_p:{eu:'trago',tu:'trazes',vce:'traz',nos:'trazemos',vces:'trazem'},
+    full_pp:{eu:'trouxe',tu:'trouxeste',vce:'trouxe',nos:'trouxemos',vces:'trouxeram'},
+    irr_p:{eu:true}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Trago o vinho.', ex_eu_en:"I'll bring the wine.",
     ex_vce:'Você traz os copos?', ex_vce_en:'Are you bringing the glasses?' },
-  { inf:'ouvir', en:'to hear / listen',   eu_p:'ouço',  vce_p:'ouve',  eu_pp:'ouvi',   vce_pp:'ouviu',  irr_eu:true, irr_vce:false,
+  { inf:'ouvir', en:'to hear / listen',
+    eu_p:'ouço',  vce_p:'ouve',  eu_pp:'ouvi',   vce_pp:'ouviu',  irr_eu:true, irr_vce:false,
+    full_p:{eu:'ouço',tu:'ouves',vce:'ouve',nos:'ouvimos',vces:'ouvem'},
+    full_pp:{eu:'ouvi',tu:'ouviste',vce:'ouviu',nos:'ouvimos',vces:'ouviram'},
+    irr_p:{eu:true}, irr_pp:{},
     ex_eu:'Ouço música portuguesa todos os dias.', ex_eu_en:'I listen to Portuguese music every day.',
     ex_vce:'Você ouve bem?', ex_vce_en:'Can you hear well?' },
 ];
 
 const IRREGULARES = [
-  { inf:'ver',    en:'to see',          eu_p:'vejo',  vce_p:'vê',   eu_pp:'vi',     vce_pp:'viu',   irr_eu:true, irr_vce:true,
+  { inf:'ver',    en:'to see',
+    eu_p:'vejo',  vce_p:'vê',   eu_pp:'vi',     vce_pp:'viu',   irr_eu:true, irr_vce:true,
+    full_p:{eu:'vejo',tu:'vês',vce:'vê',nos:'vemos',vces:'veem'},
+    full_pp:{eu:'vi',tu:'viste',vce:'viu',nos:'vimos',vces:'viram'},
+    irr_p:{eu:true,tu:true,vce:true,vces:true}, irr_pp:{},
     ex_eu:'Vejo o mar da minha janela.', ex_eu_en:'I can see the sea from my window.',
     ex_vce:'Você vê televisão?', ex_vce_en:'Do you watch television?' },
-  { inf:'saber',  en:'to know (facts)', eu_p:'sei',   vce_p:'sabe', eu_pp:'soube',  vce_pp:'soube', irr_eu:true, irr_vce:false,
+  { inf:'saber',  en:'to know (facts)',
+    eu_p:'sei',   vce_p:'sabe', eu_pp:'soube',  vce_pp:'soube', irr_eu:true, irr_vce:false,
+    full_p:{eu:'sei',tu:'sabes',vce:'sabe',nos:'sabemos',vces:'sabem'},
+    full_pp:{eu:'soube',tu:'soubeste',vce:'soube',nos:'soubemos',vces:'souberam'},
+    irr_p:{eu:true}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Sei falar um pouco de português.', ex_eu_en:'I know how to speak a little Portuguese.',
     ex_vce:'Você sabe onde fica?', ex_vce_en:'Do you know where it is?' },
-  { inf:'poder',  en:'to be able to / can', eu_p:'posso', vce_p:'pode', eu_pp:'pude', vce_pp:'pôde', irr_eu:true, irr_vce:false,
+  { inf:'poder',  en:'to be able to / can',
+    eu_p:'posso', vce_p:'pode', eu_pp:'pude',   vce_pp:'pôde',  irr_eu:true, irr_vce:false,
+    full_p:{eu:'posso',tu:'podes',vce:'pode',nos:'podemos',vces:'podem'},
+    full_pp:{eu:'pude',tu:'pudeste',vce:'pôde',nos:'pudemos',vces:'puderam'},
+    irr_p:{eu:true}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Posso repetir, por favor?', ex_eu_en:'Can I have some more, please?',
     ex_vce:'Pode trazer a conta?', ex_vce_en:'Can you bring the bill?' },
-  { inf:'querer', en:'to want',         eu_p:'quero', vce_p:'quer', eu_pp:'quis',   vce_pp:'quis',  irr_eu:false,irr_vce:false,
+  { inf:'querer', en:'to want',
+    eu_p:'quero', vce_p:'quer', eu_pp:'quis',   vce_pp:'quis',  irr_eu:false,irr_vce:false,
+    full_p:{eu:'quero',tu:'queres',vce:'quer',nos:'queremos',vces:'querem'},
+    full_pp:{eu:'quis',tu:'quiseste',vce:'quis',nos:'quisemos',vces:'quiseram'},
+    irr_p:{}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Quero aprender português bem.', ex_eu_en:'I want to learn Portuguese well.',
     ex_vce:'Você quer um café?', ex_vce_en:'Would you like a coffee?' },
-  { inf:'pôr',    en:'to put / place',  eu_p:'ponho', vce_p:'põe',  eu_pp:'pus',    vce_pp:'pôs',   irr_eu:true, irr_vce:true,
+  { inf:'pôr',    en:'to put / place',
+    eu_p:'ponho', vce_p:'põe',  eu_pp:'pus',    vce_pp:'pôs',   irr_eu:true, irr_vce:true,
+    full_p:{eu:'ponho',tu:'pões',vce:'põe',nos:'pomos',vces:'põem'},
+    full_pp:{eu:'pus',tu:'puseste',vce:'pôs',nos:'pusemos',vces:'puseram'},
+    irr_p:{eu:true,tu:true,vce:true,nos:true,vces:true}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Ponho açúcar no café.', ex_eu_en:'I put sugar in my coffee.',
     ex_vce:'Onde você põe as chaves?', ex_vce_en:'Where do you put your keys?' },
-  { inf:'perder', en:'to lose / miss',  eu_p:'perco', vce_p:'perde',eu_pp:'perdi',  vce_pp:'perdeu',irr_eu:true, irr_vce:false,
+  { inf:'perder', en:'to lose / miss',
+    eu_p:'perco', vce_p:'perde',eu_pp:'perdi',  vce_pp:'perdeu',irr_eu:true, irr_vce:false,
+    full_p:{eu:'perco',tu:'perdes',vce:'perde',nos:'perdemos',vces:'perdem'},
+    full_pp:{eu:'perdi',tu:'perdeste',vce:'perdeu',nos:'perdemos',vces:'perderam'},
+    irr_p:{eu:true}, irr_pp:{},
     ex_eu:'Perco sempre as chaves.', ex_eu_en:'I always lose my keys.',
     ex_vce:'Você perde muito tempo no trânsito?', ex_vce_en:'Do you lose a lot of time in traffic?' },
-  { inf:'ser/ir', en:'past of ser AND ir — same form!', eu_p:'—', vce_p:'—', eu_pp:'fui', vce_pp:'foi', irr_eu:true, irr_vce:true,
+  { inf:'ser/ir', en:'past of ser AND ir — same form!',
+    eu_p:'—', vce_p:'—', eu_pp:'fui', vce_pp:'foi', irr_eu:true, irr_vce:true,
+    full_p:null,
+    full_pp:{eu:'fui',tu:'foste',vce:'foi',nos:'fomos',vces:'foram'},
+    irr_p:{}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Fui ao mercado ontem. / Fui professor.', ex_eu_en:'I went to the market yesterday. / I was a teacher.',
     ex_vce:'Você foi ao Porto?', ex_vce_en:'Did you go to Porto?' },
 ];
@@ -411,7 +491,49 @@ const ER_IR_VERBS = [
 
 // ── BUILD VERB CARDS ──────────────────────────────────────────────
 
+let expandCount = 0;
+const EXPAND_DATA = {}; // store full conj data by card id
+
+const ROWS = [
+  {key:'eu',   label:'eu'},
+  {key:'tu',   label:'tu'},
+  {key:'vce',  label:'você / ele / ela'},
+  {key:'nos',  label:'nós'},
+  {key:'vces', label:'vocês / eles / elas'},
+];
+
+function toggleExpand(id) {
+  const el = document.getElementById('expand-' + id);
+  const arrow = document.getElementById('arrow-' + id);
+  const isOpen = el.classList.toggle('open');
+  arrow.textContent = isOpen ? '▾' : '▸';
+  // Populate on first open
+  if (isOpen && el.querySelector('table').innerHTML === '') {
+    const d = EXPAND_DATA[id];
+    if (!d) return;
+    let html = '';
+    if (d.fp) {
+      html += `<tr><td colspan="2" class="fc-section">${d.fp_label||'Presente'}</td></tr>`;
+      ROWS.forEach(r => { if (d.fp[r.key]) html += `<tr><td class="fc-subj">${r.label}</td><td class="fc-form ${d.fp_irr&&d.fp_irr[r.key]?'irr':''}" onclick="speak('${d.fp[r.key]}')">${d.fp[r.key]}</td></tr>`; });
+    }
+    if (d.fpp) {
+      html += `<tr><td colspan="2" class="fc-section">${d.fpp_label||'Pretérito Perfeito'}</td></tr>`;
+      ROWS.forEach(r => { if (d.fpp[r.key]) html += `<tr><td class="fc-subj">${r.label}</td><td class="fc-form ${d.fpp_irr&&d.fpp_irr[r.key]?'irr':''}" onclick="speak('${d.fpp[r.key]}')">${d.fpp[r.key]}</td></tr>`; });
+    }
+    el.querySelector('table').innerHTML = html;
+  }
+}
+
+function expandSection(id) {
+  return `<button class="verb-expand-btn" onclick="toggleExpand('${id}')">
+    <span id="arrow-${id}">▸</span> conjugação completa
+  </button>
+  <div class="verb-full-conj" id="expand-${id}"><table></table></div>`;
+}
+
 function makeEssencialCard(v) {
+  const id = 'e' + (++expandCount);
+  EXPAND_DATA[id] = { fp:v.full_p, fp_irr:v.irr_p, fp_label:'Presente', fpp:v.full_pp, fpp_irr:v.irr_pp, fpp_label:'Pretérito Perfeito' };
   return `<div class="verb-card">
     <div class="verb-card-header">
       <span class="verb-inf" onclick="speak('${v.inf}')">${v.inf}</span>
@@ -428,17 +550,17 @@ function makeEssencialCard(v) {
       <span class="subj">você</span>
       <span class="form" onclick="speak('${v.vce_pp}')" style="color:#555">${v.vce_pp}</span>
     </div>
-    <div class="verb-ex" onclick="speak('${v.ex_eu.replace(/'/g,"\\'")}')">
-      eu: ${v.ex_eu}
-    </div>
+    <div class="verb-ex" onclick="speak('${v.ex_eu.replace(/'/g,"\\'")}')">eu: ${v.ex_eu}</div>
+    ${expandSection(id)}
   </div>`;
 }
 
-function makeSimpleCard(v, showPast) {
-  const hasPast = v.eu_pp;
+function makeSimpleCard(v) {
+  const id = 'i' + (++expandCount);
+  EXPAND_DATA[id] = { fp:v.full_p, fp_irr:v.irr_p, fp_label:'Presente', fpp:v.full_pp, fpp_irr:v.irr_pp, fpp_label:'Pretérito Perfeito' };
   return `<div class="verb-card">
     <div class="verb-card-header">
-      <span class="verb-inf" onclick="speak('${v.inf.replace(/'/g,"\\'")}')">
+      <span class="verb-inf" onclick="speak('${(v.inf==='ser/ir'?'ser ir':v.inf).replace(/'/g,"\\'")}')">
         ${v.inf === 'ser/ir' ? 'ser / ir' : v.inf}
       </span>
       <span class="verb-en">${v.en}</span>
@@ -446,17 +568,20 @@ function makeSimpleCard(v, showPast) {
     <div class="verb-conj">
       ${v.eu_p !== '—' ? `<span class="subj">eu</span><span class="form ${v.irr_eu?'irr':''}" onclick="speak('${v.eu_p}')">${v.eu_p}</span>
       <span class="subj">você</span><span class="form ${v.irr_vce?'irr':''}" onclick="speak('${v.vce_p}')">${v.vce_p}</span>` : ''}
-      ${hasPast ? `<span class="subj" style="color:var(--muted);font-size:0.6rem;margin-top:0.3rem">passado</span><span></span>
+      ${v.eu_pp ? `<span class="subj" style="color:var(--muted);font-size:0.6rem;margin-top:0.3rem">passado</span><span></span>
       <span class="subj">eu</span><span class="form" onclick="speak('${v.eu_pp}')" style="color:#555">${v.eu_pp}</span>
       <span class="subj">você</span><span class="form" onclick="speak('${v.vce_pp}')" style="color:#555">${v.vce_pp}</span>` : ''}
     </div>
-    <div class="verb-ex" onclick="speak('${v.ex_eu.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')">
-      eu: ${v.ex_eu}
-    </div>
+    <div class="verb-ex" onclick="speak('${v.ex_eu.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')">eu: ${v.ex_eu}</div>
+    ${expandSection(id)}
   </div>`;
 }
 
 function makeArCard(v) {
+  const id = 'ar' + (++expandCount);
+  const stem = v.eu.replace(/o$/,'');
+  const fp = {eu:v.eu, tu:stem+'as', vce:v.vce, nos:stem+'amos', vces:stem+'am'};
+  EXPAND_DATA[id] = { fp, fp_irr:{}, fp_label:'Presente', fpp:null };
   return `<div class="verb-card">
     <div class="verb-card-header">
       <span class="verb-inf" onclick="speak('${v.inf}')">${v.inf}</span>
@@ -467,13 +592,34 @@ function makeArCard(v) {
       <span class="subj">você</span><span class="form" onclick="speak('${v.vce}')">${v.vce}</span>
     </div>
     <div class="verb-ex" onclick="speak('${v.ex_eu.replace(/'/g,"\\'")}')">eu: ${v.ex_eu}</div>
+    ${expandSection(id)}
+  </div>`;
+}
+
+function makeErIrCard(v) {
+  const id = 'er' + (++expandCount);
+  const isIR = v.inf.endsWith('ir');
+  const stem = v.eu.replace(/o$/,'');
+  const fp = {eu:v.eu, tu:stem+'es', vce:v.vce, nos:stem+(isIR?'imos':'emos'), vces:stem+'em'};
+  EXPAND_DATA[id] = { fp, fp_irr:{}, fp_label:'Presente', fpp:null };
+  return `<div class="verb-card">
+    <div class="verb-card-header">
+      <span class="verb-inf" onclick="speak('${v.inf}')">${v.inf}</span>
+      <span class="verb-en">${v.en}</span>
+    </div>
+    <div class="verb-conj">
+      <span class="subj">eu</span><span class="form" onclick="speak('${v.eu}')">${v.eu}</span>
+      <span class="subj">você</span><span class="form" onclick="speak('${v.vce}')">${v.vce}</span>
+    </div>
+    <div class="verb-ex" onclick="speak('${v.ex_eu.replace(/'/g,"\\'")}')">eu: ${v.ex_eu}</div>
+    ${expandSection(id)}
   </div>`;
 }
 
 document.getElementById('essenciais-grid').innerHTML = ESSENCIAIS.map(v => makeEssencialCard(v)).join('');
 document.getElementById('irregulares-grid').innerHTML = IRREGULARES.map(v => makeSimpleCard(v)).join('');
 document.getElementById('ar-grid').innerHTML = AR_VERBS.map(v => makeArCard(v)).join('');
-document.getElementById('er-ir-grid').innerHTML = ER_IR_VERBS.map(v => makeArCard(v)).join('');
+document.getElementById('er-ir-grid').innerHTML = ER_IR_VERBS.map(v => makeErIrCard(v)).join('');
 
 // ── FLASHCARD DATA ────────────────────────────────────────────────
 
