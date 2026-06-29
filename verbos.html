@@ -632,63 +632,139 @@ document.getElementById('er-ir-grid').innerHTML = ER_IR_VERBS.map(v => makeErIrC
 
 // ── FLASHCARD DATA ────────────────────────────────────────────────
 
-// Helper: extract "I ___" / "you ___" from the English meaning
-function enPrompt(en, subj) {
-  // en is like "to be (permanent)" or "to give"
-  // subj is 'eu' or 'você'
-  const verb = en.replace(/^to /, '').replace(/\(.*?\)/g, '').trim();
-  const label = subj === 'eu' ? 'I' : 'you';
-  return label + ' — ' + verb;
-}
-function enPromptPast(en, subj) {
-  const verb = en.replace(/^to /, '').replace(/\(.*?\)/g, '').trim();
-  const label = subj === 'eu' ? 'I' : 'you';
-  return label + ' — ' + verb + ' (past)';
-}
+// Helper: build natural English prompt from verb infinitive + subject
+const EU_FORMS = {
+  'to be (permanent)': 'I am (permanent — ser)',
+  'to be (temporary)': 'I am (temporary — estar)',
+  'to go':             'I am going / I go',
+  'to have':           'I have',
+  'to do / make':      'I do / I make',
+  'to give':           'I give',
+  'to say':            'I say',
+  'to come':           'I come',
+  'to bring':          'I bring',
+  'to hear / listen':  'I hear / I listen',
+  'to see':            'I see',
+  'to know (facts)':   'I know',
+  'to be able to / can': 'I can',
+  'to want':           'I want',
+  'to put / place':    'I put',
+  'to lose / miss':    'I lose',
+  'past of ser AND ir — same form!': 'I went / I was (past)',
+  'to study':          'I study',
+  'to like':           'I like',
+  'to work':           'I work',
+  'to live/reside':    'I live',
+  'to buy':            'I buy',
+  'to cook':           'I cook',
+  'to take / have':    'I take / I have',
+  'to pay':            'I pay',
+  'to think':          'I think',
+  'to phone':          'I phone',
+  'to speak':          'I speak',
+  'to like (+ de)':    'I like (+ de)',
+  'to live':           'I live',
+  'to decide':         'I decide',
+  'to learn':          'I learn',
+  'to understand':     'I understand',
+  'to drink':          'I drink',
+  'to go out/leave':   'I go out / I leave',
+  'to open':           'I open',
+};
+const VOCE_FORMS = {
+  'to be (permanent)': 'you are (permanent — ser)',
+  'to be (temporary)': 'you are (temporary — estar)',
+  'to go':             'you are going / you go',
+  'to have':           'you have',
+  'to do / make':      'you do / you make',
+  'to give':           'you give',
+  'to say':            'you say',
+  'to come':           'you come',
+  'to bring':          'you bring',
+  'to hear / listen':  'you hear / you listen',
+  'to see':            'you see',
+  'to know (facts)':   'you know',
+  'to be able to / can': 'you can',
+  'to want':           'you want',
+  'to put / place':    'you put',
+  'to lose / miss':    'you lose',
+  'past of ser AND ir — same form!': 'you went / you were (past)',
+  'to study':          'you study',
+  'to like':           'you like',
+  'to work':           'you work',
+  'to live/reside':    'you live',
+  'to buy':            'you buy',
+  'to cook':           'you cook',
+  'to take / have':    'you take / you have',
+  'to pay':            'you pay',
+  'to think':          'you think',
+  'to phone':          'you phone',
+  'to speak':          'you speak',
+  'to like (+ de)':    'you like (+ de)',
+  'to live':           'you live',
+  'to decide':         'you decide',
+  'to learn':          'you learn',
+  'to understand':     'you understand',
+  'to drink':          'you drink',
+  'to go out/leave':   'you go out / you leave',
+  'to open':           'you open',
+};
+const PAST_EU_FORMS = {
+  'to be (permanent)': 'I was (ser — past)',
+  'to be (temporary)': 'I was (estar — past)',
+  'to go':             'I went',
+  'to have':           'I had',
+  'to do / make':      'I did / I made',
+  'to give':           'I gave',
+  'to say':            'I said',
+  'to come':           'I came',
+  'to bring':          'I brought',
+  'to hear / listen':  'I heard / I listened',
+  'to see':            'I saw',
+  'to know (facts)':   'I knew',
+  'to be able to / can': 'I could',
+  'to want':           'I wanted',
+  'to put / place':    'I put (past)',
+  'to lose / miss':    'I lost',
+};
+function enPrompt(en, subj) { return EU_FORMS[en] || VOCE_FORMS[en] || (subj==='eu' ? 'I — '+en : 'you — '+en); }
+function enPromptVoce(en) { return VOCE_FORMS[en] || 'you — '+en; }
+function enPromptPast(en) { return PAST_EU_FORMS[en] || 'I — '+en+' (past)'; }
 
 const ALL_CARDS = [
   ...ESSENCIAIS.flatMap(v => [
     { cat:'Essenciais · eu', pt:v.eu_p,
-      prompt_en: enPrompt(v.en, 'eu'),
-      hint_en: v.en.match(/\(.*?\)/)?.[0] || '',
+      prompt_en: EU_FORMS[v.en] || 'I — '+v.en,
       note:v.ex_eu, en_note:v.ex_eu_en, filter:'Essenciais' },
     { cat:'Essenciais · você', pt:v.vce_p,
-      prompt_en: enPrompt(v.en, 'você'),
-      hint_en: v.en.match(/\(.*?\)/)?.[0] || '',
+      prompt_en: VOCE_FORMS[v.en] || 'you — '+v.en,
       note:v.ex_vce, en_note:v.ex_vce_en, filter:'Essenciais' },
     { cat:'Essenciais · passado eu', pt:v.eu_pp,
-      prompt_en: enPromptPast(v.en, 'eu'),
-      hint_en: v.en.match(/\(.*?\)/)?.[0] || '',
+      prompt_en: PAST_EU_FORMS[v.en] || 'I — '+v.en+' (past)',
       note:v.ex_eu, en_note:v.ex_eu_en, filter:'Essenciais' },
   ]),
   ...IRREGULARES.filter(v => v.eu_p !== '—').flatMap(v => [
     { cat:'Irregulares · eu', pt:v.eu_p,
-      prompt_en: enPrompt(v.en, 'eu'),
-      hint_en: v.en.match(/\(.*?\)/)?.[0] || '',
+      prompt_en: EU_FORMS[v.en] || 'I — '+v.en,
       note:v.ex_eu, en_note:v.ex_eu_en, filter:'Irregulares' },
     { cat:'Irregulares · você', pt:v.vce_p,
-      prompt_en: enPrompt(v.en, 'você'),
-      hint_en: v.en.match(/\(.*?\)/)?.[0] || '',
+      prompt_en: VOCE_FORMS[v.en] || 'you — '+v.en,
       note:v.ex_vce, en_note:v.ex_vce_en, filter:'Irregulares' },
   ]),
   ...AR_VERBS.flatMap(v => [
     { cat:'-AR · eu', pt:v.eu,
-      prompt_en: enPrompt(v.en, 'eu'),
-      hint_en: '',
+      prompt_en: EU_FORMS[v.en] || 'I — '+v.en,
       note:v.ex_eu, en_note:v.ex_eu_en, filter:'-AR' },
     { cat:'-AR · você', pt:v.vce,
-      prompt_en: enPrompt(v.en, 'você'),
-      hint_en: '',
+      prompt_en: VOCE_FORMS[v.en] || 'you — '+v.en,
       note:v.ex_vce, en_note:v.ex_vce_en, filter:'-AR' },
   ]),
   ...ER_IR_VERBS.flatMap(v => [
     { cat:'-ER/-IR · eu', pt:v.eu,
-      prompt_en: enPrompt(v.en, 'eu'),
-      hint_en: '',
+      prompt_en: EU_FORMS[v.en] || 'I — '+v.en,
       note:v.ex_eu, en_note:v.ex_eu_en, filter:'-ER/-IR' },
     { cat:'-ER/-IR · você', pt:v.vce,
-      prompt_en: enPrompt(v.en, 'você'),
-      hint_en: '',
+      prompt_en: VOCE_FORMS[v.en] || 'you — '+v.en,
       note:v.ex_vce, en_note:v.ex_vce_en, filter:'-ER/-IR' },
   ]),
 ];
