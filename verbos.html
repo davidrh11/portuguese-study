@@ -634,21 +634,21 @@ document.getElementById('er-ir-grid').innerHTML = ER_IR_VERBS.map(v => makeErIrC
 
 const ALL_CARDS = [
   ...ESSENCIAIS.flatMap(v => [
-    { cat:'Essenciais · eu', pt:v.eu_p, en:`eu — ${v.inf} (${v.en})`, note:v.ex_eu, en_note:v.ex_eu_en, filter:'Essenciais' },
-    { cat:'Essenciais · você', pt:v.vce_p, en:`você — ${v.inf} (${v.en})`, note:v.ex_vce, en_note:v.ex_vce_en, filter:'Essenciais' },
-    { cat:'Essenciais · passado eu', pt:v.eu_pp, en:`eu (passado) — ${v.inf}`, note:v.ex_eu, en_note:v.ex_eu_en, filter:'Essenciais' },
+    { cat:'Essenciais · eu', pt:v.eu_p, prompt_en:`eu — ${v.inf}`, hint_en:`(${v.en})`, note:v.ex_eu, en_note:v.ex_eu_en, filter:'Essenciais' },
+    { cat:'Essenciais · você', pt:v.vce_p, prompt_en:`você — ${v.inf}`, hint_en:`(${v.en})`, note:v.ex_vce, en_note:v.ex_vce_en, filter:'Essenciais' },
+    { cat:'Essenciais · passado eu', pt:v.eu_pp, prompt_en:`eu (passado) — ${v.inf}`, hint_en:`(${v.en})`, note:v.ex_eu, en_note:v.ex_eu_en, filter:'Essenciais' },
   ]),
   ...IRREGULARES.filter(v => v.eu_p !== '—').flatMap(v => [
-    { cat:'Irregulares · eu', pt:v.eu_p, en:`eu — ${v.inf} (${v.en})`, note:v.ex_eu, en_note:v.ex_eu_en, filter:'Irregulares' },
-    { cat:'Irregulares · você', pt:v.vce_p, en:`você — ${v.inf} (${v.en})`, note:v.ex_vce, en_note:v.ex_vce_en, filter:'Irregulares' },
+    { cat:'Irregulares · eu', pt:v.eu_p, prompt_en:`eu — ${v.inf}`, hint_en:`(${v.en})`, note:v.ex_eu, en_note:v.ex_eu_en, filter:'Irregulares' },
+    { cat:'Irregulares · você', pt:v.vce_p, prompt_en:`você — ${v.inf}`, hint_en:`(${v.en})`, note:v.ex_vce, en_note:v.ex_vce_en, filter:'Irregulares' },
   ]),
   ...AR_VERBS.flatMap(v => [
-    { cat:'-AR · eu', pt:v.eu, en:`eu — ${v.inf} (${v.en})`, note:v.ex_eu, en_note:v.ex_eu_en, filter:'-AR' },
-    { cat:'-AR · você', pt:v.vce, en:`você — ${v.inf} (${v.en})`, note:v.ex_vce, en_note:v.ex_vce_en, filter:'-AR' },
+    { cat:'-AR · eu', pt:v.eu, prompt_en:`eu — ${v.inf}`, hint_en:`(${v.en})`, note:v.ex_eu, en_note:v.ex_eu_en, filter:'-AR' },
+    { cat:'-AR · você', pt:v.vce, prompt_en:`você — ${v.inf}`, hint_en:`(${v.en})`, note:v.ex_vce, en_note:v.ex_vce_en, filter:'-AR' },
   ]),
   ...ER_IR_VERBS.flatMap(v => [
-    { cat:'-ER/-IR · eu', pt:v.eu, en:`eu — ${v.inf} (${v.en})`, note:v.ex_eu, en_note:v.ex_eu_en, filter:'-ER/-IR' },
-    { cat:'-ER/-IR · você', pt:v.vce, en:`você — ${v.inf} (${v.en})`, note:v.ex_vce, en_note:v.ex_vce_en, filter:'-ER/-IR' },
+    { cat:'-ER/-IR · eu', pt:v.eu, prompt_en:`eu — ${v.inf}`, hint_en:`(${v.en})`, note:v.ex_eu, en_note:v.ex_eu_en, filter:'-ER/-IR' },
+    { cat:'-ER/-IR · você', pt:v.vce, prompt_en:`você — ${v.inf}`, hint_en:`(${v.en})`, note:v.ex_vce, en_note:v.ex_vce_en, filter:'-ER/-IR' },
   ]),
 ];
 
@@ -685,20 +685,28 @@ function vfcRender() {
   const exEn=document.getElementById('vfcExEn');
 
   if (vfcMode==='en') {
-    // EN → PT: English is the prompt (visible), Portuguese is the answer (blurred)
-    enEl.textContent=c.en;
+    // EN → PT
+    // Prompt: "eu — ser" + small blurred hint "(to be permanent)" that can be tapped
+    enEl.innerHTML=`${c.prompt_en} <span class="vfc-en-hidden" onclick="this.classList.add('revealed')">${c.hint_en||''}</span>`;
+    // Answer: Portuguese form — blurred
     ptEl.textContent=c.pt; ptEl.className='vfc-pt';
+    // Example: PT sentence blurred (tap to hear), EN translation blurred (tap to reveal)
+    exPt.textContent=c.note||''; exPt.className='vfc-ex-pt';
+    exEn.textContent=c.en_note||''; exEn.className='vfc-ex-en';
+    exEn.onclick=()=>exEn.classList.add('revealed');
     document.getElementById('vfcHints').textContent='diz em português · clica para revelar · clica no exemplo para ouvir';
   } else {
-    // PT → EN: Portuguese is the prompt (visible), English is the answer (blurred — swap positions)
-    enEl.textContent=c.pt; // use EN slot to show PT as the prompt
-    ptEl.textContent=c.en; ptEl.className='vfc-pt'; // blur the EN meaning
-    document.getElementById('vfcHints').textContent='traduz para inglês · clica para revelar';
+    // PT → EN
+    // Prompt: Portuguese verb form — visible
+    enEl.textContent=c.pt;
+    // Answer: English meaning — blurred
+    ptEl.textContent=c.prompt_en + (c.hint_en?' '+c.hint_en:''); ptEl.className='vfc-pt';
+    // Example: same blurred pattern
+    exPt.textContent=c.note||''; exPt.className='vfc-ex-pt';
+    exEn.textContent=c.en_note||''; exEn.className='vfc-ex-en';
+    exEn.onclick=()=>exEn.classList.add('revealed');
+    document.getElementById('vfcHints').textContent='traduz para inglês · clica para revelar · clica no exemplo para ouvir';
   }
-
-  exPt.textContent=c.note||''; exPt.className='vfc-ex-pt';
-  exEn.textContent=c.en_note||''; exEn.className='vfc-ex-en';
-  exEn.onclick=()=>exEn.classList.add('revealed');
 }
 
 function vfcReveal() {
@@ -706,20 +714,15 @@ function vfcReveal() {
   document.getElementById('vfcPt').classList.add('revealed');
   document.getElementById('vfcExPt').classList.add('revealed');
   document.getElementById('vfcHints').textContent='';
+  // In EN→PT mode speak the PT answer on reveal
+  if(vfcMode==='en') speak(vfcDeck[vfcIdx].pt);
 }
-function vfcSpeakAnswer() {
-  // Always speak the Portuguese regardless of mode
-  const c=vfcDeck[vfcIdx];
-  speak(vfcMode==='en' ? c.pt : c.pt);
-}
+function vfcSpeakAnswer() { speak(vfcDeck[vfcIdx].pt); }
 function vfcSpeakEx() { vfcReveal(); speak(vfcDeck[vfcIdx].note||vfcDeck[vfcIdx].pt); }
 function vfcMove(dir) { vfcIdx=(vfcIdx+dir+vfcDeck.length)%vfcDeck.length; vfcRender(); }
 function vfcShuffle() { vfcDeck=[...vfcDeck].sort(()=>Math.random()-0.5); vfcIdx=0; vfcRender(); }
 function vfcReset() { vfcFilter(vfcCurrentFilter, document.getElementById('filter-all')); }
 
-// Default to EN → PT
-document.getElementById('mode-en').classList.add('active');
-document.getElementById('mode-pt').classList.remove('active');
 vfcRender();
 
 // ── DESAFIO ───────────────────────────────────────────────────────
