@@ -256,8 +256,8 @@
 <div id="flashcards" class="view">
 <div class="flashcard-wrap">
   <div class="vfc-mode-bar">
-    <button class="vfc-mode-btn active" id="mode-pt" onclick="vfcSetMode('pt', this)">🇵🇹 PT → EN</button>
-    <button class="vfc-mode-btn" id="mode-en" onclick="vfcSetMode('en', this)">🇬🇧 EN → PT</button>
+    <button class="vfc-mode-btn" id="mode-pt" onclick="vfcSetMode('pt', this)">🇵🇹 PT → EN</button>
+    <button class="vfc-mode-btn active" id="mode-en" onclick="vfcSetMode('en', this)">🇬🇧 EN → PT</button>
   </div>
   <div class="vfc-topbar">
     <span class="vfc-counter" id="vfcCounter">1 / 1</span>
@@ -840,29 +840,29 @@ vfcRender();
 // ── DESAFIO ───────────────────────────────────────────────────────
 const DESAFIO_CARDS = [
   // Essenciais presente
-  { cat:'Essenciais', prompt:'Say "I am from Miami but I live in Lisbon." (ser)', answer:'Sou de Miami, mas moro em Lisboa.', note:'eu → sou (ser, permanent)' },
-  { cat:'Essenciais', prompt:'Say "I\'m a little tired today." (estar)', answer:'Estou um bocadinho cansado hoje.', note:'eu → estou (estar, temporary)' },
-  { cat:'Essenciais', prompt:'Say "I\'m going to the supermarket later." (ir)', answer:'Vou ao supermercado mais tarde.', note:'eu → vou (ir)' },
-  { cat:'Essenciais', prompt:'Say "I have Portuguese class on Fridays." (ter)', answer:'Tenho aula de português às sextas.', note:'eu → tenho (ter)' },
-  { cat:'Essenciais', prompt:'Say "I always make coffee in the morning." (fazer)', answer:'Faço sempre café de manhã.', note:'eu → faço (fazer, irregular eu)' },
-  { cat:'Essenciais', prompt:'Ask "what do you do for a living?" (fazer)', answer:'O que você faz da vida?', note:'você → faz (fazer)' },
-  { cat:'Essenciais', prompt:'Say "I\'ll give you a hand, no problem." (dar)', answer:'Dou uma ajuda, sem problema.', note:'eu → dou (dar, irregular eu)' },
-  { cat:'Essenciais', prompt:'Say "I always say thank you." (dizer)', answer:'Digo sempre obrigado.', note:'eu → digo (dizer, irregular eu)' },
-  { cat:'Essenciais', prompt:'Say "I\'ll bring the wine." (trazer)', answer:'Trago o vinho.', note:'eu → trago (trazer, irregular eu)' },
-  { cat:'Essenciais', prompt:'Say "I listen to Portuguese music every day." (ouvir)', answer:'Ouço música portuguesa todos os dias.', note:'eu → ouço (ouvir, irregular eu)' },
+  { cat:'Essenciais', prompt:'Say "I am from Miami but I live in Lisbon."', answer:'Sou de Miami, mas moro em Lisboa.', note:'eu → sou (ser, permanent)' },
+  { cat:'Essenciais', prompt:'Say "I\'m a little tired today."', answer:'Estou um bocadinho cansado hoje.', note:'eu → estou (estar, temporary)' },
+  { cat:'Essenciais', prompt:'Say "I\'m going to the supermarket later."', answer:'Vou ao supermercado mais tarde.', note:'eu → vou' },
+  { cat:'Essenciais', prompt:'Say "I have Portuguese class on Fridays."', answer:'Tenho aula de português às sextas.', note:'eu → tenho' },
+  { cat:'Essenciais', prompt:'Say "I always make coffee in the morning."', answer:'Faço sempre café de manhã.', note:'eu → faço (fazer, irregular eu)' },
+  { cat:'Essenciais', prompt:'Ask "what do you do for a living?"', answer:'O que você faz da vida?', note:'você → faz' },
+  { cat:'Essenciais', prompt:'Say "I\'ll give you a hand, no problem."', answer:'Dou uma ajuda, sem problema.', note:'eu → dou (dar, irregular eu)' },
+  { cat:'Essenciais', prompt:'Say "I always say thank you."', answer:'Digo sempre obrigado.', note:'eu → digo (dizer, irregular eu)' },
+  { cat:'Essenciais', prompt:'Say "I\'ll bring the wine."', answer:'Trago o vinho.', note:'eu → trago (trazer, irregular eu)' },
+  { cat:'Essenciais', prompt:'Say "I listen to Portuguese music every day."', answer:'Ouço música portuguesa todos os dias.', note:'eu → ouço (ouvir, irregular eu)' },
   // Essenciais passado
-  { cat:'Passado', prompt:'Say "I went to the market yesterday." (ir, past)', answer:'Fui ao mercado ontem.', note:'eu → fui — same form as ser past!' },
-  { cat:'Passado', prompt:'Say "I was very tired yesterday." (estar, past)', answer:'Estive muito cansado ontem.', note:'eu → estive (estar, past)' },
-  { cat:'Passado', prompt:'Say "I had a meeting this morning." (ter, past)', answer:'Tive uma reunião esta manhã.', note:'eu → tive (ter, past)' },
-  { cat:'Passado', prompt:'Say "I did a lot today." (fazer, past)', answer:'Fiz muito hoje.', note:'eu → fiz (fazer, past)' },
-  { cat:'Passado', prompt:'Say "I came by bus." (vir, past)', answer:'Vim de autocarro.', note:'eu → vim (vir, past)' },
+  { cat:'Passado', prompt:'Say "I went to the market yesterday."', answer:'Fui ao mercado ontem.', note:'eu → fui — same form as ser past!' },
+  { cat:'Passado', prompt:'Say "I was very tired yesterday."', answer:'Estive muito cansado ontem.', note:'eu → estive (estar, past)' },
+  { cat:'Passado', prompt:'Say "I had a meeting this morning."', answer:'Tive uma reunião esta manhã.', note:'eu → tive (ter, past)' },
+  { cat:'Passado', prompt:'Say "I did a lot today."', answer:'Fiz muito hoje.', note:'eu → fiz (fazer, past)' },
+  { cat:'Passado', prompt:'Say "I came by bus."', answer:'Vim de autocarro.', note:'eu → vim (vir, past)' },
   // Irregulares
-  { cat:'Irregulares', prompt:'Say "Can I have some more, please?" (poder)', answer:'Posso repetir, por favor?', note:'eu → posso (poder, irregular eu)' },
-  { cat:'Irregulares', prompt:'Ask "can you bring the bill?" (poder)', answer:'Pode trazer a conta?', note:'você → pode (poder)' },
-  { cat:'Irregulares', prompt:'Say "I can see the sea from my window." (ver)', answer:'Vejo o mar da minha janela.', note:'eu → vejo (ver, irregular eu)' },
-  { cat:'Irregulares', prompt:'Say "I know how to speak a little Portuguese." (saber)', answer:'Sei falar um pouco de português.', note:'eu → sei (saber, irregular eu)' },
-  { cat:'Irregulares', prompt:'Say "I want to learn Portuguese well." (querer)', answer:'Quero aprender português bem.', note:'eu → quero (querer)' },
-  { cat:'Irregulares', prompt:'Say "I always lose my keys." (perder)', answer:'Perco sempre as chaves.', note:'eu → perco (perder, irregular eu)' },
+  { cat:'Irregulares', prompt:'Say "Can I have some more, please?"', answer:'Posso repetir, por favor?', note:'eu → posso (poder, irregular eu)' },
+  { cat:'Irregulares', prompt:'Ask "can you bring the bill?"', answer:'Pode trazer a conta?', note:'você → pode' },
+  { cat:'Irregulares', prompt:'Say "I can see the sea from my window."', answer:'Vejo o mar da minha janela.', note:'eu → vejo (ver, irregular eu)' },
+  { cat:'Irregulares', prompt:'Say "I know how to speak a little Portuguese."', answer:'Sei falar um pouco de português.', note:'eu → sei (saber, irregular eu)' },
+  { cat:'Irregulares', prompt:'Say "I want to learn Portuguese well."', answer:'Quero aprender português bem.', note:'eu → quero' },
+  { cat:'Irregulares', prompt:'Say "I always lose my keys."', answer:'Perco sempre as chaves.', note:'eu → perco (perder, irregular eu)' },
   // -AR
   { cat:'-AR', prompt:'Say "I study Portuguese every morning."', answer:'Estudo português todas as manhãs.', note:'estudar → eu estudo' },
   { cat:'-AR', prompt:'Say "I live in Lisbon."', answer:'Moro em Lisboa.', note:'morar → eu moro' },
