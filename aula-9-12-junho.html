@@ -672,6 +672,7 @@ function loadDesafioCard() {
   document.getElementById('d-answer').textContent=c.answer;
   document.getElementById('d-answer').classList.remove('revealed');
   document.getElementById('d-note').textContent=c.note||'';
+  document.getElementById('d-note').style.display='none';
   document.getElementById('d-actions').style.display='none';
   document.getElementById('d-hint').style.display='block';
   document.getElementById('d-hint').textContent='diz em voz alta · depois clica para revelar';
@@ -698,6 +699,7 @@ function revealDesafio() {
   document.getElementById('d-timer-text').textContent='✓';
   document.getElementById('d-answer').classList.add('revealed');
   document.getElementById('d-actions').style.display='flex';
+  document.getElementById('d-note').style.display='block';
   document.getElementById('d-hint').style.display='none';
   speak(dDeck[dIdx%dDeck.length].answer);
 }
