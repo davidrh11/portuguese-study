@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="pt" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verbos em Português</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0; --surface: #ffffff; --border: #e2ddd6;
+    --green: #2d7a50; --red: #a03428; --text: #1a1a1a; --muted: #6b6560;
+    --highlight: #eef6f1; --blue: #1a3a6b;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+  header { background: var(--surface); border-bottom: 2px solid var(--green); padding: 1.25rem 2rem; display: flex; align-items: center; gap: 1rem; }
+  .header-text h1 { font-family: var(--mono); font-size: 0.95rem; font-weight: 600; color: var(--green); }
+  .header-text p { font-size: 0.8rem; color: var(--muted); margin-top: 0.15rem; }
+
+  .tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--surface); padding: 0 2rem; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { font-family: var(--mono); font-size: 0.8rem; padding: 0.75rem 1.25rem; cursor: pointer; color: var(--muted); border: none; background: none; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  .view { display: none; padding: 2rem; max-width: 820px; margin: 0 auto; }
+  .view.active { display: block; }
+
+  .section-title { font-family: var(--mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--green); margin: 2rem 0 0.75rem; border-left: 3px solid var(--green); padding-left: 0.6rem; }
+  .section-title:first-child { margin-top: 0; }
+
+  /* VERB CARD GRID */
+  .verb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.9rem; margin-bottom: 1.5rem; }
+
+  .verb-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .verb-card-header { background: var(--blue); color: #fff; padding: 0.6rem 1rem; display: flex; justify-content: space-between; align-items: center; }
+  .verb-inf { font-family: var(--mono); font-size: 0.95rem; font-weight: 600; cursor: pointer; }
+  .verb-inf:hover { text-decoration: underline; }
+  .verb-en { font-size: 0.72rem; color: rgba(255,255,255,0.75); }
+  .verb-conj { padding: 0.75rem 1rem; display: grid; grid-template-columns: auto 1fr; gap: 0.25rem 0.75rem; align-items: baseline; }
+  .subj { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); }
+  .form { font-family: var(--mono); font-size: 0.9rem; color: var(--green); font-weight: 600; cursor: pointer; }
+  .form:hover { text-decoration: underline; }
+  .form.irr { color: var(--red); }
+  .verb-ex { padding: 0 1rem 0.75rem; font-size: 0.78rem; color: var(--muted); font-style: italic; border-top: 1px solid var(--border); padding-top: 0.5rem; cursor: pointer; }
+  .verb-ex:hover { color: var(--green); }
+
+  /* PARADIGM TABLE (for -AR/-ER/-IR models) */
+  .paradigm-wrap { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .paradigm { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .paradigm-header { padding: 0.7rem 1rem; background: var(--green); color: #fff; }
+  .paradigm-inf { font-family: var(--mono); font-size: 1rem; font-weight: 600; }
+  .paradigm-sub { font-size: 0.72rem; color: rgba(255,255,255,0.8); }
+  .paradigm table { width: 100%; border-collapse: collapse; }
+  .paradigm td { padding: 0.4rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+  .paradigm tr:last-child td { border-bottom: none; }
+  .paradigm .p-subj { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); width: 40%; }
+  .paradigm .p-form { font-family: var(--mono); font-weight: 600; color: var(--green); cursor: pointer; }
+  .paradigm .p-form:hover { text-decoration: underline; }
+  .paradigm .p-form.focus { color: var(--red); background: #fff5f5; border-radius: 3px; padding: 0.1rem 0.3rem; }
+
+  /* NOTE BLOCK */
+  .note-block { background: var(--highlight); border-left: 3px solid var(--green); padding: 0.9rem 1.1rem; border-radius: 0 6px 6px 0; margin: 1rem 0; font-size: 0.87rem; line-height: 1.7; }
+  .note-block .note-label { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.35rem; }
+  .note-block .pt { font-family: var(--mono); color: var(--green); font-weight: 600; }
+
+  /* FLASHCARD — vfc pattern */
+  .flashcard-wrap { max-width: 480px; margin: 0 auto; }
+  .vfc-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem; }
+  .vfc-counter { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+  .vfc-controls { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .vfc-ctrl { font-family: var(--mono); font-size: 0.72rem; background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 0.35rem 0.85rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .vfc-ctrl:hover, .vfc-ctrl.active { border-color: var(--green); color: var(--green); background: var(--highlight); }
+  .vfc-progress { height: 2px; background: var(--border); border-radius: 1px; margin-bottom: 1.25rem; overflow: hidden; }
+  .vfc-progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
+  .vfc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; min-height: 300px; display: flex; flex-direction: column; align-items: center; padding: 1.5rem 2rem; text-align: center; }
+  .vfc-hints { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 1.25rem; }
+  .vfc-cat { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); align-self: flex-start; margin-bottom: 0.75rem; }
+  .vfc-en { font-size: 1rem; color: var(--text); font-weight: 300; line-height: 1.5; margin-bottom: 1.1rem; }
+  .vfc-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1.1rem; }
+  .vfc-pt { font-family: var(--mono); font-size: 1.5rem; color: var(--green); font-weight: 700; filter: blur(7px); transition: filter 0.3s; cursor: pointer; margin-bottom: 1.1rem; background: var(--border); border-radius: 4px; padding: 0.1rem 0.6rem; display: inline-block; }
+  .vfc-pt.revealed { filter: blur(0); background: transparent; }
+  .vfc-speak { background: var(--bg); border: 1px solid var(--border); color: var(--green); padding: 0.35rem 1.2rem; border-radius: 99px; cursor: pointer; transition: all 0.2s; font-size: 1rem; margin-bottom: 1rem; }
+  .vfc-speak:hover { background: var(--green); color: #fff; border-color: var(--green); }
+  .vfc-ex-pt { font-style: italic; font-size: 0.82rem; color: var(--text); filter: blur(5px); transition: filter 0.3s; cursor: pointer; margin-bottom: 0.2rem; background: var(--border); border-radius: 3px; padding: 0.05rem 0.3rem; display: inline-block; }
+  .vfc-ex-pt.revealed { filter: blur(0); background: transparent; }
+  .vfc-ex-en { font-size: 0.75rem; color: var(--muted); filter: blur(5px); transition: filter 0.3s; background: var(--border); border-radius: 3px; padding: 0.05rem 0.3rem; display: inline-block; margin-bottom: 1rem; cursor: pointer; }
+  .vfc-ex-en.revealed { filter: blur(0); background: transparent; }
+  .vfc-nav { display: flex; gap: 1rem; margin-top: auto; }
+  .vfc-nav-btn { font-family: var(--mono); font-size: 0.82rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 0.55rem 1.25rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .vfc-nav-btn:hover { border-color: var(--green); color: var(--green); }
+
+  /* DESAFIO */
+  .desafio-wrap { max-width: 520px; margin: 0 auto; }
+  .d-meta { display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem; }
+  .d-streak { color: var(--green); font-weight: 600; }
+  .d-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.75rem 1.5rem 1.5rem; text-align: center; min-height: 280px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+  .d-cat { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.75rem; align-self: flex-start; }
+  .d-prompt { font-size: 1rem; color: var(--text); margin-bottom: 1.25rem; line-height: 1.6; max-width: 400px; }
+  .d-timer-ring { width: 52px; height: 52px; margin: 0 auto 1.25rem; position: relative; }
+  .d-timer-ring svg { transform: rotate(-90deg); }
+  .d-timer-ring circle { fill: none; stroke-width: 4; }
+  .d-timer-track { stroke: var(--border); }
+  .d-timer-fill { stroke: var(--green); stroke-dasharray: 138; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke 0.3s; stroke-linecap: round; }
+  .d-timer-fill.warn { stroke: #c47a00; }
+  .d-timer-fill.danger { stroke: var(--red); }
+  .d-timer-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 0.9rem; font-weight: 600; color: var(--text); }
+  .d-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1.25rem; }
+  .d-answer { font-family: var(--mono); font-size: 1.4rem; font-weight: 600; color: var(--green); filter: blur(8px); background: #e8f4ee; border-radius: 6px; padding: 0.35rem 1rem; cursor: pointer; transition: filter 0.3s, background 0.3s; margin-bottom: 0.75rem; user-select: none; }
+  .d-answer.revealed { filter: blur(0); background: transparent; }
+  .d-speak { background: var(--bg); border: 1px solid var(--border); color: var(--green); padding: 0.3rem 1rem; border-radius: 99px; cursor: pointer; font-size: 0.9rem; margin-bottom: 1.25rem; transition: all 0.2s; }
+  .d-speak:hover { background: var(--green); color: #fff; }
+  .d-note { font-size: 0.78rem; color: var(--muted); font-style: italic; margin-bottom: 1.25rem; min-height: 1.2rem; }
+  .d-actions { display: flex; gap: 0.75rem; }
+  .d-btn { font-family: var(--mono); font-size: 0.82rem; font-weight: 600; padding: 0.6rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; transition: opacity 0.15s; }
+  .d-btn.disse { background: var(--green); color: #fff; }
+  .d-btn.nao { background: #fdf0ef; color: var(--red); border: 1px solid #dba09a; }
+  .d-btn:hover { opacity: 0.85; }
+  .d-hint { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); margin-top: 1rem; letter-spacing: 0.05em; }
+</style>
+</head>
+<body>
+
+<header>
+  <svg width="32" height="22" viewBox="0 0 32 22" xmlns="http://www.w3.org/2000/svg">
+    <rect width="12" height="22" fill="#006600"/>
+    <rect x="12" width="20" height="22" fill="#FF0000"/>
+    <circle cx="12" cy="11" r="5" fill="#FFD700" stroke="#00008B" stroke-width="0.5"/>
+    <circle cx="12" cy="11" r="3" fill="#00008B"/>
+    <circle cx="12" cy="11" r="1.5" fill="#FFD700"/>
+  </svg>
+  <div class="header-text">
+    <h1>Verbos em Português — Guia Completo</h1>
+    <p>A1.1 · Essenciais · Irregulares · -AR · -ER/-IR · Flashcards · Desafio</p>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('essenciais', this)">Essenciais</button>
+  <button class="tab" onclick="switchTab('irregulares', this)">Irregulares</button>
+  <button class="tab" onclick="switchTab('ar', this)">-AR</button>
+  <button class="tab" onclick="switchTab('er-ir', this)">-ER / -IR</button>
+  <button class="tab" onclick="switchTab('flashcards', this)">Flashcards</button>
+  <button class="tab" onclick="switchTab('desafio', this)">⚡ Desafio</button>
+</div>
+
+<!-- ══ ESSENCIAIS ══ -->
+<div id="essenciais" class="view active">
+  <div class="section-title">Verbos Essenciais — Presente & Passado (eu / você)</div>
+  <div class="note-block">
+    <div class="note-label">Foco da Aula</div>
+    Drill <span class="pt">eu</span> and <span class="pt">você</span> forms only — that's your instructor's rule. Forms in <span style="color:var(--red)">red</span> are irregular (not predictable from the infinitive). Click any form or example to hear it.
+  </div>
+  <div id="essenciais-grid" class="verb-grid"></div>
+</div>
+
+<!-- ══ IRREGULARES ══ -->
+<div id="irregulares" class="view">
+  <div class="section-title">Verbos Irregulares — Presente (eu / você)</div>
+  <div class="note-block">
+    <div class="note-label">Nota</div>
+    These are the verbs that don't follow predictable patterns. Highlighted in <span style="color:var(--red)">red</span> = irregular form. Memorise as chunks — don't try to derive them from rules.
+  </div>
+  <div id="irregulares-grid" class="verb-grid"></div>
+</div>
+
+<!-- ══ -AR ══ -->
+<div id="ar" class="view">
+  <div class="section-title">Verbos Regulares -AR — Paradigma</div>
+  <div class="paradigm-wrap">
+    <div class="paradigm">
+      <div class="paradigm-header">
+        <div class="paradigm-inf" onclick="speak('falar')">falar</div>
+        <div class="paradigm-sub">to speak — model for all -AR verbs</div>
+      </div>
+      <table>
+        <tr><td class="p-subj">eu</td><td class="p-form focus" onclick="speak('falo')">falo</td></tr>
+        <tr><td class="p-subj">tu</td><td class="p-form" onclick="speak('falas')">falas</td></tr>
+        <tr><td class="p-subj">você/ele/ela</td><td class="p-form focus" onclick="speak('fala')">fala</td></tr>
+        <tr><td class="p-subj">nós</td><td class="p-form" onclick="speak('falamos')">falamos</td></tr>
+        <tr><td class="p-subj">vocês/eles</td><td class="p-form" onclick="speak('falam')">falam</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="note-block">
+    <div class="note-label">O Padrão</div>
+    Remove <span class="pt">-ar</span> → add ending: <span class="pt">-o / -as / -a / -amos / -am</span>. The <span class="pt">eu</span> form always ends in <span class="pt">-o</span>. The <span class="pt">você</span> form always ends in <span class="pt">-a</span>. These two are your priority.
+  </div>
+  <div class="section-title">-AR Verbs — eu / você</div>
+  <div id="ar-grid" class="verb-grid"></div>
+</div>
+
+<!-- ══ -ER / -IR ══ -->
+<div id="er-ir" class="view">
+  <div class="section-title">Verbos Regulares -ER e -IR — Paradigmas</div>
+  <div class="paradigm-wrap">
+    <div class="paradigm">
+      <div class="paradigm-header" style="background:#5a3e8c">
+        <div class="paradigm-inf" onclick="speak('viver')">viver</div>
+        <div class="paradigm-sub">to live — model for -ER verbs</div>
+      </div>
+      <table>
+        <tr><td class="p-subj">eu</td><td class="p-form focus" onclick="speak('vivo')">vivo</td></tr>
+        <tr><td class="p-subj">tu</td><td class="p-form" onclick="speak('vives')">vives</td></tr>
+        <tr><td class="p-subj">você/ele/ela</td><td class="p-form focus" onclick="speak('vive')">vive</td></tr>
+        <tr><td class="p-subj">nós</td><td class="p-form" onclick="speak('vivemos')">vivemos</td></tr>
+        <tr><td class="p-subj">vocês/eles</td><td class="p-form" onclick="speak('vivem')">vivem</td></tr>
+      </table>
+    </div>
+    <div class="paradigm">
+      <div class="paradigm-header" style="background:#7a3a2d">
+        <div class="paradigm-inf" onclick="speak('decidir')">decidir</div>
+        <div class="paradigm-sub">to decide — model for -IR verbs</div>
+      </div>
+      <table>
+        <tr><td class="p-subj">eu</td><td class="p-form focus" onclick="speak('decido')">decido</td></tr>
+        <tr><td class="p-subj">tu</td><td class="p-form" onclick="speak('decides')">decides</td></tr>
+        <tr><td class="p-subj">você/ele/ela</td><td class="p-form focus" onclick="speak('decide')">decide</td></tr>
+        <tr><td class="p-subj">nós</td><td class="p-form" onclick="speak('decidimos')">decidimos</td></tr>
+        <tr><td class="p-subj">vocês/eles</td><td class="p-form" onclick="speak('decidem')">decidem</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="note-block">
+    <div class="note-label">O Padrão</div>
+    -ER: remove <span class="pt">-er</span> → add <span class="pt">-o / -es / -e / -emos / -em</span>.<br>
+    -IR: remove <span class="pt">-ir</span> → add <span class="pt">-o / -es / -e / -imos / -em</span>.<br>
+    Key difference: <span class="pt">nós</span> form — <span class="pt">vivemos</span> vs <span class="pt">decidimos</span>.
+  </div>
+  <div class="section-title">-ER / -IR Verbs in Context</div>
+  <div id="er-ir-grid" class="verb-grid"></div>
+</div>
+
+<!-- ══ FLASHCARDS ══ -->
+<div id="flashcards" class="view">
+<div class="flashcard-wrap">
+  <div class="vfc-topbar">
+    <span class="vfc-counter" id="vfcCounter">1 / 1</span>
+    <div class="vfc-controls">
+      <button class="vfc-ctrl active" id="filter-all" onclick="vfcFilter('all', this)">Todos</button>
+      <button class="vfc-ctrl" id="filter-essenciais" onclick="vfcFilter('Essenciais', this)">Essenciais</button>
+      <button class="vfc-ctrl" id="filter-irregulares" onclick="vfcFilter('Irregulares', this)">Irregulares</button>
+      <button class="vfc-ctrl" id="filter-ar" onclick="vfcFilter('-AR', this)">-AR</button>
+      <button class="vfc-ctrl" id="filter-er-ir" onclick="vfcFilter('-ER/-IR', this)">-ER/-IR</button>
+    </div>
+  </div>
+  <div class="vfc-controls" style="margin-bottom:0.75rem;gap:0.5rem">
+    <button class="vfc-ctrl" onclick="vfcShuffle()">⇄ Baralhar</button>
+    <button class="vfc-ctrl" onclick="vfcReset()">↺ Reiniciar</button>
+  </div>
+  <div class="vfc-progress"><div class="vfc-progress-fill" id="vfcFill"></div></div>
+  <div class="vfc-card">
+    <div class="vfc-hints" id="vfcHints">clique na palavra para revelar · clique no exemplo para ouvir</div>
+    <div class="vfc-cat" id="vfcCat"></div>
+    <div class="vfc-en" id="vfcEn"></div>
+    <div class="vfc-divider"></div>
+    <div class="vfc-pt" id="vfcPt" onclick="vfcReveal()"></div>
+    <button class="vfc-speak" onclick="vfcSpeakAnswer()">🔊</button>
+    <div class="vfc-ex-pt" id="vfcExPt" onclick="vfcSpeakEx()"></div>
+    <div class="vfc-ex-en" id="vfcExEn"></div>
+    <div class="vfc-nav">
+      <button class="vfc-nav-btn" onclick="vfcMove(-1)">← Anterior</button>
+      <button class="vfc-nav-btn" onclick="vfcMove(1)">Próximo →</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ DESAFIO ══ -->
+<div id="desafio" class="view">
+<div class="desafio-wrap">
+  <div class="d-meta">
+    <span id="d-score-display">Score: 0 / 0</span>
+    <span class="d-streak" id="d-streak-display"></span>
+  </div>
+  <div class="d-card">
+    <span class="d-cat" id="d-cat"></span>
+    <div class="d-prompt" id="d-prompt"></div>
+    <div class="d-timer-ring">
+      <svg width="52" height="52" viewBox="0 0 52 52">
+        <circle class="d-timer-track" cx="26" cy="26" r="22"/>
+        <circle class="d-timer-fill" id="d-timer-fill" cx="26" cy="26" r="22"/>
+      </svg>
+      <div class="d-timer-text" id="d-timer-text">8</div>
+    </div>
+    <div class="d-divider"></div>
+    <div class="d-answer" id="d-answer" onclick="revealDesafio()"></div>
+    <button class="d-speak" onclick="speakDesafio()">🔊</button>
+    <div class="d-note" id="d-note"></div>
+    <div class="d-actions" id="d-actions" style="display:none">
+      <button class="d-btn disse" onclick="scoreDesafio(true)">✓ Disse</button>
+      <button class="d-btn nao" onclick="scoreDesafio(false)">✗ Não disse</button>
+    </div>
+    <div class="d-hint" id="d-hint">diz em voz alta · depois clica para revelar</div>
+  </div>
+</div>
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts-speechify.drh-dave.workers.dev";
+const audioCache = {};
+async function speak(text) {
+  if (!text) return;
+  if (audioCache[text]) { audioCache[text].currentTime=0; audioCache[text].play(); return; }
+  try {
+    const res = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({text}) });
+    if (!res.ok) throw new Error();
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url); audioCache[text]=audio; audio.play();
+  } catch(e) {}
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if (id==='flashcards') vfcRender();
+  if (id==='desafio') initDesafio();
+}
+
+// ── DATA ──────────────────────────────────────────────────────────
+
+const ESSENCIAIS = [
+  { inf:'ser',   en:'to be (permanent)',   eu_p:'sou',   vce_p:'é',     eu_pp:'fui',    vce_pp:'foi',    irr_eu:true, irr_vce:true,
+    ex_eu:'Eu sou de Miami, mas moro em Lisboa.', ex_eu_en:"I'm from Miami but I live in Lisbon.",
+    ex_vce:'Você é o professor?', ex_vce_en:'Are you the teacher?' },
+  { inf:'estar', en:'to be (temporary)',   eu_p:'estou', vce_p:'está',  eu_pp:'estive', vce_pp:'esteve', irr_eu:true, irr_vce:true,
+    ex_eu:'Estou um bocadinho cansado hoje.', ex_eu_en:"I'm a little tired today.",
+    ex_vce:'Você está bem?', ex_vce_en:'Are you okay?' },
+  { inf:'ir',    en:'to go',              eu_p:'vou',   vce_p:'vai',   eu_pp:'fui',    vce_pp:'foi',    irr_eu:true, irr_vce:true,
+    ex_eu:'Vou ao supermercado mais tarde.', ex_eu_en:"I'm going to the supermarket later.",
+    ex_vce:'Vai jantar onde hoje?', ex_vce_en:'Where are you going for dinner today?' },
+  { inf:'ter',   en:'to have',            eu_p:'tenho', vce_p:'tem',   eu_pp:'tive',   vce_pp:'teve',   irr_eu:true, irr_vce:false,
+    ex_eu:'Tenho aula de português às sextas.', ex_eu_en:'I have Portuguese class on Fridays.',
+    ex_vce:'Você tem a conta, por favor?', ex_vce_en:'Do you have the bill, please?' },
+  { inf:'fazer', en:'to do / make',       eu_p:'faço',  vce_p:'faz',   eu_pp:'fiz',    vce_pp:'fez',    irr_eu:true, irr_vce:true,
+    ex_eu:'Faço sempre café de manhã.', ex_eu_en:'I always make coffee in the morning.',
+    ex_vce:'O que você faz da vida?', ex_vce_en:'What do you do for a living?' },
+  { inf:'dar',   en:'to give',            eu_p:'dou',   vce_p:'dá',    eu_pp:'dei',    vce_pp:'deu',    irr_eu:true, irr_vce:false,
+    ex_eu:'Dou uma ajuda, sem problema.', ex_eu_en:"I'll give you a hand, no problem.",
+    ex_vce:'Você dá aulas de português?', ex_vce_en:'Do you teach Portuguese?' },
+  { inf:'dizer', en:'to say',             eu_p:'digo',  vce_p:'diz',   eu_pp:'disse',  vce_pp:'disse',  irr_eu:true, irr_vce:false,
+    ex_eu:'Digo sempre obrigado.', ex_eu_en:'I always say thank you.',
+    ex_vce:'O que você diz? Não estou a perceber.', ex_vce_en:"What are you saying? I'm not understanding." },
+  { inf:'vir',   en:'to come',            eu_p:'venho', vce_p:'vem',   eu_pp:'vim',    vce_pp:'veio',   irr_eu:true, irr_vce:true,
+    ex_eu:'Venho de autocarro.', ex_eu_en:'I come by bus.',
+    ex_vce:'Você vem de onde?', ex_vce_en:'Where do you come from?' },
+  { inf:'trazer',en:'to bring',           eu_p:'trago', vce_p:'traz',  eu_pp:'trouxe', vce_pp:'trouxe', irr_eu:true, irr_vce:true,
+    ex_eu:'Trago o vinho.', ex_eu_en:"I'll bring the wine.",
+    ex_vce:'Você traz os copos?', ex_vce_en:'Are you bringing the glasses?' },
+  { inf:'ouvir', en:'to hear / listen',   eu_p:'ouço',  vce_p:'ouve',  eu_pp:'ouvi',   vce_pp:'ouviu',  irr_eu:true, irr_vce:false,
+    ex_eu:'Ouço música portuguesa todos os dias.', ex_eu_en:'I listen to Portuguese music every day.',
+    ex_vce:'Você ouve bem?', ex_vce_en:'Can you hear well?' },
+];
+
+const IRREGULARES = [
+  { inf:'ver',    en:'to see',          eu_p:'vejo',  vce_p:'vê',   eu_pp:'vi',     vce_pp:'viu',   irr_eu:true, irr_vce:true,
+    ex_eu:'Vejo o mar da minha janela.', ex_eu_en:'I can see the sea from my window.',
+    ex_vce:'Você vê televisão?', ex_vce_en:'Do you watch television?' },
+  { inf:'saber',  en:'to know (facts)', eu_p:'sei',   vce_p:'sabe', eu_pp:'soube',  vce_pp:'soube', irr_eu:true, irr_vce:false,
+    ex_eu:'Sei falar um pouco de português.', ex_eu_en:'I know how to speak a little Portuguese.',
+    ex_vce:'Você sabe onde fica?', ex_vce_en:'Do you know where it is?' },
+  { inf:'poder',  en:'to be able to / can', eu_p:'posso', vce_p:'pode', eu_pp:'pude', vce_pp:'pôde', irr_eu:true, irr_vce:false,
+    ex_eu:'Posso repetir, por favor?', ex_eu_en:'Can I have some more, please?',
+    ex_vce:'Pode trazer a conta?', ex_vce_en:'Can you bring the bill?' },
+  { inf:'querer', en:'to want',         eu_p:'quero', vce_p:'quer', eu_pp:'quis',   vce_pp:'quis',  irr_eu:false,irr_vce:false,
+    ex_eu:'Quero aprender português bem.', ex_eu_en:'I want to learn Portuguese well.',
+    ex_vce:'Você quer um café?', ex_vce_en:'Would you like a coffee?' },
+  { inf:'pôr',    en:'to put / place',  eu_p:'ponho', vce_p:'põe',  eu_pp:'pus',    vce_pp:'pôs',   irr_eu:true, irr_vce:true,
+    ex_eu:'Ponho açúcar no café.', ex_eu_en:'I put sugar in my coffee.',
+    ex_vce:'Onde você põe as chaves?', ex_vce_en:'Where do you put your keys?' },
+  { inf:'perder', en:'to lose / miss',  eu_p:'perco', vce_p:'perde',eu_pp:'perdi',  vce_pp:'perdeu',irr_eu:true, irr_vce:false,
+    ex_eu:'Perco sempre as chaves.', ex_eu_en:'I always lose my keys.',
+    ex_vce:'Você perde muito tempo no trânsito?', ex_vce_en:'Do you lose a lot of time in traffic?' },
+  { inf:'ser/ir', en:'past of ser AND ir — same form!', eu_p:'—', vce_p:'—', eu_pp:'fui', vce_pp:'foi', irr_eu:true, irr_vce:true,
+    ex_eu:'Fui ao mercado ontem. / Fui professor.', ex_eu_en:'I went to the market yesterday. / I was a teacher.',
+    ex_vce:'Você foi ao Porto?', ex_vce_en:'Did you go to Porto?' },
+];
+
+const AR_VERBS = [
+  { inf:'estudar',   en:'to study',       eu:'estudo',   vce:'estuda',   ex_eu:'Eu estudo português todas as manhãs.',     ex_eu_en:'I study Portuguese every morning.',         ex_vce:'Você estuda na escola de línguas?', ex_vce_en:'Do you study at the language school?' },
+  { inf:'gostar',    en:'to like',        eu:'gosto',    vce:'gosta',    ex_eu:'Eu gosto de bacalhau.',                    ex_eu_en:'I like codfish.',                           ex_vce:'Você gosta de vinho tinto?',        ex_vce_en:'Do you like red wine?' },
+  { inf:'trabalhar', en:'to work',        eu:'trabalho', vce:'trabalha', ex_eu:'Eu trabalho em Lisboa.',                   ex_eu_en:'I work in Lisbon.',                         ex_vce:'Você trabalha na escola?',          ex_vce_en:'Do you work at the school?' },
+  { inf:'morar',     en:'to live/reside', eu:'moro',     vce:'mora',     ex_eu:'Eu moro em Lisboa há seis meses.',         ex_eu_en:'I have been living in Lisbon for six months.', ex_vce:'Onde você mora?',                ex_vce_en:'Where do you live?' },
+  { inf:'comprar',   en:'to buy',         eu:'compro',   vce:'compra',   ex_eu:'Eu compro vinho na Garrafeira Nacional.',  ex_eu_en:'I buy wine at Garrafeira Nacional.',        ex_vce:'Onde você compra os legumes?',      ex_vce_en:'Where do you buy vegetables?' },
+  { inf:'cozinhar',  en:'to cook',        eu:'cozinho',  vce:'cozinha',  ex_eu:'Eu cozinho comida portuguesa muitas vezes.',ex_eu_en:'I often cook Portuguese food.',           ex_vce:'Você cozinha em casa?',             ex_vce_en:'Do you cook at home?' },
+  { inf:'tomar',     en:'to take / have', eu:'tomo',     vce:'toma',     ex_eu:'Eu tomo sempre café de manhã.',           ex_eu_en:'I always have coffee in the morning.',      ex_vce:'Você toma chá ou café?',            ex_vce_en:'Do you have tea or coffee?' },
+  { inf:'pagar',     en:'to pay',         eu:'pago',     vce:'paga',     ex_eu:'Eu pago o jantar com cartão.',             ex_eu_en:'I pay for dinner by card.',                 ex_vce:'Você paga com dinheiro ou cartão?', ex_vce_en:'Do you pay cash or by card?' },
+  { inf:'pensar',    en:'to think',       eu:'penso',    vce:'pensa',    ex_eu:'Eu penso que é bom aprender línguas.',     ex_eu_en:"I think it's good to learn languages.",    ex_vce:'O que você pensa?',                 ex_vce_en:'What do you think?' },
+  { inf:'telefonar', en:'to phone',       eu:'telefono', vce:'telefona', ex_eu:'Eu telefono para a família todos os dias.', ex_eu_en:'I phone family every day.',               ex_vce:'Você telefona muito?',              ex_vce_en:'Do you phone a lot?' },
+  { inf:'falar',     en:'to speak',       eu:'falo',     vce:'fala',     ex_eu:'Eu falo português e inglês.',              ex_eu_en:'I speak Portuguese and English.',           ex_vce:'Você fala devagar, por favor?',     ex_vce_en:'Can you speak slowly, please?' },
+  { inf:'gostar de', en:'to like (+ de)', eu:'gosto de', vce:'gosta de', ex_eu:'Eu gosto de passear em Lisboa.',          ex_eu_en:'I like strolling in Lisbon.',               ex_vce:'Você gosta de música?',             ex_vce_en:'Do you like music?' },
+];
+
+const ER_IR_VERBS = [
+  { inf:'viver',    en:'to live',         eu:'vivo',     vce:'vive',     ex_eu:'Vivo em Lisboa há seis meses.',           ex_eu_en:'I have lived in Lisbon for six months.',    ex_vce:'Você vive perto daqui?',            ex_vce_en:'Do you live near here?' },
+  { inf:'decidir',  en:'to decide',       eu:'decido',   vce:'decide',   ex_eu:'Eu decido sempre na última hora.',         ex_eu_en:'I always decide at the last minute.',       ex_vce:'Você decide agora?',                ex_vce_en:'Are you deciding now?' },
+  { inf:'aprender', en:'to learn',        eu:'aprendo',  vce:'aprende',  ex_eu:'Aprendo português às terças e sextas.',    ex_eu_en:'I learn Portuguese on Tuesdays and Fridays.', ex_vce:'Você aprende rápido?',            ex_vce_en:'Do you learn quickly?' },
+  { inf:'perceber', en:'to understand',   eu:'percebo',  vce:'percebe',  ex_eu:'Não percebo bem.',                         ex_eu_en:"I don't understand well.",                  ex_vce:'Você percebe o que eu digo?',       ex_vce_en:'Do you understand what I say?' },
+  { inf:'beber',    en:'to drink',        eu:'bebo',     vce:'bebe',     ex_eu:'Bebo sempre água com as refeições.',       ex_eu_en:'I always drink water with meals.',          ex_vce:'O que você bebe?',                  ex_vce_en:'What do you drink?' },
+  { inf:'sair',     en:'to go out/leave', eu:'saio',     vce:'sai',      ex_eu:'Saio às seis da tarde.',                  ex_eu_en:'I leave at six in the afternoon.',          ex_vce:'A que horas você sai?',             ex_vce_en:'What time do you leave?' },
+  { inf:'abrir',    en:'to open',         eu:'abro',     vce:'abre',     ex_eu:'Abro sempre a janela de manhã.',           ex_eu_en:'I always open the window in the morning.',  ex_vce:'Você abre a loja às nove?',         ex_vce_en:'Do you open the shop at nine?' },
+];
+
+// ── BUILD VERB CARDS ──────────────────────────────────────────────
+
+function makeEssencialCard(v) {
+  return `<div class="verb-card">
+    <div class="verb-card-header">
+      <span class="verb-inf" onclick="speak('${v.inf}')">${v.inf}</span>
+      <span class="verb-en">${v.en}</span>
+    </div>
+    <div class="verb-conj">
+      <span class="subj">eu</span>
+      <span class="form ${v.irr_eu?'irr':''}" onclick="speak('${v.eu_p}')">${v.eu_p}</span>
+      <span class="subj">você</span>
+      <span class="form ${v.irr_vce?'irr':''}" onclick="speak('${v.vce_p}')">${v.vce_p}</span>
+      <span class="subj" style="color:var(--muted);font-size:0.6rem;margin-top:0.3rem">passado</span><span></span>
+      <span class="subj">eu</span>
+      <span class="form" onclick="speak('${v.eu_pp}')" style="color:#555">${v.eu_pp}</span>
+      <span class="subj">você</span>
+      <span class="form" onclick="speak('${v.vce_pp}')" style="color:#555">${v.vce_pp}</span>
+    </div>
+    <div class="verb-ex" onclick="speak('${v.ex_eu.replace(/'/g,"\\'")}')">
+      eu: ${v.ex_eu}
+    </div>
+  </div>`;
+}
+
+function makeSimpleCard(v, showPast) {
+  const hasPast = v.eu_pp;
+  return `<div class="verb-card">
+    <div class="verb-card-header">
+      <span class="verb-inf" onclick="speak('${v.inf.replace(/'/g,"\\'")}')">
+        ${v.inf === 'ser/ir' ? 'ser / ir' : v.inf}
+      </span>
+      <span class="verb-en">${v.en}</span>
+    </div>
+    <div class="verb-conj">
+      ${v.eu_p !== '—' ? `<span class="subj">eu</span><span class="form ${v.irr_eu?'irr':''}" onclick="speak('${v.eu_p}')">${v.eu_p}</span>
+      <span class="subj">você</span><span class="form ${v.irr_vce?'irr':''}" onclick="speak('${v.vce_p}')">${v.vce_p}</span>` : ''}
+      ${hasPast ? `<span class="subj" style="color:var(--muted);font-size:0.6rem;margin-top:0.3rem">passado</span><span></span>
+      <span class="subj">eu</span><span class="form" onclick="speak('${v.eu_pp}')" style="color:#555">${v.eu_pp}</span>
+      <span class="subj">você</span><span class="form" onclick="speak('${v.vce_pp}')" style="color:#555">${v.vce_pp}</span>` : ''}
+    </div>
+    <div class="verb-ex" onclick="speak('${v.ex_eu.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')">
+      eu: ${v.ex_eu}
+    </div>
+  </div>`;
+}
+
+function makeArCard(v) {
+  return `<div class="verb-card">
+    <div class="verb-card-header">
+      <span class="verb-inf" onclick="speak('${v.inf}')">${v.inf}</span>
+      <span class="verb-en">${v.en}</span>
+    </div>
+    <div class="verb-conj">
+      <span class="subj">eu</span><span class="form" onclick="speak('${v.eu}')">${v.eu}</span>
+      <span class="subj">você</span><span class="form" onclick="speak('${v.vce}')">${v.vce}</span>
+    </div>
+    <div class="verb-ex" onclick="speak('${v.ex_eu.replace(/'/g,"\\'")}')">eu: ${v.ex_eu}</div>
+  </div>`;
+}
+
+document.getElementById('essenciais-grid').innerHTML = ESSENCIAIS.map(v => makeEssencialCard(v)).join('');
+document.getElementById('irregulares-grid').innerHTML = IRREGULARES.map(v => makeSimpleCard(v)).join('');
+document.getElementById('ar-grid').innerHTML = AR_VERBS.map(v => makeArCard(v)).join('');
+document.getElementById('er-ir-grid').innerHTML = ER_IR_VERBS.map(v => makeArCard(v)).join('');
+
+// ── FLASHCARD DATA ────────────────────────────────────────────────
+
+const ALL_CARDS = [
+  ...ESSENCIAIS.flatMap(v => [
+    { cat:'Essenciais · eu', pt:v.eu_p, en:`eu — ${v.inf} (${v.en})`, note:v.ex_eu, en_note:v.ex_eu_en, filter:'Essenciais' },
+    { cat:'Essenciais · você', pt:v.vce_p, en:`você — ${v.inf} (${v.en})`, note:v.ex_vce, en_note:v.ex_vce_en, filter:'Essenciais' },
+    { cat:'Essenciais · passado eu', pt:v.eu_pp, en:`eu (passado) — ${v.inf}`, note:v.ex_eu, en_note:v.ex_eu_en, filter:'Essenciais' },
+  ]),
+  ...IRREGULARES.filter(v => v.eu_p !== '—').flatMap(v => [
+    { cat:'Irregulares · eu', pt:v.eu_p, en:`eu — ${v.inf} (${v.en})`, note:v.ex_eu, en_note:v.ex_eu_en, filter:'Irregulares' },
+    { cat:'Irregulares · você', pt:v.vce_p, en:`você — ${v.inf} (${v.en})`, note:v.ex_vce, en_note:v.ex_vce_en, filter:'Irregulares' },
+  ]),
+  ...AR_VERBS.flatMap(v => [
+    { cat:'-AR · eu', pt:v.eu, en:`eu — ${v.inf} (${v.en})`, note:v.ex_eu, en_note:v.ex_eu_en, filter:'-AR' },
+    { cat:'-AR · você', pt:v.vce, en:`você — ${v.inf} (${v.en})`, note:v.ex_vce, en_note:v.ex_vce_en, filter:'-AR' },
+  ]),
+  ...ER_IR_VERBS.flatMap(v => [
+    { cat:'-ER/-IR · eu', pt:v.eu, en:`eu — ${v.inf} (${v.en})`, note:v.ex_eu, en_note:v.ex_eu_en, filter:'-ER/-IR' },
+    { cat:'-ER/-IR · você', pt:v.vce, en:`você — ${v.inf} (${v.en})`, note:v.ex_vce, en_note:v.ex_vce_en, filter:'-ER/-IR' },
+  ]),
+];
+
+let vfcDeck = [...ALL_CARDS], vfcIdx=0, vfcRevealed=false, vfcCurrentFilter='all';
+
+function vfcFilter(filter, btn) {
+  document.querySelectorAll('.vfc-ctrl[id^=filter]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  vfcCurrentFilter = filter;
+  const pool = filter==='all' ? ALL_CARDS : ALL_CARDS.filter(c=>c.filter===filter);
+  vfcDeck = [...pool].sort(()=>Math.random()-0.5);
+  vfcIdx=0; vfcRender();
+}
+
+function vfcRender() {
+  if (!vfcDeck.length) return;
+  const c=vfcDeck[vfcIdx]; vfcRevealed=false;
+  document.getElementById('vfcCounter').textContent=`${vfcIdx+1} / ${vfcDeck.length}`;
+  document.getElementById('vfcFill').style.width=`${((vfcIdx+1)/vfcDeck.length)*100}%`;
+  document.getElementById('vfcCat').textContent=c.cat;
+  document.getElementById('vfcEn').textContent=c.en;
+  const pt=document.getElementById('vfcPt'); pt.textContent=c.pt; pt.className='vfc-pt';
+  const exPt=document.getElementById('vfcExPt'); exPt.textContent=c.note||''; exPt.className='vfc-ex-pt';
+  const exEn=document.getElementById('vfcExEn'); exEn.textContent=c.en_note||''; exEn.className='vfc-ex-en';
+  exEn.onclick=()=>exEn.classList.add('revealed');
+  document.getElementById('vfcHints').textContent='clique na palavra para revelar · clique no exemplo para ouvir';
+}
+function vfcReveal() {
+  if(vfcRevealed) return; vfcRevealed=true;
+  document.getElementById('vfcPt').classList.add('revealed');
+  document.getElementById('vfcExPt').classList.add('revealed');
+  document.getElementById('vfcHints').textContent='';
+}
+function vfcSpeakAnswer() { speak(vfcDeck[vfcIdx].pt); }
+function vfcSpeakEx() { vfcReveal(); speak(vfcDeck[vfcIdx].note||vfcDeck[vfcIdx].pt); }
+function vfcMove(dir) { vfcIdx=(vfcIdx+dir+vfcDeck.length)%vfcDeck.length; vfcRender(); }
+function vfcShuffle() { vfcDeck=[...vfcDeck].sort(()=>Math.random()-0.5); vfcIdx=0; vfcRender(); }
+function vfcReset() { vfcFilter(vfcCurrentFilter, document.getElementById(`filter-${vfcCurrentFilter==='all'?'all':vfcCurrentFilter.replace(/\//g,'-').replace(/-/g,'').toLowerCase()}`)||document.getElementById('filter-all')); }
+
+vfcRender();
+
+// ── DESAFIO ───────────────────────────────────────────────────────
+const DESAFIO_CARDS = [
+  // Essenciais presente
+  { cat:'Essenciais', prompt:'Say "I am from Miami but I live in Lisbon." (ser)', answer:'Sou de Miami, mas moro em Lisboa.', note:'eu → sou (ser, permanent)' },
+  { cat:'Essenciais', prompt:'Say "I\'m a little tired today." (estar)', answer:'Estou um bocadinho cansado hoje.', note:'eu → estou (estar, temporary)' },
+  { cat:'Essenciais', prompt:'Say "I\'m going to the supermarket later." (ir)', answer:'Vou ao supermercado mais tarde.', note:'eu → vou (ir)' },
+  { cat:'Essenciais', prompt:'Say "I have Portuguese class on Fridays." (ter)', answer:'Tenho aula de português às sextas.', note:'eu → tenho (ter)' },
+  { cat:'Essenciais', prompt:'Say "I always make coffee in the morning." (fazer)', answer:'Faço sempre café de manhã.', note:'eu → faço (fazer, irregular eu)' },
+  { cat:'Essenciais', prompt:'Ask "what do you do for a living?" (fazer)', answer:'O que você faz da vida?', note:'você → faz (fazer)' },
+  { cat:'Essenciais', prompt:'Say "I\'ll give you a hand, no problem." (dar)', answer:'Dou uma ajuda, sem problema.', note:'eu → dou (dar, irregular eu)' },
+  { cat:'Essenciais', prompt:'Say "I always say thank you." (dizer)', answer:'Digo sempre obrigado.', note:'eu → digo (dizer, irregular eu)' },
+  { cat:'Essenciais', prompt:'Say "I\'ll bring the wine." (trazer)', answer:'Trago o vinho.', note:'eu → trago (trazer, irregular eu)' },
+  { cat:'Essenciais', prompt:'Say "I listen to Portuguese music every day." (ouvir)', answer:'Ouço música portuguesa todos os dias.', note:'eu → ouço (ouvir, irregular eu)' },
+  // Essenciais passado
+  { cat:'Passado', prompt:'Say "I went to the market yesterday." (ir, past)', answer:'Fui ao mercado ontem.', note:'eu → fui — same form as ser past!' },
+  { cat:'Passado', prompt:'Say "I was very tired yesterday." (estar, past)', answer:'Estive muito cansado ontem.', note:'eu → estive (estar, past)' },
+  { cat:'Passado', prompt:'Say "I had a meeting this morning." (ter, past)', answer:'Tive uma reunião esta manhã.', note:'eu → tive (ter, past)' },
+  { cat:'Passado', prompt:'Say "I did a lot today." (fazer, past)', answer:'Fiz muito hoje.', note:'eu → fiz (fazer, past)' },
+  { cat:'Passado', prompt:'Say "I came by bus." (vir, past)', answer:'Vim de autocarro.', note:'eu → vim (vir, past)' },
+  // Irregulares
+  { cat:'Irregulares', prompt:'Say "Can I have some more, please?" (poder)', answer:'Posso repetir, por favor?', note:'eu → posso (poder, irregular eu)' },
+  { cat:'Irregulares', prompt:'Ask "can you bring the bill?" (poder)', answer:'Pode trazer a conta?', note:'você → pode (poder)' },
+  { cat:'Irregulares', prompt:'Say "I can see the sea from my window." (ver)', answer:'Vejo o mar da minha janela.', note:'eu → vejo (ver, irregular eu)' },
+  { cat:'Irregulares', prompt:'Say "I know how to speak a little Portuguese." (saber)', answer:'Sei falar um pouco de português.', note:'eu → sei (saber, irregular eu)' },
+  { cat:'Irregulares', prompt:'Say "I want to learn Portuguese well." (querer)', answer:'Quero aprender português bem.', note:'eu → quero (querer)' },
+  { cat:'Irregulares', prompt:'Say "I always lose my keys." (perder)', answer:'Perco sempre as chaves.', note:'eu → perco (perder, irregular eu)' },
+  // -AR
+  { cat:'-AR', prompt:'Say "I study Portuguese every morning."', answer:'Estudo português todas as manhãs.', note:'estudar → eu estudo' },
+  { cat:'-AR', prompt:'Say "I live in Lisbon."', answer:'Moro em Lisboa.', note:'morar → eu moro' },
+  { cat:'-AR', prompt:'Ask "do you like red wine?"', answer:'Você gosta de vinho tinto?', note:'gostar → você gosta' },
+  { cat:'-AR', prompt:'Say "I always have coffee in the morning."', answer:'Tomo sempre café de manhã.', note:'tomar → eu tomo' },
+  { cat:'-AR', prompt:'Say "I pay by card."', answer:'Pago com cartão.', note:'pagar → eu pago' },
+  // -ER/-IR
+  { cat:'-ER/-IR', prompt:'Say "I don\'t understand well."', answer:'Não percebo bem.', note:'perceber → eu percebo' },
+  { cat:'-ER/-IR', prompt:'Say "I learn Portuguese on Tuesdays and Fridays."', answer:'Aprendo português às terças e sextas.', note:'aprender → eu aprendo' },
+  { cat:'-ER/-IR', prompt:'Say "I always drink water with meals."', answer:'Bebo sempre água com as refeições.', note:'beber → eu bebo' },
+  { cat:'-ER/-IR', prompt:'Say "I leave at six in the afternoon."', answer:'Saio às seis da tarde.', note:'sair → eu saio (irregular eu)' },
+];
+
+let dDeck=[], dIdx=0, dCorrect=0, dTotal=0, dStreak=0, dTimer=null, dSecondsLeft=8, dRevealed=false;
+
+function initDesafio() {
+  dDeck=[...DESAFIO_CARDS].sort(()=>Math.random()-0.5);
+  dIdx=0; dCorrect=0; dTotal=0; dStreak=0; loadDesafioCard();
+}
+function loadDesafioCard() {
+  dRevealed=false; clearInterval(dTimer); dSecondsLeft=8;
+  const c=dDeck[dIdx%dDeck.length];
+  document.getElementById('d-cat').textContent=c.cat;
+  document.getElementById('d-prompt').textContent=c.prompt;
+  document.getElementById('d-answer').textContent=c.answer;
+  document.getElementById('d-answer').classList.remove('revealed');
+  document.getElementById('d-note').textContent=c.note||'';
+  document.getElementById('d-actions').style.display='none';
+  document.getElementById('d-hint').style.display='block';
+  document.getElementById('d-hint').textContent='diz em voz alta · depois clica para revelar';
+  document.getElementById('d-score-display').textContent=`Score: ${dCorrect} / ${dTotal}`;
+  document.getElementById('d-streak-display').textContent=dStreak>=3?`🔥 ${dStreak}`:'';
+  const fill=document.getElementById('d-timer-fill'), txt=document.getElementById('d-timer-text');
+  fill.style.strokeDashoffset=0; fill.className='d-timer-fill'; txt.textContent=8;
+  dTimer=setInterval(()=>{
+    dSecondsLeft--;
+    txt.textContent=dSecondsLeft;
+    fill.style.strokeDashoffset=138*(1-dSecondsLeft/8);
+    if(dSecondsLeft<=2) fill.classList.add('warn');
+    if(dSecondsLeft<=1){fill.classList.remove('warn');fill.classList.add('danger');}
+    if(dSecondsLeft<=0){
+      clearInterval(dTimer); txt.textContent='✓';
+      fill.style.stroke='var(--border)';
+      document.getElementById('d-hint').textContent='tempo — toca para revelar';
+    }
+  },1000);
+}
+function revealDesafio() {
+  if(dRevealed) return; dRevealed=true; clearInterval(dTimer);
+  document.getElementById('d-timer-text').textContent='✓';
+  document.getElementById('d-answer').classList.add('revealed');
+  document.getElementById('d-actions').style.display='flex';
+  document.getElementById('d-hint').style.display='none';
+  speak(dDeck[dIdx%dDeck.length].answer);
+}
+function speakDesafio(){speak(dDeck[dIdx%dDeck.length].answer);}
+function scoreDesafio(correct){
+  dTotal++; if(correct){dCorrect++;dStreak++;}else{dStreak=0;}
+  dIdx++; loadDesafioCard();
+}
+</script>
+</body>
+</html>
