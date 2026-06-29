@@ -91,8 +91,7 @@
   .vfc-mode-bar { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; }
   .vfc-mode-btn { font-family: var(--mono); font-size: 0.72rem; padding: 0.35rem 0.9rem; border-radius: 4px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); cursor: pointer; transition: all 0.15s; flex: 1; text-align: center; }
   .vfc-mode-btn.active { background: var(--blue); border-color: var(--blue); color: #fff; }
-  .vfc-en-hidden { filter: blur(6px); background: var(--border); border-radius: 3px; padding: 0.05rem 0.4rem; cursor: pointer; transition: filter 0.3s, background 0.3s; display: inline-block; }
-  .vfc-en-hidden.revealed { filter: blur(0); background: transparent; }
+  .vfc-hint-line { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.6rem; font-style: italic; }
   .vfc-progress { height: 2px; background: var(--border); border-radius: 1px; margin-bottom: 1.25rem; overflow: hidden; }
   .vfc-progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
   .vfc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; min-height: 300px; display: flex; flex-direction: column; align-items: center; padding: 1.5rem 2rem; text-align: center; }
@@ -279,6 +278,7 @@
     <div class="vfc-hints" id="vfcHints">clique na palavra para revelar · clique no exemplo para ouvir</div>
     <div class="vfc-cat" id="vfcCat"></div>
     <div class="vfc-en" id="vfcEn"></div>
+    <div class="vfc-hint-line" id="vfcHintLine"></div>
     <div class="vfc-divider"></div>
     <div class="vfc-pt" id="vfcPt" onclick="vfcReveal()"></div>
     <button class="vfc-speak" onclick="vfcSpeakAnswer()">🔊</button>
@@ -684,29 +684,24 @@ function vfcRender() {
   const exPt=document.getElementById('vfcExPt');
   const exEn=document.getElementById('vfcExEn');
 
+  document.getElementById('vfcHintLine').textContent = '';
+
   if (vfcMode==='en') {
-    // EN → PT
-    // Prompt: "eu — ser" + small blurred hint "(to be permanent)" that can be tapped
-    enEl.innerHTML=`${c.prompt_en} <span class="vfc-en-hidden" onclick="this.classList.add('revealed')">${c.hint_en||''}</span>`;
-    // Answer: Portuguese form — blurred
-    ptEl.textContent=c.pt; ptEl.className='vfc-pt';
-    // Example: PT sentence blurred (tap to hear), EN translation blurred (tap to reveal)
-    exPt.textContent=c.note||''; exPt.className='vfc-ex-pt';
-    exEn.textContent=c.en_note||''; exEn.className='vfc-ex-en';
-    exEn.onclick=()=>exEn.classList.add('revealed');
-    document.getElementById('vfcHints').textContent='diz em português · clica para revelar · clica no exemplo para ouvir';
+    // EN → PT: English prompt visible, Portuguese answer blurred
+    enEl.textContent = c.prompt_en + (c.hint_en ? ' ' + c.hint_en : '');
+    ptEl.textContent = c.pt; ptEl.className = 'vfc-pt';
+    document.getElementById('vfcHints').textContent = 'diz em português · clica para revelar';
   } else {
-    // PT → EN
-    // Prompt: Portuguese verb form — visible
-    enEl.textContent=c.pt;
-    // Answer: English meaning — blurred
-    ptEl.textContent=c.prompt_en + (c.hint_en?' '+c.hint_en:''); ptEl.className='vfc-pt';
-    // Example: same blurred pattern
-    exPt.textContent=c.note||''; exPt.className='vfc-ex-pt';
-    exEn.textContent=c.en_note||''; exEn.className='vfc-ex-en';
-    exEn.onclick=()=>exEn.classList.add('revealed');
-    document.getElementById('vfcHints').textContent='traduz para inglês · clica para revelar · clica no exemplo para ouvir';
+    // PT → EN: Portuguese prompt visible, English answer blurred
+    enEl.textContent = c.pt;
+    ptEl.textContent = c.prompt_en + (c.hint_en ? ' ' + c.hint_en : '');
+    ptEl.className = 'vfc-pt';
+    document.getElementById('vfcHints').textContent = 'traduz para inglês · clica para revelar';
   }
+
+  exPt.textContent = c.note || ''; exPt.className = 'vfc-ex-pt';
+  exEn.textContent = c.en_note || ''; exEn.className = 'vfc-ex-en';
+  exEn.onclick = () => exEn.classList.add('revealed');
 }
 
 function vfcReveal() {
@@ -778,6 +773,7 @@ function loadDesafioCard() {
   document.getElementById('d-answer').textContent=c.answer;
   document.getElementById('d-answer').classList.remove('revealed');
   document.getElementById('d-note').textContent=c.note||'';
+  document.getElementById('d-note').style.display='none';
   document.getElementById('d-actions').style.display='none';
   document.getElementById('d-hint').style.display='block';
   document.getElementById('d-hint').textContent='diz em voz alta · depois clica para revelar';
@@ -803,6 +799,7 @@ function revealDesafio() {
   document.getElementById('d-timer-text').textContent='✓';
   document.getElementById('d-answer').classList.add('revealed');
   document.getElementById('d-actions').style.display='flex';
+  document.getElementById('d-note').style.display='block';
   document.getElementById('d-hint').style.display='none';
   speak(dDeck[dIdx%dDeck.length].answer);
 }
