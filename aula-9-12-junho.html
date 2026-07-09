@@ -439,6 +439,7 @@
 <div class="flashcard-wrap">
   <div class="vfc-topbar">
     <span class="vfc-counter" id="vfcCounter">1 / 1</span>
+    <span class="vfc-counter" id="vfcSeen" style="color:var(--green);font-weight:600">Vistos: 0</span>
     <div class="vfc-controls">
       <button class="vfc-ctrl" onclick="vfcShuffle()">⇄ Baralhar</button>
       <button class="vfc-ctrl" onclick="vfcReset()">↺ Reiniciar</button>
@@ -602,9 +603,20 @@ function vfcReveal() {
 }
 function vfcSpeakAnswer() { speak(vfcDeck[vfcIdx].pt); }
 function vfcSpeakEx() { vfcReveal(); speak(vfcDeck[vfcIdx].note || vfcDeck[vfcIdx].pt); }
-function vfcMove(dir) { vfcIdx = (vfcIdx+dir+vfcDeck.length)%vfcDeck.length; vfcRender(); }
+let vfcSessionSeen = 0;
+function vfcMarkSeen() {
+  vfcSessionSeen++;
+  const el = document.getElementById('vfcSeen');
+  if (el) el.textContent = `Vistos: ${vfcSessionSeen}`;
+}
+function vfcMove(dir) { vfcIdx = (vfcIdx+dir+vfcDeck.length)%vfcDeck.length; vfcRender(); vfcMarkSeen(); }
 function vfcShuffle() { vfcDeck = [...CARDS].sort(()=>Math.random()-0.5); vfcIdx=0; vfcRender(); }
-function vfcReset() { vfcDeck = [...CARDS]; vfcIdx=0; vfcRender(); }
+function vfcReset() {
+  vfcDeck = [...CARDS]; vfcIdx=0; vfcRender();
+  vfcSessionSeen = 0;
+  const el = document.getElementById('vfcSeen');
+  if (el) el.textContent = `Vistos: 0`;
+}
 vfcRender();
 
 // ── QUIZ ─────────────────────────────────────────────────────────
