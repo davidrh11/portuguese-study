@@ -60,7 +60,7 @@
 </header>
 
 <div class="note-block">
-  <strong>Security note:</strong> the token you paste below stays in this browser tab only, it is sent directly to <code>luvvoice.com</code> and nowhere else. Once you've found your voice_id, close this tab. If a token was ever pasted into a chat or screenshot, revoke it on LuvVoice's API Tokens page and generate a new one, don't reuse an exposed token here.
+  <strong>Security note:</strong> for the voice list step, your token passes through your own Cloudflare Worker (a relay you control) since LuvVoice blocks direct browser calls with CORS. The worker forwards it as-is and stores nothing. Once you've found your voice_id, close this tab. If a token was ever pasted into a chat or screenshot, revoke it on LuvVoice's API Tokens page and generate a new one, don't reuse an exposed token here.
 </div>
 
 <div class="section-title">1. Configuration</div>
@@ -98,7 +98,7 @@ async function fetchVoices() {
   status.className = 'status';
 
   try {
-    const res = await fetch('https://luvvoice.com/api/v1/text-to-speech?action=voices', {
+    const res = await fetch('https://portuguese-tts-speechify.drh-dave.workers.dev?action=voices', {
       headers: { 'Authorization': `Bearer ${apiKey}` },
     });
     const rawText = await res.text();
