@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LuvVoice pt-PT Test</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0; --surface: #ffffff; --border: #e2ddd6;
+    --green: #2d7a50; --red: #a03428; --text: #1a1a1a; --muted: #6b6560;
+    --highlight: #eef6f1;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; padding: 2rem; max-width: 720px; margin: 0 auto; }
+
+  header { border-bottom: 2px solid var(--green); padding-bottom: 1rem; margin-bottom: 1.5rem; }
+  header h1 { font-family: var(--mono); font-size: 1rem; color: var(--green); }
+  header p { font-size: 0.82rem; color: var(--muted); margin-top: 0.3rem; }
+
+  .section-title { font-family: var(--mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--green); margin: 1.5rem 0 0.75rem; border-left: 3px solid var(--green); padding-left: 0.6rem; }
+
+  .config-block { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem; }
+  label { display: block; font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 0.3rem; margin-top: 0.9rem; }
+  label:first-child { margin-top: 0; }
+  input { width: 100%; padding: 0.6rem 0.8rem; border: 1px solid var(--border); border-radius: 4px; font-family: var(--mono); font-size: 0.85rem; background: var(--bg); color: var(--text); }
+  input:focus { outline: none; border-color: var(--green); }
+
+  .btn { font-family: var(--mono); font-size: 0.82rem; font-weight: 600; padding: 0.6rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; background: var(--green); color: #fff; transition: opacity 0.15s; margin-top: 1rem; }
+  .btn:hover { opacity: 0.85; }
+  .btn:disabled { opacity: 0.4; cursor: default; }
+
+  .status { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); margin-top: 0.75rem; min-height: 1.2rem; white-space: pre-wrap; word-break: break-word; }
+  .status.error { color: var(--red); }
+  .status.ok { color: var(--green); }
+
+  .voice-picker-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.6rem; margin-top: 0.75rem; }
+  .voice-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; cursor: pointer; transition: all 0.15s; }
+  .voice-card:hover { border-color: var(--green); }
+  .voice-card.selected { border-color: var(--green); background: var(--highlight); border-width: 2px; }
+  .voice-card-name { font-family: var(--mono); font-size: 0.95rem; font-weight: 600; color: var(--green); display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+  .voice-card-meta { font-size: 0.72rem; color: var(--muted); margin-top: 0.25rem; }
+  .voice-card-id { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); margin-top: 0.4rem; background: var(--bg); padding: 0.15rem 0.4rem; border-radius: 3px; display: inline-block; }
+  .voice-preview-btn { background: var(--bg); border: 1px solid var(--green); color: var(--green); font-family: var(--mono); font-size: 0.7rem; padding: 0.25rem 0.6rem; border-radius: 99px; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+  .voice-preview-btn:hover, .voice-preview-btn.playing { background: var(--green); color: #fff; }
+  .voice-picker-empty { font-size: 0.82rem; color: var(--muted); padding: 0.75rem 0; }
+
+  .note-block { background: var(--highlight); border-left: 3px solid var(--green); padding: 0.9rem 1.1rem; border-radius: 0 6px 6px 0; margin: 1rem 0; font-size: 0.85rem; line-height: 1.6; }
+  .note-block code { font-family: var(--mono); background: var(--border); padding: 0.1rem 0.3rem; border-radius: 3px; }
+
+  .copy-hint { font-family: var(--mono); font-size: 0.72rem; color: var(--green); margin-top: 0.5rem; cursor: pointer; text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>LuvVoice pt-PT — Voice ID Lookup</h1>
+  <p>Paste your API token below, fetch the voice list, listen, and copy the exact voice_id to send back. Nothing here is saved anywhere except your browser's memory for this page load.</p>
+</header>
+
+<div class="note-block">
+  <strong>Security note:</strong> the token you paste below stays in this browser tab only, it is sent directly to <code>luvvoice.com</code> and nowhere else. Once you've found your voice_id, close this tab. If a token was ever pasted into a chat or screenshot, revoke it on LuvVoice's API Tokens page and generate a new one, don't reuse an exposed token here.
+</div>
+
+<div class="section-title">1. Configuration</div>
+<div class="config-block">
+  <label for="apiKey">LuvVoice API Token</label>
+  <input type="password" id="apiKey" placeholder="lvv_...">
+
+  <button class="btn" onclick="fetchVoices()">Fetch Voices</button>
+  <div class="status" id="voicesStatus"></div>
+</div>
+
+<div class="section-title">2. Portuguese (Portugal) Voices</div>
+<div class="voice-picker-empty" id="voicePickerEmpty">Fetch voices above to see pt-PT options here.</div>
+<div class="voice-picker-grid" id="voicePickerGrid"></div>
+
+<div class="section-title">3. Custom Text</div>
+<div class="config-block">
+  <label for="customText">Type a sentence to test with the selected voice</label>
+  <input type="text" id="customText" placeholder="Escreva uma frase em português europeu..." value="Boa tarde. Queria uma mesa para dois, por favor.">
+  <button class="btn" onclick="playCustom()">▶ Reproduzir</button>
+  <div class="status" id="customStatus"></div>
+</div>
+
+<script>
+let ALL_VOICES = [];
+let SELECTED_VOICE_ID = null;
+let currentAudio = null;
+
+async function fetchVoices() {
+  const apiKey = document.getElementById('apiKey').value.trim();
+  const status = document.getElementById('voicesStatus');
+  if (!apiKey) { status.textContent = 'Paste your API token first.'; status.className = 'status error'; return; }
+
+  status.textContent = 'Fetching voices…';
+  status.className = 'status';
+
+  try {
+    const res = await fetch('https://luvvoice.com/api/v1/text-to-speech?action=voices', {
+      headers: { 'Authorization': `Bearer ${apiKey}` },
+    });
+    const rawText = await res.text();
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}: ${rawText.slice(0, 300)}`);
+    }
+    const data = JSON.parse(rawText);
+    const voices = data.voices || [];
+    if (!voices.length) {
+      status.textContent = 'No voices returned. Raw response:\n' + rawText.slice(0, 300);
+      status.className = 'status error';
+      return;
+    }
+    ALL_VOICES = voices;
+    renderVoicePicker();
+    const ptCount = voices.filter(v => (v.language || '').toLowerCase() === 'pt-pt').length;
+    status.textContent = `${voices.length} total voices found, ${ptCount} are pt-PT.`;
+    status.className = 'status ok';
+  } catch (e) {
+    console.error(e);
+    status.textContent = 'Error: ' + e.message;
+    status.className = 'status error';
+  }
+}
+
+function renderVoicePicker() {
+  const grid = document.getElementById('voicePickerGrid');
+  const empty = document.getElementById('voicePickerEmpty');
+
+  const ptVoices = ALL_VOICES.filter(v => (v.language || '').toLowerCase() === 'pt-pt');
+
+  if (!ptVoices.length) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    empty.textContent = 'No pt-PT voices found in this account\'s catalog.';
+    return;
+  }
+  empty.style.display = 'none';
+  grid.innerHTML = '';
+
+  ptVoices.forEach(v => {
+    const card = document.createElement('div');
+    card.className = 'voice-card' + (v.voice_id === SELECTED_VOICE_ID ? ' selected' : '');
+    card.innerHTML = `
+      <div class="voice-card-name">
+        <span>${v.name}</span>
+        <button class="voice-preview-btn" data-id="${v.voice_id}">▶</button>
+      </div>
+      <div class="voice-card-meta">${v.gender || ''} · ${v.language_name || v.language || ''}</div>
+      <div class="voice-card-id">${v.voice_id}</div>
+      <div class="copy-hint" data-id="${v.voice_id}">click id to copy</div>
+    `;
+    card.onclick = (e) => {
+      if (e.target.classList.contains('voice-preview-btn')) return;
+      SELECTED_VOICE_ID = v.voice_id;
+      renderVoicePicker();
+    };
+    card.querySelector('.voice-preview-btn').onclick = (e) => {
+      e.stopPropagation();
+      previewVoice(v.voice_id, e.target);
+    };
+    card.querySelector('.copy-hint').onclick = (e) => {
+      e.stopPropagation();
+      navigator.clipboard.writeText(v.voice_id);
+      e.target.textContent = 'copied!';
+      setTimeout(() => { e.target.textContent = 'click id to copy'; }, 1200);
+    };
+    grid.appendChild(card);
+  });
+}
+
+async function synthesize(text, voiceId) {
+  const apiKey = document.getElementById('apiKey').value.trim();
+  if (!apiKey) throw new Error('Enter your API token first.');
+  if (!voiceId) throw new Error('Select a voice first.');
+
+  const res = await fetch('https://luvvoice.com/api/v1/text-to-speech', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      text: text,
+      voice_id: voiceId,
+      rate: 0,
+      pitch: 0,
+      volume: 0,
+    }),
+  });
+
+  const rawText = await res.text();
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}: ${rawText.slice(0, 300)}`);
+  }
+
+  const data = JSON.parse(rawText);
+
+  if (data.audio_data) {
+    const binary = atob(data.audio_data);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    const blob = new Blob([bytes], { type: 'audio/mpeg' });
+    return URL.createObjectURL(blob);
+  }
+  if (data.audio_url) {
+    return data.audio_url;
+  }
+  throw new Error('No audio_data or audio_url in response: ' + rawText.slice(0, 300));
+}
+
+async function previewVoice(voiceId, btn) {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  document.querySelectorAll('.voice-preview-btn').forEach(b => b.classList.remove('playing'));
+  btn.classList.add('playing');
+  btn.textContent = '…';
+  try {
+    const url = await synthesize('Boa tarde. Queria uma mesa para dois, por favor.', voiceId);
+    const audio = new Audio(url);
+    currentAudio = audio;
+    audio.onended = () => { btn.classList.remove('playing'); btn.textContent = '▶'; };
+    audio.onerror = () => { btn.classList.remove('playing'); btn.textContent = '▶'; };
+    await audio.play();
+  } catch (e) {
+    console.error(e);
+    btn.classList.remove('playing');
+    btn.textContent = '✕';
+    alert('Error: ' + e.message);
+    setTimeout(() => { btn.textContent = '▶'; }, 1500);
+  }
+}
+
+async function playCustom() {
+  const text = document.getElementById('customText').value.trim();
+  const status = document.getElementById('customStatus');
+  if (!text) { status.textContent = 'Type a sentence first.'; status.className = 'status error'; return; }
+  if (!SELECTED_VOICE_ID) { status.textContent = 'Click a voice card above to select it first.'; status.className = 'status error'; return; }
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+
+  status.textContent = 'Generating…';
+  status.className = 'status';
+
+  try {
+    const url = await synthesize(text, SELECTED_VOICE_ID);
+    const audio = new Audio(url);
+    currentAudio = audio;
+    status.textContent = '';
+    audio.onerror = () => { status.textContent = 'Playback error'; status.className = 'status error'; };
+    await audio.play();
+  } catch (e) {
+    console.error(e);
+    status.textContent = 'Error: ' + e.message;
+    status.className = 'status error';
+  }
+}
+</script>
+</body>
+</html>
