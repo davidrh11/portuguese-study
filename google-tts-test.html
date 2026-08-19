@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Cloud TTS pt-PT Test</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0; --surface: #ffffff; --border: #e2ddd6;
+    --green: #2d7a50; --red: #a03428; --text: #1a1a1a; --muted: #6b6560;
+    --highlight: #eef6f1;
+    --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; padding: 2rem; max-width: 720px; margin: 0 auto; }
+
+  header { border-bottom: 2px solid var(--green); padding-bottom: 1rem; margin-bottom: 1.5rem; }
+  header h1 { font-family: var(--mono); font-size: 1rem; color: var(--green); }
+  header p { font-size: 0.82rem; color: var(--muted); margin-top: 0.3rem; }
+
+  .section-title { font-family: var(--mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--green); margin: 1.5rem 0 0.75rem; border-left: 3px solid var(--green); padding-left: 0.6rem; }
+
+  .config-block { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem; }
+  label { display: block; font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 0.3rem; margin-top: 0.9rem; }
+  label:first-child { margin-top: 0; }
+  input { width: 100%; padding: 0.6rem 0.8rem; border: 1px solid var(--border); border-radius: 4px; font-family: var(--mono); font-size: 0.85rem; background: var(--bg); color: var(--text); }
+  input:focus { outline: none; border-color: var(--green); }
+
+  .btn { font-family: var(--mono); font-size: 0.82rem; font-weight: 600; padding: 0.6rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; background: var(--green); color: #fff; transition: opacity 0.15s; margin-top: 1rem; }
+  .btn:hover { opacity: 0.85; }
+  .btn:disabled { opacity: 0.4; cursor: default; }
+
+  .status { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); margin-top: 0.75rem; min-height: 1.2rem; white-space: pre-wrap; word-break: break-word; }
+  .status.error { color: var(--red); }
+  .status.ok { color: var(--green); }
+
+  .voice-picker-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 0.6rem; margin-top: 0.75rem; }
+  .voice-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; cursor: pointer; transition: all 0.15s; }
+  .voice-card:hover { border-color: var(--green); }
+  .voice-card.selected { border-color: var(--green); background: var(--highlight); border-width: 2px; }
+  .voice-card-name { font-family: var(--mono); font-size: 0.88rem; font-weight: 600; color: var(--green); display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; word-break: break-all; }
+  .voice-card-meta { font-size: 0.72rem; color: var(--muted); margin-top: 0.35rem; }
+  .voice-preview-btn { background: var(--bg); border: 1px solid var(--green); color: var(--green); font-family: var(--mono); font-size: 0.7rem; padding: 0.25rem 0.6rem; border-radius: 99px; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+  .voice-preview-btn:hover, .voice-preview-btn.playing { background: var(--green); color: #fff; }
+  .voice-picker-empty { font-size: 0.82rem; color: var(--muted); padding: 0.75rem 0; }
+
+  .note-block { background: var(--highlight); border-left: 3px solid var(--green); padding: 0.9rem 1.1rem; border-radius: 0 6px 6px 0; margin: 1rem 0; font-size: 0.85rem; line-height: 1.6; }
+  .note-block code { font-family: var(--mono); background: var(--border); padding: 0.1rem 0.3rem; border-radius: 3px; }
+
+  .word-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+  .word-pill { font-family: var(--mono); font-size: 0.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: 99px; padding: 0.4rem 1rem; cursor: pointer; transition: all 0.15s; }
+  .word-pill:hover { border-color: var(--green); color: var(--green); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Google Cloud TTS — pt-PT Voice Test</h1>
+  <p>Paste your API key, fetch pt-PT voices, and specifically test short isolated words and phrases — that's the known weak spot from ElevenLabs, so that's exactly what to stress-test here.</p>
+</header>
+
+<div class="note-block">
+  <strong>Note:</strong> Google's newest Chirp 3 HD tier does not support pt-PT, only pt-BR. What shows up below will be Standard, Wavenet, or Neural2 tier voices, Google's previous generation for this specific language variant, not their current flagship.
+</div>
+
+<div class="section-title">1. Configuration</div>
+<div class="config-block">
+  <label for="apiKey">Google Cloud API Key</label>
+  <input type="password" id="apiKey" placeholder="AIza...">
+  <p style="font-size:0.72rem;color:var(--muted);margin-top:0.4rem">Key must have the Cloud Text-to-Speech API enabled in Google Cloud Console for your project.</p>
+
+  <button class="btn" onclick="fetchVoices()">Fetch pt-PT Voices</button>
+  <div class="status" id="voicesStatus"></div>
+</div>
+
+<div class="section-title">2. Voices Found</div>
+<div class="voice-picker-empty" id="voicePickerEmpty">Fetch voices above to see pt-PT options here.</div>
+<div class="voice-picker-grid" id="voicePickerGrid"></div>
+
+<div class="section-title">3. Short-Phrase Stress Test</div>
+<p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.5rem">Click any word below to test it in isolation with the selected voice — the exact scenario where ElevenLabs struggled.</p>
+<div class="word-grid">
+  <div class="word-pill" onclick="playCustomText('faca')">faca</div>
+  <div class="word-pill" onclick="playCustomText('não')">não</div>
+  <div class="word-pill" onclick="playCustomText('obrigado')">obrigado</div>
+  <div class="word-pill" onclick="playCustomText('estou')">estou</div>
+  <div class="word-pill" onclick="playCustomText('sim')">sim</div>
+  <div class="word-pill" onclick="playCustomText('já')">já</div>
+</div>
+
+<div class="config-block" style="margin-top:1rem">
+  <label for="customText">Or type your own short phrase</label>
+  <input type="text" id="customText" placeholder="faca">
+  <button class="btn" onclick="playCustom()">▶ Reproduzir</button>
+  <div class="status" id="customStatus"></div>
+</div>
+
+<script>
+let ALL_VOICES = [];
+let SELECTED_VOICE = null;
+let currentAudio = null;
+
+async function fetchVoices() {
+  const apiKey = document.getElementById('apiKey').value.trim();
+  const status = document.getElementById('voicesStatus');
+  if (!apiKey) { status.textContent = 'Paste your API key first.'; status.className = 'status error'; return; }
+
+  status.textContent = 'Fetching voices…';
+  status.className = 'status';
+
+  try {
+    const res = await fetch(`https://texttospeech.googleapis.com/v1/voices?languageCode=pt-PT&key=${encodeURIComponent(apiKey)}`);
+    const rawText = await res.text();
+    if (!res.ok) throw new Error(`HTTP ${res.status}: ${rawText.slice(0, 300)}`);
+
+    const data = JSON.parse(rawText);
+    const voices = data.voices || [];
+    if (!voices.length) {
+      status.textContent = 'No pt-PT voices returned.';
+      status.className = 'status error';
+      return;
+    }
+    ALL_VOICES = voices;
+    renderVoicePicker();
+    status.textContent = `${voices.length} pt-PT voices found.`;
+    status.className = 'status ok';
+  } catch (e) {
+    console.error(e);
+    status.textContent = 'Error: ' + e.message;
+    status.className = 'status error';
+  }
+}
+
+function renderVoicePicker() {
+  const grid = document.getElementById('voicePickerGrid');
+  const empty = document.getElementById('voicePickerEmpty');
+  if (!ALL_VOICES.length) return;
+  empty.style.display = 'none';
+  grid.innerHTML = '';
+
+  ALL_VOICES.forEach(v => {
+    const card = document.createElement('div');
+    card.className = 'voice-card' + (SELECTED_VOICE === v.name ? ' selected' : '');
+    card.innerHTML = `
+      <div class="voice-card-name">
+        <span>${v.name}</span>
+        <button class="voice-preview-btn" data-name="${v.name}">▶</button>
+      </div>
+      <div class="voice-card-meta">${v.ssmlGender || ''} · ${v.naturalSampleRateHertz || ''}Hz</div>
+    `;
+    card.onclick = (e) => {
+      if (e.target.classList.contains('voice-preview-btn')) return;
+      SELECTED_VOICE = v.name;
+      renderVoicePicker();
+    };
+    card.querySelector('.voice-preview-btn').onclick = (e) => {
+      e.stopPropagation();
+      previewVoice(v.name, e.target);
+    };
+    grid.appendChild(card);
+  });
+}
+
+async function synthesize(text, voiceName) {
+  const apiKey = document.getElementById('apiKey').value.trim();
+  if (!apiKey) throw new Error('Enter your API key first.');
+  if (!voiceName) throw new Error('Select a voice first.');
+
+  const res = await fetch(`https://texttospeech.googleapis.com/v1/text:synthesize?key=${encodeURIComponent(apiKey)}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      input: { text },
+      voice: { languageCode: 'pt-PT', name: voiceName },
+      audioConfig: { audioEncoding: 'MP3' },
+    }),
+  });
+
+  const rawText = await res.text();
+  if (!res.ok) throw new Error(`HTTP ${res.status}: ${rawText.slice(0, 300)}`);
+
+  const data = JSON.parse(rawText);
+  if (!data.audioContent) throw new Error('No audioContent in response: ' + rawText.slice(0, 300));
+
+  const binary = atob(data.audioContent);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  const blob = new Blob([bytes], { type: 'audio/mpeg' });
+  return URL.createObjectURL(blob);
+}
+
+async function previewVoice(voiceName, btn) {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  document.querySelectorAll('.voice-preview-btn').forEach(b => b.classList.remove('playing'));
+  btn.classList.add('playing');
+  btn.textContent = '…';
+  try {
+    const url = await synthesize('Boa tarde. Queria uma mesa para dois, por favor.', voiceName);
+    const audio = new Audio(url);
+    currentAudio = audio;
+    audio.onended = () => { btn.classList.remove('playing'); btn.textContent = '▶'; };
+    audio.onerror = () => { btn.classList.remove('playing'); btn.textContent = '▶'; };
+    await audio.play();
+  } catch (e) {
+    console.error(e);
+    btn.classList.remove('playing');
+    btn.textContent = '✕';
+    alert('Error: ' + e.message);
+    setTimeout(() => { btn.textContent = '▶'; }, 1500);
+  }
+}
+
+async function playCustomText(text) {
+  const status = document.getElementById('customStatus');
+  if (!SELECTED_VOICE) { alert('Click a voice card above to select it first.'); return; }
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  status.textContent = `Generating "${text}"…`;
+  status.className = 'status';
+  try {
+    const url = await synthesize(text, SELECTED_VOICE);
+    const audio = new Audio(url);
+    currentAudio = audio;
+    status.textContent = '';
+    await audio.play();
+  } catch (e) {
+    console.error(e);
+    status.textContent = 'Error: ' + e.message;
+    status.className = 'status error';
+  }
+}
+
+async function playCustom() {
+  const text = document.getElementById('customText').value.trim();
+  if (!text) { alert('Type a word or phrase first.'); return; }
+  playCustomText(text);
+}
+</script>
+</body>
+</html>
