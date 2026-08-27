@@ -699,6 +699,19 @@ const SITUACAO_CATEGORIES = [
 ];
 
 function normalizeVerb(v) {
+  const isSimple = !!(v.eu_p || v.vce_p); // essenciais / irregulares carry full_p/full_pp already
+  let full_p = v.full_p;
+  let full_pp = v.full_pp;
+  if (!isSimple) {
+    // AR_VERBS / ER_IR_VERBS — derive present tense the same way makeArCard/makeErIrCard do
+    const eu = v.eu;
+    const stem = eu.replace(/o$/,'');
+    const isIR = v.inf.endsWith('ir');
+    full_p = isIR
+      ? {eu:eu, tu:stem+'es', vce:v.vce, nos:stem+'imos', vces:stem+'em'}
+      : {eu:eu, tu:stem+'as', vce:v.vce, nos:stem+'amos', vces:stem+'am'};
+    full_pp = null; // no pretérito data stored for -AR/-ER/-IR verbs, same limitation as their home tabs
+  }
   return {
     inf: v.inf,
     en: v.en,
@@ -707,6 +720,8 @@ function normalizeVerb(v) {
     ex_eu: v.ex_eu,
     ex_eu_en: v.ex_eu_en,
     ctx: v.ctx || [],
+    full_p, full_pp,
+    irr_p: v.irr_p, irr_pp: v.irr_pp,
   };
 }
 
@@ -730,6 +745,8 @@ function renderSituacaoTab() {
     html += `<p style="font-size:0.78rem;color:var(--muted);margin-bottom:0.75rem">${cat.desc}</p>`;
     html += `<div class="verb-grid">`;
     verbs.forEach(v => {
+      const id = 'sit' + (++expandCount);
+      EXPAND_DATA[id] = { fp:v.full_p, fp_irr:v.irr_p, fp_label:'Presente', fpp:v.full_pp, fpp_irr:v.irr_pp, fpp_label:'Pretérito Perfeito' };
       const exOnclick = v.ex_eu ? `onclick="speak('${v.ex_eu.replace(/'/g,"\\'")}')"` : '';
       html += `<div class="verb-card">
         <div class="verb-card-header">
@@ -741,6 +758,7 @@ function renderSituacaoTab() {
           <span class="subj">você</span><span class="form" onclick="speak('${v.vce}')">${v.vce}</span>
         </div>
         ${v.ex_eu ? `<div class="verb-ex" ${exOnclick}>eu: ${v.ex_eu}</div>` : ''}
+        ${expandSection(id)}
       </div>`;
     });
     html += `</div>`;
