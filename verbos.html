@@ -81,6 +81,22 @@
   .note-block .note-label { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.35rem; }
   .note-block .pt { font-family: var(--mono); color: var(--green); font-weight: 600; }
 
+  .verb-focus { background: var(--surface); border: 2px solid var(--green); border-radius: 10px; padding: 1.25rem 1.5rem; margin: 1rem 0; }
+  .verb-focus-header { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.75rem; }
+  .verb-focus-inf { font-family: var(--mono); font-size: 1.3rem; font-weight: 700; color: var(--green); cursor: pointer; }
+  .verb-focus-inf:hover { text-decoration: underline; }
+  .verb-focus-tag { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--red); background: #fdf0ef; padding: 0.2rem 0.5rem; border-radius: 99px; }
+  .verb-focus-meanings { font-size: 0.85rem; color: var(--text); margin-bottom: 1rem; line-height: 1.6; }
+  .verb-focus-meanings b { color: var(--green); }
+  .verb-focus-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 0.9rem; }
+  .verb-focus-cell { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem 0.6rem; text-align: center; cursor: pointer; }
+  .verb-focus-cell:hover { border-color: var(--green); }
+  .verb-focus-cell-tense { font-family: var(--mono); font-size: 0.58rem; text-transform: uppercase; color: var(--muted); }
+  .verb-focus-cell-form { font-family: var(--mono); font-size: 0.95rem; font-weight: 700; color: var(--green); margin-top: 0.15rem; }
+  .verb-focus-priority { font-size: 0.82rem; color: var(--muted); line-height: 1.6; border-top: 1px solid var(--border); padding-top: 0.75rem; }
+  .verb-focus-priority .pt { font-family: var(--mono); color: var(--green); font-weight: 600; cursor: pointer; }
+  .verb-focus-priority .pt:hover { text-decoration: underline; }
+
   /* FLASHCARD — vfc pattern */
   .flashcard-wrap { max-width: 480px; margin: 0 auto; }
   .vfc-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem; }
@@ -161,6 +177,7 @@
   <button class="tab" onclick="switchTab('irregulares', this)">Irregulares</button>
   <button class="tab" onclick="switchTab('ar', this)">-AR</button>
   <button class="tab" onclick="switchTab('er-ir', this)">-ER / -IR</button>
+  <button class="tab" onclick="switchTab('situacao', this)">Por Situação</button>
   <button class="tab" onclick="switchTab('flashcards', this)">Flashcards</button>
   <button class="tab" onclick="switchTab('desafio', this)">⚡ Desafio</button>
 </div>
@@ -207,6 +224,28 @@
     <div class="note-label">O Padrão</div>
     Remove <span class="pt">-ar</span> → add ending: <span class="pt">-o / -as / -a / -amos / -am</span>. The <span class="pt">eu</span> form always ends in <span class="pt">-o</span>. The <span class="pt">você</span> form always ends in <span class="pt">-a</span>. These two are your priority.
   </div>
+  <div class="verb-focus">
+    <div class="verb-focus-header">
+      <span class="verb-focus-inf" onclick="speak('ficar')">ficar</span>
+      <span class="verb-focus-tag">multi-significado</span>
+    </div>
+    <div class="verb-focus-meanings">
+      <b>to stay</b> · <b>to remain</b> · <b>to become</b> · <b>to be located</b> · <b>to turn out</b> — same verb, five real meanings, context tells you which one.
+    </div>
+    <div class="verb-focus-grid">
+      <div class="verb-focus-cell" onclick="speak('fico')"><div class="verb-focus-cell-tense">eu · presente</div><div class="verb-focus-cell-form">fico</div></div>
+      <div class="verb-focus-cell" onclick="speak('fica')"><div class="verb-focus-cell-tense">você · presente</div><div class="verb-focus-cell-form">fica</div></div>
+      <div class="verb-focus-cell" onclick="speak('ficou')"><div class="verb-focus-cell-tense">você · pretérito</div><div class="verb-focus-cell-form">ficou</div></div>
+    </div>
+    <div class="verb-focus-priority">
+      <span class="pt" onclick="speak('Onde fica?')">Onde fica?</span> — where is it, the single highest-priority form for navigating Lisbon. <span class="pt" onclick="speak('Ficou muito bem.')">Ficou muito bem.</span> — it turned out great. <span class="pt" onclick="speak('Fico em casa hoje.')">Fico em casa hoje.</span> — I'm staying home today. Note: <span class="pt">fiquei</span> (eu, pretérito) takes c→qu before e, same spelling rule as every -car verb, not an irregularity specific to ficar.
+    </div>
+    <button class="verb-expand-btn" onclick="toggleExpand('ficar-focus')">
+      <span id="arrow-ficar-focus">▸</span> conjugação completa — presente, imperfeito, pretérito
+    </button>
+    <div class="verb-full-conj" id="expand-ficar-focus"><table></table></div>
+  </div>
+
   <div class="section-title">-AR Verbs — eu / você</div>
   <div id="ar-grid" class="verb-grid"></div>
 </div>
@@ -253,6 +292,11 @@
 </div>
 
 <!-- ══ FLASHCARDS ══ -->
+<div id="situacao" class="view">
+  <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem">Os mesmos verbos, organizados por quando os usas — não pela terminação. Primeira versão, categorias por ajustar.</p>
+  <div id="situacao-content"></div>
+</div>
+
 <div id="flashcards" class="view">
 <div class="flashcard-wrap">
   <div class="vfc-mode-bar">
@@ -344,75 +388,76 @@ function switchTab(id, btn) {
   btn.classList.add('active');
   if (id==='flashcards') vfcRender();
   if (id==='desafio') initDesafio();
+  if (id==='situacao') renderSituacaoTab();
 }
 
 // ── DATA ──────────────────────────────────────────────────────────
 
 const ESSENCIAIS = [
-  { inf:'ser',   en:'to be (permanent)',
+  { inf:'ser', ctx:['estado'],   en:'to be (permanent)',
     eu_p:'sou',   vce_p:'é',     eu_pp:'fui',    vce_pp:'foi',    irr_eu:true, irr_vce:true,
     full_p:{eu:'sou',tu:'és',vce:'é',nos:'somos',vces:'são'},
     full_pp:{eu:'fui',tu:'foste',vce:'foi',nos:'fomos',vces:'foram'},
     irr_p:{eu:true,vce:true,nos:true,vces:true}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Eu sou de Miami, mas moro em Lisboa.', ex_eu_en:"I'm from Miami but I live in Lisbon.",
     ex_vce:'Você é o professor?', ex_vce_en:'Are you the teacher?' },
-  { inf:'estar', en:'to be (temporary)',
+  { inf:'estar', ctx:['estado'], en:'to be (temporary)',
     eu_p:'estou', vce_p:'está',  eu_pp:'estive', vce_pp:'esteve', irr_eu:true, irr_vce:true,
     full_p:{eu:'estou',tu:'estás',vce:'está',nos:'estamos',vces:'estão'},
     full_pp:{eu:'estive',tu:'estiveste',vce:'esteve',nos:'estivemos',vces:'estiveram'},
     irr_p:{eu:true,tu:true,vce:true,nos:true,vces:true}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Estou um bocadinho cansado hoje.', ex_eu_en:"I'm a little tired today.",
     ex_vce:'Você está bem?', ex_vce_en:'Are you okay?' },
-  { inf:'ir',    en:'to go',
+  { inf:'ir', ctx:['direcoes'],    en:'to go',
     eu_p:'vou',   vce_p:'vai',   eu_pp:'fui',    vce_pp:'foi',    irr_eu:true, irr_vce:true,
     full_p:{eu:'vou',tu:'vais',vce:'vai',nos:'vamos',vces:'vão'},
     full_pp:{eu:'fui',tu:'foste',vce:'foi',nos:'fomos',vces:'foram'},
     irr_p:{eu:true,tu:true,vce:true,nos:true,vces:true}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Vou ao supermercado mais tarde.', ex_eu_en:"I'm going to the supermarket later.",
     ex_vce:'Vai jantar onde hoje?', ex_vce_en:'Where are you going for dinner today?' },
-  { inf:'ter',   en:'to have',
+  { inf:'ter', ctx:['rotina'],   en:'to have',
     eu_p:'tenho', vce_p:'tem',   eu_pp:'tive',   vce_pp:'teve',   irr_eu:true, irr_vce:false,
     full_p:{eu:'tenho',tu:'tens',vce:'tem',nos:'temos',vces:'têm'},
     full_pp:{eu:'tive',tu:'tiveste',vce:'teve',nos:'tivemos',vces:'tiveram'},
     irr_p:{eu:true,vces:true}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Tenho aula de português às sextas.', ex_eu_en:'I have Portuguese class on Fridays.',
     ex_vce:'Você tem a conta, por favor?', ex_vce_en:'Do you have the bill, please?' },
-  { inf:'fazer', en:'to do / make',
+  { inf:'fazer', ctx:['rotina'], en:'to do / make',
     eu_p:'faço',  vce_p:'faz',   eu_pp:'fiz',    vce_pp:'fez',    irr_eu:true, irr_vce:true,
     full_p:{eu:'faço',tu:'fazes',vce:'faz',nos:'fazemos',vces:'fazem'},
     full_pp:{eu:'fiz',tu:'fizeste',vce:'fez',nos:'fizemos',vces:'fizeram'},
     irr_p:{eu:true}, irr_pp:{eu:true,vce:true},
     ex_eu:'Faço sempre café de manhã.', ex_eu_en:'I always make coffee in the morning.',
     ex_vce:'O que você faz da vida?', ex_vce_en:'What do you do for a living?' },
-  { inf:'dar',   en:'to give',
+  { inf:'dar', ctx:['trabalho'],   en:'to give',
     eu_p:'dou',   vce_p:'dá',    eu_pp:'dei',    vce_pp:'deu',    irr_eu:true, irr_vce:false,
     full_p:{eu:'dou',tu:'dás',vce:'dá',nos:'damos',vces:'dão'},
     full_pp:{eu:'dei',tu:'deste',vce:'deu',nos:'demos',vces:'deram'},
     irr_p:{eu:true,vces:true}, irr_pp:{eu:true,tu:true,vce:true},
     ex_eu:'Dou uma ajuda, sem problema.', ex_eu_en:"I'll give you a hand, no problem.",
     ex_vce:'Você dá aulas de português?', ex_vce_en:'Do you teach Portuguese?' },
-  { inf:'dizer', en:'to say',
+  { inf:'dizer', ctx:['rotina'], en:'to say',
     eu_p:'digo',  vce_p:'diz',   eu_pp:'disse',  vce_pp:'disse',  irr_eu:true, irr_vce:false,
     full_p:{eu:'digo',tu:'dizes',vce:'diz',nos:'dizemos',vces:'dizem'},
     full_pp:{eu:'disse',tu:'disseste',vce:'disse',nos:'dissemos',vces:'disseram'},
     irr_p:{eu:true}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Digo sempre obrigado.', ex_eu_en:'I always say thank you.',
     ex_vce:'O que você diz? Não estou a perceber.', ex_vce_en:"What are you saying? I'm not understanding." },
-  { inf:'vir',   en:'to come',
+  { inf:'vir', ctx:['direcoes'],   en:'to come',
     eu_p:'venho', vce_p:'vem',   eu_pp:'vim',    vce_pp:'veio',   irr_eu:true, irr_vce:true,
     full_p:{eu:'venho',tu:'vens',vce:'vem',nos:'vimos',vces:'vêm'},
     full_pp:{eu:'vim',tu:'vieste',vce:'veio',nos:'viemos',vces:'vieram'},
     irr_p:{eu:true,nos:true,vces:true}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Venho de autocarro.', ex_eu_en:'I come by bus.',
     ex_vce:'Você vem de onde?', ex_vce_en:'Where do you come from?' },
-  { inf:'trazer',en:'to bring',
+  { inf:'trazer', ctx:['restaurante'],en:'to bring',
     eu_p:'trago', vce_p:'traz',  eu_pp:'trouxe', vce_pp:'trouxe', irr_eu:true, irr_vce:true,
     full_p:{eu:'trago',tu:'trazes',vce:'traz',nos:'trazemos',vces:'trazem'},
     full_pp:{eu:'trouxe',tu:'trouxeste',vce:'trouxe',nos:'trouxemos',vces:'trouxeram'},
     irr_p:{eu:true}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Trago o vinho.', ex_eu_en:"I'll bring the wine.",
     ex_vce:'Você traz os copos?', ex_vce_en:'Are you bringing the glasses?' },
-  { inf:'ouvir', en:'to hear / listen',
+  { inf:'ouvir', ctx:['rotina'], en:'to hear / listen',
     eu_p:'ouço',  vce_p:'ouve',  eu_pp:'ouvi',   vce_pp:'ouviu',  irr_eu:true, irr_vce:false,
     full_p:{eu:'ouço',tu:'ouves',vce:'ouve',nos:'ouvimos',vces:'ouvem'},
     full_pp:{eu:'ouvi',tu:'ouviste',vce:'ouviu',nos:'ouvimos',vces:'ouviram'},
@@ -422,42 +467,42 @@ const ESSENCIAIS = [
 ];
 
 const IRREGULARES = [
-  { inf:'ver',    en:'to see',
+  { inf:'ver', ctx:['rotina'],    en:'to see',
     eu_p:'vejo',  vce_p:'vê',   eu_pp:'vi',     vce_pp:'viu',   irr_eu:true, irr_vce:true,
     full_p:{eu:'vejo',tu:'vês',vce:'vê',nos:'vemos',vces:'veem'},
     full_pp:{eu:'vi',tu:'viste',vce:'viu',nos:'vimos',vces:'viram'},
     irr_p:{eu:true,tu:true,vce:true,vces:true}, irr_pp:{},
     ex_eu:'Vejo o mar da minha janela.', ex_eu_en:'I can see the sea from my window.',
     ex_vce:'Você vê televisão?', ex_vce_en:'Do you watch television?' },
-  { inf:'saber',  en:'to know (facts)',
+  { inf:'saber', ctx:['trabalho'],  en:'to know (facts)',
     eu_p:'sei',   vce_p:'sabe', eu_pp:'soube',  vce_pp:'soube', irr_eu:true, irr_vce:false,
     full_p:{eu:'sei',tu:'sabes',vce:'sabe',nos:'sabemos',vces:'sabem'},
     full_pp:{eu:'soube',tu:'soubeste',vce:'soube',nos:'soubemos',vces:'souberam'},
     irr_p:{eu:true}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Sei falar um pouco de português.', ex_eu_en:'I know how to speak a little Portuguese.',
     ex_vce:'Você sabe onde fica?', ex_vce_en:'Do you know where it is?' },
-  { inf:'poder',  en:'to be able to / can',
+  { inf:'poder', ctx:['restaurante'],  en:'to be able to / can',
     eu_p:'posso', vce_p:'pode', eu_pp:'pude',   vce_pp:'pôde',  irr_eu:true, irr_vce:false,
     full_p:{eu:'posso',tu:'podes',vce:'pode',nos:'podemos',vces:'podem'},
     full_pp:{eu:'pude',tu:'pudeste',vce:'pôde',nos:'pudemos',vces:'puderam'},
     irr_p:{eu:true}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Posso repetir, por favor?', ex_eu_en:'Can I have some more, please?',
     ex_vce:'Pode trazer a conta?', ex_vce_en:'Can you bring the bill?' },
-  { inf:'querer', en:'to want',
+  { inf:'querer', ctx:['restaurante'], en:'to want',
     eu_p:'quero', vce_p:'quer', eu_pp:'quis',   vce_pp:'quis',  irr_eu:false,irr_vce:false,
     full_p:{eu:'quero',tu:'queres',vce:'quer',nos:'queremos',vces:'querem'},
     full_pp:{eu:'quis',tu:'quiseste',vce:'quis',nos:'quisemos',vces:'quiseram'},
     irr_p:{}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Quero aprender português bem.', ex_eu_en:'I want to learn Portuguese well.',
     ex_vce:'Você quer um café?', ex_vce_en:'Would you like a coffee?' },
-  { inf:'pôr',    en:'to put / place',
+  { inf:'pôr', ctx:['rotina'],    en:'to put / place',
     eu_p:'ponho', vce_p:'põe',  eu_pp:'pus',    vce_pp:'pôs',   irr_eu:true, irr_vce:true,
     full_p:{eu:'ponho',tu:'pões',vce:'põe',nos:'pomos',vces:'põem'},
     full_pp:{eu:'pus',tu:'puseste',vce:'pôs',nos:'pusemos',vces:'puseram'},
     irr_p:{eu:true,tu:true,vce:true,nos:true,vces:true}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
     ex_eu:'Ponho açúcar no café.', ex_eu_en:'I put sugar in my coffee.',
     ex_vce:'Onde você põe as chaves?', ex_vce_en:'Where do you put your keys?' },
-  { inf:'perder', en:'to lose / miss',
+  { inf:'perder', ctx:['rotina'], en:'to lose / miss',
     eu_p:'perco', vce_p:'perde',eu_pp:'perdi',  vce_pp:'perdeu',irr_eu:true, irr_vce:false,
     full_p:{eu:'perco',tu:'perdes',vce:'perde',nos:'perdemos',vces:'perdem'},
     full_pp:{eu:'perdi',tu:'perdeste',vce:'perdeu',nos:'perdemos',vces:'perderam'},
@@ -474,28 +519,29 @@ const IRREGULARES = [
 ];
 
 const AR_VERBS = [
-  { inf:'estudar',   en:'to study',       eu:'estudo',   vce:'estuda',   ex_eu:'Eu estudo português todas as manhãs.',     ex_eu_en:'I study Portuguese every morning.',         ex_vce:'Você estuda na escola de línguas?', ex_vce_en:'Do you study at the language school?' },
-  { inf:'gostar',    en:'to like',        eu:'gosto',    vce:'gosta',    ex_eu:'Eu gosto de bacalhau.',                    ex_eu_en:'I like codfish.',                           ex_vce:'Você gosta de vinho tinto?',        ex_vce_en:'Do you like red wine?' },
-  { inf:'trabalhar', en:'to work',        eu:'trabalho', vce:'trabalha', ex_eu:'Eu trabalho em Lisboa.',                   ex_eu_en:'I work in Lisbon.',                         ex_vce:'Você trabalha na escola?',          ex_vce_en:'Do you work at the school?' },
-  { inf:'morar',     en:'to live/reside', eu:'moro',     vce:'mora',     ex_eu:'Eu moro em Lisboa há seis meses.',         ex_eu_en:'I have been living in Lisbon for six months.', ex_vce:'Onde você mora?',                ex_vce_en:'Where do you live?' },
-  { inf:'comprar',   en:'to buy',         eu:'compro',   vce:'compra',   ex_eu:'Eu compro vinho na Garrafeira Nacional.',  ex_eu_en:'I buy wine at Garrafeira Nacional.',        ex_vce:'Onde você compra os legumes?',      ex_vce_en:'Where do you buy vegetables?' },
-  { inf:'cozinhar',  en:'to cook',        eu:'cozinho',  vce:'cozinha',  ex_eu:'Eu cozinho comida portuguesa muitas vezes.',ex_eu_en:'I often cook Portuguese food.',           ex_vce:'Você cozinha em casa?',             ex_vce_en:'Do you cook at home?' },
-  { inf:'tomar',     en:'to take / have', eu:'tomo',     vce:'toma',     ex_eu:'Eu tomo sempre café de manhã.',           ex_eu_en:'I always have coffee in the morning.',      ex_vce:'Você toma chá ou café?',            ex_vce_en:'Do you have tea or coffee?' },
-  { inf:'pagar',     en:'to pay',         eu:'pago',     vce:'paga',     ex_eu:'Eu pago o jantar com cartão.',             ex_eu_en:'I pay for dinner by card.',                 ex_vce:'Você paga com dinheiro ou cartão?', ex_vce_en:'Do you pay cash or by card?' },
-  { inf:'pensar',    en:'to think',       eu:'penso',    vce:'pensa',    ex_eu:'Eu penso que é bom aprender línguas.',     ex_eu_en:"I think it's good to learn languages.",    ex_vce:'O que você pensa?',                 ex_vce_en:'What do you think?' },
-  { inf:'telefonar', en:'to phone',       eu:'telefono', vce:'telefona', ex_eu:'Eu telefono para a família todos os dias.', ex_eu_en:'I phone family every day.',               ex_vce:'Você telefona muito?',              ex_vce_en:'Do you phone a lot?' },
-  { inf:'falar',     en:'to speak',       eu:'falo',     vce:'fala',     ex_eu:'Eu falo português e inglês.',              ex_eu_en:'I speak Portuguese and English.',           ex_vce:'Você fala devagar, por favor?',     ex_vce_en:'Can you speak slowly, please?' },
-  { inf:'gostar de', en:'to like (+ de)', eu:'gosto de', vce:'gosta de', ex_eu:'Eu gosto de passear em Lisboa.',          ex_eu_en:'I like strolling in Lisbon.',               ex_vce:'Você gosta de música?',             ex_vce_en:'Do you like music?' },
+  { inf:'estudar', ctx:['trabalho'],   en:'to study',       eu:'estudo',   vce:'estuda',   ex_eu:'Eu estudo português todas as manhãs.',     ex_eu_en:'I study Portuguese every morning.',         ex_vce:'Você estuda na escola de línguas?', ex_vce_en:'Do you study at the language school?' },
+  { inf:'gostar', ctx:['estado'],    en:'to like',        eu:'gosto',    vce:'gosta',    ex_eu:'Eu gosto de bacalhau.',                    ex_eu_en:'I like codfish.',                           ex_vce:'Você gosta de vinho tinto?',        ex_vce_en:'Do you like red wine?' },
+  { inf:'trabalhar', ctx:['trabalho'], en:'to work',        eu:'trabalho', vce:'trabalha', ex_eu:'Eu trabalho em Lisboa.',                   ex_eu_en:'I work in Lisbon.',                         ex_vce:'Você trabalha na escola?',          ex_vce_en:'Do you work at the school?' },
+  { inf:'morar', ctx:['direcoes'],     en:'to live/reside', eu:'moro',     vce:'mora',     ex_eu:'Eu moro em Lisboa há seis meses.',         ex_eu_en:'I have been living in Lisbon for six months.', ex_vce:'Onde você mora?',                ex_vce_en:'Where do you live?' },
+  { inf:'comprar', ctx:['restaurante'],   en:'to buy',         eu:'compro',   vce:'compra',   ex_eu:'Eu compro vinho na Garrafeira Nacional.',  ex_eu_en:'I buy wine at Garrafeira Nacional.',        ex_vce:'Onde você compra os legumes?',      ex_vce_en:'Where do you buy vegetables?' },
+  { inf:'cozinhar', ctx:['restaurante'],  en:'to cook',        eu:'cozinho',  vce:'cozinha',  ex_eu:'Eu cozinho comida portuguesa muitas vezes.',ex_eu_en:'I often cook Portuguese food.',           ex_vce:'Você cozinha em casa?',             ex_vce_en:'Do you cook at home?' },
+  { inf:'tomar', ctx:['rotina','restaurante'],     en:'to take / have', eu:'tomo',     vce:'toma',     ex_eu:'Eu tomo sempre café de manhã.',           ex_eu_en:'I always have coffee in the morning.',      ex_vce:'Você toma chá ou café?',            ex_vce_en:'Do you have tea or coffee?' },
+  { inf:'pagar', ctx:['restaurante'],     en:'to pay',         eu:'pago',     vce:'paga',     ex_eu:'Eu pago o jantar com cartão.',             ex_eu_en:'I pay for dinner by card.',                 ex_vce:'Você paga com dinheiro ou cartão?', ex_vce_en:'Do you pay cash or by card?' },
+  { inf:'pensar', ctx:['trabalho'],    en:'to think',       eu:'penso',    vce:'pensa',    ex_eu:'Eu penso que é bom aprender línguas.',     ex_eu_en:"I think it's good to learn languages.",    ex_vce:'O que você pensa?',                 ex_vce_en:'What do you think?' },
+  { inf:'telefonar', ctx:['rotina'], en:'to phone',       eu:'telefono', vce:'telefona', ex_eu:'Eu telefono para a família todos os dias.', ex_eu_en:'I phone family every day.',               ex_vce:'Você telefona muito?',              ex_vce_en:'Do you phone a lot?' },
+  { inf:'falar', ctx:['rotina'],     en:'to speak',       eu:'falo',     vce:'fala',     ex_eu:'Eu falo português e inglês.',              ex_eu_en:'I speak Portuguese and English.',           ex_vce:'Você fala devagar, por favor?',     ex_vce_en:'Can you speak slowly, please?' },
+  { inf:'gostar de', ctx:['estado'], en:'to like (+ de)', eu:'gosto de', vce:'gosta de', ex_eu:'Eu gosto de passear em Lisboa.',          ex_eu_en:'I like strolling in Lisbon.',               ex_vce:'Você gosta de música?',             ex_vce_en:'Do you like music?' },
+  { inf:'ficar', ctx:['direcoes','estado'],     en:'to stay / remain / become / be located', eu:'fico', vce:'fica', ex_eu:'Fico em casa aos domingos.', ex_eu_en:'I stay home on Sundays.',              ex_vce:'Onde fica a estação?',              ex_vce_en:'Where is the station located?' },
 ];
 
 const ER_IR_VERBS = [
-  { inf:'viver',    en:'to live',         eu:'vivo',     vce:'vive',     ex_eu:'Vivo em Lisboa há seis meses.',           ex_eu_en:'I have lived in Lisbon for six months.',    ex_vce:'Você vive perto daqui?',            ex_vce_en:'Do you live near here?' },
-  { inf:'decidir',  en:'to decide',       eu:'decido',   vce:'decide',   ex_eu:'Eu decido sempre na última hora.',         ex_eu_en:'I always decide at the last minute.',       ex_vce:'Você decide agora?',                ex_vce_en:'Are you deciding now?' },
-  { inf:'aprender', en:'to learn',        eu:'aprendo',  vce:'aprende',  ex_eu:'Aprendo português às terças e sextas.',    ex_eu_en:'I learn Portuguese on Tuesdays and Fridays.', ex_vce:'Você aprende rápido?',            ex_vce_en:'Do you learn quickly?' },
-  { inf:'perceber', en:'to understand',   eu:'percebo',  vce:'percebe',  ex_eu:'Não percebo bem.',                         ex_eu_en:"I don't understand well.",                  ex_vce:'Você percebe o que eu digo?',       ex_vce_en:'Do you understand what I say?' },
-  { inf:'beber',    en:'to drink',        eu:'bebo',     vce:'bebe',     ex_eu:'Bebo sempre água com as refeições.',       ex_eu_en:'I always drink water with meals.',          ex_vce:'O que você bebe?',                  ex_vce_en:'What do you drink?' },
-  { inf:'sair',     en:'to go out/leave', eu:'saio',     vce:'sai',      ex_eu:'Saio às seis da tarde.',                  ex_eu_en:'I leave at six in the afternoon.',          ex_vce:'A que horas você sai?',             ex_vce_en:'What time do you leave?' },
-  { inf:'abrir',    en:'to open',         eu:'abro',     vce:'abre',     ex_eu:'Abro sempre a janela de manhã.',           ex_eu_en:'I always open the window in the morning.',  ex_vce:'Você abre a loja às nove?',         ex_vce_en:'Do you open the shop at nine?' },
+  { inf:'viver', ctx:['direcoes'],    en:'to live',         eu:'vivo',     vce:'vive',     ex_eu:'Vivo em Lisboa há seis meses.',           ex_eu_en:'I have lived in Lisbon for six months.',    ex_vce:'Você vive perto daqui?',            ex_vce_en:'Do you live near here?' },
+  { inf:'decidir', ctx:['trabalho'],  en:'to decide',       eu:'decido',   vce:'decide',   ex_eu:'Eu decido sempre na última hora.',         ex_eu_en:'I always decide at the last minute.',       ex_vce:'Você decide agora?',                ex_vce_en:'Are you deciding now?' },
+  { inf:'aprender', ctx:['trabalho'], en:'to learn',        eu:'aprendo',  vce:'aprende',  ex_eu:'Aprendo português às terças e sextas.',    ex_eu_en:'I learn Portuguese on Tuesdays and Fridays.', ex_vce:'Você aprende rápido?',            ex_vce_en:'Do you learn quickly?' },
+  { inf:'perceber', ctx:['rotina'], en:'to understand',   eu:'percebo',  vce:'percebe',  ex_eu:'Não percebo bem.',                         ex_eu_en:"I don't understand well.",                  ex_vce:'Você percebe o que eu digo?',       ex_vce_en:'Do you understand what I say?' },
+  { inf:'beber', ctx:['restaurante'],    en:'to drink',        eu:'bebo',     vce:'bebe',     ex_eu:'Bebo sempre água com as refeições.',       ex_eu_en:'I always drink water with meals.',          ex_vce:'O que você bebe?',                  ex_vce_en:'What do you drink?' },
+  { inf:'sair', ctx:['rotina','direcoes'],     en:'to go out/leave', eu:'saio',     vce:'sai',      ex_eu:'Saio às seis da tarde.',                  ex_eu_en:'I leave at six in the afternoon.',          ex_vce:'A que horas você sai?',             ex_vce_en:'What time do you leave?' },
+  { inf:'abrir', ctx:['rotina'],    en:'to open',         eu:'abro',     vce:'abre',     ex_eu:'Abro sempre a janela de manhã.',           ex_eu_en:'I always open the window in the morning.',  ex_vce:'Você abre a loja às nove?',         ex_vce_en:'Do you open the shop at nine?' },
 ];
 
 // ── BUILD VERB CARDS ──────────────────────────────────────────────
@@ -524,6 +570,10 @@ function toggleExpand(id) {
     if (d.fp) {
       html += `<tr><td colspan="2" class="fc-section">${d.fp_label||'Presente'}</td></tr>`;
       ROWS.forEach(r => { if (d.fp[r.key]) html += `<tr><td class="fc-subj">${r.label}</td><td class="fc-form ${d.fp_irr&&d.fp_irr[r.key]?'irr':''}" onclick="speak('${d.fp[r.key]}')">${d.fp[r.key]}</td></tr>`; });
+    }
+    if (d.fimp) {
+      html += `<tr><td colspan="2" class="fc-section">${d.fimp_label||'Imperfeito'}</td></tr>`;
+      ROWS.forEach(r => { if (d.fimp[r.key]) html += `<tr><td class="fc-subj">${r.label}</td><td class="fc-form ${d.fimp_irr&&d.fimp_irr[r.key]?'irr':''}" onclick="speak('${d.fimp[r.key]}')">${d.fimp[r.key]}</td></tr>`; });
     }
     if (d.fpp) {
       html += `<tr><td colspan="2" class="fc-section">${d.fpp_label||'Pretérito Perfeito'}</td></tr>`;
@@ -628,7 +678,76 @@ function makeErIrCard(v) {
 document.getElementById('essenciais-grid').innerHTML = ESSENCIAIS.map(v => makeEssencialCard(v)).join('');
 document.getElementById('irregulares-grid').innerHTML = IRREGULARES.map(v => makeSimpleCard(v)).join('');
 document.getElementById('ar-grid').innerHTML = AR_VERBS.map(v => makeArCard(v)).join('');
+
+EXPAND_DATA['ficar-focus'] = {
+  fp: {eu:'fico', tu:'ficas', vce:'fica', nos:'ficamos', vces:'ficam'},
+  fp_label: 'Presente',
+  fimp: {eu:'ficava', tu:'ficavas', vce:'ficava', nos:'ficávamos', vces:'ficavam'},
+  fimp_label: 'Imperfeito',
+  fpp: {eu:'fiquei', tu:'ficaste', vce:'ficou', nos:'ficámos', vces:'ficaram'},
+  fpp_label: 'Pretérito',
+};
 document.getElementById('er-ir-grid').innerHTML = ER_IR_VERBS.map(v => makeErIrCard(v)).join('');
+
+// ── POR SITUAÇÃO — same verbs, indexed by context instead of ending ─
+const SITUACAO_CATEGORIES = [
+  { id:'rotina',      label:'Rotina Diária',            desc:'Everyday actions, morning to night' },
+  { id:'direcoes',    label:'Direções & Localização',    desc:'Getting around, saying where things are' },
+  { id:'restaurante', label:'Restaurante & Compras',      desc:'Eating out, buying things, paying' },
+  { id:'trabalho',    label:'Trabalho & Aprendizagem',    desc:'Work, study, thinking things through' },
+  { id:'estado',      label:'Estado & Mudança',           desc:'Being, becoming, how things are' },
+];
+
+function normalizeVerb(v) {
+  return {
+    inf: v.inf,
+    en: v.en,
+    eu: v.eu_p || v.eu,
+    vce: v.vce_p || v.vce,
+    ex_eu: v.ex_eu,
+    ex_eu_en: v.ex_eu_en,
+    ctx: v.ctx || [],
+  };
+}
+
+function renderSituacaoTab() {
+  const container = document.getElementById('situacao-content');
+  if (container.dataset.rendered) return; // build once
+  container.dataset.rendered = '1';
+
+  const allVerbs = [
+    ...ESSENCIAIS.map(normalizeVerb),
+    ...IRREGULARES.map(normalizeVerb),
+    ...AR_VERBS.map(normalizeVerb),
+    ...ER_IR_VERBS.map(normalizeVerb),
+  ].filter(v => v.eu && v.eu !== '—' && v.ctx.length);
+
+  let html = '';
+  SITUACAO_CATEGORIES.forEach(cat => {
+    const verbs = allVerbs.filter(v => v.ctx.includes(cat.id));
+    if (!verbs.length) return;
+    html += `<div class="section-title">${cat.label}</div>`;
+    html += `<p style="font-size:0.78rem;color:var(--muted);margin-bottom:0.75rem">${cat.desc}</p>`;
+    html += `<div class="verb-grid">`;
+    verbs.forEach(v => {
+      const exOnclick = v.ex_eu ? `onclick="speak('${v.ex_eu.replace(/'/g,"\\'")}')"` : '';
+      html += `<div class="verb-card">
+        <div class="verb-card-header">
+          <span class="verb-inf" onclick="speak('${v.inf.replace(/'/g,"\\'")}')">${v.inf}</span>
+          <span class="verb-en">${v.en}</span>
+        </div>
+        <div class="verb-conj">
+          <span class="subj">eu</span><span class="form" onclick="speak('${v.eu}')">${v.eu}</span>
+          <span class="subj">você</span><span class="form" onclick="speak('${v.vce}')">${v.vce}</span>
+        </div>
+        ${v.ex_eu ? `<div class="verb-ex" ${exOnclick}>eu: ${v.ex_eu}</div>` : ''}
+      </div>`;
+    });
+    html += `</div>`;
+  });
+
+  container.innerHTML = html;
+}
 
 // ── FLASHCARD DATA ────────────────────────────────────────────────
 
@@ -670,6 +789,7 @@ const EU_FORMS = {
   'to drink':          'I drink',
   'to go out/leave':   'I go out / I leave',
   'to open':           'I open',
+  'to stay / remain / become / be located':   'I stay / remain / become',
 };
 const VOCE_FORMS = {
   'to be (permanent)': 'you are (permanent)',
@@ -708,6 +828,7 @@ const VOCE_FORMS = {
   'to drink':          'you drink',
   'to go out/leave':   'you go out / you leave',
   'to open':           'you open',
+  'to stay / remain / become / be located':   'you stay / remain / become',
 };
 const PAST_EU_FORMS = {
   'to be (permanent)': 'I was (permanent, past)',
@@ -874,6 +995,13 @@ const DESAFIO_CARDS = [
   { cat:'-ER/-IR', prompt:'Say "I learn Portuguese on Tuesdays and Fridays."', answer:'Aprendo português às terças e sextas.', note:'aprender → eu aprendo' },
   { cat:'-ER/-IR', prompt:'Say "I always drink water with meals."', answer:'Bebo sempre água com as refeições.', note:'beber → eu bebo' },
   { cat:'-ER/-IR', prompt:'Say "I leave at six in the afternoon."', answer:'Saio às seis da tarde.', note:'sair → eu saio (irregular eu)' },
+  // Ficar — high priority, multi-meaning
+  { cat:'Ficar', prompt:'Say "I stay home on Sundays."', answer:'Fico em casa aos domingos.', note:'fico → to stay, daily use' },
+  { cat:'Ficar', prompt:'Ask someone "where is the station?"', answer:'Onde fica a estação?', note:'onde fica → highest priority for Lisbon navigation' },
+  { cat:'Ficar', prompt:'Say "it turned out great."', answer:'Ficou muito bem.', note:'ficou → past, "turned out"' },
+  { cat:'Ficar', prompt:'Ask "where is the pharmacy?"', answer:'Onde fica a farmácia?', note:'onde fica + any place — the pattern to memorize' },
+  { cat:'Ficar', prompt:'Say "she stayed at the office until eight."', answer:'Ela ficou no escritório até às oito.', note:'ficou → to stay, past tense' },
+  { cat:'Ficar', prompt:'Say "I always get nervous before the exam." (become)', answer:'Fico sempre nervoso antes do exame.', note:'fico → to become, ficar + adjective' },
 ];
 
 let dDeck=[], dIdx=0, dCorrect=0, dTotal=0, dStreak=0, dTimer=null, dSecondsLeft=8, dRevealed=false;
