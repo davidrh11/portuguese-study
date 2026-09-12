@@ -636,11 +636,41 @@ function makeSimpleCard(v) {
   </div>`;
 }
 
+// ── PRETÉRITO PERFEITO — hand-verified, not auto-derived ───────────
+// Spelling changes (c→qu, g→gu before e) and sair's accent are real
+// EP orthographic rules, not exceptions to memorize as arbitrary.
+const PRETERITO_MAP = {
+  // -AR verbs
+  'estudar':   { p:{eu:'estudei',tu:'estudaste',vce:'estudou',nos:'estudámos',vces:'estudaram'} },
+  'gostar':    { p:{eu:'gostei',tu:'gostaste',vce:'gostou',nos:'gostámos',vces:'gostaram'} },
+  'trabalhar': { p:{eu:'trabalhei',tu:'trabalhaste',vce:'trabalhou',nos:'trabalhámos',vces:'trabalharam'} },
+  'morar':     { p:{eu:'morei',tu:'moraste',vce:'morou',nos:'morámos',vces:'moraram'} },
+  'comprar':   { p:{eu:'comprei',tu:'compraste',vce:'comprou',nos:'comprámos',vces:'compraram'} },
+  'cozinhar':  { p:{eu:'cozinhei',tu:'cozinhaste',vce:'cozinhou',nos:'cozinhámos',vces:'cozinharam'} },
+  'tomar':     { p:{eu:'tomei',tu:'tomaste',vce:'tomou',nos:'tomámos',vces:'tomaram'} },
+  'pagar':     { p:{eu:'paguei',tu:'pagaste',vce:'pagou',nos:'pagámos',vces:'pagaram'}, irr:{eu:true} },
+  'pensar':    { p:{eu:'pensei',tu:'pensaste',vce:'pensou',nos:'pensámos',vces:'pensaram'} },
+  'telefonar': { p:{eu:'telefonei',tu:'telefonaste',vce:'telefonou',nos:'telefonámos',vces:'telefonaram'} },
+  'falar':     { p:{eu:'falei',tu:'falaste',vce:'falou',nos:'falámos',vces:'falaram'} },
+  'gostar de': { p:{eu:'gostei de',tu:'gostaste de',vce:'gostou de',nos:'gostámos de',vces:'gostaram de'} },
+  'ficar':     { p:{eu:'fiquei',tu:'ficaste',vce:'ficou',nos:'ficámos',vces:'ficaram'}, irr:{eu:true} },
+  // -ER verbs
+  'viver':     { p:{eu:'vivi',tu:'viveste',vce:'viveu',nos:'vivemos',vces:'viveram'} },
+  'aprender':  { p:{eu:'aprendi',tu:'aprendeste',vce:'aprendeu',nos:'aprendemos',vces:'aprenderam'} },
+  'perceber':  { p:{eu:'percebi',tu:'percebeste',vce:'percebeu',nos:'percebemos',vces:'perceberam'} },
+  'beber':     { p:{eu:'bebi',tu:'bebeste',vce:'bebeu',nos:'bebemos',vces:'beberam'} },
+  // -IR verbs
+  'decidir':   { p:{eu:'decidi',tu:'decidiste',vce:'decidiu',nos:'decidimos',vces:'decidiram'} },
+  'sair':      { p:{eu:'saí',tu:'saíste',vce:'saiu',nos:'saímos',vces:'saíram'}, irr:{eu:true,nos:true} },
+  'abrir':     { p:{eu:'abri',tu:'abriste',vce:'abriu',nos:'abrimos',vces:'abriram'} },
+};
+
 function makeArCard(v) {
   const id = 'ar' + (++expandCount);
   const stem = v.eu.replace(/o$/,'');
   const fp = {eu:v.eu, tu:stem+'as', vce:v.vce, nos:stem+'amos', vces:stem+'am'};
-  EXPAND_DATA[id] = { fp, fp_irr:{}, fp_label:'Presente', fpp:null };
+  const pret = PRETERITO_MAP[v.inf];
+  EXPAND_DATA[id] = { fp, fp_irr:{}, fp_label:'Presente', fpp:pret?pret.p:null, fpp_irr:pret?pret.irr:{}, fpp_label:'Pretérito Perfeito' };
   return `<div class="verb-card">
     <div class="verb-card-header">
       <span class="verb-inf" onclick="speak('${v.inf}')">${v.inf}</span>
@@ -660,7 +690,8 @@ function makeErIrCard(v) {
   const isIR = v.inf.endsWith('ir');
   const stem = v.eu.replace(/o$/,'');
   const fp = {eu:v.eu, tu:stem+'es', vce:v.vce, nos:stem+(isIR?'imos':'emos'), vces:stem+'em'};
-  EXPAND_DATA[id] = { fp, fp_irr:{}, fp_label:'Presente', fpp:null };
+  const pret = PRETERITO_MAP[v.inf];
+  EXPAND_DATA[id] = { fp, fp_irr:{}, fp_label:'Presente', fpp:pret?pret.p:null, fpp_irr:pret?pret.irr:{}, fpp_label:'Pretérito Perfeito' };
   return `<div class="verb-card">
     <div class="verb-card-header">
       <span class="verb-inf" onclick="speak('${v.inf}')">${v.inf}</span>
@@ -702,15 +733,18 @@ function normalizeVerb(v) {
   const isSimple = !!(v.eu_p || v.vce_p); // essenciais / irregulares carry full_p/full_pp already
   let full_p = v.full_p;
   let full_pp = v.full_pp;
+  let irr_pp = v.irr_pp;
   if (!isSimple) {
-    // AR_VERBS / ER_IR_VERBS — derive present tense the same way makeArCard/makeErIrCard do
+    // AR_VERBS / ER_IR_VERBS — derive present the same way makeArCard/makeErIrCard do
     const eu = v.eu;
     const stem = eu.replace(/o$/,'');
     const isIR = v.inf.endsWith('ir');
     full_p = isIR
       ? {eu:eu, tu:stem+'es', vce:v.vce, nos:stem+'imos', vces:stem+'em'}
       : {eu:eu, tu:stem+'as', vce:v.vce, nos:stem+'amos', vces:stem+'am'};
-    full_pp = null; // no pretérito data stored for -AR/-ER/-IR verbs, same limitation as their home tabs
+    const pret = PRETERITO_MAP[v.inf];
+    full_pp = pret ? pret.p : null;
+    irr_pp = pret ? pret.irr : {};
   }
   return {
     inf: v.inf,
@@ -721,7 +755,7 @@ function normalizeVerb(v) {
     ex_eu_en: v.ex_eu_en,
     ctx: v.ctx || [],
     full_p, full_pp,
-    irr_p: v.irr_p, irr_pp: v.irr_pp,
+    irr_p: v.irr_p, irr_pp,
   };
 }
 
