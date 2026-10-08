@@ -6,7 +6,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tipos de Frases</title>
+<title>Tipos de Frases &amp; Perguntas</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -111,13 +111,48 @@
   .fc-nav { display: flex; gap: 1rem; margin-top: auto; }
   .fc-nav-btn { font-family: var(--mono); font-size: 0.82rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 0.55rem 1.25rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
   .fc-nav-btn:hover { border-color: var(--green); color: var(--green); }
+  .q-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1.1rem; margin-bottom: 0.75rem; }
+  .q-head { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.25rem; }
+  .q-word { font-family: var(--mono); font-size: 1.15rem; font-weight: 700; color: var(--green); cursor: pointer; }
+  .q-word:hover { text-decoration: underline; }
+  .q-mean { font-size: 0.85rem; color: var(--text); font-weight: 600; }
+  .q-note { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.5rem; line-height: 1.5; }
+  .q-ex { font-family: var(--mono); font-size: 0.86rem; padding: 0.35rem 0.5rem; border-top: 1px solid var(--border); cursor: pointer; }
+  .q-ex:hover { background: var(--surface2); }
+  .q-en { display: block; font-family: var(--sans); font-size: 0.74rem; color: var(--muted); margin-top: 0.1rem; }
+  .desafio-wrap { max-width: 520px; margin: 0 auto; }
+  .d-meta { display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem; }
+  .d-streak { color: var(--green); font-weight: 600; }
+  .d-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.75rem 1.5rem 1.5rem; text-align: center; min-height: 280px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+  .d-cat { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.75rem; align-self: flex-start; }
+  .d-prompt { font-size: 1rem; color: var(--text); margin-bottom: 1.25rem; line-height: 1.6; max-width: 400px; }
+  .d-timer-ring { width: 52px; height: 52px; margin: 0 auto 1.25rem; position: relative; }
+  .d-timer-ring svg { transform: rotate(-90deg); }
+  .d-timer-ring circle { fill: none; stroke-width: 4; }
+  .d-timer-track { stroke: var(--border); }
+  .d-timer-fill { stroke: var(--green); stroke-dasharray: 138; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke 0.3s; stroke-linecap: round; }
+  .d-timer-fill.warn { stroke: #c47a00; }
+  .d-timer-fill.danger { stroke: var(--red); }
+  .d-timer-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 0.9rem; font-weight: 600; color: var(--text); }
+  .d-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1.25rem; }
+  .d-answer { font-family: var(--mono); font-size: 1.15rem; font-weight: 600; color: var(--green); filter: blur(8px); background: #e8f4ee; border-radius: 6px; padding: 0.4rem 1rem; cursor: pointer; transition: filter 0.3s, background 0.3s; margin-bottom: 0.75rem; user-select: none; line-height: 1.6; }
+  .d-answer.revealed { filter: blur(0); background: transparent; }
+  .d-speak { background: var(--bg); border: 1px solid var(--border); color: var(--green); padding: 0.3rem 1rem; border-radius: 99px; cursor: pointer; font-size: 0.9rem; margin-bottom: 1.25rem; transition: all 0.2s; }
+  .d-speak:hover { background: var(--green); color: #fff; }
+  .d-note { font-size: 0.78rem; color: var(--muted); font-style: italic; margin-bottom: 1.25rem; min-height: 1.2rem; }
+  .d-actions { display: flex; gap: 0.75rem; }
+  .d-btn { font-family: var(--mono); font-size: 0.82rem; font-weight: 600; padding: 0.6rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; transition: opacity 0.15s; }
+  .d-btn.disse { background: var(--green); color: #fff; }
+  .d-btn.nao { background: #fdf0ef; color: var(--red); border: 1px solid #dba09a; }
+  .d-btn:hover { opacity: 0.85; }
+  .d-hint { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); margin-top: 1rem; letter-spacing: 0.05em; }
 </style>
 </head>
 <body>
 
 <header>
   <div class="header-text">
-    <h1>Unidade 1 · <span>Tipos de Frases</span></h1>
+    <h1>Unidade 1 · <span>Tipos de Frases &amp; Perguntas</span></h1>
     <p>A1.1 — Lighthouse Language School</p>
   </div>
   <svg class="pt-flag" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
@@ -140,8 +175,10 @@
 
 <div class="tabs">
   <button class="tab active" onclick="switchTab('tabela', this)">Tabela</button>
+  <button class="tab" onclick="switchTab('perguntas', this)">Perguntas</button>
   <button class="tab" onclick="switchTab('transformer', this)">Transformar</button>
   <button class="tab" onclick="switchTab('flashcards', this)">Flashcards</button>
+  <button class="tab" onclick="switchTab('desafio', this)">⚡ Desafio</button>
   <button class="tab" onclick="switchTab('expressao', this)">Expressão</button>
 </div>
 
@@ -174,6 +211,34 @@
 
   <div class="section-title">Exemplos com Áudio</div>
   <table style="width:100%;border-collapse:collapse;font-size:0.88rem;" id="examplesTable"></table>
+</div>
+
+<div id="perguntas" class="view">
+  <div class="section-title">Palavras Interrogativas</div>
+  <div class="q-card"><div class="q-head"><span class="q-word" onclick="speak('o que')">o que</span><span class="q-mean">what</span></div><div class="q-note">Before the verb. At the end of a sentence, or alone, it is stressed: o quê.</div><div class="q-ex" onclick="speak('O que é isto?')">O que é isto?<span class="q-en">What is this?</span></div><div class="q-ex" onclick="speak('O que quer beber?')">O que quer beber?<span class="q-en">What would you like to drink?</span></div><div class="q-ex" onclick="speak('Estás a fazer o quê?')">Estás a fazer o quê?<span class="q-en">What are you doing?</span></div></div>
+  <div class="q-card"><div class="q-head"><span class="q-word" onclick="speak('quem')">quem</span><span class="q-mean">who</span></div><div class="q-note">Also after a preposition: de quem, com quem.</div><div class="q-ex" onclick="speak('Quem é aquele?')">Quem é aquele?<span class="q-en">Who is that?</span></div><div class="q-ex" onclick="speak('Quem fala português?')">Quem fala português?<span class="q-en">Who speaks Portuguese?</span></div><div class="q-ex" onclick="speak('De quem é este livro?')">De quem é este livro?<span class="q-en">Whose book is this?</span></div></div>
+  <div class="q-card"><div class="q-head"><span class="q-word" onclick="speak('onde')">onde</span><span class="q-mean">where</span></div><div class="q-note">For direction use para onde; for origin use de onde.</div><div class="q-ex" onclick="speak('Onde fica a estação?')">Onde fica a estação?<span class="q-en">Where is the station?</span></div><div class="q-ex" onclick="speak('Onde mora?')">Onde mora?<span class="q-en">Where do you live?</span></div><div class="q-ex" onclick="speak('Onde é que está o meu telemóvel?')">Onde é que está o meu telemóvel?<span class="q-en">Where is my phone?</span></div></div>
+  <div class="q-card"><div class="q-head"><span class="q-word" onclick="speak('quando')">quando</span><span class="q-mean">when</span></div><div class="q-note">Also a connector (see Conectores): Quando chego a casa, janto.</div><div class="q-ex" onclick="speak('Quando abre o museu?')">Quando abre o museu?<span class="q-en">When does the museum open?</span></div><div class="q-ex" onclick="speak('Quando é a próxima aula?')">Quando é a próxima aula?<span class="q-en">When is the next class?</span></div><div class="q-ex" onclick="speak('Quando chegas?')">Quando chegas?<span class="q-en">When do you arrive?</span></div></div>
+  <div class="q-card"><div class="q-head"><span class="q-word" onclick="speak('como')">como</span><span class="q-mean">how</span></div><div class="q-note">Also means since or like (see Conectores). In a question it asks about manner or state.</div><div class="q-ex" onclick="speak('Como está?')">Como está?<span class="q-en">How are you?</span></div><div class="q-ex" onclick="speak('Como chego ao Rossio?')">Como chego ao Rossio?<span class="q-en">How do I get to Rossio?</span></div><div class="q-ex" onclick="speak('Como se diz isto em português?')">Como se diz isto em português?<span class="q-en">How do you say this in Portuguese?</span></div></div>
+  <div class="q-card"><div class="q-head"><span class="q-word" onclick="speak('porque')">porque</span><span class="q-mean">why</span></div><div class="q-note">In a question: porque é que...? Alone or at the end: porquê. The answer starts with porque (because).</div><div class="q-ex" onclick="speak('Porque é que estás cansado?')">Porque é que estás cansado?<span class="q-en">Why are you tired?</span></div><div class="q-ex" onclick="speak('Porque não vamos ao cinema?')">Porque não vamos ao cinema?<span class="q-en">Why don&#x27;t we go to the cinema?</span></div><div class="q-ex" onclick="speak('Porquê?')">Porquê?<span class="q-en">Why?</span></div></div>
+  <div class="q-card"><div class="q-head"><span class="q-word" onclick="speak('qual')">qual</span><span class="q-mean">which, what (a choice)</span></div><div class="q-note">Plural quais. Use qual before ser: Qual é...? Use o que for other verbs.</div><div class="q-ex" onclick="speak('Qual é o seu nome?')">Qual é o seu nome?<span class="q-en">What is your name?</span></div><div class="q-ex" onclick="speak('Qual prefere, o vinho tinto ou o branco?')">Qual prefere, o vinho tinto ou o branco?<span class="q-en">Which do you prefer, the red wine or the white?</span></div><div class="q-ex" onclick="speak('Quais são os teus planos?')">Quais são os teus planos?<span class="q-en">What are your plans?</span></div></div>
+  <div class="q-card"><div class="q-head"><span class="q-word" onclick="speak('quanto')">quanto</span><span class="q-mean">how much, how many</span></div><div class="q-note">Agrees with the noun: quanto, quanta, quantos, quantas.</div><div class="q-ex" onclick="speak('Quanto custa?')">Quanto custa?<span class="q-en">How much does it cost?</span></div><div class="q-ex" onclick="speak('Quantos anos tens?')">Quantos anos tens?<span class="q-en">How old are you?</span></div><div class="q-ex" onclick="speak('Quanta água quer?')">Quanta água quer?<span class="q-en">How much water do you want?</span></div><div class="q-ex" onclick="speak('Para quantas pessoas?')">Para quantas pessoas?<span class="q-en">For how many people?</span></div></div>
+  <div class="q-card"><div class="q-head"><span class="q-word" onclick="speak('que')">que</span><span class="q-mean">what (before a noun)</span></div><div class="q-note">Que + noun. Not the same as o que, which stands alone.</div><div class="q-ex" onclick="speak('Que horas são?')">Que horas são?<span class="q-en">What time is it?</span></div><div class="q-ex" onclick="speak('Que dia é hoje?')">Que dia é hoje?<span class="q-en">What day is it today?</span></div><div class="q-ex" onclick="speak('Que vinho recomenda?')">Que vinho recomenda?<span class="q-en">What wine do you recommend?</span></div></div>
+  <div class="q-card"><div class="q-head"><span class="q-word" onclick="speak('a que horas')">a que horas</span><span class="q-mean">at what time</span></div><div class="q-note">Always a que horas for a time of day.</div><div class="q-ex" onclick="speak('A que horas abre?')">A que horas abre?<span class="q-en">What time does it open?</span></div><div class="q-ex" onclick="speak('A que horas é a reunião?')">A que horas é a reunião?<span class="q-en">What time is the meeting?</span></div><div class="q-ex" onclick="speak('A que horas fechas?')">A que horas fechas?<span class="q-en">What time do you close?</span></div></div>
+  <div class="q-card"><div class="q-head"><span class="q-word" onclick="speak('de onde')">de onde</span><span class="q-mean">from where</span></div><div class="q-note">Origin. Pairs with Sou de... in the answer.</div><div class="q-ex" onclick="speak('De onde é?')">De onde é?<span class="q-en">Where are you from?</span></div><div class="q-ex" onclick="speak('De onde vens?')">De onde vens?<span class="q-en">Where do you come from?</span></div></div>
+  <div class="q-card"><div class="q-head"><span class="q-word" onclick="speak('para onde')">para onde</span><span class="q-mean">to where</span></div><div class="q-note">Direction. Use para, as in Preposições.</div><div class="q-ex" onclick="speak('Para onde vai?')">Para onde vai?<span class="q-en">Where are you going?</span></div><div class="q-ex" onclick="speak('Para onde vamos?')">Para onde vamos?<span class="q-en">Where are we going?</span></div></div>
+  <div class="q-card"><div class="q-head"><span class="q-word" onclick="speak('há quanto tempo')">há quanto tempo</span><span class="q-mean">how long (up to now)</span></div><div class="q-note">há + time looks back from now. Answer: Há seis meses.</div><div class="q-ex" onclick="speak('Há quanto tempo mora em Lisboa?')">Há quanto tempo mora em Lisboa?<span class="q-en">How long have you lived in Lisbon?</span></div><div class="q-ex" onclick="speak('Há quanto tempo estás em Portugal?')">Há quanto tempo estás em Portugal?<span class="q-en">How long have you been in Portugal?</span></div></div>
+  <div class="q-card"><div class="q-head"><span class="q-word" onclick="speak('quanto custa')">quanto custa</span><span class="q-mean">how much does it cost</span></div><div class="q-note">For one item. Plural: quanto custam.</div><div class="q-ex" onclick="speak('Quanto custa este vinho?')">Quanto custa este vinho?<span class="q-en">How much does this wine cost?</span></div><div class="q-ex" onclick="speak('Quanto custam as framboesas?')">Quanto custam as framboesas?<span class="q-en">How much are the raspberries?</span></div></div>
+  <div class="q-card"><div class="q-head"><span class="q-word" onclick="speak('quanto é')">quanto é</span><span class="q-mean">how much is it (total)</span></div><div class="q-note">Asking for the total or the bill.</div><div class="q-ex" onclick="speak('Quanto é, por favor?')">Quanto é, por favor?<span class="q-en">How much is it, please?</span></div><div class="q-ex" onclick="speak('Quanto é tudo?')">Quanto é tudo?<span class="q-en">How much is everything?</span></div></div>
+  <div class="q-card"><div class="q-head"><span class="q-word" onclick="speak('como se diz')">como se diz</span><span class="q-mean">how do you say</span></div><div class="q-note">Use for any word you do not know. Say it often.</div><div class="q-ex" onclick="speak('Como se diz isto em português?')">Como se diz isto em português?<span class="q-en">How do you say this in Portuguese?</span></div><div class="q-ex" onclick="speak('Como se diz &quot;obrigado&quot; em inglês?')">Como se diz &quot;obrigado&quot; em inglês?<span class="q-en">How do you say &quot;obrigado&quot; in English?</span></div></div>
+  <div class="q-card"><div class="q-head"><span class="q-word" onclick="speak('é que')">é que</span><span class="q-mean">extra emphasis in questions</span></div><div class="q-note">Not translated. Adds natural rhythm after a question word: Onde é que...? O que é que...?</div><div class="q-ex" onclick="speak('O que é que queres?')">O que é que queres?<span class="q-en">What do you want?</span></div><div class="q-ex" onclick="speak('Onde é que fica a casa de banho?')">Onde é que fica a casa de banho?<span class="q-en">Where is the bathroom?</span></div><div class="q-ex" onclick="speak('Quando é que chegas?')">Quando é que chegas?<span class="q-en">When do you arrive?</span></div></div>
+  <div class="section-title">Armadilhas</div>
+  <div class="note-block">
+    <strong>porque · porquê · por que</strong> — Ask with <em>porque é que...?</em>. Alone or at the end, <em>porquê?</em>. The answer is <em>porque</em> (because). Leave two-word <em>por que</em> for later.<br>
+    <strong>qual vs o que</strong> — <em>Qual é o seu nome?</em> but <em>O que é isto?</em>. Qual asks for a choice or a name; o que asks for a definition. With verbs other than ser, use o que: <em>O que quer beber?</em><br>
+    <strong>quanto agrees</strong> — <em>Quanta água? Quantos anos? Quantas pessoas?</em><br>
+    <strong>como</strong> — also "since" (Conectores): <em>Como está frio, visto um casaco.</em>
+  </div>
 </div>
 
 <!-- TRANSFORMER -->
@@ -224,6 +289,35 @@
       </div>
     </div>
   </div>
+</div>
+
+<div id="desafio" class="view">
+<div class="desafio-wrap">
+  <div class="d-meta">
+    <span id="d-score-display">Score: 0 / 0</span>
+    <span class="d-streak" id="d-streak-display"></span>
+  </div>
+  <div class="d-card">
+    <span class="d-cat" id="d-cat"></span>
+    <div class="d-prompt" id="d-prompt"></div>
+    <div class="d-timer-ring">
+      <svg width="52" height="52" viewBox="0 0 52 52">
+        <circle class="d-timer-track" cx="26" cy="26" r="22"/>
+        <circle class="d-timer-fill" id="d-timer-fill" cx="26" cy="26" r="22"/>
+      </svg>
+      <div class="d-timer-text" id="d-timer-text">8</div>
+    </div>
+    <div class="d-divider"></div>
+    <div class="d-answer" id="d-answer" onclick="revealDesafio()"></div>
+    <button class="d-speak" onclick="speakDesafio()">🔊</button>
+    <div class="d-note" id="d-note"></div>
+    <div class="d-actions" id="d-actions" style="display:none">
+      <button class="d-btn disse" onclick="scoreDesafio(true)">✓ Disse</button>
+      <button class="d-btn nao" onclick="scoreDesafio(false)">✗ Não disse</button>
+    </div>
+    <div class="d-hint" id="d-hint">diz em voz alta · depois clica para revelar</div>
+  </div>
+</div>
 </div>
 
 <!-- EXPRESSÃO -->
@@ -353,6 +447,7 @@ const TYPE_COLORS = {
   afirmativa:   { bg: '#eef5f1', color: '#2d7a50', border: '#9acbb0' },
   negativa:     { bg: '#fdf2f1', color: '#a03428', border: '#dba09a' },
   interrogativa:{ bg: '#fdf6e8', color: '#b07d2a', border: '#e0c070' },
+  pergunta:     { bg: '#eef3fb', color: '#2a5fa0', border: '#9ab8e0' },
 };
 
 function typeBadgeStyle(type) {
@@ -492,6 +587,69 @@ const FC_CARDS = SENTENCE_SETS.flatMap(set => [
   { type: 'afirmativa',   en: set.en_af,  pt: set.af  },
   { type: 'negativa',     en: set.en_neg, pt: set.neg },
   { type: 'interrogativa',en: set.en_int, pt: set.int },
+]).concat([
+  { type: 'pergunta', en: 'what', pt: 'o que' },
+  { type: 'pergunta', en: 'What is this?', pt: 'O que é isto?' },
+  { type: 'pergunta', en: 'What would you like to drink?', pt: 'O que quer beber?' },
+  { type: 'pergunta', en: 'What are you doing?', pt: 'Estás a fazer o quê?' },
+  { type: 'pergunta', en: 'who', pt: 'quem' },
+  { type: 'pergunta', en: 'Who is that?', pt: 'Quem é aquele?' },
+  { type: 'pergunta', en: 'Who speaks Portuguese?', pt: 'Quem fala português?' },
+  { type: 'pergunta', en: 'Whose book is this?', pt: 'De quem é este livro?' },
+  { type: 'pergunta', en: 'where', pt: 'onde' },
+  { type: 'pergunta', en: 'Where is the station?', pt: 'Onde fica a estação?' },
+  { type: 'pergunta', en: 'Where do you live?', pt: 'Onde mora?' },
+  { type: 'pergunta', en: 'Where is my phone?', pt: 'Onde é que está o meu telemóvel?' },
+  { type: 'pergunta', en: 'when', pt: 'quando' },
+  { type: 'pergunta', en: 'When does the museum open?', pt: 'Quando abre o museu?' },
+  { type: 'pergunta', en: 'When is the next class?', pt: 'Quando é a próxima aula?' },
+  { type: 'pergunta', en: 'When do you arrive?', pt: 'Quando chegas?' },
+  { type: 'pergunta', en: 'how', pt: 'como' },
+  { type: 'pergunta', en: 'How are you?', pt: 'Como está?' },
+  { type: 'pergunta', en: 'How do I get to Rossio?', pt: 'Como chego ao Rossio?' },
+  { type: 'pergunta', en: 'How do you say this in Portuguese?', pt: 'Como se diz isto em português?' },
+  { type: 'pergunta', en: 'why', pt: 'porque' },
+  { type: 'pergunta', en: 'Why are you tired?', pt: 'Porque é que estás cansado?' },
+  { type: 'pergunta', en: 'Why don\'t we go to the cinema?', pt: 'Porque não vamos ao cinema?' },
+  { type: 'pergunta', en: 'Why?', pt: 'Porquê?' },
+  { type: 'pergunta', en: 'which, what (a choice)', pt: 'qual' },
+  { type: 'pergunta', en: 'What is your name?', pt: 'Qual é o seu nome?' },
+  { type: 'pergunta', en: 'Which do you prefer, the red wine or the white?', pt: 'Qual prefere, o vinho tinto ou o branco?' },
+  { type: 'pergunta', en: 'What are your plans?', pt: 'Quais são os teus planos?' },
+  { type: 'pergunta', en: 'how much, how many', pt: 'quanto' },
+  { type: 'pergunta', en: 'How much does it cost?', pt: 'Quanto custa?' },
+  { type: 'pergunta', en: 'How old are you?', pt: 'Quantos anos tens?' },
+  { type: 'pergunta', en: 'How much water do you want?', pt: 'Quanta água quer?' },
+  { type: 'pergunta', en: 'For how many people?', pt: 'Para quantas pessoas?' },
+  { type: 'pergunta', en: 'what (before a noun)', pt: 'que' },
+  { type: 'pergunta', en: 'What time is it?', pt: 'Que horas são?' },
+  { type: 'pergunta', en: 'What day is it today?', pt: 'Que dia é hoje?' },
+  { type: 'pergunta', en: 'What wine do you recommend?', pt: 'Que vinho recomenda?' },
+  { type: 'pergunta', en: 'at what time', pt: 'a que horas' },
+  { type: 'pergunta', en: 'What time does it open?', pt: 'A que horas abre?' },
+  { type: 'pergunta', en: 'What time is the meeting?', pt: 'A que horas é a reunião?' },
+  { type: 'pergunta', en: 'What time do you close?', pt: 'A que horas fechas?' },
+  { type: 'pergunta', en: 'from where', pt: 'de onde' },
+  { type: 'pergunta', en: 'Where are you from?', pt: 'De onde é?' },
+  { type: 'pergunta', en: 'Where do you come from?', pt: 'De onde vens?' },
+  { type: 'pergunta', en: 'to where', pt: 'para onde' },
+  { type: 'pergunta', en: 'Where are you going?', pt: 'Para onde vai?' },
+  { type: 'pergunta', en: 'Where are we going?', pt: 'Para onde vamos?' },
+  { type: 'pergunta', en: 'how long (up to now)', pt: 'há quanto tempo' },
+  { type: 'pergunta', en: 'How long have you lived in Lisbon?', pt: 'Há quanto tempo mora em Lisboa?' },
+  { type: 'pergunta', en: 'How long have you been in Portugal?', pt: 'Há quanto tempo estás em Portugal?' },
+  { type: 'pergunta', en: 'how much does it cost', pt: 'quanto custa' },
+  { type: 'pergunta', en: 'How much does this wine cost?', pt: 'Quanto custa este vinho?' },
+  { type: 'pergunta', en: 'How much are the raspberries?', pt: 'Quanto custam as framboesas?' },
+  { type: 'pergunta', en: 'how much is it (total)', pt: 'quanto é' },
+  { type: 'pergunta', en: 'How much is it, please?', pt: 'Quanto é, por favor?' },
+  { type: 'pergunta', en: 'How much is everything?', pt: 'Quanto é tudo?' },
+  { type: 'pergunta', en: 'how do you say', pt: 'como se diz' },
+  { type: 'pergunta', en: 'How do you say "obrigado" in English?', pt: 'Como se diz "obrigado" em inglês?' },
+  { type: 'pergunta', en: 'extra emphasis in questions', pt: 'é que' },
+  { type: 'pergunta', en: 'What do you want?', pt: 'O que é que queres?' },
+  { type: 'pergunta', en: 'Where is the bathroom?', pt: 'Onde é que fica a casa de banho?' },
+  { type: 'pergunta', en: 'When do you arrive?', pt: 'Quando é que chegas?' },
 ]);
 
 let fcDeck = [...FC_CARDS], fcIdx = 0, fcRevealed = false;
@@ -531,6 +689,105 @@ function switchTab(id, tabEl) {
   tabEl.classList.add('active');
   if (id === 'transformer') initTransformer();
   if (id === 'flashcards') renderFC();
+  if (id === 'desafio') initDesafio();
+}
+
+// ── DESAFIO ───────────────────────────────────────────────────────
+const DESAFIO_CARDS = [
+  { cat:'Perguntas', prompt:'Ask "What is this?"', answer:'O que é isto?', note:'o que: Before the verb. At the end of a sentence, or alone, it is stressed: o quê.' },
+  { cat:'Perguntas', prompt:'Ask "What would you like to drink?"', answer:'O que quer beber?', note:'o que: Before the verb. At the end of a sentence, or alone, it is stressed: o quê.' },
+  { cat:'Perguntas', prompt:'Ask "What are you doing?"', answer:'Estás a fazer o quê?', note:'o que: Before the verb. At the end of a sentence, or alone, it is stressed: o quê.' },
+  { cat:'Perguntas', prompt:'Ask "Who is that?"', answer:'Quem é aquele?', note:'quem: Also after a preposition: de quem, com quem.' },
+  { cat:'Perguntas', prompt:'Ask "Who speaks Portuguese?"', answer:'Quem fala português?', note:'quem: Also after a preposition: de quem, com quem.' },
+  { cat:'Perguntas', prompt:'Ask "Whose book is this?"', answer:'De quem é este livro?', note:'quem: Also after a preposition: de quem, com quem.' },
+  { cat:'Perguntas', prompt:'Ask "Where is the station?"', answer:'Onde fica a estação?', note:'onde: For direction use para onde; for origin use de onde.' },
+  { cat:'Perguntas', prompt:'Ask "Where do you live?"', answer:'Onde mora?', note:'onde: For direction use para onde; for origin use de onde.' },
+  { cat:'Perguntas', prompt:'Ask "Where is my phone?"', answer:'Onde é que está o meu telemóvel?', note:'onde: For direction use para onde; for origin use de onde.' },
+  { cat:'Perguntas', prompt:'Ask "When does the museum open?"', answer:'Quando abre o museu?', note:'quando: Also a connector (see Conectores): Quando chego a casa, janto.' },
+  { cat:'Perguntas', prompt:'Ask "When is the next class?"', answer:'Quando é a próxima aula?', note:'quando: Also a connector (see Conectores): Quando chego a casa, janto.' },
+  { cat:'Perguntas', prompt:'Ask "When do you arrive?"', answer:'Quando chegas?', note:'quando: Also a connector (see Conectores): Quando chego a casa, janto.' },
+  { cat:'Perguntas', prompt:'Ask "How are you?"', answer:'Como está?', note:'como: Also means since or like (see Conectores). In a question it asks about manner or state.' },
+  { cat:'Perguntas', prompt:'Ask "How do I get to Rossio?"', answer:'Como chego ao Rossio?', note:'como: Also means since or like (see Conectores). In a question it asks about manner or state.' },
+  { cat:'Perguntas', prompt:'Ask "How do you say this in Portuguese?"', answer:'Como se diz isto em português?', note:'como: Also means since or like (see Conectores). In a question it asks about manner or state.' },
+  { cat:'Perguntas', prompt:'Ask "Why are you tired?"', answer:'Porque é que estás cansado?', note:'porque: In a question: porque é que...? Alone or at the end: porquê. The answer starts with porque (because).' },
+  { cat:'Perguntas', prompt:'Ask "Why don\'t we go to the cinema?"', answer:'Porque não vamos ao cinema?', note:'porque: In a question: porque é que...? Alone or at the end: porquê. The answer starts with porque (because).' },
+  { cat:'Perguntas', prompt:'Ask "Why?"', answer:'Porquê?', note:'porque: In a question: porque é que...? Alone or at the end: porquê. The answer starts with porque (because).' },
+  { cat:'Perguntas', prompt:'Ask "What is your name?"', answer:'Qual é o seu nome?', note:'qual: Plural quais. Use qual before ser: Qual é...? Use o que for other verbs.' },
+  { cat:'Perguntas', prompt:'Ask "Which do you prefer, the red wine or the white?"', answer:'Qual prefere, o vinho tinto ou o branco?', note:'qual: Plural quais. Use qual before ser: Qual é...? Use o que for other verbs.' },
+  { cat:'Perguntas', prompt:'Ask "What are your plans?"', answer:'Quais são os teus planos?', note:'qual: Plural quais. Use qual before ser: Qual é...? Use o que for other verbs.' },
+  { cat:'Perguntas', prompt:'Ask "How much does it cost?"', answer:'Quanto custa?', note:'quanto: Agrees with the noun: quanto, quanta, quantos, quantas.' },
+  { cat:'Perguntas', prompt:'Ask "How old are you?"', answer:'Quantos anos tens?', note:'quanto: Agrees with the noun: quanto, quanta, quantos, quantas.' },
+  { cat:'Perguntas', prompt:'Ask "How much water do you want?"', answer:'Quanta água quer?', note:'quanto: Agrees with the noun: quanto, quanta, quantos, quantas.' },
+  { cat:'Perguntas', prompt:'Ask "For how many people?"', answer:'Para quantas pessoas?', note:'quanto: Agrees with the noun: quanto, quanta, quantos, quantas.' },
+  { cat:'Perguntas', prompt:'Ask "What time is it?"', answer:'Que horas são?', note:'que: Que + noun. Not the same as o que, which stands alone.' },
+  { cat:'Perguntas', prompt:'Ask "What day is it today?"', answer:'Que dia é hoje?', note:'que: Que + noun. Not the same as o que, which stands alone.' },
+  { cat:'Perguntas', prompt:'Ask "What wine do you recommend?"', answer:'Que vinho recomenda?', note:'que: Que + noun. Not the same as o que, which stands alone.' },
+  { cat:'Perguntas', prompt:'Ask "What time does it open?"', answer:'A que horas abre?', note:'a que horas: Always a que horas for a time of day.' },
+  { cat:'Perguntas', prompt:'Ask "What time is the meeting?"', answer:'A que horas é a reunião?', note:'a que horas: Always a que horas for a time of day.' },
+  { cat:'Perguntas', prompt:'Ask "What time do you close?"', answer:'A que horas fechas?', note:'a que horas: Always a que horas for a time of day.' },
+  { cat:'Perguntas', prompt:'Ask "Where are you from?"', answer:'De onde é?', note:'de onde: Origin. Pairs with Sou de... in the answer.' },
+  { cat:'Perguntas', prompt:'Ask "Where do you come from?"', answer:'De onde vens?', note:'de onde: Origin. Pairs with Sou de... in the answer.' },
+  { cat:'Perguntas', prompt:'Ask "Where are you going?"', answer:'Para onde vai?', note:'para onde: Direction. Use para, as in Preposições.' },
+  { cat:'Perguntas', prompt:'Ask "Where are we going?"', answer:'Para onde vamos?', note:'para onde: Direction. Use para, as in Preposições.' },
+  { cat:'Perguntas', prompt:'Ask "How long have you lived in Lisbon?"', answer:'Há quanto tempo mora em Lisboa?', note:'há quanto tempo: há + time looks back from now. Answer: Há seis meses.' },
+  { cat:'Perguntas', prompt:'Ask "How long have you been in Portugal?"', answer:'Há quanto tempo estás em Portugal?', note:'há quanto tempo: há + time looks back from now. Answer: Há seis meses.' },
+  { cat:'Perguntas', prompt:'Ask "How much does this wine cost?"', answer:'Quanto custa este vinho?', note:'quanto custa: For one item. Plural: quanto custam.' },
+  { cat:'Perguntas', prompt:'Ask "How much are the raspberries?"', answer:'Quanto custam as framboesas?', note:'quanto custa: For one item. Plural: quanto custam.' },
+  { cat:'Perguntas', prompt:'Ask "How much is it, please?"', answer:'Quanto é, por favor?', note:'quanto é: Asking for the total or the bill.' },
+  { cat:'Perguntas', prompt:'Ask "How much is everything?"', answer:'Quanto é tudo?', note:'quanto é: Asking for the total or the bill.' },
+  { cat:'Perguntas', prompt:'Ask "What do you want?"', answer:'O que é que queres?', note:'é que: Not translated. Adds natural rhythm after a question word: Onde é que...? O que é que...?' },
+  { cat:'Perguntas', prompt:'Ask "Where is the bathroom?"', answer:'Onde é que fica a casa de banho?', note:'é que: Not translated. Adds natural rhythm after a question word: Onde é que...? O que é que...?' },
+  { cat:'Perguntas', prompt:'Ask "When do you arrive?"', answer:'Quando é que chegas?', note:'é que: Not translated. Adds natural rhythm after a question word: Onde é que...? O que é que...?' },
+];
+let dDeck=[], dIdx=0, dCorrect=0, dTotal=0, dStreak=0, dTimer=null, dSecondsLeft=8, dRevealed=false;
+function initDesafio() {
+  dDeck=[...DESAFIO_CARDS].sort(()=>Math.random()-0.5);
+  dIdx=0; dCorrect=0; dTotal=0; dStreak=0;
+  loadDesafioCard();
+}
+function loadDesafioCard() {
+  dRevealed=false; clearInterval(dTimer); dSecondsLeft=8;
+  const c=dDeck[dIdx%dDeck.length];
+  document.getElementById('d-cat').textContent=c.cat;
+  document.getElementById('d-prompt').textContent=c.prompt;
+  document.getElementById('d-answer').textContent=c.answer;
+  document.getElementById('d-answer').classList.remove('revealed');
+  document.getElementById('d-note').textContent=c.note||'';
+  document.getElementById('d-note').style.display='none';
+  document.getElementById('d-actions').style.display='none';
+  document.getElementById('d-hint').style.display='block';
+  document.getElementById('d-hint').textContent='diz em voz alta · depois clica para revelar';
+  document.getElementById('d-score-display').textContent=`Score: ${dCorrect} / ${dTotal}`;
+  document.getElementById('d-streak-display').textContent=dStreak>=3?`🔥 ${dStreak}`:'';
+  const fill=document.getElementById('d-timer-fill'), txt=document.getElementById('d-timer-text');
+  fill.style.strokeDashoffset=0; fill.className='d-timer-fill'; txt.textContent=8;
+  dTimer=setInterval(()=>{
+    dSecondsLeft--;
+    txt.textContent=dSecondsLeft;
+    fill.style.strokeDashoffset=138*(1-dSecondsLeft/8);
+    if(dSecondsLeft<=2) fill.classList.add('warn');
+    if(dSecondsLeft<=1){fill.classList.remove('warn');fill.classList.add('danger');}
+    if(dSecondsLeft<=0){
+      clearInterval(dTimer);
+      txt.textContent='✓';
+      fill.style.stroke='var(--border)';
+      document.getElementById('d-hint').textContent='tempo — toca para revelar';
+    }
+  },1000);
+}
+function revealDesafio() {
+  if(dRevealed) return; dRevealed=true; clearInterval(dTimer);
+  document.getElementById('d-timer-text').textContent='✓';
+  document.getElementById('d-answer').classList.add('revealed');
+  document.getElementById('d-actions').style.display='flex';
+  document.getElementById('d-note').style.display='block';
+  document.getElementById('d-hint').style.display='none';
+  speak(dDeck[dIdx%dDeck.length].answer);
+}
+function speakDesafio(){speak(dDeck[dIdx%dDeck.length].answer);}
+function scoreDesafio(correct){
+  dTotal++; if(correct){dCorrect++;dStreak++;}else{dStreak=0;}
+  dIdx++; loadDesafioCard();
 }
 
 // ── INIT ──────────────────────────────────────────────────────────
