@@ -93,6 +93,7 @@
   .grade button { flex: 1; font-family: var(--mono); font-size: 0.9rem; font-weight: 600; padding: 0.9rem 0.5rem; min-height: 52px; border: none; border-radius: 8px; cursor: pointer; }
   .grade .no { background: #fdf0ef; color: var(--red); border: 1px solid #dba09a; }
   .grade .yes { background: var(--green); color: #fff; }
+  .grade .half { background: #fff7e6; color: #8a5a00; border: 1px solid #e0b860; font-size: 0.78rem; }
 
   /* DESAFIO */
   .desafio-wrap { max-width: 520px; margin: 0 auto; }
@@ -249,6 +250,7 @@
         <button class="reveal-btn" id="fReveal">mostrar resposta</button>
         <div class="grade" id="fGrade" style="display:none">
           <button class="no" id="fNo">✗ Não sabia</button>
+          <button class="half" id="fHalf">~ Palavra sim, frase não</button>
           <button class="yes" id="fYes">✓ Sabia</button>
         </div>
       </div>
@@ -369,9 +371,11 @@ function isRec(r) {
 
 function applyResult(rec, correct, today, now) {
   if (!rec) {
+    if (correct === 'half') return { b: 1, d: today + 1, f: today, l: today, n: 1, w: 0, u: now };   // word right, sentence wrong
     const b = correct ? 2 : 1;
     return { b, d: today + INTERVALS[b], f: today, l: today, n: 1, w: correct ? 0 : 1, u: now };
   }
+  if (correct === 'half') return { b: rec.b, d: today + 1, f: rec.f, l: today, n: rec.n + 1, w: rec.w, u: now };   // stays in its box, back tomorrow
   const b = correct ? Math.min(5, rec.b + 1) : 1;
   return { b, d: today + INTERVALS[b], f: rec.f, l: today, n: rec.n + 1, w: rec.w + (correct ? 0 : 1), u: now };
 }
@@ -678,6 +682,7 @@ function flashReveal() {
   $('fHint').textContent = '';
   $('fReveal').style.display = 'none';
   $('fGrade').style.display = 'flex';
+  $('fHalf').style.display = cur().card.x ? 'block' : 'none';
   speak(speechText(cur().card));
 }
 $('fReveal').onclick = flashReveal;
@@ -689,6 +694,7 @@ $('fExPt').onclick = () => { $('fExPt').classList.add('revealed'); speak(cur().c
 $('fExEn').onclick = () => $('fExEn').classList.add('revealed');
 $('fYes').onclick = () => grade(true);
 $('fNo').onclick = () => grade(false);
+$('fHalf').onclick = () => grade('half');
 
 function renderDesafio(c) {
   $('dCat').textContent = c.c + (cur().tries ? ' · outra vez' : '');
@@ -743,7 +749,7 @@ function grade(correct) {
     progress[k] = applyResult(progress[k], correct, todayIdx(), Date.now());
     saveProgress();
     S.first.set(c.i, correct);
-    if (correct) { S.right++; S.streak++; } else { S.streak = 0; S.missed.push(c); }
+    if (correct) { S.right++; S.streak++; if (correct === 'half') S.half = (S.half || 0) + 1; } else { S.streak = 0; S.missed.push(c); }
   } else if (!correct) { S.streak = 0; }
   if (!correct && it.tries < 2) {             // see it again a few cards later
     const at = Math.min(S.queue.length, S.pos + 1 + 4);
@@ -757,7 +763,7 @@ function finishSession() {
   clearInterval(S.timer);
   const total = S.unique, right = S.right;
   $('doneBig').textContent = right + ' / ' + total;
-  $('doneSub').textContent = right === total ? 'tudo certo à primeira' : 'certos à primeira';
+  $('doneSub').textContent = (right === total ? 'tudo certo à primeira' : 'certos à primeira') + (S.half ? ' · ' + S.half + ' com a frase por treinar' : '');
   const list = $('doneMissed'); list.innerHTML = '';
   $('doneMissedWrap').style.display = S.missed.length ? 'block' : 'none';
   S.missed.forEach(c => {
@@ -784,7 +790,8 @@ document.addEventListener('keydown', e => {
   if (e.key === ' ' || e.key === 'Enter') {
     e.preventDefault();
     if (!S.revealed) (S.mode === 'f' ? flashReveal : desafioReveal)();
-  } else if (S.revealed && (e.key === '1' || e.key === 'ArrowLeft')) grade(false);
+  } else if (S.revealed && S.mode === 'f' && cur().card.x && (e.key === '3' || e.key === 'ArrowDown')) grade('half');
+  else if (S.revealed && (e.key === '1' || e.key === 'ArrowLeft')) grade(false);
   else if (S.revealed && (e.key === '2' || e.key === 'ArrowRight')) grade(true);
 });
 
