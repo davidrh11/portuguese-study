@@ -474,6 +474,13 @@ const IRREGULARES = [
     irr_p:{eu:true,tu:true,vce:true,vces:true}, irr_pp:{},
     ex_eu:'Vejo o mar da minha janela.', ex_eu_en:'I can see the sea from my window.',
     ex_vce:'Você vê televisão?', ex_vce_en:'Do you watch television?' },
+  { inf:'ler', ctx:['rotina'],    en:'to read',
+    eu_p:'leio',  vce_p:'lê',   eu_pp:'li',     vce_pp:'leu',   irr_eu:true, irr_vce:true,
+    full_p:{eu:'leio',tu:'lês',vce:'lê',nos:'lemos',vces:'leem'},
+    full_pp:{eu:'li',tu:'leste',vce:'leu',nos:'lemos',vces:'leram'},
+    irr_p:{eu:true,tu:true,vce:true,vces:true}, irr_pp:{eu:true,tu:true,vce:true,nos:true,vces:true},
+    ex_eu:'Leio o jornal de manhã.', ex_eu_en:'I read the newspaper in the morning.',
+    ex_vce:'Você lê livros em português?', ex_vce_en:'Do you read books in Portuguese?' },
   { inf:'saber', ctx:['trabalho'],  en:'to know (facts)',
     eu_p:'sei',   vce_p:'sabe', eu_pp:'soube',  vce_pp:'soube', irr_eu:true, irr_vce:false,
     full_p:{eu:'sei',tu:'sabes',vce:'sabe',nos:'sabemos',vces:'sabem'},
@@ -532,6 +539,13 @@ const AR_VERBS = [
   { inf:'falar', ctx:['rotina'],     en:'to speak',       eu:'falo',     vce:'fala',     ex_eu:'Eu falo português e inglês.',              ex_eu_en:'I speak Portuguese and English.',           ex_vce:'Você fala devagar, por favor?',     ex_vce_en:'Can you speak slowly, please?' },
   { inf:'gostar de', ctx:['estado'], en:'to like (+ de)', eu:'gosto de', vce:'gosta de', ex_eu:'Eu gosto de passear em Lisboa.',          ex_eu_en:'I like strolling in Lisbon.',               ex_vce:'Você gosta de música?',             ex_vce_en:'Do you like music?' },
   { inf:'ficar', ctx:['direcoes','estado'],     en:'to stay / remain / become / be located', eu:'fico', vce:'fica', ex_eu:'Fico em casa aos domingos.', ex_eu_en:'I stay home on Sundays.',              ex_vce:'Onde fica a estação?',              ex_vce_en:'Where is the station located?' },
+  { inf:'apanhar', ctx:['direcoes','rotina'], en:'to catch (bus, boat, metro)', eu:'apanho', vce:'apanha', ex_eu:'Apanho o metro às oito.', ex_eu_en:'I catch the metro at eight.', ex_vce:'Você apanha o autocarro para casa?', ex_vce_en:'Do you catch the bus home?' },
+  { inf:'lanchar', ctx:['restaurante','rotina'], en:'to have a snack', eu:'lancho', vce:'lancha', ex_eu:'Lancho às quatro da tarde.', ex_eu_en:'I have a snack at four in the afternoon.', ex_vce:'Você lancha no escritório?', ex_vce_en:'Do you have a snack at the office?' },
+  { inf:'jantar', ctx:['restaurante','rotina'], en:'to have dinner', eu:'janto', vce:'janta', ex_eu:'Janto às oito.', ex_eu_en:'I have dinner at eight.', ex_vce:'Onde você janta?', ex_vce_en:'Where do you have dinner?' },
+  { inf:'adorar', ctx:['estado'], en:'to love / adore', eu:'adoro', vce:'adora', ex_eu:'Adoro viver em Lisboa.', ex_eu_en:'I love living in Lisbon.', ex_vce:'O Rogério adora trabalhar ao ar livre.', ex_vce_en:'Rogério loves working outdoors.' },
+  { inf:'cuidar de', ctx:['trabalho'], en:'to take care of (+ de)', eu:'cuido de', vce:'cuida de', ex_eu:'Cuido do meu gato.', ex_eu_en:'I take care of my cat.', ex_vce:'A Carla cuida das doenças dos animais.', ex_vce_en:'Carla looks after sick animals.' },
+  { inf:'criar', ctx:['trabalho'], en:'to create', eu:'crio', vce:'cria', ex_eu:'Crio um projeto novo.', ex_eu_en:'I am creating a new project.', ex_vce:'A Mariana cria novas start-ups.', ex_vce_en:'Mariana creates new start-ups.' },
+  { inf:'analisar', ctx:['trabalho'], en:'to analyse', eu:'analiso', vce:'analisa', ex_eu:'Analiso os dados todos os dias.', ex_eu_en:'I analyse the data every day.', ex_vce:'A Andreia analisa dados e trabalha à distância.', ex_vce_en:'Andreia analyses data and works remotely.' },
 ];
 
 const ER_IR_VERBS = [
@@ -654,6 +668,13 @@ const PRETERITO_MAP = {
   'falar':     { p:{eu:'falei',tu:'falaste',vce:'falou',nos:'falámos',vces:'falaram'} },
   'gostar de': { p:{eu:'gostei de',tu:'gostaste de',vce:'gostou de',nos:'gostámos de',vces:'gostaram de'} },
   'ficar':     { p:{eu:'fiquei',tu:'ficaste',vce:'ficou',nos:'ficámos',vces:'ficaram'}, irr:{eu:true} },
+  'apanhar':   { p:{eu:'apanhei',tu:'apanhaste',vce:'apanhou',nos:'apanhámos',vces:'apanharam'} },
+  'lanchar':   { p:{eu:'lanchei',tu:'lanchaste',vce:'lanchou',nos:'lanchámos',vces:'lancharam'} },
+  'jantar':    { p:{eu:'jantei',tu:'jantaste',vce:'jantou',nos:'jantámos',vces:'jantaram'} },
+  'adorar':    { p:{eu:'adorei',tu:'adoraste',vce:'adorou',nos:'adorámos',vces:'adoraram'} },
+  'cuidar de': { p:{eu:'cuidei de',tu:'cuidaste de',vce:'cuidou de',nos:'cuidámos de',vces:'cuidaram de'} },
+  'criar':     { p:{eu:'criei',tu:'criaste',vce:'criou',nos:'criámos',vces:'criaram'} },
+  'analisar':  { p:{eu:'analisei',tu:'analisaste',vce:'analisou',nos:'analisámos',vces:'analisaram'} },
   // -ER verbs
   'viver':     { p:{eu:'vivi',tu:'viveste',vce:'viveu',nos:'vivemos',vces:'viveram'} },
   'aprender':  { p:{eu:'aprendi',tu:'aprendeste',vce:'aprendeu',nos:'aprendemos',vces:'aprenderam'} },
@@ -665,10 +686,17 @@ const PRETERITO_MAP = {
   'abrir':     { p:{eu:'abri',tu:'abriste',vce:'abriu',nos:'abrimos',vces:'abriram'} },
 };
 
+// Present tense of a regular -AR verb; handles verbs that carry a fixed preposition ('gosto de').
+function derivePresentAR(v) {
+  const m = v.eu.match(/^(.+?)o( de)?$/);
+  const stem = m ? m[1] : v.eu.replace(/o$/,'');
+  const suf = (m && m[2]) || '';
+  return {eu:v.eu, tu:stem+'as'+suf, vce:v.vce, nos:stem+'amos'+suf, vces:stem+'am'+suf};
+}
+
 function makeArCard(v) {
   const id = 'ar' + (++expandCount);
-  const stem = v.eu.replace(/o$/,'');
-  const fp = {eu:v.eu, tu:stem+'as', vce:v.vce, nos:stem+'amos', vces:stem+'am'};
+  const fp = derivePresentAR(v);
   const pret = PRETERITO_MAP[v.inf];
   EXPAND_DATA[id] = { fp, fp_irr:{}, fp_label:'Presente', fpp:pret?pret.p:null, fpp_irr:pret?pret.irr:{}, fpp_label:'Pretérito Perfeito' };
   return `<div class="verb-card">
@@ -737,11 +765,10 @@ function normalizeVerb(v) {
   if (!isSimple) {
     // AR_VERBS / ER_IR_VERBS — derive present the same way makeArCard/makeErIrCard do
     const eu = v.eu;
-    const stem = eu.replace(/o$/,'');
     const isIR = v.inf.endsWith('ir');
     full_p = isIR
-      ? {eu:eu, tu:stem+'es', vce:v.vce, nos:stem+'imos', vces:stem+'em'}
-      : {eu:eu, tu:stem+'as', vce:v.vce, nos:stem+'amos', vces:stem+'am'};
+      ? (function(){ const stem = eu.replace(/o$/,''); return {eu:eu, tu:stem+'es', vce:v.vce, nos:stem+'imos', vces:stem+'em'}; })()
+      : derivePresentAR(v);
     const pret = PRETERITO_MAP[v.inf];
     full_pp = pret ? pret.p : null;
     irr_pp = pret ? pret.irr : {};
@@ -842,6 +869,14 @@ const EU_FORMS = {
   'to go out/leave':   'I go out / I leave',
   'to open':           'I open',
   'to stay / remain / become / be located':   'I stay / remain / become',
+  'to catch (bus, boat, metro)': 'I catch',
+  'to have a snack': 'I have a snack',
+  'to have dinner': 'I have dinner',
+  'to love / adore': 'I love',
+  'to take care of (+ de)': 'I take care of',
+  'to create': 'I create',
+  'to analyse': 'I analyse',
+  'to read': 'I read',
 };
 const VOCE_FORMS = {
   'to be (permanent)': 'you are (permanent)',
@@ -881,6 +916,14 @@ const VOCE_FORMS = {
   'to go out/leave':   'you go out / you leave',
   'to open':           'you open',
   'to stay / remain / become / be located':   'you stay / remain / become',
+  'to catch (bus, boat, metro)': 'you catch',
+  'to have a snack': 'you have a snack',
+  'to have dinner': 'you have dinner',
+  'to love / adore': 'you love',
+  'to take care of (+ de)': 'you take care of',
+  'to create': 'you create',
+  'to analyse': 'you analyse',
+  'to read': 'you read',
 };
 const PAST_EU_FORMS = {
   'to be (permanent)': 'I was (permanent, past)',
@@ -899,6 +942,14 @@ const PAST_EU_FORMS = {
   'to want':           'I wanted',
   'to put / place':    'I put (past)',
   'to lose / miss':    'I lost',
+  'to catch (bus, boat, metro)': 'I caught',
+  'to have a snack': 'I had a snack',
+  'to have dinner': 'I had dinner',
+  'to love / adore': 'I loved',
+  'to take care of (+ de)': 'I took care of',
+  'to create': 'I created',
+  'to analyse': 'I analysed',
+  'to read': 'I read (past)',
 };
 function enPrompt(en, subj) { return EU_FORMS[en] || VOCE_FORMS[en] || (subj==='eu' ? 'I — '+en : 'you — '+en); }
 function enPromptVoce(en) { return VOCE_FORMS[en] || 'you — '+en; }
@@ -1054,6 +1105,29 @@ const DESAFIO_CARDS = [
   { cat:'Ficar', prompt:'Ask "where is the pharmacy?"', answer:'Onde fica a farmácia?', note:'onde fica + any place — the pattern to memorize' },
   { cat:'Ficar', prompt:'Say "she stayed at the office until eight."', answer:'Ela ficou no escritório até às oito.', note:'ficou → to stay, past tense' },
   { cat:'Ficar', prompt:'Say "I always get nervous before the exam." (become)', answer:'Fico sempre nervoso antes do exame.', note:'fico → to become, ficar + adjective' },
+  { cat:'Exercício da aula', prompt:'Say "I am super tired today." (to the teacher)', answer:'Eu hoje estou super cansado.', note:'eu → estou, estado temporário' },
+  { cat:'Exercício da aula', prompt:'Say "The book is on the floor."', answer:'O livro está no chão.', note:'o livro → está' },
+  { cat:'Exercício da aula', prompt:'Say "Professor, I have a question!"', answer:'Professor, eu estou com uma dúvida!', note:'estar com + dúvida, estado temporário' },
+  { cat:'Exercício da aula', prompt:'Say "The restaurant is open!"', answer:'O restaurante está aberto!', note:'o restaurante → está, aberto é estado' },
+  { cat:'Exercício da aula', prompt:'Say "The table at the restaurant is already reserved."', answer:'A mesa no restaurante já está reservada.', note:'a mesa → está' },
+  { cat:'Exercício da aula', prompt:'Ask "How is your bitoque, darling?" (informal)', answer:'Como está o teu bitoque, querido?', note:'o bitoque → está' },
+  { cat:'Exercício da aula', prompt:'Ask "How are you?" (formal, to a woman)', answer:'Como está a senhora?', note:'a senhora → está' },
+  { cat:'Exercício da aula', prompt:'Say "I am very well. Thank you so much." (you are a man)', answer:'Estou muito bem. Obrigadíssimo.', note:'eu → estou; obrigadíssimo, forma masculina' },
+  { cat:'Exercício da aula', prompt:'Say "I am a bit under the weather, but I am better now."', answer:'Estou meio constipado. Mas já estou melhor agora.', note:'eu → estou; constipado = com constipação' },
+  { cat:'Exercício da aula', prompt:'Say "In Portugal, the shopping centres are open on weekends."', answer:'Em Portugal, os centros comerciais estão abertos aos fins de semana.', note:'os centros → estão' },
+  { cat:'Exercício da aula', prompt:'Say "Sandra and I are on holiday. Finally!"', answer:'Eu e a Sandra estamos de férias. Finalmente!', note:'eu e a Sandra → estamos; de férias, expressão fixa' },
+  { cat:'Exercício da aula', prompt:'Say "It is so hot today!"', answer:'Hoje está muito calor!', note:'tempo → está, sem sujeito' },
+  { cat:'Exercício da aula', prompt:'Say "Tomorrow the weather is going to be horrible: only rain and wind."', answer:'Amanhã, o tempo vai estar horrível: só chuva e vento.', note:'futuro próximo: vai + estar' },
+  { cat:'Verbos novos', prompt:'Say "I catch the metro at eight."', answer:'Apanho o metro às oito.', note:'apanhar = catch, para transportes' },
+  { cat:'Verbos novos', prompt:'Say "Shall we have a snack together?"', answer:'Vamos lanchar juntos?', note:'lanchar = merendar, vamos + infinitivo' },
+  { cat:'Verbos novos', prompt:'Say "I love living in Lisbon."', answer:'Adoro viver em Lisboa.', note:'adorar + infinitivo' },
+  { cat:'Verbos novos', prompt:'Say "I read the newspaper in the morning."', answer:'Leio o jornal de manhã.', note:'ler, eu → leio (irregular)' },
+  { cat:'Verbos novos', prompt:'Say "Rogério loves working outdoors." (third person)', answer:'O Rogério adora trabalhar ao ar livre.', note:'ele → adora' },
+  { cat:'Verbos novos', prompt:'Say "Carla takes care of the animals\' illnesses." (third person)', answer:'A Carla cuida das doenças dos animais.', note:'cuidar de + as = das' },
+  { cat:'Verbos novos', prompt:'Say "Mariana creates new start-ups." (third person)', answer:'A Mariana cria novas start-ups.', note:'ele/ela → cria' },
+  { cat:'Verbos novos', prompt:'Say "Andreia analyses data and works remotely." (third person)', answer:'A Andreia analisa dados e trabalha à distância.', note:'à distância = remotely' },
+  { cat:'Verbos novos', prompt:'Say "Rui works at TAP, the Portuguese airline." (third person)', answer:'O Rui trabalha na TAP, a companhia aérea portuguesa.', note:'trabalhar + em + a = na' },
+  { cat:'Verbos novos', prompt:'Say "Bruno phones a hundred clients every day." (third person)', answer:'O Bruno telefona a cem clientes todos os dias.', note:'telefonar a + clientes' },
 ];
 
 let dDeck=[], dIdx=0, dCorrect=0, dTotal=0, dStreak=0, dTimer=null, dSecondsLeft=8, dRevealed=false;

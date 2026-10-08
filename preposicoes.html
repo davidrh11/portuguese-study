@@ -6,7 +6,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Preposições — Qual Escolher</title>
+<title>Preposições &amp; Lugar</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -143,13 +143,15 @@
     <circle cx="12" cy="11" r="1.5" fill="#FFD700"/>
   </svg>
   <div class="header-text">
-    <h1>Preposições — Qual Escolher</h1>
+    <h1>Preposições &amp; Lugar</h1>
     <p>Highest-frequency error class in coaching log, before contraction mechanics matter, you have to pick the right preposition</p>
   </div>
 </header>
 
 <div class="tabs">
   <button class="tab active" onclick="switchTab('tabela', this)">Tabela</button>
+  <button class="tab" onclick="switchTab('lugar', this)">Lugar</button>
+  <button class="tab" onclick="switchTab('demonstrativos', this)">Demonstrativos</button>
   <button class="tab" onclick="switchTab('flashcards', this)">Flashcards</button>
   <button class="tab" onclick="switchTab('quiz', this)">Quiz</button>
   <button class="tab" onclick="switchTab('desafio', this)">⚡ Desafio</button>
@@ -234,6 +236,94 @@
 
 </div>
 
+<div id="lugar" class="view">
+  <div class="section-title">Preposições de Lugar — onde está?</div>
+  <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.75rem">Toca num exemplo para ouvir. Estrutura: estar + preposição + lugar.</p>
+<table>
+<thead><tr><th>Português</th><th>English</th><th>Exemplo</th></tr></thead>
+<tbody>
+<tr><td class="pt-word" onclick="speak('à frente de')">à frente de</td><td class="en-word">in front of</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('O gato está à frente da caixa.')">O gato está à frente da caixa.</span><br><span style="color:var(--muted);font-size:0.75rem">The cat is in front of the box.</span></td></tr>
+<tr><td class="pt-word" onclick="speak('atrás de')">atrás de</td><td class="en-word">behind</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('O gato está atrás da caixa.')">O gato está atrás da caixa.</span><br><span style="color:var(--muted);font-size:0.75rem">The cat is behind the box.</span></td></tr>
+<tr><td class="pt-word" onclick="speak('em cima de')">em cima de</td><td class="en-word">on top of</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('O gato está em cima da caixa.')">O gato está em cima da caixa.</span><br><span style="color:var(--muted);font-size:0.75rem">The cat is on top of the box.</span></td></tr>
+<tr><td class="pt-word" onclick="speak('debaixo de')">debaixo de</td><td class="en-word">under, beneath</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('O gato está debaixo da caixa.')">O gato está debaixo da caixa.</span><br><span style="color:var(--muted);font-size:0.75rem">The cat is under the box.</span></td></tr>
+<tr><td class="pt-word" onclick="speak('dentro de')">dentro de</td><td class="en-word">inside</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('O gato está dentro da caixa.')">O gato está dentro da caixa.</span><br><span style="color:var(--muted);font-size:0.75rem">The cat is inside the box.</span></td></tr>
+<tr><td class="pt-word" onclick="speak('entre')">entre</td><td class="en-word">between</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('O gato está entre as duas caixas.')">O gato está entre as duas caixas.</span><br><span style="color:var(--muted);font-size:0.75rem">The cat is between the two boxes.</span></td></tr>
+<tr><td class="pt-word" onclick="speak('ao lado de')">ao lado de</td><td class="en-word">beside, next to</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('O gato está ao lado da caixa.')">O gato está ao lado da caixa.</span><br><span style="color:var(--muted);font-size:0.75rem">The cat is next to the box.</span></td></tr>
+<tr><td class="pt-word" onclick="speak('ao pé de')">ao pé de</td><td class="en-word">right next to, very close</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('Estou ao pé de ti.')">Estou ao pé de ti.</span><br><span style="color:var(--muted);font-size:0.75rem">I am right next to you.</span></td></tr>
+<tr><td class="pt-word" onclick="speak('à direita de')">à direita de</td><td class="en-word">to the right of</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('O banco está à direita da farmácia.')">O banco está à direita da farmácia.</span><br><span style="color:var(--muted);font-size:0.75rem">The bank is to the right of the pharmacy.</span></td></tr>
+<tr><td class="pt-word" onclick="speak('à esquerda de')">à esquerda de</td><td class="en-word">to the left of</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('O café está à esquerda da livraria.')">O café está à esquerda da livraria.</span><br><span style="color:var(--muted);font-size:0.75rem">The cafe is to the left of the bookshop.</span></td></tr>
+</tbody>
+</table>
+  <div class="section-title">Contrações — preposição + artigo</div>
+<table>
+<thead><tr><th>Português</th><th>English</th><th>Exemplo</th></tr></thead>
+<tbody>
+<tr><td class="pt-word" onclick="speak('ao lado do')">ao lado do</td><td class="en-word">beside the, masc.</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('O gato está ao lado do carro.')">O gato está ao lado do carro.</span><br><span style="color:var(--muted);font-size:0.75rem">The cat is next to the car.</span></td></tr>
+<tr><td class="pt-word" onclick="speak('ao lado da')">ao lado da</td><td class="en-word">beside the, fem.</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('O gato está ao lado da caixa.')">O gato está ao lado da caixa.</span><br><span style="color:var(--muted);font-size:0.75rem">The cat is next to the box.</span></td></tr>
+</tbody>
+</table>
+  <div class="note-block"><div class="note-label">Regra</div><p><span class="pt">de + o = do</span> · <span class="pt">de + a = da</span> · <span class="pt">em + o = no</span> · <span class="pt">em + a = na</span>. As preposições que acabam em <span class="pt">de</span> (ao lado de, atrás de, dentro de) contraem com o artigo da mesma forma.</p></div>
+  <div class="section-title">Advérbios de Lugar — aqui · aí · ali · cá · lá</div>
+<table>
+<thead><tr><th>Português</th><th>English</th><th>Exemplo</th></tr></thead>
+<tbody>
+<tr><td class="pt-word" onclick="speak('aqui')">aqui</td><td class="en-word">here, near the speaker</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('A Sofia está aqui.')">A Sofia está aqui.</span><br><span style="color:var(--muted);font-size:0.75rem">Sofia is here.</span></td></tr>
+<tr><td class="pt-word" onclick="speak('aí')">aí</td><td class="en-word">there, near the listener</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('O livro está aí?')">O livro está aí?</span><br><span style="color:var(--muted);font-size:0.75rem">Is the book there (near you)?</span></td></tr>
+<tr><td class="pt-word" onclick="speak('ali')">ali</td><td class="en-word">over there, far from both</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('O gato está ali!')">O gato está ali!</span><br><span style="color:var(--muted);font-size:0.75rem">The cat is over there!</span></td></tr>
+<tr><td class="pt-word" onclick="speak('cá')">cá</td><td class="en-word">here in general, in this country</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('Moro cá com a minha família.')">Moro cá com a minha família.</span><br><span style="color:var(--muted);font-size:0.75rem">I live here with my family.</span></td></tr>
+<tr><td class="pt-word" onclick="speak('lá')">lá</td><td class="en-word">there in general, in that country</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('Ela está lá de férias com a família.')">Ela está lá de férias com a família.</span><br><span style="color:var(--muted);font-size:0.75rem">She is there on holiday with her family.</span></td></tr>
+</tbody>
+</table>
+  <div class="note-block"><div class="note-label">cá vs aqui · lá vs ali</div><p><span class="pt">aqui, aí, ali</span> são precisos: indicam o ponto exato onde está a pessoa. <span class="pt">cá, lá</span> são gerais: países, regiões, onde alguém anda. <span class="pt">Moro cá</span> = I live here (in Portugal). <span class="pt">Ela está lá</span> = she is there (in another country).</p></div>
+  <div class="section-title">Com o verbo estar</div>
+<table>
+<thead><tr><th>Português</th><th>English</th></tr></thead>
+<tbody>
+<tr><td class="pt-word" onclick="speak('O livro está aqui.')">O livro está aqui.</td><td class="en-word">The book is here.</td></tr>
+<tr><td class="pt-word" onclick="speak('A chave está aí?')">A chave está aí?</td><td class="en-word">Is the key there (near you)?</td></tr>
+<tr><td class="pt-word" onclick="speak('O táxi está ali.')">O táxi está ali.</td><td class="en-word">The taxi is over there.</td></tr>
+</tbody>
+</table>
+  <div class="section-title">Diálogo — Não encontro os meus óculos</div>
+<table>
+<thead><tr><th>Português</th><th>English</th></tr></thead>
+<tbody>
+<tr><td class="pt-word" onclick="speak('Manuel, não encontro os meus óculos.')">Manuel, não encontro os meus óculos.</td><td class="en-word">Manuel, I can't find my glasses. <span style="color:var(--muted);font-size:0.72rem">(Dave)</span></td></tr>
+<tr><td class="pt-word" onclick="speak('Estão em cima da secretária, ao lado do teu computador.')">Estão em cima da secretária, ao lado do teu computador.</td><td class="en-word">They are on top of the desk, next to your computer. <span style="color:var(--muted);font-size:0.72rem">(Manuel)</span></td></tr>
+<tr><td class="pt-word" onclick="speak('Não estão, não.')">Não estão, não.</td><td class="en-word">They are not there. (emphatic) <span style="color:var(--muted);font-size:0.72rem">(Dave)</span></td></tr>
+<tr><td class="pt-word" onclick="speak('E dentro da tua mala?')">E dentro da tua mala?</td><td class="en-word">And inside your bag? <span style="color:var(--muted);font-size:0.72rem">(Manuel)</span></td></tr>
+<tr><td class="pt-word" onclick="speak('Também não.')">Também não.</td><td class="en-word">Not there either. <span style="color:var(--muted);font-size:0.72rem">(Dave)</span></td></tr>
+<tr><td class="pt-word" onclick="speak('Ah, olha! Estão na tua cabeça.')">Ah, olha! Estão na tua cabeça.</td><td class="en-word">Oh, look! They are on your head. <span style="color:var(--muted);font-size:0.72rem">(Manuel)</span></td></tr>
+</tbody>
+</table>
+</div>
+<div id="demonstrativos" class="view">
+  <div class="section-title">Advérbio → Demonstrativo → Género</div>
+  <div class="note-block"><div class="note-label">A cadeia</div><p>Onde está? <span class="pt">aqui · aí · ali</span> → qual demonstrativo? → género do substantivo.</p></div>
+<table>
+<thead><tr><th>Português</th><th>English</th><th>Demonstrativo</th></tr></thead>
+<tbody>
+<tr><td class="pt-word" onclick="speak('aqui')">aqui</td><td class="en-word">perto do falante</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('este · esta')">este · esta</span><br><span style="color:var(--muted);font-size:0.75rem">this picture, this window</span></td></tr>
+<tr><td class="pt-word" onclick="speak('aí')">aí</td><td class="en-word">perto do ouvinte</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('esse · essa')">esse · essa</span><br><span style="color:var(--muted);font-size:0.75rem">that, near you</span></td></tr>
+<tr><td class="pt-word" onclick="speak('ali')">ali</td><td class="en-word">longe de todos</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('aquele · aquela')">aquele · aquela</span><br><span style="color:var(--muted);font-size:0.75rem">that, far away</span></td></tr>
+</tbody>
+</table>
+  <div class="section-title">Exemplos da aula</div>
+<table>
+<thead><tr><th>Demonstrativo</th><th>English</th><th>Com substantivo</th></tr></thead>
+<tbody>
+<tr><td class="pt-word" onclick="speak('este')">este</td><td class="en-word">this, masc., near me</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('Este quadro')">Este quadro</span><br><span style="color:var(--muted);font-size:0.75rem">This picture</span></td></tr>
+<tr><td class="pt-word" onclick="speak('esta')">esta</td><td class="en-word">this, fem., near me</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('Esta janela')">Esta janela</span><br><span style="color:var(--muted);font-size:0.75rem">This window</span></td></tr>
+<tr><td class="pt-word" onclick="speak('esse')">esse</td><td class="en-word">that, masc., near you</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('Esse computador')">Esse computador</span><br><span style="color:var(--muted);font-size:0.75rem">That computer</span></td></tr>
+<tr><td class="pt-word" onclick="speak('essa')">essa</td><td class="en-word">that, fem., near you</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('Essa borracha')">Essa borracha</span><br><span style="color:var(--muted);font-size:0.75rem">That eraser</span></td></tr>
+<tr><td class="pt-word" onclick="speak('aquele')">aquele</td><td class="en-word">that, masc., far from both</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('Aquele carro')">Aquele carro</span><br><span style="color:var(--muted);font-size:0.75rem">That car over there</span></td></tr>
+<tr><td class="pt-word" onclick="speak('aquela')">aquela</td><td class="en-word">that, fem., far from both</td><td class="en-word"><span style="font-family:var(--mono);cursor:pointer" onclick="speak('Aquela rua')">Aquela rua</span><br><span style="color:var(--muted);font-size:0.75rem">That street over there</span></td></tr>
+</tbody>
+</table>
+  <div class="section-title">Plural — reconhecer, ainda não produzir</div>
+  <div class="note-block"><p><span class="pt">este, esta</span> → <span class="pt">estes, estas</span> · <span class="pt">esse, essa</span> → <span class="pt">esses, essas</span> · <span class="pt">aquele, aquela</span> → <span class="pt">aqueles, aquelas</span>. Vais ouvir e ler estas formas muitas vezes.</p></div>
+  <div class="warn-block"><div class="warn-label">Português europeu vs brasileiro</div><p>O português do Brasil usa muitas vezes <span class="pt">esse</span> onde o europeu usa <span class="pt">este</span>. Não deixes os recursos brasileiros baralharem o sistema acima, que é o padrão europeu da tua professora.</p></div>
+</div>
 <div id="flashcards" class="view">
 <div class="flashcard-wrap">
   <div class="vfc-topbar">
@@ -339,6 +429,33 @@ const CARDS = [
   { cat:'VERBO + A', pt:'chegar a', en:'to arrive at, takes a not em', note:'Chego ao aeroporto às oito.', en_note:'I arrive at the airport at eight.' },
   { cat:'VERBO + EM', pt:'pensar em', en:'to think about, takes em not sobre', note:'Penso muito nisso.', en_note:'I think about that a lot.' },
   { cat:'TEMPO', pt:'daqui a', en:'in (time from now)', note:'Chego daqui a trinta minutos.', en_note:"I'll be there in 30 minutes." },
+  { cat:'LUGAR — preposições', pt:'à frente de', en:'in front of', note:'O gato está à frente da caixa.', en_note:'The cat is in front of the box.' },
+  { cat:'LUGAR — preposições', pt:'atrás de', en:'behind', note:'O gato está atrás da caixa.', en_note:'The cat is behind the box.' },
+  { cat:'LUGAR — preposições', pt:'em cima de', en:'on top of', note:'O gato está em cima da caixa.', en_note:'The cat is on top of the box.' },
+  { cat:'LUGAR — preposições', pt:'debaixo de', en:'under, beneath', note:'O gato está debaixo da caixa.', en_note:'The cat is under the box.' },
+  { cat:'LUGAR — preposições', pt:'dentro de', en:'inside', note:'O gato está dentro da caixa.', en_note:'The cat is inside the box.' },
+  { cat:'LUGAR — preposições', pt:'entre', en:'between', note:'O gato está entre as duas caixas.', en_note:'The cat is between the two boxes.' },
+  { cat:'LUGAR — preposições', pt:'ao lado de', en:'beside, next to', note:'O gato está ao lado da caixa.', en_note:'The cat is next to the box.' },
+  { cat:'LUGAR — preposições', pt:'ao pé de', en:'right next to, very close', note:'Estou ao pé de ti.', en_note:'I am right next to you.' },
+  { cat:'LUGAR — preposições', pt:'à direita de', en:'to the right of', note:'O banco está à direita da farmácia.', en_note:'The bank is to the right of the pharmacy.' },
+  { cat:'LUGAR — preposições', pt:'à esquerda de', en:'to the left of', note:'O café está à esquerda da livraria.', en_note:'The cafe is to the left of the bookshop.' },
+  { cat:'LUGAR — advérbios', pt:'aqui', en:'here, near the speaker', note:'A Sofia está aqui.', en_note:'Sofia is here.' },
+  { cat:'LUGAR — advérbios', pt:'aí', en:'there, near the listener', note:'O livro está aí?', en_note:'Is the book there (near you)?' },
+  { cat:'LUGAR — advérbios', pt:'ali', en:'over there, far from both', note:'O gato está ali!', en_note:'The cat is over there!' },
+  { cat:'LUGAR — advérbios', pt:'cá', en:'here in general, in this country', note:'Moro cá com a minha família.', en_note:'I live here with my family.' },
+  { cat:'LUGAR — advérbios', pt:'lá', en:'there in general, in that country', note:'Ela está lá de férias com a família.', en_note:'She is there on holiday with her family.' },
+  { cat:'DEMONSTRATIVOS', pt:'este', en:'this, masc., near me', note:'Este quadro', en_note:'This picture' },
+  { cat:'DEMONSTRATIVOS', pt:'esta', en:'this, fem., near me', note:'Esta janela', en_note:'This window' },
+  { cat:'DEMONSTRATIVOS', pt:'esse', en:'that, masc., near you', note:'Esse computador', en_note:'That computer' },
+  { cat:'DEMONSTRATIVOS', pt:'essa', en:'that, fem., near you', note:'Essa borracha', en_note:'That eraser' },
+  { cat:'DEMONSTRATIVOS', pt:'aquele', en:'that, masc., far from both', note:'Aquele carro', en_note:'That car over there' },
+  { cat:'DEMONSTRATIVOS', pt:'aquela', en:'that, fem., far from both', note:'Aquela rua', en_note:'That street over there' },
+  { cat:'DIÁLOGO — os óculos', pt:'Manuel, não encontro os meus óculos.', en:'Manuel, I can\'t find my glasses.', note:'Manuel, não encontro os meus óculos.', en_note:'Manuel, I can\'t find my glasses.' },
+  { cat:'DIÁLOGO — os óculos', pt:'Estão em cima da secretária, ao lado do teu computador.', en:'They are on top of the desk, next to your computer.', note:'Estão em cima da secretária, ao lado do teu computador.', en_note:'They are on top of the desk, next to your computer.' },
+  { cat:'DIÁLOGO — os óculos', pt:'Não estão, não.', en:'They are not there. (emphatic)', note:'Não estão, não.', en_note:'They are not there. (emphatic)' },
+  { cat:'DIÁLOGO — os óculos', pt:'E dentro da tua mala?', en:'And inside your bag?', note:'E dentro da tua mala?', en_note:'And inside your bag?' },
+  { cat:'DIÁLOGO — os óculos', pt:'Também não.', en:'Not there either.', note:'Também não.', en_note:'Not there either.' },
+  { cat:'DIÁLOGO — os óculos', pt:'Ah, olha! Estão na tua cabeça.', en:'Oh, look! They are on your head.', note:'Ah, olha! Estão na tua cabeça.', en_note:'Oh, look! They are on your head.' },
 ];
 
 let vfcDeck = [...CARDS], vfcIdx = 0, vfcRevealed = false;
@@ -402,7 +519,7 @@ function nextQuiz() { qIdx++; if(qIdx>=qDeck.length){qDeck=[...QUIZ_POOL].sort((
 
 const DESAFIO_CARDS = [
   { cat:'do teu log real', prompt:'Say "I am leaving now."', answer:'Estou a sair agora.', note:'sair, não partir, mais natural em registo casual' },
-  { cat:'do teu log real', prompt:'Say "I\\'ll be there in 30 minutes." (anchor from now, not duration)', answer:'Chego daqui a trinta minutos.', note:'daqui a, não em, para chegada a partir de agora' },
+  { cat:'do teu log real', prompt:'Say "I\'ll be there in 30 minutes." (anchor from now, not duration)', answer:'Chego daqui a trinta minutos.', note:'daqui a, não em, para chegada a partir de agora' },
   { cat:'do teu log real', prompt:'Say "I am at the restaurant."', answer:'Estou no restaurante.', note:'restaurante é masculino, em + o = no' },
   { cat:'do teu log real', prompt:'Say "I am walking home." (home as concept, no specific building)', answer:'Estou a andar para casa.', note:'para casa, sem artigo, direção a um conceito' },
   { cat:'do teu log real', prompt:'Say "I am walking to my house." (specific building, with possessive)', answer:'Estou a andar para a minha casa.', note:'artigo obrigatório antes do possessivo em português europeu' },
@@ -417,8 +534,42 @@ const DESAFIO_CARDS = [
   { cat:'aplicar a novos casos', prompt:'Say "I arrive at the airport at eight."', answer:'Chego ao aeroporto às oito.', note:'chegar exige a, não em, aeroporto masculino, a + o = ao' },
   { cat:'aplicar a novos casos', prompt:'Say "I think about that a lot."', answer:'Penso muito nisso.', note:'pensar exige em, não sobre, nisso = em + isso' },
   { cat:'aplicar a novos casos', prompt:'Say "I am on holiday this week."', answer:'Estou de férias esta semana.', note:'de férias, expressão fixa, não em férias' },
-  { cat:'aplicar a novos casos', prompt:'Say "I\\'ll be there in ten minutes."', answer:'Chego daqui a dez minutos.', note:'mesma construção, número diferente, testa se generalizaste a regra' },
+  { cat:'aplicar a novos casos', prompt:'Say "I\'ll be there in ten minutes."', answer:'Chego daqui a dez minutos.', note:'mesma construção, número diferente, testa se generalizaste a regra' },
   { cat:'aplicar a novos casos', prompt:'Say "I am walking to the office." (specific destination, no possessive)', answer:'Estou a andar para o escritório.', note:'para + destino específico, artigo do substantivo normal' },
+  { cat:'lugar', prompt:'Say "The cat is in front of the box."', answer:'O gato está à frente da caixa.', note:'à frente de + a = à frente da, caixa é feminino' },
+  { cat:'lugar', prompt:'Say "The cat is behind the box."', answer:'O gato está atrás da caixa.', note:'atrás de + a = atrás da' },
+  { cat:'lugar', prompt:'Say "The cat is on top of the box."', answer:'O gato está em cima da caixa.', note:'em cima de + a = em cima da' },
+  { cat:'lugar', prompt:'Say "The cat is under the box."', answer:'O gato está debaixo da caixa.', note:'debaixo de + a = debaixo da' },
+  { cat:'lugar', prompt:'Say "The cat is inside the box."', answer:'O gato está dentro da caixa.', note:'dentro de + a = dentro da' },
+  { cat:'lugar', prompt:'Say "The cat is between the two boxes."', answer:'O gato está entre as duas caixas.', note:'entre não leva de, e fica sem contração' },
+  { cat:'lugar', prompt:'Say "The cat is next to the box."', answer:'O gato está ao lado da caixa.', note:'ao lado de + a = ao lado da' },
+  { cat:'lugar', prompt:'Say "I am right next to you."', answer:'Estou ao pé de ti.', note:'ao pé de + ti, pronome depois de preposição, sem artigo' },
+  { cat:'lugar', prompt:'Say "The bank is to the right of the pharmacy."', answer:'O banco está à direita da farmácia.', note:'à direita de + a = à direita da, farmácia é feminino' },
+  { cat:'lugar', prompt:'Say "The cafe is to the left of the bookshop."', answer:'O café está à esquerda da livraria.', note:'à esquerda de + a = à esquerda da, livraria é feminino' },
+  { cat:'lugar', prompt:'Say "The cat is next to the car."', answer:'O gato está ao lado do carro.', note:'ao lado de + o = ao lado do, carro é masculino' },
+  { cat:'lugar', prompt:'Say "Sofia is here."', answer:'A Sofia está aqui.', note:'aqui, perto de quem fala' },
+  { cat:'lugar', prompt:'Say "Is the book there (near you)?"', answer:'O livro está aí?', note:'aí, perto de quem ouve' },
+  { cat:'lugar', prompt:'Say "The cat is over there."', answer:'O gato está ali!', note:'ali, longe dos dois' },
+  { cat:'lugar', prompt:'Say "I live here with my family."', answer:'Moro cá com a minha família.', note:'cá, geral, país ou região' },
+  { cat:'lugar', prompt:'Say "She is there on holiday with her family."', answer:'Ela está lá de férias com a família.', note:'lá, geral, outro país' },
+  { cat:'lugar', prompt:'Say "The book is here."', answer:'O livro está aqui.', note:'estar + advérbio de lugar' },
+  { cat:'lugar', prompt:'Say "Is the key there (near you)??"', answer:'A chave está aí?', note:'estar + advérbio de lugar' },
+  { cat:'lugar', prompt:'Say "The taxi is over there."', answer:'O táxi está ali.', note:'estar + advérbio de lugar' },
+  { cat:'demonstrativos', prompt:'Say "this picture". (near me)', answer:'Este quadro', note:'aqui, aí, ali decide a forma; o género do substantivo escolhe entre -e e -a' },
+  { cat:'demonstrativos', prompt:'Say "this window". (near me)', answer:'Esta janela', note:'aqui, aí, ali decide a forma; o género do substantivo escolhe entre -e e -a' },
+  { cat:'demonstrativos', prompt:'Say "that computer". (near you)', answer:'Esse computador', note:'aqui, aí, ali decide a forma; o género do substantivo escolhe entre -e e -a' },
+  { cat:'demonstrativos', prompt:'Say "that eraser". (near you)', answer:'Essa borracha', note:'aqui, aí, ali decide a forma; o género do substantivo escolhe entre -e e -a' },
+  { cat:'demonstrativos', prompt:'Say "that car". (far from both)', answer:'Aquele carro', note:'aqui, aí, ali decide a forma; o género do substantivo escolhe entre -e e -a' },
+  { cat:'demonstrativos', prompt:'Say "that street". (far from both)', answer:'Aquela rua', note:'aqui, aí, ali decide a forma; o género do substantivo escolhe entre -e e -a' },
+  { cat:'demonstrativos', prompt:'Say "this book." (near me)', answer:'Este livro', note:'livro é masculino, aqui, este' },
+  { cat:'demonstrativos', prompt:'Say "that bag." (near you)', answer:'Essa mala', note:'mala é feminino, aí, essa' },
+  { cat:'demonstrativos', prompt:'Say "that house over there." (far from both)', answer:'Aquela casa', note:'casa é feminino, ali, aquela' },
+  { cat:'diálogo', prompt:'Say "Manuel, I can\'t find my glasses" (Dave)', answer:'Manuel, não encontro os meus óculos.', note:'frase do diálogo dos óculos' },
+  { cat:'diálogo', prompt:'Say "They are on top of the desk, next to your computer" (Manuel)', answer:'Estão em cima da secretária, ao lado do teu computador.', note:'frase do diálogo dos óculos' },
+  { cat:'diálogo', prompt:'Say "They are not there." (Dave)', answer:'Não estão, não.', note:'frase do diálogo dos óculos' },
+  { cat:'diálogo', prompt:'Say "And inside your bag?" (Manuel)', answer:'E dentro da tua mala?', note:'frase do diálogo dos óculos' },
+  { cat:'diálogo', prompt:'Say "Not there either" (Dave)', answer:'Também não.', note:'frase do diálogo dos óculos' },
+  { cat:'diálogo', prompt:'Say "Oh, look! They are on your head" (Manuel)', answer:'Ah, olha! Estão na tua cabeça.', note:'frase do diálogo dos óculos' },
 ];
 
 let dDeck=[], dIdx=0, dCorrect=0, dTotal=0, dStreak=0, dTimer=null, dSecondsLeft=8, dRevealed=false;

@@ -215,6 +215,7 @@
       <tr><td class="pt-word red" onclick="speak('no entanto')">no entanto</td><td class="en-word">however; nevertheless</td><td class="use-cell">More formal than mas. <em>Está frio. No entanto, o sol está a brilhar.</em></td></tr>
       <tr><td class="pt-word red" onclick="speak('embora')">embora</td><td class="en-word">although; even though</td><td class="use-cell">Requires subjunctive. <em>Embora esteja frio, vou à praia.</em></td></tr>
       <tr><td class="pt-word red" onclick="speak('apesar de')">apesar de</td><td class="en-word">despite; in spite of</td><td class="use-cell">Followed by noun or infinitive. <em>Apesar do frio, saí de casa.</em></td></tr>
+      <tr><td class="pt-word red" onclick="speak('em vez de')">em vez de</td><td class="en-word">instead of</td><td class="use-cell">Followed by an infinitive or noun. <em>Vou beber vinho verde em vez de beber cerveja.</em></td></tr>
     </tbody>
   </table>
 
@@ -236,8 +237,10 @@
       <tr><td class="pt-word blue" onclick="speak('primeiro')">primeiro</td><td class="en-word">first; firstly</td><td class="use-cell"><em>Primeiro, tomo o pequeno-almoço.</em></td></tr>
       <tr><td class="pt-word blue" onclick="speak('depois')">depois</td><td class="en-word">then; afterwards; after</td><td class="use-cell"><em>Depois, vou ao trabalho.</em></td></tr>
       <tr><td class="pt-word blue" onclick="speak('finalmente')">finalmente</td><td class="en-word">finally; at last</td><td class="use-cell"><em>Finalmente, chego a casa às 19h.</em></td></tr>
-      <tr><td class="pt-word blue" onclick="speak('quando')">quando</td><td class="en-word">when</td><td class="use-cell"><em>Quando chego a casa, jantar.</em></td></tr>
+      <tr><td class="pt-word blue" onclick="speak('quando')">quando</td><td class="en-word">when</td><td class="use-cell"><em>Quando chego a casa, janto.</em></td></tr>
       <tr><td class="pt-word blue" onclick="speak('enquanto')">enquanto</td><td class="en-word">while; whilst</td><td class="use-cell"><em>Enquanto trabalho, ouço música.</em></td></tr>
+      <tr><td class="pt-word blue" onclick="speak('antes de')">antes de</td><td class="en-word">before</td><td class="use-cell">Followed by an infinitive. <em>Tomo café antes de trabalhar.</em></td></tr>
+      <tr><td class="pt-word blue" onclick="speak('depois de')">depois de</td><td class="en-word">after</td><td class="use-cell">Followed by an infinitive. <em>Vou ao ginásio depois de trabalhar.</em></td></tr>
     </tbody>
   </table>
 
@@ -405,6 +408,17 @@ const CARDS = [
   { cat:'Tempo', pt:'quando', en:'when', use:'time clause', ex:'Quando chego a casa, janto.', note:'Quando chego a casa, janto.', en_note:'When I get home, I have dinner.' },
   { cat:'Tempo', pt:'enquanto', en:'while; whilst', use:'simultaneous actions', ex:'Enquanto trabalho, ouço música.', note:'Enquanto trabalho, ouço música.', en_note:'While I work, I listen to music.' },
   { cat:'Condição', pt:'se', en:'if', use:'conditional clause', ex:'Se está sol, vou à praia.', note:'Se está sol, vou à praia.', en_note:'If it is sunny, I go to the beach.' },
+  { cat:'Tempo', pt:'antes de', en:'before', use:'followed by infinitive', ex:'Tomo café antes de trabalhar.', note:'Tomo café antes de trabalhar.', en_note:'I have coffee before working.' },
+  { cat:'Tempo', pt:'antes de', en:'before', use:'followed by infinitive', ex:'Faço a lista antes de ir ao supermercado.', note:'Faço a lista antes de ir ao supermercado.', en_note:'I make the list before going to the supermarket.' },
+  { cat:'Tempo', pt:'depois de', en:'after', use:'followed by infinitive', ex:'Vou ao ginásio depois de trabalhar.', note:'Vou ao ginásio depois de trabalhar.', en_note:'I go to the gym after work.' },
+  { cat:'Tempo', pt:'depois de', en:'after', use:'followed by infinitive', ex:'Depois de jantar, vamos beber um copo.', note:'Depois de jantar, vamos beber um copo.', en_note:'After dinner, we are going to have a drink.' },
+  { cat:'Contraste', pt:'em vez de', en:'instead of', use:'followed by infinitive or noun', ex:'Vou beber vinho verde em vez de beber cerveja.', note:'Vou beber vinho verde em vez de beber cerveja.', en_note:'I am going to drink vinho verde instead of beer.' },
+  { cat:'Contraste', pt:'em vez de', en:'instead of', use:'followed by infinitive or noun', ex:'Estou a andar em vez de apanhar o metro.', note:'Estou a andar em vez de apanhar o metro.', en_note:'I am walking instead of catching the metro.' },
+  { cat:'Contraste', pt:'apesar de', en:'despite', use:'followed by infinitive', ex:'Vou sair apesar de estar cansado.', note:'Vou sair apesar de estar cansado.', en_note:'I am going out even though I am tired.' },
+  { cat:'Causa', pt:'porque', en:'because', use:'most common cause connector', ex:'Gosto de Lisboa porque é muito bonita.', note:'Gosto de Lisboa porque é muito bonita.', en_note:'I like Lisbon because it is very beautiful.' },
+  { cat:'Contraste', pt:'mas', en:'but', use:'most common contrast connector', ex:'Falo um bocadinho, mas ainda estou a aprender.', note:'Falo um bocadinho, mas ainda estou a aprender.', en_note:'I speak a little, but I am still learning.' },
+  { cat:'Tempo', pt:'enquanto', en:'while', use:'simultaneous actions', ex:'Estudo enquanto tomo o pequeno-almoço.', note:'Estudo enquanto tomo o pequeno-almoço.', en_note:'I study while I have breakfast.' },
+  { cat:'Condição', pt:'se', en:'if', use:'conditional clause', ex:'Se há bacalhau no menu, vou pedir.', note:'Se há bacalhau no menu, vou pedir.', en_note:'If there is cod on the menu, I will order it.' },
 ];
 
 let vfcDeck=[...CARDS], vfcIdx=0, vfcRevealed=false;
@@ -488,6 +502,17 @@ const DESAFIO_CARDS = [
   { cat:'Tempo', prompt:'Complete: "___ I get home, I have dinner."', answer:'Quando', note:'quando = when' },
   { cat:'Tempo', prompt:'Complete: "___ I work, I listen to music."', answer:'Enquanto', note:'enquanto = while' },
   { cat:'Condição', prompt:'Complete: "___ it\'s sunny, I\'ll go to the beach."', answer:'Se', note:'se = if — conditional' },
+  { cat:'Tempo', prompt:'Say "I have coffee before working."', answer:'Tomo café antes de trabalhar.', note:'antes de + infinitivo' },
+  { cat:'Tempo', prompt:'Say "I make the list before going to the supermarket."', answer:'Faço a lista antes de ir ao supermercado.', note:'antes de + infinitivo' },
+  { cat:'Tempo', prompt:'Say "I go to the gym after work."', answer:'Vou ao ginásio depois de trabalhar.', note:'depois de + infinitivo' },
+  { cat:'Tempo', prompt:'Say "After dinner, we are going to have a drink."', answer:'Depois de jantar, vamos beber um copo.', note:'depois de + infinitivo, no início da frase' },
+  { cat:'Contraste', prompt:'Say "I am going to drink vinho verde instead of beer."', answer:'Vou beber vinho verde em vez de beber cerveja.', note:'em vez de + infinitivo' },
+  { cat:'Contraste', prompt:'Say "I am walking instead of catching the metro."', answer:'Estou a andar em vez de apanhar o metro.', note:'em vez de + infinitivo' },
+  { cat:'Contraste', prompt:'Say "I am going out even though I am tired."', answer:'Vou sair apesar de estar cansado.', note:'apesar de + infinitivo' },
+  { cat:'Causa', prompt:'Say "I like Lisbon because it is very beautiful."', answer:'Gosto de Lisboa porque é muito bonita.', note:'porque, causa' },
+  { cat:'Contraste', prompt:'Say "I speak a little, but I am still learning."', answer:'Falo um bocadinho, mas ainda estou a aprender.', note:'mas, contraste' },
+  { cat:'Tempo', prompt:'Say "I study while I have breakfast."', answer:'Estudo enquanto tomo o pequeno-almoço.', note:'enquanto, ações simultâneas' },
+  { cat:'Condição', prompt:'Say "If there is cod on the menu, I will order it."', answer:'Se há bacalhau no menu, vou pedir.', note:'se + presente' },
 ];
 
 let dDeck=[], dIdx=0, dCorrect=0, dTotal=0, dStreak=0, dTimer=null, dSecondsLeft=5, dRevealed=false;

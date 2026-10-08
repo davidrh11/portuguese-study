@@ -414,6 +414,121 @@ const CATEGORIES = [
       { pt: 'Ainda tenho tempo.', en: 'I still have time.', register: 'informal', note: null },
       { pt: 'Não tenho tempo.', en: "I don't have time.", register: 'informal', note: null },
     ]
+  },
+  {
+    id: "meteo", label: "O Tempo",
+    phrases: [
+      { pt: "Como está o tempo hoje?", en: "What's the weather like today?", register: "informal", note: null },
+      { pt: "Hoje o tempo está bom.", en: "Today the weather is good.", register: "informal", note: null },
+      { pt: "Hoje o tempo está mau.", en: "Today the weather is bad.", register: "informal", note: null },
+      { pt: "Está sol.", en: "It's sunny.", register: "informal", note: "Está + weather noun, no article" },
+      { pt: "Está a chover.", en: "It's raining.", register: "informal", note: null },
+      { pt: "Está vento.", en: "It's windy.", register: "informal", note: null },
+      { pt: "Está nublado.", en: "It's cloudy.", register: "informal", note: null },
+      { pt: "Está nevoeiro.", en: "It's foggy.", register: "informal", note: "Common on Lisbon mornings" },
+      { pt: "Está frio.", en: "It's cold.", register: "informal", note: null },
+      { pt: "Está muito calor!", en: "It's very hot!", register: "informal", note: null },
+      { pt: "Sábado vai estar muito abafado.", en: "Saturday is going to be very muggy.", register: "informal", note: "abafado = hot, humid, stifling" },
+      { pt: "E amanhã, como vai estar o tempo em Lisboa?", en: "And tomorrow, what's the weather going to be like in Lisbon?", register: "informal", note: "vai estar = futuro próximo" },
+      { pt: "Amanhã vai estar sol.", en: "Tomorrow it's going to be sunny.", register: "informal", note: null },
+      { pt: "Concordo! Para mim, também.", en: "I agree! For me too.", register: "informal", note: null },
+      { pt: "Não concordo. Para mim, está frio.", en: "I disagree. For me, it's cold.", register: "informal", note: null },
+    ]
+  },
+  {
+    id: "agenda", label: "Dias e Planos",
+    phrases: [
+      { pt: "Para ti, qual é o melhor dia da semana?", en: "For you, what's the best day of the week?", register: "informal", note: null },
+      { pt: "Para mim, é a sexta, porque…", en: "For me, it's Friday, because…", register: "informal", note: "Mon to Fri take the feminine article a; sábado and domingo take o" },
+      { pt: "Vou jantar fora.", en: "I'm going to eat out.", register: "informal", note: "vou + infinitivo = futuro próximo" },
+      { pt: "Vais sair com os teus amigos?", en: "Are you going out with your friends?", register: "informal", note: null },
+      { pt: "Vamos organizar uma viagem aos Açores.", en: "We're going to organise a trip to the Azores.", register: "informal", note: null },
+      { pt: "Amanhã vou apanhar o barco para Cacilhas no Cais do Sodré.", en: "Tomorrow I'm going to catch the boat to Cacilhas at Cais do Sodré.", register: "informal", note: null },
+      { pt: "No próximo domingo, nós vamos almoçar num restaurante em Cascais.", en: "Next Sunday we're going to have lunch at a restaurant in Cascais.", register: "informal", note: null },
+      { pt: "Infelizmente, no sábado vai estar a chover, por isso vou jantar no restaurante perto da minha casa.", en: "Unfortunately on Saturday it's going to rain, so I'm going to have dinner at the restaurant near my house.", register: "informal", note: null },
+      { pt: "No sábado à noite, vou beber uns copos com uns amigos no Lx Factory.", en: "On Saturday night I'm going to have some drinks with friends at Lx Factory.", register: "informal", note: null },
+      { pt: "Vamos fazer uma caminhada à beira-rio.", en: "Let's go for a walk along the river.", register: "informal", note: null },
+    ]
+  },
+  {
+    id: "trabalho", label: "No Trabalho",
+    phrases: [
+      { pt: "Estou atrasado cinco minutos.", en: "I'm five minutes late.", register: "informal", note: "atrasado (masc.); a woman says atrasada" },
+      { pt: "Vou sair às duas e meia.", en: "I'm leaving at half past two.", register: "informal", note: null },
+      { pt: "Chego dentro de cinco minutos.", en: "I'll be there in five minutes.", register: "informal", note: "dentro de = in / within (time)" },
+      { pt: "Estás no silêncio.", en: "You're on silent.", register: "informal", note: "Phone on silent mode" },
+      { pt: "Tenho uma reunião às três.", en: "I have a meeting at three.", register: "formal", note: "reunião is feminine" },
+      { pt: "Estou no escritório.", en: "I'm at the office.", register: "informal", note: null },
+      { pt: "Os meus colegas.", en: "My colleagues.", register: "informal", note: "colega has one form for masc. and fem." },
+      { pt: "Infelizmente, não posso.", en: "Unfortunately, I can't.", register: "formal", note: null },
+      { pt: "Vou ficar no escritório.", en: "I'm going to stay at the office.", register: "informal", note: null },
+      { pt: "Vamos lanchar juntos?", en: "Shall we have a snack together?", register: "informal", note: null },
+      { pt: "Obrigado pelo convite. Mas não posso.", en: "Thank you for the invitation. But I can't.", register: "formal", note: null },
+      { pt: "Não te preocupes. A mesa já está reservada.", en: "Don't worry. The table is already reserved.", register: "informal", note: null },
+      { pt: "Manuel, há tanto tempo. Tudo bem?", en: "Manuel, long time no see. How are you?", register: "informal", note: null },
+      { pt: "O livro está no chão.", en: "The book is on the floor.", register: "informal", note: null },
+    ]
+  },
+  {
+    id: "mercado", label: "Mercado",
+    phrases: [
+      { pt: "Diga.", en: "Go ahead. / Yes?", register: "formal", note: "Shopkeeper invites you to speak" },
+      { pt: "Cem gramas de framboesas, por favor.", en: "A hundred grams of raspberries, please.", register: "formal", note: null },
+      { pt: "Aqui tem sete euros.", en: "Here you go, seven euros.", register: "formal", note: "Handing over money" },
+      { pt: "Pode ser dinheiro.", en: "Cash is fine.", register: "formal", note: "Answer to how you want to pay" },
+    ]
+  },
+  {
+    id: "ha-preciso", label: "Há e Preciso de",
+    phrases: [
+      { pt: "Há massa.", en: "There is pasta.", register: "informal", note: "Há = there is / there are, never changes" },
+      { pt: "Há ovos.", en: "There are eggs.", register: "informal", note: null },
+      { pt: "Não há manteiga.", en: "There is no butter.", register: "informal", note: null },
+      { pt: "Há leite no frigorífico?", en: "Is there milk in the fridge?", register: "informal", note: null },
+      { pt: "Não há manteiga em casa.", en: "There is no butter at home.", register: "informal", note: null },
+      { pt: "Preciso de leite.", en: "I need milk.", register: "informal", note: "precisar exige de" },
+      { pt: "Preciso de leite e ovos.", en: "I need milk and eggs.", register: "informal", note: null },
+      { pt: "Preciso de bacalhau e batatas.", en: "I need cod and potatoes.", register: "informal", note: null },
+      { pt: "Não preciso de açúcar.", en: "I don't need sugar.", register: "informal", note: null },
+      { pt: "Você precisa de azeite?", en: "Do you need olive oil?", register: "formal", note: null },
+      { pt: "Há massa, mas não há manteiga.", en: "There is pasta, but there is no butter.", register: "informal", note: null },
+      { pt: "Há cenouras, mas não preciso de cenouras.", en: "There are carrots, but I don't need carrots.", register: "informal", note: null },
+      { pt: "Não há fiambre. Preciso de fiambre.", en: "There is no ham. I need ham.", register: "informal", note: null },
+    ]
+  },
+  {
+    id: "frequencia", label: "Frequência",
+    phrases: [
+      { pt: "Eu estudo sempre de manhã.", en: "I always study in the morning.", register: "informal", note: "sempre, muitas vezes, às vezes, raramente, nunca" },
+      { pt: "Ela trabalha muitas vezes ao fim de semana.", en: "She often works at the weekend.", register: "informal", note: null },
+      { pt: "Eu tomo frequentemente café às dez.", en: "I frequently have coffee at ten.", register: "informal", note: null },
+      { pt: "Às vezes vou ao ginásio depois de trabalhar.", en: "Sometimes I go to the gym after work.", register: "informal", note: null },
+      { pt: "Eu raramente cozinho ao almoço.", en: "I rarely cook at lunch.", register: "informal", note: null },
+      { pt: "Eu nunca chego a horas.", en: "I never arrive on time.", register: "informal", note: "nunca = never, with no extra não before the verb here" },
+      { pt: "Nós jantamos muitas vezes fora.", en: "We often eat out.", register: "informal", note: null },
+    ]
+  },
+  {
+    id: "opiniao", label: "Opinião",
+    phrases: [
+      { pt: "Acho que o português é difícil, mas interessante.", en: "I think Portuguese is difficult but interesting.", register: "informal", note: "Acho que = I think that" },
+      { pt: "Acho que devo praticar português todos os dias.", en: "I think I should practise Portuguese every day.", register: "informal", note: null },
+      { pt: "Acho que o vinho verde é melhor que a cerveja.", en: "I think vinho verde is better than beer.", register: "informal", note: null },
+      { pt: "Não sei se o restaurante é bom.", en: "I don't know if the restaurant is good.", register: "informal", note: null },
+      { pt: "Estou a queixar-me do trânsito.", en: "I'm complaining about the traffic.", register: "informal", note: "queixar-se de = to complain about" },
+    ]
+  },
+  {
+    id: "cumprimentos", label: "Cumprimentos",
+    phrases: [
+      { pt: "Bom dia! Tudo bem, e tu?", en: "Good morning! How are you, and you?", register: "informal", note: "tu = informal, with friends and colleagues" },
+      { pt: "Bom dia, Senhora Amélia! Como está?", en: "Good morning, Mrs Amélia! How are you?", register: "formal", note: "Formal: Senhor / Senhora + como está" },
+      { pt: "Estou bem, obrigado. E você, como está?", en: "I'm fine, thank you. And you, how are you?", register: "formal", note: null },
+      { pt: "Boa tarde, Senhor Marks! Como está?", en: "Good afternoon, Mr Marks! How are you?", register: "formal", note: null },
+      { pt: "Bem, obrigado. E a senhora?", en: "Well, thank you. And you, madam?", register: "formal", note: null },
+      { pt: "Bom trabalho! Até já!", en: "Have a good day at work! See you shortly!", register: "informal", note: "Até já implies you will see them today" },
+      { pt: "Igualmente! Até já!", en: "Likewise! See you shortly!", register: "informal", note: null },
+    ]
   }
 ];
 

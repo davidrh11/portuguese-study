@@ -173,13 +173,10 @@
 // ── GUIDE DATA ────────────────────────────────────────────────────
 const SECTIONS = [
   {
-    label: 'Aulas Recentes', color: 'red',
-    sub: 'Last 4 sessions — retire after session 5',
+    label: 'Treino', color: 'green',
+    sub: 'Daily drilling — every guide in one deck',
     items: [
-      { num:'🗓', file:'aula-9-12-junho.html',            title:'Aula — 9 & 12 de Junho',          desc:'Preposições de Lugar · Advérbios · Demonstrativos (este/esse/aquele) · cá/lá · Mercado', tags:['desafio'] },
-      { num:'🗓', file:'aula-15-maio.html',               title:'Aula — 15 de Maio',               desc:'O Tempo · Dias da semana · Futuro Próximo (ir + infinitivo) · briol · abafado', tags:['desafio'] },
-      { num:'🗓', file:'aula-12-maio.html',               title:'Aula — 12 de Maio',               desc:'Aqui · Aí · Ali — adverbs of place · Estar in context · "Pode ser"', tags:['desafio'] },
-      { num:'🗓', file:'aula-21-24-abril.html',           title:'Aula 5 — 21 & 24 Abril',         desc:'Possessivos · Conectores +inf / sem inf · Refeições', tags:['desafio'] },
+      { num:'★', file:'drill.html', pinned:true, title:'Treino — Drill', desc:'1,045 cards from all guides · words first · spaced repetition · syncs phone, laptop and iPad', tags:['desafio','new'] },
     ]
   },
   {
@@ -189,22 +186,22 @@ const SECTIONS = [
       {
         label: 'Verbos — Combinações',
         items: [
-          { num:'★', file:'combinacoes.html', pinned:true, title:'Combinações de Verbos', desc:'Estou a · Posso · Queria · Quero · Devo · Vou — 25 verbos, Construtor, Desafio', tags:['desafio'] },
+          { num:'★', file:'combinacoes.html', pinned:true, title:'Combinações de Verbos', desc:'Estou a · Posso · Queria · Quero · Devo · Vou (futuro próximo) — 29 verbos, Construtor, Desafio', tags:['desafio'] },
         ]
       },
       {
         label: 'Verbos — Conjugações',
         items: [
-          { num:'★', file:'verbos.html', pinned:true, title:'Verbos em Português — Guia Completo', desc:'Essenciais · Irregulares · -AR · -ER/-IR · Presente & Passado · Flashcards · Desafio', tags:['desafio'] },
+          { num:'★', file:'verbos.html', pinned:true, title:'Verbos em Português — Guia Completo', desc:'Essenciais · Irregulares · -AR · -ER/-IR · Por Situação · Presente & Passado · Flashcards · Desafio', tags:['desafio'] },
         ]
       },
       {
         label: 'Frases & Estrutura',
         items: [
           { num:'→', file:'tipos-de-frases.html',      title:'Tipos de Frases',      desc:'Afirmativa, negativa, interrogativa — sentence transformer drill', tags:[] },
-          { num:'→', file:'preposicoes.html',           title:'Preposições — Qual Escolher', desc:'Para vs em vs de vs a, selection logic before contraction mechanics, built from real coaching errors', tags:['desafio'] },
+          { num:'→', file:'preposicoes.html',           title:'Preposições & Lugar', desc:'Para · em · de · a, plus place prepositions, aqui · aí · ali, este · esse · aquele', tags:['desafio'] },
           { num:'→', file:'contracoes.html',            title:'Contrações', desc:'ao/à/no/na/do/da/pelo — preposição + artigo, diagnosed recurring error class', tags:['desafio'] },
-          { num:'→', file:'conectores.html',            title:'Conectores',           desc:'e · mas · porque · por isso · depois — addition, contrast, cause, time, condition', tags:['desafio'] },
+          { num:'→', file:'conectores.html',            title:'Conectores',           desc:'e · mas · porque · por isso · antes de · depois de · em vez de — addition, contrast, cause, time, condition', tags:['desafio'] },
           { num:'→', file:'possessivos.html',           title:'Possessivos',          desc:'meu/minha · seu/sua · nosso/nossa — eu/você focus + full agreement table', tags:['desafio'] },
         ]
       },
@@ -214,12 +211,12 @@ const SECTIONS = [
     label: 'Vocabulário', color: 'blue',
     sub: 'Permanent reference — by topic',
     items: [
-      { num:'→', file:'frases-do-dia.html',              title:'Frases do Dia a Dia',       desc:'Everyday phrases — introductions, plans, restaurant, café, time', tags:[] },
-      { num:'→', file:'frases-corrigidas.html',          title:'Frases Corrigidas — Julho',  desc:'26 phrases from real coaching corrections — listen, drill, repeat', tags:['desafio','new'] },
+      { num:'→', file:'frases-do-dia.html',              title:'Frases do Dia a Dia',       desc:'Everyday phrases — introductions, plans, weather, work, market, há e preciso de, greetings', tags:[] },
+      { num:'→', file:'frases-corrigidas.html',          title:'Frases Corrigidas — Julho',  desc:'26 phrases from real coaching corrections — listen, drill, repeat', tags:['desafio'] },
       { num:'→', file:'restaurante.html',                title:'No Restaurante',             desc:'Survival phrases for eating out — ordering, wine, the bill, Desafio', tags:['desafio'] },
       { num:'→', file:'aula1_comunicar_sala_de_aula.html', title:'Comunicar na Sala de Aula', desc:'Classroom phrases — questions, clarifications, apologies', tags:[] },
       { num:'→', file:'numeros.html',                    title:'Números 0–100',             desc:'Cardinal numbers · masc & fem forms · Escuta listening exercise', tags:[] },
-      { num:'→', file:'casa-vocabulario.html',           title:'A Casa — Vocabulário',      desc:'Rooms, furniture, appliances, utensils — with images', tags:[] },
+      { num:'→', file:'casa-vocabulario.html',           title:'Vocabulário Temático',      desc:'House, weather, days, time markers, work, pantry, frequency — with images', tags:[] },
       { num:'→', file:'common-words.html',               title:'100 Palavras Mais Comuns',   desc:'100 most-used Portuguese words — definitions + example sentences', tags:[] },
     ]
   },
@@ -227,14 +224,18 @@ const SECTIONS = [
     label: 'Expressões & Cultura', color: 'yellow',
     sub: 'Permanent — updated every class',
     items: [
-      { num:'★', file:'expressoes.html', pinned:true, title:'Expressões', desc:'Idioms, farewells, cultural phrases — bocadinho, vai-se andando, estou de rastos…', tags:[] },
+      { num:'★', file:'expressoes.html', pinned:true, title:'Expressões', desc:'Idioms, farewells, cultural phrases — bocadinho, pode ser, para mim, o que lá vai, lá vai…', tags:[] },
     ]
   },
 
   {
     label: 'Arquivo', color: 'muted',
-    sub: 'Retired aulas — content distributed to reference guides',
+    sub: 'Retired aulas — files kept for reference',
     items: [
+      { num:'📁', file:'aula-9-12-junho.html',            title:'Aula — 9 & 12 de Junho',          desc:'Preposições de Lugar · Advérbios · Demonstrativos (este/esse/aquele) · cá/lá · Mercado', tags:[] },
+      { num:'📁', file:'aula-15-maio.html',               title:'Aula — 15 de Maio',               desc:'O Tempo · Dias da semana · Futuro Próximo (ir + infinitivo) · briol · abafado', tags:[] },
+      { num:'📁', file:'aula-12-maio.html',               title:'Aula — 12 de Maio',               desc:'Aqui · Aí · Ali — adverbs of place · Estar in context · "Pode ser"', tags:[] },
+      { num:'📁', file:'aula-21-24-abril.html',           title:'Aula 5 — 21 & 24 Abril',         desc:'Possessivos · Conectores +inf / sem inf · Refeições', tags:[] },
       { num:'📁', file:'aula-14-abril.html',               title:'Aula 3 — 14 Abril',               desc:'Frequência & Opinião · acho que / não sei se · Verbos Reflexivos', tags:[] },
       { num:'📁', file:'ha-preciso-de.html',               title:'Aula 3 — Há vs. Preciso de',          desc:'Há / não há · Preciso de — supermarket vocabulary in context', tags:[] },
       { num:'📁', file:'dialogos-unidade2.html',           title:'Aula 2 — Diálogos: Saudações',        desc:'Tudo bem? / Como está? — formal & informal greetings, 3 modes', tags:[] },

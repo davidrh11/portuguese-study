@@ -540,6 +540,13 @@ const FRAMES = [
       { pt: '<span class="hl">Vou</span> ter aula de português.', en: "I'm going to have Portuguese class.", speak: 'Vou ter aula de português.' },
       { pt: '<span class="hl">Vai</span> jantar onde hoje?', en: 'Where are you going to have dinner today?', speak: 'Vai jantar onde hoje?' },
       { pt: '<span class="hl">Vamos</span> beber um copo hoje?', en: 'Shall we have a drink today?', speak: 'Vamos beber um copo hoje?' },
+      { pt: '<span class="hl">Vou</span> jantar fora.', en: "I'm going to eat out.", speak: 'Vou jantar fora.' },
+      { pt: '<span class="hl">Vais</span> sair com os teus amigos?', en: "Are you going out with your friends?", speak: 'Vais sair com os teus amigos?' },
+      { pt: '<span class="hl">Vai</span> fazer o trabalho de casa.', en: "He is going to do the homework.", speak: 'Vai fazer o trabalho de casa.' },
+      { pt: '<span class="hl">Vamos</span> organizar uma viagem aos Açores.', en: "We are going to organise a trip to the Azores.", speak: 'Vamos organizar uma viagem aos Açores.' },
+      { pt: '<span class="hl">Vão</span> ficar aqui até às 18h.', en: "They are going to stay here until 6 pm.", speak: 'Vão ficar aqui até às 18h.' },
+      { pt: '<span class="hl">Vou</span> sair às duas e meia.', en: "I'm leaving at half past two.", speak: 'Vou sair às duas e meia.' },
+      { pt: 'Amanhã <span class="hl">vai</span> estar sol.', en: "Tomorrow it's going to be sunny.", speak: 'Amanhã vai estar sol.' },
     ]
   },
 ];
@@ -570,6 +577,10 @@ const VERBS = [
   { inf: 'sair',      en: 'to leave / go out',       ex: 'Devo sair por aqui?',               ex_en: 'Should I leave this way?' },
   { inf: 'voltar',    en: 'to return / come back',   ex: 'Vou voltar às seis.',               ex_en: "I'm coming back at six." },
   { inf: 'abrir',     en: 'to open',                 ex: 'Pode abrir a janela?',              ex_en: 'Can you open the window?' },
+  { inf: 'apanhar',   en: 'to catch (bus, boat, metro)', ex: 'Vou apanhar o metro.',        ex_en: "I'm going to catch the metro." },
+  { inf: 'lanchar',   en: 'to have a snack',         ex: 'Vamos lanchar juntos?',            ex_en: 'Shall we have a snack together?' },
+  { inf: 'jantar',    en: 'to have dinner',          ex: 'Vou jantar fora.',                 ex_en: "I'm going to eat out." },
+  { inf: 'almoçar',   en: 'to have lunch',           ex: 'Vamos almoçar num restaurante.',   ex_en: 'We are going to have lunch at a restaurant.' },
 ];
 
 // Construtor: one good example per frame+verb combo (subset — expands on use)
@@ -893,6 +904,18 @@ const DESAFIO_GUIADO = [
   { situation: "Suggest having a drink tonight.", frame: 'vou', verb: 'beber', answer: 'Vamos beber um copo hoje?', en: 'Shall we have a drink today?' },
   { situation: "You're going to stay here a little while.", frame: 'vou', verb: 'ficar', answer: 'Vou ficar aqui um bocadinho.', en: "I'm going to stay here a little bit." },
   { situation: "You'll be back at six.", frame: 'vou', verb: 'voltar', answer: 'Vou voltar às seis.', en: "I'm coming back at six." },
+  { situation: "Tomorrow you're taking the boat to Cacilhas from Cais do Sodré.", frame: 'vou', verb: 'apanhar', answer: 'Amanhã vou apanhar o barco para Cacilhas no Cais do Sodré.', en: "Tomorrow I'm going to catch the boat to Cacilhas at Cais do Sodré." },
+  { situation: "Next Sunday, we're having lunch at a restaurant in Cascais.", frame: 'vou', verb: 'almoçar', answer: 'No próximo domingo, nós vamos almoçar num restaurante em Cascais.', en: "Next Sunday we're going to have lunch at a restaurant in Cascais." },
+  { situation: "It's going to rain on Saturday, so you'll eat at the restaurant near your house.", frame: 'vou', verb: 'jantar', answer: 'Infelizmente, no sábado vai estar a chover, por isso vou jantar no restaurante perto da minha casa.', en: "Unfortunately on Saturday it's going to rain, so I'm going to have dinner at the restaurant near my house." },
+  { situation: "Saturday night you're having drinks with friends at Lx Factory.", frame: 'vou', verb: 'beber', answer: 'No sábado à noite, vou beber uns copos com uns amigos no Lx Factory.', en: "On Saturday night I'm going to have some drinks with friends at Lx Factory." },
+  { situation: "Ask what the weather will be like tomorrow in Lisbon.", frame: 'vou', verb: 'estar', answer: 'E amanhã, como vai estar o tempo em Lisboa?', en: "And tomorrow, what's the weather going to be like in Lisbon?" },
+  { situation: "Tell someone the weather tomorrow will be foggy.", frame: 'vou', verb: 'estar', answer: 'Amanhã vai estar nevoeiro.', en: "Tomorrow it's going to be foggy." },
+  { situation: "Tell someone you're leaving at half past two.", frame: 'vou', verb: 'sair', answer: 'Vou sair às duas e meia.', en: "I'm leaving at half past two." },
+  { situation: "Suggest having a snack together.", frame: 'vou', verb: 'lanchar', answer: 'Vamos lanchar juntos?', en: "Shall we have a snack together?" },
+  { situation: "Ask a friend if they are going out with their friends.", frame: 'vou', verb: 'sair', answer: 'Vais sair com os teus amigos?', en: "Are you going out with your friends?" },
+  { situation: "Tell someone you're going to eat out tonight.", frame: 'vou', verb: 'jantar', answer: 'Vou jantar fora.', en: "I'm going to eat out." },
+  { situation: "Tell someone you are going to stay at the office.", frame: 'vou', verb: 'ficar', answer: 'Vou ficar no escritório.', en: "I'm going to stay at the office." },
+  { situation: "Tell someone they are staying here until six.", frame: 'vou', verb: 'ficar', answer: 'Vão ficar aqui até às dezoito horas.', en: "They are going to stay here until six." },
 ];
 
 const DESAFIO_LIVRE = [

@@ -6,7 +6,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A Casa — Vocabulário Português</title>
+<title>Vocabulário Temático — Português</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
     :root {
@@ -277,7 +277,7 @@
 <header>
 <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;width:100%;">
 <div style="flex:1;">
-  <div class="logo">a casa <span>// vocabulário</span></div>
+  <div class="logo">vocabulário <span>// casa, tempo, dias, trabalho</span></div>
   <div class="mode-bar">
     <button class="mode-btn active" onclick="setMode('tabela')">Tabela</button>
     <button class="mode-btn" onclick="setMode('flashcard')">Flashcards</button>
@@ -494,6 +494,107 @@ const CATEGORIES = [
       { pt: "a colher de sopa",       en: "soup spoon",     img: "Soup_spoon" },
       { pt: "a argola de guardanapo", en: "napkin ring",    img: "Napkin_ring" }
     ]
+  },
+  {
+    id: "tempo", label: "O Tempo",
+    words: [
+      { pt: "está sol", en: "it's sunny", img: "Sun" },
+      { pt: "está soalheiro", en: "it's sunny, bathed in sun", img: "Sunlight" },
+      { pt: "está a chover", en: "it's raining", img: "Rain" },
+      { pt: "está chuva", en: "it's rainy", img: "Rain" },
+      { pt: "está vento", en: "it's windy", img: "Wind" },
+      { pt: "está nublado", en: "it's cloudy", img: "Cloud" },
+      { pt: "está nevoeiro", en: "it's foggy", img: "Fog" },
+      { pt: "está trovoada", en: "there's a thunderstorm", img: "Thunderstorm" },
+      { pt: "está frio", en: "it's cold", img: "Cold" },
+      { pt: "está calor", en: "it's hot", img: "Heat" },
+      { pt: "está abafado", en: "it's muggy and stifling", img: "Humidity" },
+      { pt: "a neve", en: "snow", img: "Snow" },
+      { pt: "o briol", en: "freezing cold weather (slang)", img: "Cold_wave" },
+      { pt: "bom tempo", en: "good weather", img: "" },
+      { pt: "mau tempo", en: "bad weather", img: "" }
+    ]
+  },
+  {
+    id: "dias", label: "Dias da Semana",
+    words: [
+      { pt: "a segunda", en: "Monday", img: "" },
+      { pt: "a terça", en: "Tuesday", img: "" },
+      { pt: "a quarta", en: "Wednesday", img: "" },
+      { pt: "a quinta", en: "Thursday", img: "" },
+      { pt: "a sexta", en: "Friday", img: "" },
+      { pt: "o sábado", en: "Saturday", img: "" },
+      { pt: "o domingo", en: "Sunday", img: "" },
+      { pt: "o fim de semana", en: "the weekend", img: "Weekend" }
+    ]
+  },
+  {
+    id: "marcadores", label: "Marcadores de Tempo",
+    words: [
+      { pt: "amanhã", en: "tomorrow", img: "" },
+      { pt: "depois de amanhã", en: "the day after tomorrow", img: "" },
+      { pt: "esta tarde", en: "this afternoon", img: "" },
+      { pt: "logo à noite", en: "later tonight", img: "" },
+      { pt: "este sábado", en: "this Saturday", img: "" },
+      { pt: "no próximo domingo", en: "next Sunday", img: "" },
+      { pt: "no próximo fim de semana", en: "next weekend", img: "" },
+      { pt: "na próxima semana", en: "next week", img: "" }
+    ]
+  },
+  {
+    id: "trabalho", label: "Trabalho & Dia a Dia",
+    words: [
+      { pt: "a reunião", en: "meeting", img: "Meeting" },
+      { pt: "o escritório", en: "office", img: "Office" },
+      { pt: "o colega", en: "colleague", img: "Coworker" },
+      { pt: "infelizmente", en: "unfortunately", img: "" },
+      { pt: "atrasado", en: "late (masc.)", img: "" },
+      { pt: "dentro de cinco minutos", en: "in five minutes", img: "" },
+      { pt: "no silêncio", en: "on silent (phone)", img: "" },
+      { pt: "o chão", en: "floor, ground", img: "Floor" },
+      { pt: "assim", en: "like this, so, that way", img: "" },
+      { pt: "a caminhada", en: "a walk", img: "Walking" },
+      { pt: "o convite", en: "invitation", img: "Invitation" }
+    ]
+  },
+  {
+    id: "objetos", label: "Objetos & Mercado",
+    words: [
+      { pt: "os óculos", en: "glasses (always plural)", img: "Glasses" },
+      { pt: "a secretária", en: "desk", img: "Desk" },
+      { pt: "a mala", en: "bag, briefcase, suitcase", img: "Suitcase" },
+      { pt: "a cabeça", en: "head", img: "Head" },
+      { pt: "as framboesas", en: "raspberries", img: "Raspberry" },
+      { pt: "o troco", en: "change (money)", img: "" },
+      { pt: "o arraial", en: "street fair, summer festival", img: "" }
+    ]
+  },
+  {
+    id: "despensa", label: "Despensa",
+    words: [
+      { pt: "a massa", en: "pasta", img: "Pasta" },
+      { pt: "os ovos", en: "eggs", img: "Egg_as_food" },
+      { pt: "a manteiga", en: "butter", img: "Butter" },
+      { pt: "o frango", en: "chicken", img: "Chicken_as_food" },
+      { pt: "o leite", en: "milk", img: "Milk" },
+      { pt: "o açúcar", en: "sugar", img: "Sugar" },
+      { pt: "o azeite", en: "olive oil", img: "Olive_oil" },
+      { pt: "as cenouras", en: "carrots", img: "Carrot" },
+      { pt: "o fiambre", en: "ham", img: "Ham" },
+      { pt: "o bacalhau", en: "salt cod", img: "Bacalhau" },
+      { pt: "as batatas", en: "potatoes", img: "Potato" }
+    ]
+  },
+  {
+    id: "frequencia", label: "Frequência",
+    words: [
+      { pt: "sempre", en: "always", img: "" },
+      { pt: "muitas vezes", en: "often", img: "" },
+      { pt: "frequentemente", en: "frequently", img: "" },
+      { pt: "às vezes", en: "sometimes", img: "" },
+      { pt: "raramente", en: "rarely", img: "" },
+      { pt: "nunca", en: "never", img: "" }
+    ]
   }
 ];
 
@@ -505,6 +606,7 @@ const ALL_WORDS = CATEGORIES.flatMap(c =>
 const imgCache = {};
 
 async function loadWikiImage(term) {
+  if (!term) return '';
   if (imgCache[term] !== undefined) return imgCache[term];
   try {
     const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(term)}`;
