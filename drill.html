@@ -675,7 +675,6 @@ function flashReveal() {
   if (!S || S.mode !== 'f' || S.revealed) return;
   S.revealed = true;
   $('fAns').classList.add('revealed');
-  $('fExPt').classList.add('revealed');
   $('fHint').textContent = '';
   $('fReveal').style.display = 'none';
   $('fGrade').style.display = 'flex';
@@ -686,7 +685,7 @@ $('fAns').onclick = flashReveal;
 $('fFrontSpeak').onclick = () => speak(speechText(cur().card), $('fFrontSpeak'));
 $('fFrontPt').onclick = () => speak(speechText(cur().card));
 $('fAnsSpeak').onclick = () => speak(speechText(cur().card), $('fAnsSpeak'));
-$('fExPt').onclick = () => { flashReveal(); speak(cur().card.xp); };
+$('fExPt').onclick = () => { $('fExPt').classList.add('revealed'); speak(cur().card.xp); };
 $('fExEn').onclick = () => $('fExEn').classList.add('revealed');
 $('fYes').onclick = () => grade(true);
 $('fNo').onclick = () => grade(false);
