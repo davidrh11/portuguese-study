@@ -452,9 +452,12 @@ let progress = {};
 try { const raw = JSON.parse(lsGet(LS_PROG) || '{}'); for (const k in raw) if (isRec(raw[k])) progress[k] = raw[k]; } catch (e) {}
 function saveProgress() { lsSet(LS_PROG, JSON.stringify(progress)); }
 
-const DEFAULTS = { mode: 'f', track: 'w', dir: 'r', size: 20, newPerDay: 15, gate: true, sources: null, types: null };
+const DEFAULTS = { mode: 'f', track: 'w', dir: 'p', size: 20, newPerDay: 15, gate: false, sources: null, types: null };
 let settings = Object.assign({}, DEFAULTS);
 try { Object.assign(settings, JSON.parse(lsGet(LS_SET) || '{}')); } catch (e) {}
+// One-time migration (v2): earlier builds defaulted to PT→EN with the production gate on, which left EN→PT
+// sessions empty on a fresh deck. Move saved settings to the new defaults once, then leave them alone.
+if (settings.v !== 2) { settings.v = 2; settings.gate = false; settings.dir = 'p'; try { lsSet(LS_SET, JSON.stringify(settings)); } catch (e) {} }
 function saveSettings() { lsSet(LS_SET, JSON.stringify(settings)); }
 
 // =====================================================================
