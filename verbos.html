@@ -937,7 +937,7 @@ const PAST_EU_FORMS = {
   'to bring':          'I brought',
   'to hear / listen':  'I heard / I listened',
   'to see':            'I saw',
-  'to know (facts)':   'I knew',
+  'to know (facts)':   'I found out / I knew',
   'to be able to / can': 'I could',
   'to want':           'I wanted',
   'to put / place':    'I put (past)',
@@ -950,6 +950,26 @@ const PAST_EU_FORMS = {
   'to create': 'I created',
   'to analyse': 'I analysed',
   'to read': 'I read (past)',
+};
+const PAST_EX = {
+  'past of ser AND ir — same form!': ['Fui ao cinema com a Carla.', 'I went to the cinema with Carla.'],
+  'to be (permanent)': ['Fui professor durante dez anos.', 'I was a teacher for ten years.'],
+  'to be (temporary)': ['Estive em Madrid na semana passada.', 'I was in Madrid last week.'],
+  'to go': ['Ontem fui ao mercado.', 'Yesterday I went to the market.'],
+  'to have': ['Tive uma reunião de manhã.', 'I had a meeting this morning.'],
+  'to do / make': ['Fiz o jantar ontem à noite.', 'I made dinner last night.'],
+  'to give': ['Dei um presente à Carla.', 'I gave Carla a present.'],
+  'to say': ['Disse que sim.', 'I said yes.'],
+  'to come': ['Vim de autocarro.', 'I came by bus.'],
+  'to bring': ['Trouxe o vinho.', 'I brought the wine.'],
+  'to hear / listen': ['Ouvi a notícia na rádio.', 'I heard the news on the radio.'],
+  'to see': ['Vi um filme ontem.', 'I saw a film yesterday.'],
+  'to read': ['Li o livro todo.', 'I read the whole book.'],
+  'to know (facts)': ['Soube da notícia ontem.', 'I found out about the news yesterday.'],
+  'to be able to / can': ['Não pude ir à festa.', 'I couldn\'t go to the party.'],
+  'to want': ['Quis ficar em casa.', 'I wanted to stay home.'],
+  'to put / place': ['Pus o casaco na cadeira.', 'I put the coat on the chair.'],
+  'to lose / miss': ['Perdi o autocarro.', 'I missed the bus.'],
 };
 function enPrompt(en, subj) { return EU_FORMS[en] || VOCE_FORMS[en] || (subj==='eu' ? 'I — '+en : 'you — '+en); }
 function enPromptVoce(en) { return VOCE_FORMS[en] || 'you — '+en; }
@@ -965,7 +985,7 @@ const ALL_CARDS = [
       note:v.ex_vce, en_note:v.ex_vce_en, filter:'Essenciais' },
     { cat:'Essenciais · passado eu', pt:v.eu_pp,
       prompt_en: PAST_EU_FORMS[v.en] || 'I — '+v.en+' (past)',
-      note:v.ex_eu, en_note:v.ex_eu_en, filter:'Essenciais' },
+      note:(PAST_EX[v.en]||[v.ex_eu])[0], en_note:(PAST_EX[v.en]||[,v.ex_eu_en])[1], filter:'Essenciais' },
   ]),
   ...IRREGULARES.filter(v => v.eu_p !== '—').flatMap(v => [
     { cat:'Irregulares · eu', pt:v.eu_p,
