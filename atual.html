@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="pt" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atual · Português Europeu</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f9f6f0;
+    --surface: #ffffff;
+    --border: #e2ddd6;
+    --green: #2d7a50;
+    --red: #a03428;
+    --text: #1a1a1a;
+    --muted: #6b6560;
+    --highlight: #eef6f1;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+  header {
+    background: var(--surface); border-bottom: 2px solid var(--green);
+    padding: 1.25rem 2rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+  }
+  .header-text h1 { font-family: var(--mono); font-size: 0.95rem; font-weight: 600; color: var(--green); }
+  .header-text p { font-size: 0.8rem; color: var(--muted); margin-top: 0.15rem; }
+
+  .tabs {
+    display: flex; border-bottom: 1px solid var(--border);
+    background: var(--surface); padding: 0 2rem;
+  }
+  .tab {
+    font-family: var(--mono); font-size: 0.8rem; padding: 0.75rem 1.25rem;
+    cursor: pointer; color: var(--muted); border: none; background: none;
+    border-bottom: 2px solid transparent; transition: all 0.2s;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  .view { display: none; padding: 2rem; max-width: 720px; margin: 0 auto; }
+  .view.active { display: block; }
+
+  .section-title {
+    font-family: var(--mono); font-size: 0.68rem; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--green); margin: 2rem 0 0.75rem;
+    border-left: 3px solid var(--green); padding-left: 0.6rem;
+  }
+  .section-title:first-child { margin-top: 0; }
+  .section-title.red { color: var(--red); border-left-color: var(--red); }
+
+  /* CONECTOR CARDS */
+  table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+  th {
+    font-family: var(--mono); font-size: 0.63rem; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--muted); text-align: left;
+    padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);
+  }
+  td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td.pt-word {
+    font-family: var(--mono); font-size: 0.92rem; font-weight: 600;
+    cursor: pointer; width: 22%;
+  }
+  td.pt-word:hover { text-decoration: underline; }
+  td.en-word { width: 25%; font-size: 0.88rem; color: var(--text); }
+  td.use-cell { font-size: 0.82rem; color: var(--muted); width: 53%; }
+  tbody tr:hover { background: var(--highlight); }
+
+  .green { color: var(--green); }
+  .red { color: var(--red); }
+  .orange { color: #c47a00; }
+  .blue { color: #2a5f9e; }
+
+  /* EXAMPLE BLOCKS */
+  .example-list { list-style: none; margin: 0.5rem 0 1rem; }
+  .example-list li {
+    padding: 0.6rem 0.75rem; border-left: 2px solid var(--border);
+    margin-bottom: 0.4rem; cursor: pointer; transition: border-color 0.15s;
+  }
+  .example-list li:hover { border-left-color: var(--green); background: var(--highlight); }
+  .ex-pt { font-family: var(--mono); font-size: 0.87rem; color: var(--green); }
+  .ex-en { font-size: 0.78rem; color: var(--muted); margin-top: 0.15rem; }
+  .ex-connector { background: #eef6f1; border-radius: 3px; padding: 0 3px; }
+
+  /* NOTE */
+  .note-block {
+    background: var(--highlight); border-left: 3px solid var(--green);
+    padding: 0.9rem 1.1rem; border-radius: 0 6px 6px 0; margin: 1rem 0;
+  }
+  .note-block .note-label { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.35rem; }
+  .note-block p { font-size: 0.87rem; line-height: 1.6; }
+  .note-block .pt { font-family: var(--mono); color: var(--green); font-weight: 600; }
+
+  /* DESAFIO */
+  .desafio-wrap { max-width: 520px; margin: 0 auto; }
+  .d-meta { display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem; }
+  .d-streak { color: var(--green); font-weight: 600; }
+  .d-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.75rem 1.5rem 1.5rem; text-align: center; position: relative; min-height: 280px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+  .d-cat { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.75rem; align-self: flex-start; }
+  .d-prompt { font-size: 1rem; color: var(--text); margin-bottom: 1.25rem; line-height: 1.5; }
+  .d-timer-ring { width: 52px; height: 52px; margin: 0 auto 1.25rem; position: relative; }
+  .d-timer-ring svg { transform: rotate(-90deg); }
+  .d-timer-ring circle { fill: none; stroke-width: 4; }
+  .d-timer-track { stroke: var(--border); }
+  .d-timer-fill { stroke: var(--green); stroke-dasharray: 138; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke 0.3s; stroke-linecap: round; }
+  .d-timer-fill.warn { stroke: #c47a00; }
+  .d-timer-fill.danger { stroke: var(--red); }
+  .d-timer-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 0.9rem; font-weight: 600; color: var(--text); }
+  .d-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1.25rem; }
+  .d-answer { font-family: var(--mono); font-size: 1.5rem; font-weight: 600; color: var(--green); filter: blur(8px); background: #e8f4ee; border-radius: 6px; padding: 0.35rem 1rem; cursor: pointer; transition: filter 0.3s, background 0.3s; margin-bottom: 0.75rem; user-select: none; }
+  .d-answer.revealed { filter: blur(0); background: transparent; }
+  .d-speak { background: var(--bg); border: 1px solid var(--border); color: var(--green); padding: 0.3rem 1rem; border-radius: 99px; cursor: pointer; font-size: 0.9rem; margin-bottom: 1.25rem; transition: all 0.2s; }
+  .d-speak:hover { background: var(--green); color: #fff; }
+  .d-note { font-size: 0.78rem; color: var(--muted); font-style: italic; margin-bottom: 1.25rem; min-height: 1.2rem; }
+  .d-actions { display: flex; gap: 0.75rem; }
+  .d-btn { font-family: var(--mono); font-size: 0.82rem; font-weight: 600; padding: 0.6rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; transition: opacity 0.15s; }
+  .d-btn.disse { background: var(--green); color: #fff; }
+  .d-btn.nao { background: #fdf0ef; color: var(--red); border: 1px solid #dba09a; }
+  .d-btn:hover { opacity: 0.85; }
+  .d-hint { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); margin-top: 1rem; letter-spacing: 0.05em; }
+
+  .flashcard-wrap { max-width: 480px; margin: 0 auto; }
+  .vfc-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+  .vfc-counter { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+  .vfc-controls { display: flex; gap: 0.5rem; }
+  .vfc-ctrl { font-family: var(--mono); font-size: 0.72rem; background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 0.35rem 0.85rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .vfc-ctrl:hover { border-color: var(--green); color: var(--green); }
+  .vfc-progress { height: 2px; background: var(--border); border-radius: 1px; margin-bottom: 1.25rem; overflow: hidden; }
+  .vfc-progress-fill { height: 100%; background: var(--green); transition: width 0.3s; }
+  .vfc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; min-height: 300px; display: flex; flex-direction: column; align-items: center; padding: 1.5rem 2rem; text-align: center; gap: 0; }
+  .vfc-hints { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 1.25rem; }
+  .vfc-cat { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); align-self: flex-start; margin-bottom: 0.75rem; }
+  .vfc-en { font-size: 1.05rem; color: var(--text); font-weight: 300; line-height: 1.5; margin-bottom: 1.1rem; }
+  .vfc-divider { width: 2rem; height: 1px; background: var(--border); margin-bottom: 1.1rem; }
+  .vfc-pt { font-family: var(--mono); font-size: 1.5rem; color: var(--green); font-weight: 700; filter: blur(7px); transition: filter 0.3s; cursor: pointer; margin-bottom: 1.1rem; background: var(--border); border-radius: 4px; padding: 0.1rem 0.5rem; display: inline-block; }
+  .vfc-pt.revealed { filter: blur(0); background: transparent; }
+  .vfc-speak { background: var(--bg); border: 1px solid var(--border); color: var(--green); padding: 0.35rem 1.2rem; border-radius: 99px; cursor: pointer; transition: all 0.2s; font-size: 1rem; margin-bottom: 1rem; }
+  .vfc-speak:hover, .vfc-speak.playing { background: var(--green); color: #fff; border-color: var(--green); }
+  .vfc-ex-pt { font-style: italic; font-size: 0.82rem; color: var(--text); filter: blur(5px); transition: filter 0.3s; cursor: pointer; margin-bottom: 0.2rem; background: var(--border); border-radius: 3px; padding: 0.05rem 0.3rem; display: inline-block; }
+  .vfc-ex-pt.revealed { filter: blur(0); background: transparent; }
+  .vfc-ex-en { font-size: 0.75rem; color: var(--muted); filter: blur(5px); transition: filter 0.3s; background: var(--border); border-radius: 3px; padding: 0.05rem 0.3rem; display: inline-block; margin-bottom: 1rem; cursor: pointer; }
+  .vfc-ex-en.revealed { filter: blur(0); background: transparent; }
+  .vfc-nav { display: flex; gap: 1rem; margin-top: auto; }
+  .vfc-nav-btn { font-family: var(--mono); font-size: 0.82rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 0.55rem 1.25rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+  .vfc-nav-btn:hover { border-color: var(--green); color: var(--green); }
+
+  /* QUIZ */
+  .quiz-wrap { max-width: 520px; margin: 0 auto; }
+  .quiz-score { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); margin-bottom: 1.5rem; }
+  .quiz-q { font-family: var(--mono); font-size: 1.2rem; color: var(--green); text-align: center; margin-bottom: 1.25rem; min-height: 50px; }
+  .quiz-prompt { font-size: 0.82rem; color: var(--muted); text-align: center; margin-bottom: 0.75rem; }
+  .quiz-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; margin-bottom: 1rem; }
+  .quiz-opt { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 0.8rem; cursor: pointer; font-size: 0.85rem; color: var(--text); transition: all 0.15s; text-align: center; }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--green); }
+  .quiz-opt.correct { border-color: var(--green); background: var(--highlight); color: var(--green); }
+  .quiz-opt.wrong { border-color: var(--red); background: #fdf0ef; color: var(--red); }
+  .quiz-opt:disabled { cursor: default; }
+  .quiz-feedback { text-align: center; font-family: var(--mono); font-size: 0.82rem; min-height: 1.4rem; margin-bottom: 1rem; }
+  .quiz-feedback.ok { color: var(--green); }
+  .quiz-feedback.bad { color: var(--red); }
+  .quiz-next { display: block; margin: 0 auto; font-family: var(--mono); font-size: 0.85rem; padding: 0.6rem 2rem; background: var(--green); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+  .quiz-next:disabled { opacity: 0.3; cursor: default; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <svg width="32" height="22" viewBox="0 0 32 22" xmlns="http://www.w3.org/2000/svg">
+      <rect width="12" height="22" fill="#006600"/>
+      <rect x="12" width="20" height="22" fill="#FF0000"/>
+      <circle cx="12" cy="11" r="5" fill="#FFD700" stroke="#00008B" stroke-width="0.5"/>
+      <circle cx="12" cy="11" r="3" fill="#00008B"/>
+      <circle cx="12" cy="11" r="1.5" fill="#FFD700"/>
+    </svg>
+  </div>
+  <div class="header-text">
+    <h1>Atual · Current Lessons</h1>
+    <p>A1.1 · Material recente, aulas por ordem</p>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('tabela', this)">Tabela</button>
+  <button class="tab" onclick="switchTab('flashcards', this)">Flashcards</button>
+  <button class="tab" onclick="switchTab('quiz', this)">Quiz</button>
+  <button class="tab" onclick="switchTab('desafio', this)">⚡ Desafio</button>
+</div>
+
+<!-- ══ TABELA ══ -->
+<div id="tabela" class="view active">
+  <div class="section-title" style="font-size:1rem">Aula 9 out</div>
+  <div class="section-title">Passado</div>
+  <table><thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead><tbody>
+    <tr><td class="pt-word green" onclick="speak('joguei')">joguei</td><td class="en-word">I played</td><td class="use-cell">jogar, eu, past <em>Joguei golfe.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('comi')">comi</td><td class="en-word">I ate</td><td class="use-cell">comer, eu, past <em>Comi muito boa comida.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('fizemos')">fizemos</td><td class="en-word">we did; we made</td><td class="use-cell">fazer, nós, past <em>Nós não fizemos reservas.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('encontrámos')">encontrámos</td><td class="en-word">we found</td><td class="use-cell">encontrar, nós, past. The accent on á marks the past; without it, encontramos is &quot;we find&quot;. <em>Encontrámos um restaurante local.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('tornar')">tornar</td><td class="en-word">to turn into; to make (become)</td><td class="use-cell">tornou = he, she, it made or turned into <em>Uma empregada tornou o jantar divertido.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('foi')">foi</td><td class="en-word">was; went (he, she, it)</td><td class="use-cell">past of ser and ir, same form <em>O Douro foi muito bonito.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('bonito')">bonito</td><td class="en-word">beautiful; pretty</td><td class="use-cell">lindo means the same <em>O Douro foi muito bonito.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('lindo')">lindo</td><td class="en-word">beautiful; lovely</td><td class="use-cell">another word for bonito</td></tr>
+    <tr><td class="pt-word green" onclick="speak('divertido')">divertido</td><td class="en-word">fun; amusing (masc.)</td><td class="use-cell">fem. divertida, matches the noun <em>Uma empregada tornou o jantar divertido.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('mais ou menos')">mais ou menos</td><td class="en-word">so-so; more or less</td><td class="use-cell"> <em>O restaurante foi mais ou menos.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('lá')">lá</td><td class="en-word">there (over there)</td><td class="use-cell"> <em>Um amigo foi lá antes.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('antes')">antes</td><td class="en-word">before; earlier</td><td class="use-cell"> <em>Um amigo foi lá antes.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('a primeira vez')">a primeira vez</td><td class="en-word">the first time</td><td class="use-cell"> <em>Para outro, foi a primeira vez em Portugal.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('o melhor')">o melhor</td><td class="en-word">the best (masc.)</td><td class="use-cell"> <em>Qual foi o melhor restaurante?</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('provavelmente')">provavelmente</td><td class="en-word">probably</td><td class="use-cell"> <em>O restaurante de que mais gostámos foi provavelmente o Café São Bento.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('O restaurante foi mais ou menos, mas foi divertido.')">O restaurante foi mais ou menos, mas foi divertido.</td><td class="en-word">The restaurant was so-so, but it was fun.</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('Nós não fizemos reservas, mas encontrámos um restaurante local.')">Nós não fizemos reservas, mas encontrámos um restaurante local.</td><td class="en-word">We did not make reservations, but we found a local restaurant.</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('Uma empregada tornou o jantar divertido.')">Uma empregada tornou o jantar divertido.</td><td class="en-word">A waitress made the dinner fun.</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('Um amigo foi lá antes.')">Um amigo foi lá antes.</td><td class="en-word">A friend went there before.</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('Para outro, foi a primeira vez em Portugal.')">Para outro, foi a primeira vez em Portugal.</td><td class="en-word">For another, it was the first time in Portugal.</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('Para os teus amigos, qual foi o melhor restaurante?')">Para os teus amigos, qual foi o melhor restaurante?</td><td class="en-word">For your friends, which was the best restaurant?</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('O restaurante de que mais gostámos foi provavelmente o Café São Bento.')">O restaurante de que mais gostámos foi provavelmente o Café São Bento.</td><td class="en-word">The restaurant we liked most was probably Café São Bento.</td><td class="use-cell">de que gostámos: the preposition de goes with gostar</td></tr>
+  </tbody></table>
+  <div class="section-title red">Comida</div>
+  <table><thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead><tbody>
+    <tr><td class="pt-word green" onclick="speak('cabrito no forno')">cabrito no forno</td><td class="en-word">roast kid (oven-roasted young goat)</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('bife à Madeira')">bife à Madeira</td><td class="en-word">Madeira-style steak</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('espetadas à Madeira')">espetadas à Madeira</td><td class="en-word">Madeira-style skewers (grilled beef)</td><td class="use-cell"></td></tr>
+  </tbody></table>
+  <div class="section-title" style="color:#c47a00;border-left-color:#c47a00">Pedir</div>
+  <table><thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead><tbody>
+    <tr><td class="pt-word green" onclick="speak('só')">só</td><td class="en-word">only</td><td class="use-cell"> <em>Eu só tenho de ir ao ginásio de manhã.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('tenho de')">tenho de</td><td class="en-word">I have to</td><td class="use-cell"> <em>Tenho de ir ao ginásio.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('destes')">destes</td><td class="en-word">of these (here)</td><td class="use-cell">aqui is optional; used in a pastelaria or café <em>Queria um café e um destes.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('daqueles')">daqueles</td><td class="en-word">of those (over there)</td><td class="use-cell">ali is optional; used in a padaria <em>Queria um café e um daqueles.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('outro')">outro</td><td class="en-word">another (masc.)</td><td class="use-cell">fem. outra <em>Queria outro café.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('mais um')">mais um</td><td class="en-word">plus one; one more (masc.)</td><td class="use-cell">fem. mais uma <em>Queria um destes mais um café.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('à tua esquerda')">à tua esquerda</td><td class="en-word">to your left</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('à tua direita')">à tua direita</td><td class="en-word">to your right</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('peço')">peço</td><td class="en-word">I order; I ask for</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('Queria um café e um destes.')">Queria um café e um destes.</td><td class="en-word">I would like a coffee and one of these.</td><td class="use-cell">destes with aqui, daqueles with ali</td></tr>
+    <tr><td class="pt-word green" onclick="speak('Queria um café e um daqueles.')">Queria um café e um daqueles.</td><td class="en-word">I would like a coffee and one of those.</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('Queria um destes mais um café.')">Queria um destes mais um café.</td><td class="en-word">I would like one of these plus a coffee.</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('Queria outro café.')">Queria outro café.</td><td class="en-word">I would like another coffee.</td><td class="use-cell">outro = another; mais um = plus one</td></tr>
+    <tr><td class="pt-word green" onclick="speak('Não, à tua esquerda.')">Não, à tua esquerda.</td><td class="en-word">No, to your left.</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('Não, à tua direita.')">Não, à tua direita.</td><td class="en-word">No, to your right.</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('É para já.')">É para já.</td><td class="en-word">Coming right up.</td><td class="use-cell">what staff say: all good, right away</td></tr>
+    <tr><td class="pt-word green" onclick="speak('Pode sentar-se.')">Pode sentar-se.</td><td class="en-word">You can sit down.</td><td class="use-cell">pode is often an invitation or instruction, not a question: look for the question mark</td></tr>
+    <tr><td class="pt-word green" onclick="speak('à parte')">à parte</td><td class="en-word">on the side</td><td class="use-cell"> <em>Quero o molho à parte.</em></td></tr>
+  </tbody></table>
+  <div class="section-title" style="color:#2a5f9e;border-left-color:#2a5f9e">Planos</div>
+  <table><thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead><tbody>
+    <tr><td class="pt-word green" onclick="speak('o alarme')">o alarme</td><td class="en-word">the alarm</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('antes de')">antes de</td><td class="en-word">before (+ infinitive)</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('depois de')">depois de</td><td class="en-word">after (+ infinitive)</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('depois')">depois</td><td class="en-word">later; afterwards</td><td class="use-cell"> <em>Depois vou jantar à noite.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('qualquer coisa')">qualquer coisa</td><td class="en-word">anything; whatever</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('gravar')">gravar</td><td class="en-word">to record</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('estou sentado')">estou sentado</td><td class="en-word">I am sitting (masc.)</td><td class="use-cell">fem. estou sentada</td></tr>
+    <tr><td class="pt-word green" onclick="speak('ainda não')">ainda não</td><td class="en-word">not yet</td><td class="use-cell"> <em>Ainda não tenho planos.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('o sítio')">o sítio</td><td class="en-word">the place; the spot</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('prefiro')">prefiro</td><td class="en-word">I prefer</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('é o mais antigo')">é o mais antigo</td><td class="en-word">it is the oldest (masc.)</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('vinte minutos de carro')">vinte minutos de carro</td><td class="en-word">twenty minutes by car</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('acordar')">acordar</td><td class="en-word">to wake up</td><td class="use-cell"> <em>Normalmente acordo às oito.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('durmo')">durmo</td><td class="en-word">I sleep</td><td class="use-cell">dormir: o becomes u in the eu form <em>Não durmo até tarde.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('até')">até</td><td class="en-word">until</td><td class="use-cell"> <em>Não durmo até tarde.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('normalmente')">normalmente</td><td class="en-word">normally; usually</td><td class="use-cell"> <em>Normalmente acordo às oito.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('algures')">algures</td><td class="en-word">somewhere</td><td class="use-cell"> <em>E vou jantar algures.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('de certeza')">de certeza</td><td class="en-word">for sure; definitely</td><td class="use-cell"> <em>Sim, de certeza.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('nada específico')">nada específico</td><td class="en-word">nothing specific</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('cozinhar')">cozinhar</td><td class="en-word">to cook</td><td class="use-cell"> <em>No domingo vou cozinhar o jantar em casa.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('não me lembro')">não me lembro</td><td class="en-word">I do not remember</td><td class="use-cell">lembrar-se: me stays before the verb</td></tr>
+    <tr><td class="pt-word green" onclick="speak('já me lembro')">já me lembro</td><td class="en-word">I remember now</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('deixa ver')">deixa ver</td><td class="en-word">let me see</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('olha!')">olha!</td><td class="en-word">look!</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('Hoje vou à praia da Caparica com amigos.')">Hoje vou à praia da Caparica com amigos.</td><td class="en-word">Today I am going to Caparica beach with friends.</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('Depois vou jantar à noite ao restaurante italiano.')">Depois vou jantar à noite ao restaurante italiano.</td><td class="en-word">Then I am going to have dinner tonight at the Italian restaurant.</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('Como se chama o restaurante?')">Como se chama o restaurante?</td><td class="en-word">What is the restaurant called?</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('Não me lembro. Deixa ver.')">Não me lembro. Deixa ver.</td><td class="en-word">I do not remember. Let me see.</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('Já me lembro. Olha.')">Já me lembro. Olha.</td><td class="en-word">I remember now. Look.</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('No sábado, o que vais fazer?')">No sábado, o que vais fazer?</td><td class="en-word">On Saturday, what are you going to do?</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('Vais ao ginásio?')">Vais ao ginásio?</td><td class="en-word">Are you going to the gym?</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('Sim, de certeza. E vou jantar algures.')">Sim, de certeza. E vou jantar algures.</td><td class="en-word">Yes, for sure. And I am going to have dinner somewhere.</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('E no domingo, tens planos?')">E no domingo, tens planos?</td><td class="en-word">And on Sunday, do you have plans?</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('No domingo, nada específico, mas vou cozinhar o jantar em casa.')">No domingo, nada específico, mas vou cozinhar o jantar em casa.</td><td class="en-word">On Sunday, nothing specific, but I am going to cook dinner at home.</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('A que horas acordas normalmente?')">A que horas acordas normalmente?</td><td class="en-word">What time do you usually wake up?</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('Normalmente acordo às oito. Não durmo até tarde.')">Normalmente acordo às oito. Não durmo até tarde.</td><td class="en-word">I usually wake up at eight. I do not sleep until late.</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('Eu só tenho de ir ao ginásio de manhã.')">Eu só tenho de ir ao ginásio de manhã.</td><td class="en-word">I only have to go to the gym in the morning.</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('Ainda não tenho planos.')">Ainda não tenho planos.</td><td class="en-word">I do not have plans yet.</td><td class="use-cell"></td></tr>
+  </tbody></table>
+  <div class="section-title">Conversa</div>
+  <table><thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead><tbody>
+    <tr><td class="pt-word green" onclick="speak('a questão é que')">a questão é que</td><td class="en-word">the thing is (that)</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('qual')">qual</td><td class="en-word">which</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('se tu pedes')">se tu pedes</td><td class="en-word">if you order</td><td class="use-cell">tu is optional: se pedes</td></tr>
+    <tr><td class="pt-word green" onclick="speak('sabes?')">sabes?</td><td class="en-word">you know? (filler)</td><td class="use-cell">said quickly, close to &quot;sabsh&quot;</td></tr>
+    <tr><td class="pt-word green" onclick="speak('há')">há</td><td class="en-word">there is; there are</td><td class="use-cell"> <em>Há um restaurante italiano.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('fico surpreendido')">fico surpreendido</td><td class="en-word">I am surprised (masc.)</td><td class="use-cell">fem. fico surpreendida</td></tr>
+    <tr><td class="pt-word green" onclick="speak('para além de')">para além de</td><td class="en-word">other than; besides; furthermore</td><td class="use-cell"></td></tr>
+  </tbody></table>
+</div>
+
+<!-- ══ FLASHCARDS ══ -->
+<div id="flashcards" class="view">
+<div class="flashcard-wrap">
+  <div class="vfc-topbar">
+    <span class="vfc-counter" id="vfcCounter">1 / 1</span>
+    <div class="vfc-controls">
+      <button class="vfc-ctrl" onclick="vfcShuffle()">⇄ Baralhar</button>
+      <button class="vfc-ctrl" onclick="vfcReset()">↺ Reiniciar</button>
+    </div>
+  </div>
+  <div class="vfc-progress"><div class="vfc-progress-fill" id="vfcFill"></div></div>
+  <div class="vfc-card">
+    <div class="vfc-hints" id="vfcHints">clique na palavra para revelar · clique no exemplo para ouvir</div>
+    <div class="vfc-cat" id="vfcCat"></div>
+    <div class="vfc-en" id="vfcEn"></div>
+    <div class="vfc-divider"></div>
+    <div class="vfc-pt" id="vfcPt" onclick="vfcReveal()"></div>
+    <button class="vfc-speak" id="vfcSpeak" onclick="vfcSpeakAnswer()">🔊</button>
+    <div class="vfc-ex-pt" id="vfcExPt" onclick="vfcSpeakEx()"></div>
+    <div class="vfc-ex-en" id="vfcExEn"></div>
+    <div class="vfc-nav">
+      <button class="vfc-nav-btn" onclick="vfcMove(-1)">← Anterior</button>
+      <button class="vfc-nav-btn" onclick="vfcMove(1)">Próximo →</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ QUIZ ══ -->
+<div id="quiz" class="view">
+<div class="quiz-wrap">
+  <div class="quiz-score" id="quiz-score">Score: 0 / 0</div>
+  <div class="quiz-q" id="quiz-q"></div>
+  <div class="quiz-prompt" id="quiz-prompt"></div>
+  <div class="quiz-opts" id="quiz-opts"></div>
+  <div class="quiz-feedback" id="quiz-fb"></div>
+  <button class="quiz-next" id="quiz-next" onclick="nextQuiz()" disabled>Próximo →</button>
+</div>
+</div>
+
+<!-- ══ DESAFIO ══ -->
+<div id="desafio" class="view">
+<div class="desafio-wrap">
+  <div class="d-meta">
+    <span id="d-score-display">Score: 0 / 0</span>
+    <span class="d-streak" id="d-streak-display"></span>
+  </div>
+  <div class="d-card">
+    <span class="d-cat" id="d-cat"></span>
+    <div class="d-prompt" id="d-prompt"></div>
+    <div class="d-timer-ring">
+      <svg width="52" height="52" viewBox="0 0 52 52">
+        <circle class="d-timer-track" cx="26" cy="26" r="22"/>
+        <circle class="d-timer-fill" id="d-timer-fill" cx="26" cy="26" r="22"/>
+      </svg>
+      <div class="d-timer-text" id="d-timer-text">5</div>
+    </div>
+    <div class="d-divider"></div>
+    <div class="d-answer" id="d-answer" onclick="revealDesafio()"></div>
+    <button class="d-speak" onclick="speakDesafio()">🔊</button>
+    <div class="d-note" id="d-note"></div>
+    <div class="d-actions" id="d-actions" style="display:none">
+      <button class="d-btn disse" onclick="scoreDesafio(true)">✓ Disse</button>
+      <button class="d-btn nao" onclick="scoreDesafio(false)">✗ Não disse</button>
+    </div>
+    <div class="d-hint" id="d-hint">diz em voz alta · depois clica para revelar</div>
+  </div>
+</div>
+</div>
+
+<script>
+const WORKER_URL = "https://portuguese-tts-speechify.drh-dave.workers.dev";
+const audioCache = {};
+async function speak(text) {
+  if (!text) return;
+  if (audioCache[text]) { audioCache[text].currentTime=0; audioCache[text].play(); return; }
+  try {
+    const res = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({text}) });
+    if (!res.ok) throw new Error();
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    audioCache[text] = audio; audio.play();
+  } catch(e) {}
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if (id==='flashcards') vfcRender();
+  if (id==='quiz') startQuiz();
+  if (id==='desafio') initDesafio();
+}
+
+const CARDS = [
+  {"cat": "Aula 9 out · Passado", "pt": "joguei", "en": "I played", "ex": "Joguei golfe.", "note": "Joguei golfe.", "en_note": "I played golf.", "track": "w", "y": "verb"},
+  {"cat": "Aula 9 out · Passado", "pt": "comi", "en": "I ate", "ex": "Comi muito boa comida.", "note": "Comi muito boa comida.", "en_note": "I ate really good food.", "track": "w", "y": "verb"},
+  {"cat": "Aula 9 out · Passado", "pt": "fizemos", "en": "we did; we made", "ex": "Nós não fizemos reservas.", "note": "Nós não fizemos reservas.", "en_note": "We did not make reservations.", "track": "w", "y": "verb"},
+  {"cat": "Aula 9 out · Passado", "pt": "encontrámos", "en": "we found", "ex": "Encontrámos um restaurante local.", "note": "Encontrámos um restaurante local.", "en_note": "We found a local restaurant.", "track": "w", "y": "verb"},
+  {"cat": "Aula 9 out · Passado", "pt": "tornar", "en": "to turn into; to make (become)", "ex": "Uma empregada tornou o jantar divertido.", "note": "Uma empregada tornou o jantar divertido.", "en_note": "A waitress made the dinner fun.", "track": "w", "y": "verb"},
+  {"cat": "Aula 9 out · Passado", "pt": "foi", "en": "was; went (he, she, it)", "ex": "O Douro foi muito bonito.", "note": "O Douro foi muito bonito.", "en_note": "The Douro was very beautiful.", "track": "w", "y": "verb"},
+  {"cat": "Aula 9 out · Passado", "pt": "bonito", "en": "beautiful; pretty", "ex": "O Douro foi muito bonito.", "note": "O Douro foi muito bonito.", "en_note": "The Douro was very beautiful.", "track": "w"},
+  {"cat": "Aula 9 out · Passado", "pt": "lindo", "en": "beautiful; lovely", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 9 out · Passado", "pt": "divertido", "en": "fun; amusing (masc.)", "ex": "Uma empregada tornou o jantar divertido.", "note": "Uma empregada tornou o jantar divertido.", "en_note": "A waitress made the dinner fun.", "track": "w"},
+  {"cat": "Aula 9 out · Passado", "pt": "mais ou menos", "en": "so-so; more or less", "ex": "O restaurante foi mais ou menos.", "note": "O restaurante foi mais ou menos.", "en_note": "The restaurant was so-so.", "track": "w"},
+  {"cat": "Aula 9 out · Passado", "pt": "lá", "en": "there (over there)", "ex": "Um amigo foi lá antes.", "note": "Um amigo foi lá antes.", "en_note": "A friend went there before.", "track": "w"},
+  {"cat": "Aula 9 out · Passado", "pt": "antes", "en": "before; earlier", "ex": "Um amigo foi lá antes.", "note": "Um amigo foi lá antes.", "en_note": "A friend went there before.", "track": "w"},
+  {"cat": "Aula 9 out · Passado", "pt": "a primeira vez", "en": "the first time", "ex": "Para outro, foi a primeira vez em Portugal.", "note": "Para outro, foi a primeira vez em Portugal.", "en_note": "For another, it was the first time in Portugal.", "track": "w"},
+  {"cat": "Aula 9 out · Passado", "pt": "o melhor", "en": "the best (masc.)", "ex": "Qual foi o melhor restaurante?", "note": "Qual foi o melhor restaurante?", "en_note": "Which was the best restaurant?", "track": "w"},
+  {"cat": "Aula 9 out · Passado", "pt": "provavelmente", "en": "probably", "ex": "O restaurante de que mais gostámos foi provavelmente o Café São Bento.", "note": "O restaurante de que mais gostámos foi provavelmente o Café São Bento.", "en_note": "The restaurant we liked most was probably Café São Bento.", "track": "w"},
+  {"cat": "Aula 9 out · Passado", "pt": "O restaurante foi mais ou menos, mas foi divertido.", "en": "The restaurant was so-so, but it was fun.", "ex": "O restaurante foi mais ou menos, mas foi divertido.", "note": "", "en_note": "", "track": "p"},
+  {"cat": "Aula 9 out · Comida", "pt": "cabrito no forno", "en": "roast kid (oven-roasted young goat)", "ex": "", "note": "", "en_note": "", "track": "w", "y": "vocab"},
+  {"cat": "Aula 9 out · Comida", "pt": "bife à Madeira", "en": "Madeira-style steak", "ex": "", "note": "", "en_note": "", "track": "w", "y": "vocab"},
+  {"cat": "Aula 9 out · Comida", "pt": "espetadas à Madeira", "en": "Madeira-style skewers (grilled beef)", "ex": "", "note": "", "en_note": "", "track": "w", "y": "vocab"},
+  {"cat": "Aula 9 out · Pedir", "pt": "só", "en": "only", "ex": "Eu só tenho de ir ao ginásio de manhã.", "note": "Eu só tenho de ir ao ginásio de manhã.", "en_note": "I only have to go to the gym in the morning.", "track": "w"},
+  {"cat": "Aula 9 out · Pedir", "pt": "tenho de", "en": "I have to", "ex": "Tenho de ir ao ginásio.", "note": "Tenho de ir ao ginásio.", "en_note": "I have to go to the gym.", "track": "w", "y": "verb"},
+  {"cat": "Aula 9 out · Pedir", "pt": "destes", "en": "of these (here)", "ex": "Queria um café e um destes.", "note": "Queria um café e um destes.", "en_note": "I would like a coffee and one of these.", "track": "w"},
+  {"cat": "Aula 9 out · Pedir", "pt": "daqueles", "en": "of those (over there)", "ex": "Queria um café e um daqueles.", "note": "Queria um café e um daqueles.", "en_note": "I would like a coffee and one of those.", "track": "w"},
+  {"cat": "Aula 9 out · Pedir", "pt": "outro", "en": "another (masc.)", "ex": "Queria outro café.", "note": "Queria outro café.", "en_note": "I would like another coffee.", "track": "w"},
+  {"cat": "Aula 9 out · Pedir", "pt": "mais um", "en": "plus one; one more (masc.)", "ex": "Queria um destes mais um café.", "note": "Queria um destes mais um café.", "en_note": "I would like one of these plus a coffee.", "track": "w"},
+  {"cat": "Aula 9 out · Pedir", "pt": "à tua esquerda", "en": "to your left", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 9 out · Pedir", "pt": "à tua direita", "en": "to your right", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 9 out · Pedir", "pt": "peço", "en": "I order; I ask for", "ex": "", "note": "", "en_note": "", "track": "w", "y": "verb"},
+  {"cat": "Aula 9 out · Pedir", "pt": "Não, à tua direita.", "en": "No, to your right.", "ex": "Não, à tua direita.", "note": "", "en_note": "", "track": "p"},
+  {"cat": "Aula 9 out · Pedir", "pt": "Pode sentar-se.", "en": "You can sit down.", "ex": "Pode sentar-se.", "note": "", "en_note": "pode is often an invitation or instruction, not a question: look for the question mark", "track": "p"},
+  {"cat": "Aula 9 out · Pedir", "pt": "à parte", "en": "on the side", "ex": "Quero o molho à parte.", "note": "Quero o molho à parte.", "en_note": "I want the sauce on the side.", "track": "w"},
+  {"cat": "Aula 9 out · Planos", "pt": "o alarme", "en": "the alarm", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 9 out · Planos", "pt": "antes de", "en": "before (+ infinitive)", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 9 out · Planos", "pt": "depois de", "en": "after (+ infinitive)", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 9 out · Planos", "pt": "depois", "en": "later; afterwards", "ex": "Depois vou jantar à noite.", "note": "Depois vou jantar à noite.", "en_note": "Later I am going to have dinner tonight.", "track": "w"},
+  {"cat": "Aula 9 out · Planos", "pt": "qualquer coisa", "en": "anything; whatever", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 9 out · Planos", "pt": "gravar", "en": "to record", "ex": "", "note": "", "en_note": "", "track": "w", "y": "verb"},
+  {"cat": "Aula 9 out · Planos", "pt": "estou sentado", "en": "I am sitting (masc.)", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 9 out · Planos", "pt": "ainda não", "en": "not yet", "ex": "Ainda não tenho planos.", "note": "Ainda não tenho planos.", "en_note": "I do not have plans yet.", "track": "w"},
+  {"cat": "Aula 9 out · Planos", "pt": "o sítio", "en": "the place; the spot", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 9 out · Planos", "pt": "prefiro", "en": "I prefer", "ex": "", "note": "", "en_note": "", "track": "w", "y": "verb"},
+  {"cat": "Aula 9 out · Planos", "pt": "é o mais antigo", "en": "it is the oldest (masc.)", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 9 out · Planos", "pt": "vinte minutos de carro", "en": "twenty minutes by car", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 9 out · Planos", "pt": "acordar", "en": "to wake up", "ex": "Normalmente acordo às oito.", "note": "Normalmente acordo às oito.", "en_note": "I usually wake up at eight.", "track": "w", "y": "verb"},
+  {"cat": "Aula 9 out · Planos", "pt": "durmo", "en": "I sleep", "ex": "Não durmo até tarde.", "note": "Não durmo até tarde.", "en_note": "I do not sleep until late.", "track": "w", "y": "verb"},
+  {"cat": "Aula 9 out · Planos", "pt": "até", "en": "until", "ex": "Não durmo até tarde.", "note": "Não durmo até tarde.", "en_note": "I do not sleep until late.", "track": "w"},
+  {"cat": "Aula 9 out · Planos", "pt": "normalmente", "en": "normally; usually", "ex": "Normalmente acordo às oito.", "note": "Normalmente acordo às oito.", "en_note": "I usually wake up at eight.", "track": "w"},
+  {"cat": "Aula 9 out · Planos", "pt": "algures", "en": "somewhere", "ex": "E vou jantar algures.", "note": "E vou jantar algures.", "en_note": "And I am going to have dinner somewhere.", "track": "w"},
+  {"cat": "Aula 9 out · Planos", "pt": "de certeza", "en": "for sure; definitely", "ex": "Sim, de certeza.", "note": "Sim, de certeza.", "en_note": "Yes, for sure.", "track": "w"},
+  {"cat": "Aula 9 out · Planos", "pt": "nada específico", "en": "nothing specific", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 9 out · Planos", "pt": "cozinhar", "en": "to cook", "ex": "No domingo vou cozinhar o jantar em casa.", "note": "No domingo vou cozinhar o jantar em casa.", "en_note": "On Sunday I am going to cook dinner at home.", "track": "w", "y": "verb"},
+  {"cat": "Aula 9 out · Planos", "pt": "não me lembro", "en": "I do not remember", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 9 out · Planos", "pt": "já me lembro", "en": "I remember now", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 9 out · Planos", "pt": "deixa ver", "en": "let me see", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 9 out · Planos", "pt": "olha!", "en": "look!", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 9 out · Planos", "pt": "Vais ao ginásio?", "en": "Are you going to the gym?", "ex": "Vais ao ginásio?", "note": "", "en_note": "", "track": "p"},
+  {"cat": "Aula 9 out · Conversa", "pt": "a questão é que", "en": "the thing is (that)", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 9 out · Conversa", "pt": "qual", "en": "which", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 9 out · Conversa", "pt": "se tu pedes", "en": "if you order", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 9 out · Conversa", "pt": "sabes?", "en": "you know? (filler)", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 9 out · Conversa", "pt": "há", "en": "there is; there are", "ex": "Há um restaurante italiano.", "note": "Há um restaurante italiano.", "en_note": "There is an Italian restaurant.", "track": "w"},
+  {"cat": "Aula 9 out · Conversa", "pt": "fico surpreendido", "en": "I am surprised (masc.)", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 9 out · Conversa", "pt": "para além de", "en": "other than; besides; furthermore", "ex": "", "note": "", "en_note": "", "track": "w"}
+];
+
+let vfcDeck=[...CARDS], vfcIdx=0, vfcRevealed=false;
+
+function vfcRender() {
+  const c=vfcDeck[vfcIdx];
+  vfcRevealed=false;
+  document.getElementById('vfcCounter').textContent=`${vfcIdx+1} / ${vfcDeck.length}`;
+  document.getElementById('vfcFill').style.width=`${((vfcIdx+1)/vfcDeck.length)*100}%`;
+  document.getElementById('vfcCat').textContent=c.cat||'';
+  document.getElementById('vfcEn').textContent=c.en;
+  const pt=document.getElementById('vfcPt');
+  pt.textContent=c.pt; pt.className='vfc-pt';
+  const exPt=document.getElementById('vfcExPt');
+  exPt.textContent=c.note||''; exPt.className='vfc-ex-pt';
+  const exEn=document.getElementById('vfcExEn');
+  exEn.textContent=c.en_note||''; exEn.className='vfc-ex-en';
+  exEn.onclick=()=>exEn.classList.add('revealed');
+  document.getElementById('vfcHints').textContent='clique na palavra para revelar · clique no exemplo para ouvir';
+  document.getElementById('vfcSpeak').classList.remove('playing');
+}
+function vfcReveal() {
+  if(vfcRevealed) return; vfcRevealed=true;
+  document.getElementById('vfcPt').classList.add('revealed');
+  document.getElementById('vfcExPt').classList.add('revealed');
+  document.getElementById('vfcHints').textContent='';
+}
+function vfcSpeakAnswer() { speak(vfcDeck[vfcIdx].pt, document.getElementById('vfcSpeak')); }
+function vfcSpeakEx() {
+  vfcReveal();
+  speak(vfcDeck[vfcIdx].note||vfcDeck[vfcIdx].pt, document.getElementById('vfcExPt'));
+}
+function vfcMove(dir) { vfcIdx=(vfcIdx+dir+vfcDeck.length)%vfcDeck.length; vfcRender(); }
+function vfcShuffle() { vfcDeck=[...CARDS].sort(()=>Math.random()-0.5); vfcIdx=0; vfcRender(); }
+function vfcReset() { vfcDeck=[...CARDS]; vfcIdx=0; vfcRender(); }
+vfcRender();
+
+const QUIZ_POOL = CARDS.filter(c=>c.track==='w').map(c=>({q:c.pt, a:c.en, ex:c.ex}));
+let qDeck=[],qIdx=0,qScore=0,qTotal=0,qAnswered=false;
+function startQuiz() { qDeck=[...QUIZ_POOL].sort(()=>Math.random()-0.5); qIdx=0;qScore=0;qTotal=0;qAnswered=false; loadQuiz(); }
+function loadQuiz() {
+  qAnswered=false;
+  document.getElementById('quiz-fb').textContent='';
+  document.getElementById('quiz-fb').className='quiz-feedback';
+  document.getElementById('quiz-next').disabled=true;
+  const item=qDeck[qIdx%qDeck.length];
+  document.getElementById('quiz-q').textContent=item.q;
+  document.getElementById('quiz-prompt').textContent='Choose the correct English meaning:';
+  const others=QUIZ_POOL.filter(x=>x.a!==item.a).sort(()=>Math.random()-0.5).slice(0,3).map(x=>x.a);
+  const opts=[item.a,...others].sort(()=>Math.random()-0.5);
+  const c=document.getElementById('quiz-opts'); c.innerHTML='';
+  opts.forEach(opt=>{
+    const btn=document.createElement('button'); btn.className='quiz-opt'; btn.textContent=opt;
+    btn.onclick=()=>checkAnswer(btn,opt,item); c.appendChild(btn);
+  });
+  document.getElementById('quiz-score').textContent=`Score: ${qScore} / ${qTotal}`;
+}
+function checkAnswer(btn,chosen,item) {
+  if(qAnswered) return;
+  qAnswered=true; qTotal++;
+  const fb=document.getElementById('quiz-fb');
+  if(chosen===item.a){ btn.classList.add('correct'); fb.textContent='Correto! ✓'; fb.className='quiz-feedback ok'; qScore++; speak(item.q); }
+  else { btn.classList.add('wrong'); fb.textContent=`Errado — "${item.a}"`; fb.className='quiz-feedback bad'; document.querySelectorAll('.quiz-opt').forEach(b=>{if(b.textContent===item.a)b.classList.add('correct');}); speak(item.q); }
+  document.querySelectorAll('.quiz-opt').forEach(b=>b.disabled=true);
+  document.getElementById('quiz-next').disabled=false;
+  document.getElementById('quiz-score').textContent=`Score: ${qScore} / ${qTotal}`;
+}
+function nextQuiz() { qIdx++; if(qIdx>=qDeck.length){qDeck=[...QUIZ_POOL].sort(()=>Math.random()-0.5);qIdx=0;} loadQuiz(); }
+
+// ── DESAFIO ──────────────────────────────────────────────────────
+const DESAFIO_CARDS = [
+  {"cat": "Aula 9 out · Passado", "prompt": "Say \"I played golf.\"", "answer": "Joguei golfe.", "note": "jogar, eu, passado"},
+  {"cat": "Aula 9 out · Passado", "prompt": "Say \"I ate really good food.\"", "answer": "Comi muito boa comida.", "note": "comer, eu, passado"},
+  {"cat": "Aula 9 out · Passado", "prompt": "Say \"We did not make reservations, but we found a local restaurant.\"", "answer": "Nós não fizemos reservas, mas encontrámos um restaurante local.", "note": "fizemos, encontrámos: nós, passado"},
+  {"cat": "Aula 9 out · Passado", "prompt": "Say \"A waitress made the dinner fun.\"", "answer": "Uma empregada tornou o jantar divertido.", "note": "tornar = to turn into"},
+  {"cat": "Aula 9 out · Passado", "prompt": "Say \"The Douro was very beautiful.\"", "answer": "O Douro foi muito bonito.", "note": "foi = ser, passado"},
+  {"cat": "Aula 9 out · Passado", "prompt": "Say \"A friend went there before.\"", "answer": "Um amigo foi lá antes.", "note": "foi = ir, passado"},
+  {"cat": "Aula 9 out · Passado", "prompt": "Ask a friend \"For your friends, which was the best restaurant?\"", "answer": "Para os teus amigos, qual foi o melhor restaurante?", "note": "qual = which"},
+  {"cat": "Aula 9 out · Passado", "prompt": "Say \"The restaurant we liked most was probably Café São Bento.\"", "answer": "O restaurante de que mais gostámos foi provavelmente o Café São Bento.", "note": "gostar de, nós, passado. de que gostámos: the preposition de goes with gostar"},
+  {"cat": "Aula 9 out · Pedir", "prompt": "Say \"I would like a coffee and one of these.\" (pointing, here)", "answer": "Queria um café e um destes.", "note": "destes = aqui. destes with aqui, daqueles with ali"},
+  {"cat": "Aula 9 out · Pedir", "prompt": "Say \"I would like a coffee and one of those.\" (pointing, over there)", "answer": "Queria um café e um daqueles.", "note": "daqueles = ali"},
+  {"cat": "Aula 9 out · Pedir", "prompt": "Say \"I would like another coffee.\"", "answer": "Queria outro café.", "note": "outro = another. outro = another; mais um = plus one"},
+  {"cat": "Aula 9 out · Pedir", "prompt": "Say \"I would like one of these plus a coffee.\"", "answer": "Queria um destes mais um café.", "note": "mais = plus"},
+  {"cat": "Aula 9 out · Pedir", "prompt": "The staff say \"No, to your left.\" Say it.", "answer": "Não, à tua esquerda.", "note": ""},
+  {"cat": "Aula 9 out · Pedir", "prompt": "Say \"Coming right up.\" (as the waiter)", "answer": "É para já.", "note": "what staff say: all good, right away"},
+  {"cat": "Aula 9 out · Planos", "prompt": "Say \"Today I am going to Caparica beach with friends.\"", "answer": "Hoje vou à praia da Caparica com amigos.", "note": "ir a + a = à"},
+  {"cat": "Aula 9 out · Planos", "prompt": "Say \"Then I am going to have dinner tonight at the Italian restaurant.\"", "answer": "Depois vou jantar à noite ao restaurante italiano.", "note": "ir + infinitivo"},
+  {"cat": "Aula 9 out · Planos", "prompt": "Ask \"What is the restaurant called?\"", "answer": "Como se chama o restaurante?", "note": ""},
+  {"cat": "Aula 9 out · Planos", "prompt": "Say \"I do not remember. Let me see.\"", "answer": "Não me lembro. Deixa ver.", "note": ""},
+  {"cat": "Aula 9 out · Planos", "prompt": "Say \"I remember now. Look.\"", "answer": "Já me lembro. Olha.", "note": ""},
+  {"cat": "Aula 9 out · Planos", "prompt": "Ask \"On Saturday, what are you going to do?\"", "answer": "No sábado, o que vais fazer?", "note": ""},
+  {"cat": "Aula 9 out · Planos", "prompt": "Say \"Yes, for sure. And I am going to have dinner somewhere.\"", "answer": "Sim, de certeza. E vou jantar algures.", "note": ""},
+  {"cat": "Aula 9 out · Planos", "prompt": "Ask \"And on Sunday, do you have plans?\"", "answer": "E no domingo, tens planos?", "note": ""},
+  {"cat": "Aula 9 out · Planos", "prompt": "Say \"On Sunday, nothing specific, but I am going to cook dinner at home.\"", "answer": "No domingo, nada específico, mas vou cozinhar o jantar em casa.", "note": ""},
+  {"cat": "Aula 9 out · Planos", "prompt": "Ask \"What time do you usually wake up?\"", "answer": "A que horas acordas normalmente?", "note": ""},
+  {"cat": "Aula 9 out · Planos", "prompt": "Say \"I usually wake up at eight. I do not sleep until late.\"", "answer": "Normalmente acordo às oito. Não durmo até tarde.", "note": "durmo: o becomes u"},
+  {"cat": "Aula 9 out · Planos", "prompt": "Say \"I only have to go to the gym in the morning.\"", "answer": "Eu só tenho de ir ao ginásio de manhã.", "note": "só = only; tenho de = have to"},
+  {"cat": "Aula 9 out · Planos", "prompt": "Say \"I do not have plans yet.\"", "answer": "Ainda não tenho planos.", "note": "ainda não = not yet"}
+];
+
+let dDeck=[], dIdx=0, dCorrect=0, dTotal=0, dStreak=0, dTimer=null, dSecondsLeft=5, dRevealed=false;
+
+function initDesafio(){
+  dDeck=[...DESAFIO_CARDS].sort(()=>Math.random()-0.5);
+  dIdx=0; dCorrect=0; dTotal=0; dStreak=0;
+  loadDesafioCard();
+}
+
+function loadDesafioCard(){
+  dRevealed=false; clearInterval(dTimer); dSecondsLeft=5;
+  const c=dDeck[dIdx%dDeck.length];
+  document.getElementById('d-cat').textContent=c.cat;
+  document.getElementById('d-prompt').textContent=c.prompt;
+  document.getElementById('d-answer').textContent=c.answer;
+  document.getElementById('d-answer').classList.remove('revealed');
+  document.getElementById('d-note').textContent=c.note||'';
+  document.getElementById('d-actions').style.display='none';
+  document.getElementById('d-hint').style.display='block';
+  document.getElementById('d-score-display').textContent=`Score: ${dCorrect} / ${dTotal}`;
+  document.getElementById('d-streak-display').textContent=dStreak>=3?`🔥 ${dStreak}`:'';
+  const fill=document.getElementById('d-timer-fill'), txt=document.getElementById('d-timer-text');
+  fill.style.strokeDashoffset=0; fill.className='d-timer-fill'; txt.textContent=5;
+  dTimer=setInterval(()=>{
+    dSecondsLeft--;
+    txt.textContent=dSecondsLeft;
+    fill.style.strokeDashoffset=138*(1-dSecondsLeft/5);
+    if(dSecondsLeft<=2) fill.classList.add('warn');
+    if(dSecondsLeft<=1){fill.classList.remove('warn');fill.classList.add('danger');}
+    if(dSecondsLeft<=0){
+      clearInterval(dTimer);
+      txt.textContent='✓';
+      fill.style.stroke='var(--border)';
+      document.getElementById('d-hint').textContent='tempo — toca para revelar';
+    }
+  },1000);
+}
+
+function revealDesafio(){
+  if(dRevealed) return; dRevealed=true; clearInterval(dTimer);
+  document.getElementById('d-timer-text').textContent='✓';
+  document.getElementById('d-answer').classList.add('revealed');
+  document.getElementById('d-actions').style.display='flex';
+  document.getElementById('d-hint').style.display='none';
+  speak(dDeck[dIdx%dDeck.length].answer);
+}
+
+function speakDesafio(){speak(dDeck[dIdx%dDeck.length].answer);}
+
+function scoreDesafio(correct){
+  dTotal++; if(correct){dCorrect++;dStreak++;}else{dStreak=0;}
+  dIdx++; loadDesafioCard();
+}
+</script>
+</body>
+</html>
