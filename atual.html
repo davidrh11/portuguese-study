@@ -166,6 +166,8 @@
   .quiz-feedback.bad { color: var(--red); }
   .quiz-next { display: block; margin: 0 auto; font-family: var(--mono); font-size: 0.85rem; padding: 0.6rem 2rem; background: var(--green); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
   .quiz-next:disabled { opacity: 0.3; cursor: default; }
+  .ex-link { cursor: pointer; font-style: italic; }
+  .ex-link:hover { text-decoration: underline; color: var(--green); }
 </style>
 </head>
 <body>
@@ -198,21 +200,21 @@
   <div class="section-title" style="font-size:1rem">Aula 9 out</div>
   <div class="section-title">Passado</div>
   <table><thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead><tbody>
-    <tr><td class="pt-word green" onclick="speak('joguei')">joguei</td><td class="en-word">I played</td><td class="use-cell">jogar, eu, past <em>Joguei golfe.</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('comi')">comi</td><td class="en-word">I ate</td><td class="use-cell">comer, eu, past <em>Comi muito boa comida.</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('fizemos')">fizemos</td><td class="en-word">we did; we made</td><td class="use-cell">fazer, nós, past <em>Nós não fizemos reservas.</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('encontrámos')">encontrámos</td><td class="en-word">we found</td><td class="use-cell">encontrar, nós, past. The accent on á marks the past; without it, encontramos is &quot;we find&quot;. <em>Encontrámos um restaurante local.</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('tornar')">tornar</td><td class="en-word">to turn into; to make (become)</td><td class="use-cell">tornou = he, she, it made or turned into <em>Uma empregada tornou o jantar divertido.</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('foi')">foi</td><td class="en-word">was; went (he, she, it)</td><td class="use-cell">past of ser and ir, same form <em>O Douro foi muito bonito.</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('bonito')">bonito</td><td class="en-word">beautiful; pretty</td><td class="use-cell">lindo means the same <em>O Douro foi muito bonito.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('joguei')">joguei</td><td class="en-word">I played</td><td class="use-cell">jogar, eu, past <em class="ex-link" onclick="speak('Joguei golfe.')" title="ouvir">🔊 Joguei golfe.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('comi')">comi</td><td class="en-word">I ate</td><td class="use-cell">comer, eu, past <em class="ex-link" onclick="speak('Comi muito boa comida.')" title="ouvir">🔊 Comi muito boa comida.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('fizemos')">fizemos</td><td class="en-word">we did; we made</td><td class="use-cell">fazer, nós, past <em class="ex-link" onclick="speak('Nós não fizemos reservas.')" title="ouvir">🔊 Nós não fizemos reservas.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('encontrámos')">encontrámos</td><td class="en-word">we found</td><td class="use-cell">encontrar, nós, past. The accent on á marks the past; without it, encontramos is &quot;we find&quot;. <em class="ex-link" onclick="speak('Encontrámos um restaurante local.')" title="ouvir">🔊 Encontrámos um restaurante local.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('tornar')">tornar</td><td class="en-word">to turn into; to make (become)</td><td class="use-cell">tornou = he, she, it made or turned into <em class="ex-link" onclick="speak('Uma empregada tornou o jantar divertido.')" title="ouvir">🔊 Uma empregada tornou o jantar divertido.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('foi')">foi</td><td class="en-word">was; went (he, she, it)</td><td class="use-cell">past of ser and ir, same form <em class="ex-link" onclick="speak('O Douro foi muito bonito.')" title="ouvir">🔊 O Douro foi muito bonito.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('bonito')">bonito</td><td class="en-word">beautiful; pretty</td><td class="use-cell">lindo means the same <em class="ex-link" onclick="speak('O Douro foi muito bonito.')" title="ouvir">🔊 O Douro foi muito bonito.</em></td></tr>
     <tr><td class="pt-word green" onclick="speak('lindo')">lindo</td><td class="en-word">beautiful; lovely</td><td class="use-cell">another word for bonito</td></tr>
-    <tr><td class="pt-word green" onclick="speak('divertido')">divertido</td><td class="en-word">fun; amusing (masc.)</td><td class="use-cell">fem. divertida, matches the noun <em>Uma empregada tornou o jantar divertido.</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('mais ou menos')">mais ou menos</td><td class="en-word">so-so; more or less</td><td class="use-cell"> <em>O restaurante foi mais ou menos.</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('lá')">lá</td><td class="en-word">there (over there)</td><td class="use-cell"> <em>Um amigo foi lá antes.</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('antes')">antes</td><td class="en-word">before; earlier</td><td class="use-cell"> <em>Um amigo foi lá antes.</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('a primeira vez')">a primeira vez</td><td class="en-word">the first time</td><td class="use-cell"> <em>Para outro, foi a primeira vez em Portugal.</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('o melhor')">o melhor</td><td class="en-word">the best (masc.)</td><td class="use-cell"> <em>Qual foi o melhor restaurante?</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('provavelmente')">provavelmente</td><td class="en-word">probably</td><td class="use-cell"> <em>O restaurante de que mais gostámos foi provavelmente o Café São Bento.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('divertido')">divertido</td><td class="en-word">fun; amusing (masc.)</td><td class="use-cell">fem. divertida, matches the noun <em class="ex-link" onclick="speak('Uma empregada tornou o jantar divertido.')" title="ouvir">🔊 Uma empregada tornou o jantar divertido.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('mais ou menos')">mais ou menos</td><td class="en-word">so-so; more or less</td><td class="use-cell"> <em class="ex-link" onclick="speak('O restaurante foi mais ou menos.')" title="ouvir">🔊 O restaurante foi mais ou menos.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('lá')">lá</td><td class="en-word">there (over there)</td><td class="use-cell"> <em class="ex-link" onclick="speak('Um amigo foi lá antes.')" title="ouvir">🔊 Um amigo foi lá antes.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('antes')">antes</td><td class="en-word">before; earlier</td><td class="use-cell"> <em class="ex-link" onclick="speak('Um amigo foi lá antes.')" title="ouvir">🔊 Um amigo foi lá antes.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('a primeira vez')">a primeira vez</td><td class="en-word">the first time</td><td class="use-cell"> <em class="ex-link" onclick="speak('Para outro, foi a primeira vez em Portugal.')" title="ouvir">🔊 Para outro, foi a primeira vez em Portugal.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('o melhor')">o melhor</td><td class="en-word">the best (masc.)</td><td class="use-cell"> <em class="ex-link" onclick="speak('Qual foi o melhor restaurante?')" title="ouvir">🔊 Qual foi o melhor restaurante?</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('provavelmente')">provavelmente</td><td class="en-word">probably</td><td class="use-cell"> <em class="ex-link" onclick="speak('O restaurante de que mais gostámos foi provavelmente o Café São Bento.')" title="ouvir">🔊 O restaurante de que mais gostámos foi provavelmente o Café São Bento.</em></td></tr>
     <tr><td class="pt-word green" onclick="speak('O restaurante foi mais ou menos, mas foi divertido.')">O restaurante foi mais ou menos, mas foi divertido.</td><td class="en-word">The restaurant was so-so, but it was fun.</td><td class="use-cell"></td></tr>
     <tr><td class="pt-word green" onclick="speak('Nós não fizemos reservas, mas encontrámos um restaurante local.')">Nós não fizemos reservas, mas encontrámos um restaurante local.</td><td class="en-word">We did not make reservations, but we found a local restaurant.</td><td class="use-cell"></td></tr>
     <tr><td class="pt-word green" onclick="speak('Uma empregada tornou o jantar divertido.')">Uma empregada tornou o jantar divertido.</td><td class="en-word">A waitress made the dinner fun.</td><td class="use-cell"></td></tr>
@@ -229,12 +231,12 @@
   </tbody></table>
   <div class="section-title" style="color:#c47a00;border-left-color:#c47a00">Pedir</div>
   <table><thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead><tbody>
-    <tr><td class="pt-word green" onclick="speak('só')">só</td><td class="en-word">only</td><td class="use-cell"> <em>Eu só tenho de ir ao ginásio de manhã.</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('tenho de')">tenho de</td><td class="en-word">I have to</td><td class="use-cell"> <em>Tenho de ir ao ginásio.</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('destes')">destes</td><td class="en-word">of these (here)</td><td class="use-cell">aqui is optional; used in a pastelaria or café <em>Queria um café e um destes.</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('daqueles')">daqueles</td><td class="en-word">of those (over there)</td><td class="use-cell">ali is optional; used in a padaria <em>Queria um café e um daqueles.</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('outro')">outro</td><td class="en-word">another (masc.)</td><td class="use-cell">fem. outra <em>Queria outro café.</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('mais um')">mais um</td><td class="en-word">plus one; one more (masc.)</td><td class="use-cell">fem. mais uma <em>Queria um destes mais um café.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('só')">só</td><td class="en-word">only</td><td class="use-cell"> <em class="ex-link" onclick="speak('Eu só tenho de ir ao ginásio de manhã.')" title="ouvir">🔊 Eu só tenho de ir ao ginásio de manhã.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('tenho de')">tenho de</td><td class="en-word">I have to</td><td class="use-cell"> <em class="ex-link" onclick="speak('Tenho de ir ao ginásio.')" title="ouvir">🔊 Tenho de ir ao ginásio.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('destes')">destes</td><td class="en-word">of these (here)</td><td class="use-cell">aqui is optional; used in a pastelaria or café <em class="ex-link" onclick="speak('Queria um café e um destes.')" title="ouvir">🔊 Queria um café e um destes.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('daqueles')">daqueles</td><td class="en-word">of those (over there)</td><td class="use-cell">ali is optional; used in a padaria <em class="ex-link" onclick="speak('Queria um café e um daqueles.')" title="ouvir">🔊 Queria um café e um daqueles.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('outro')">outro</td><td class="en-word">another (masc.)</td><td class="use-cell">fem. outra <em class="ex-link" onclick="speak('Queria outro café.')" title="ouvir">🔊 Queria outro café.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('mais um')">mais um</td><td class="en-word">plus one; one more (masc.)</td><td class="use-cell">fem. mais uma <em class="ex-link" onclick="speak('Queria um destes mais um café.')" title="ouvir">🔊 Queria um destes mais um café.</em></td></tr>
     <tr><td class="pt-word green" onclick="speak('à tua esquerda')">à tua esquerda</td><td class="en-word">to your left</td><td class="use-cell"></td></tr>
     <tr><td class="pt-word green" onclick="speak('à tua direita')">à tua direita</td><td class="en-word">to your right</td><td class="use-cell"></td></tr>
     <tr><td class="pt-word green" onclick="speak('peço')">peço</td><td class="en-word">I order; I ask for</td><td class="use-cell"></td></tr>
@@ -246,30 +248,30 @@
     <tr><td class="pt-word green" onclick="speak('Não, à tua direita.')">Não, à tua direita.</td><td class="en-word">No, to your right.</td><td class="use-cell"></td></tr>
     <tr><td class="pt-word green" onclick="speak('É para já.')">É para já.</td><td class="en-word">Coming right up.</td><td class="use-cell">what staff say: all good, right away</td></tr>
     <tr><td class="pt-word green" onclick="speak('Pode sentar-se.')">Pode sentar-se.</td><td class="en-word">You can sit down.</td><td class="use-cell">pode is often an invitation or instruction, not a question: look for the question mark</td></tr>
-    <tr><td class="pt-word green" onclick="speak('à parte')">à parte</td><td class="en-word">on the side</td><td class="use-cell"> <em>Quero o molho à parte.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('à parte')">à parte</td><td class="en-word">on the side</td><td class="use-cell"> <em class="ex-link" onclick="speak('Quero o molho à parte.')" title="ouvir">🔊 Quero o molho à parte.</em></td></tr>
   </tbody></table>
   <div class="section-title" style="color:#2a5f9e;border-left-color:#2a5f9e">Planos</div>
   <table><thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead><tbody>
     <tr><td class="pt-word green" onclick="speak('o alarme')">o alarme</td><td class="en-word">the alarm</td><td class="use-cell"></td></tr>
     <tr><td class="pt-word green" onclick="speak('antes de')">antes de</td><td class="en-word">before (+ infinitive)</td><td class="use-cell"></td></tr>
     <tr><td class="pt-word green" onclick="speak('depois de')">depois de</td><td class="en-word">after (+ infinitive)</td><td class="use-cell"></td></tr>
-    <tr><td class="pt-word green" onclick="speak('depois')">depois</td><td class="en-word">later; afterwards</td><td class="use-cell"> <em>Depois vou jantar à noite.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('depois')">depois</td><td class="en-word">later; afterwards</td><td class="use-cell"> <em class="ex-link" onclick="speak('Depois vou jantar à noite.')" title="ouvir">🔊 Depois vou jantar à noite.</em></td></tr>
     <tr><td class="pt-word green" onclick="speak('qualquer coisa')">qualquer coisa</td><td class="en-word">anything; whatever</td><td class="use-cell"></td></tr>
     <tr><td class="pt-word green" onclick="speak('gravar')">gravar</td><td class="en-word">to record</td><td class="use-cell"></td></tr>
     <tr><td class="pt-word green" onclick="speak('estou sentado')">estou sentado</td><td class="en-word">I am sitting (masc.)</td><td class="use-cell">fem. estou sentada</td></tr>
-    <tr><td class="pt-word green" onclick="speak('ainda não')">ainda não</td><td class="en-word">not yet</td><td class="use-cell"> <em>Ainda não tenho planos.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('ainda não')">ainda não</td><td class="en-word">not yet</td><td class="use-cell"> <em class="ex-link" onclick="speak('Ainda não tenho planos.')" title="ouvir">🔊 Ainda não tenho planos.</em></td></tr>
     <tr><td class="pt-word green" onclick="speak('o sítio')">o sítio</td><td class="en-word">the place; the spot</td><td class="use-cell"></td></tr>
     <tr><td class="pt-word green" onclick="speak('prefiro')">prefiro</td><td class="en-word">I prefer</td><td class="use-cell"></td></tr>
     <tr><td class="pt-word green" onclick="speak('é o mais antigo')">é o mais antigo</td><td class="en-word">it is the oldest (masc.)</td><td class="use-cell"></td></tr>
     <tr><td class="pt-word green" onclick="speak('vinte minutos de carro')">vinte minutos de carro</td><td class="en-word">twenty minutes by car</td><td class="use-cell"></td></tr>
-    <tr><td class="pt-word green" onclick="speak('acordar')">acordar</td><td class="en-word">to wake up</td><td class="use-cell"> <em>Normalmente acordo às oito.</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('durmo')">durmo</td><td class="en-word">I sleep</td><td class="use-cell">dormir: o becomes u in the eu form <em>Não durmo até tarde.</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('até')">até</td><td class="en-word">until</td><td class="use-cell"> <em>Não durmo até tarde.</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('normalmente')">normalmente</td><td class="en-word">normally; usually</td><td class="use-cell"> <em>Normalmente acordo às oito.</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('algures')">algures</td><td class="en-word">somewhere</td><td class="use-cell"> <em>E vou jantar algures.</em></td></tr>
-    <tr><td class="pt-word green" onclick="speak('de certeza')">de certeza</td><td class="en-word">for sure; definitely</td><td class="use-cell"> <em>Sim, de certeza.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('acordar')">acordar</td><td class="en-word">to wake up</td><td class="use-cell"> <em class="ex-link" onclick="speak('Normalmente acordo às oito.')" title="ouvir">🔊 Normalmente acordo às oito.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('durmo')">durmo</td><td class="en-word">I sleep</td><td class="use-cell">dormir: o becomes u in the eu form <em class="ex-link" onclick="speak('Não durmo até tarde.')" title="ouvir">🔊 Não durmo até tarde.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('até')">até</td><td class="en-word">until</td><td class="use-cell"> <em class="ex-link" onclick="speak('Não durmo até tarde.')" title="ouvir">🔊 Não durmo até tarde.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('normalmente')">normalmente</td><td class="en-word">normally; usually</td><td class="use-cell"> <em class="ex-link" onclick="speak('Normalmente acordo às oito.')" title="ouvir">🔊 Normalmente acordo às oito.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('algures')">algures</td><td class="en-word">somewhere</td><td class="use-cell"> <em class="ex-link" onclick="speak('E vou jantar algures.')" title="ouvir">🔊 E vou jantar algures.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('de certeza')">de certeza</td><td class="en-word">for sure; definitely</td><td class="use-cell"> <em class="ex-link" onclick="speak('Sim, de certeza.')" title="ouvir">🔊 Sim, de certeza.</em></td></tr>
     <tr><td class="pt-word green" onclick="speak('nada específico')">nada específico</td><td class="en-word">nothing specific</td><td class="use-cell"></td></tr>
-    <tr><td class="pt-word green" onclick="speak('cozinhar')">cozinhar</td><td class="en-word">to cook</td><td class="use-cell"> <em>No domingo vou cozinhar o jantar em casa.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('cozinhar')">cozinhar</td><td class="en-word">to cook</td><td class="use-cell"> <em class="ex-link" onclick="speak('No domingo vou cozinhar o jantar em casa.')" title="ouvir">🔊 No domingo vou cozinhar o jantar em casa.</em></td></tr>
     <tr><td class="pt-word green" onclick="speak('não me lembro')">não me lembro</td><td class="en-word">I do not remember</td><td class="use-cell">lembrar-se: me stays before the verb</td></tr>
     <tr><td class="pt-word green" onclick="speak('já me lembro')">já me lembro</td><td class="en-word">I remember now</td><td class="use-cell"></td></tr>
     <tr><td class="pt-word green" onclick="speak('deixa ver')">deixa ver</td><td class="en-word">let me see</td><td class="use-cell"></td></tr>
@@ -295,7 +297,7 @@
     <tr><td class="pt-word green" onclick="speak('qual')">qual</td><td class="en-word">which</td><td class="use-cell"></td></tr>
     <tr><td class="pt-word green" onclick="speak('se tu pedes')">se tu pedes</td><td class="en-word">if you order</td><td class="use-cell">tu is optional: se pedes</td></tr>
     <tr><td class="pt-word green" onclick="speak('sabes?')">sabes?</td><td class="en-word">you know? (filler)</td><td class="use-cell">said quickly, close to &quot;sabsh&quot;</td></tr>
-    <tr><td class="pt-word green" onclick="speak('há')">há</td><td class="en-word">there is; there are</td><td class="use-cell"> <em>Há um restaurante italiano.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('há')">há</td><td class="en-word">there is; there are</td><td class="use-cell"> <em class="ex-link" onclick="speak('Há um restaurante italiano.')" title="ouvir">🔊 Há um restaurante italiano.</em></td></tr>
     <tr><td class="pt-word green" onclick="speak('fico surpreendido')">fico surpreendido</td><td class="en-word">I am surprised (masc.)</td><td class="use-cell">fem. fico surpreendida</td></tr>
     <tr><td class="pt-word green" onclick="speak('para além de')">para além de</td><td class="en-word">other than; besides; furthermore</td><td class="use-cell"></td></tr>
   </tbody></table>
