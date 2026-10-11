@@ -168,6 +168,11 @@
   .quiz-next:disabled { opacity: 0.3; cursor: default; }
   .ex-link { cursor: pointer; font-style: italic; }
   .ex-link:hover { text-decoration: underline; color: var(--green); }
+  .vfc-fx { font-style: italic; font-size: 0.9rem; color: var(--muted); margin: -0.4rem 0 1rem; text-align: center; cursor: default; }
+  .vfc-fx.pt { color: var(--text); cursor: pointer; }
+  .vfc-fx.pt:hover { text-decoration: underline; }
+  .vfc-en.pt { font-family: var(--mono); color: var(--green); font-weight: 700; font-size: 1.5rem; cursor: pointer; }
+  .vfc-pt.en { font-family: inherit; font-size: 1.25rem; font-weight: 400; }
 </style>
 </head>
 <body>
@@ -309,6 +314,7 @@
   <div class="vfc-topbar">
     <span class="vfc-counter" id="vfcCounter">1 / 1</span>
     <div class="vfc-controls">
+      <button class="vfc-ctrl" id="vfcDir" onclick="vfcToggleDir()">EN → PT</button>
       <button class="vfc-ctrl" onclick="vfcShuffle()">⇄ Baralhar</button>
       <button class="vfc-ctrl" onclick="vfcReset()">↺ Reiniciar</button>
     </div>
@@ -317,7 +323,8 @@
   <div class="vfc-card">
     <div class="vfc-hints" id="vfcHints">clique na palavra para revelar · clique no exemplo para ouvir</div>
     <div class="vfc-cat" id="vfcCat"></div>
-    <div class="vfc-en" id="vfcEn"></div>
+    <div class="vfc-en" id="vfcEn" onclick="vfcFrontClick()"></div>
+    <div class="vfc-fx" id="vfcFx" onclick="vfcFxClick()"></div>
     <div class="vfc-divider"></div>
     <div class="vfc-pt" id="vfcPt" onclick="vfcReveal()"></div>
     <button class="vfc-speak" id="vfcSpeak" onclick="vfcSpeakAnswer()">🔊</button>
@@ -467,34 +474,48 @@ const CARDS = [
 
 let vfcDeck=[...CARDS], vfcIdx=0, vfcRevealed=false;
 
+let vfcDir = 'p';   // p = EN to PT (default), r = PT to EN
+try { if (localStorage.getItem('atual.dir') === 'r') vfcDir = 'r'; } catch (e) {}
+function vfcToggleDir() {
+  vfcDir = vfcDir === 'p' ? 'r' : 'p';
+  try { localStorage.setItem('atual.dir', vfcDir); } catch (e) {}
+  vfcRender();
+}
 function vfcRender() {
-  const c=vfcDeck[vfcIdx];
-  vfcRevealed=false;
-  document.getElementById('vfcCounter').textContent=`${vfcIdx+1} / ${vfcDeck.length}`;
-  document.getElementById('vfcFill').style.width=`${((vfcIdx+1)/vfcDeck.length)*100}%`;
-  document.getElementById('vfcCat').textContent=c.cat||'';
-  document.getElementById('vfcEn').textContent=c.en;
-  const pt=document.getElementById('vfcPt');
-  pt.textContent=c.pt; pt.className='vfc-pt';
-  const exPt=document.getElementById('vfcExPt');
-  exPt.textContent=c.note||''; exPt.className='vfc-ex-pt';
-  const exEn=document.getElementById('vfcExEn');
-  exEn.textContent=c.en_note||''; exEn.className='vfc-ex-en';
-  exEn.onclick=()=>exEn.classList.add('revealed');
-  document.getElementById('vfcHints').textContent='clique na palavra para revelar · clique no exemplo para ouvir';
+  const c = vfcDeck[vfcIdx], rec = vfcDir === 'r', hasEx = !!c.note;
+  vfcRevealed = false;
+  document.getElementById('vfcDir').textContent = rec ? 'PT → EN' : 'EN → PT';
+  document.getElementById('vfcCounter').textContent = `${vfcIdx+1} / ${vfcDeck.length}`;
+  document.getElementById('vfcFill').style.width = `${((vfcIdx+1)/vfcDeck.length)*100}%`;
+  document.getElementById('vfcCat').textContent = c.cat || '';
+  const front = document.getElementById('vfcEn');
+  front.textContent = rec ? c.pt : c.en; front.className = 'vfc-en' + (rec ? ' pt' : '');
+  const fx = document.getElementById('vfcFx');
+  fx.textContent = hasEx ? (rec ? c.note : c.en_note) : ''; fx.className = 'vfc-fx' + (rec ? ' pt' : ''); fx.style.display = hasEx ? 'block' : 'none';
+  const ans = document.getElementById('vfcPt');
+  ans.textContent = rec ? c.en : c.pt; ans.className = 'vfc-pt' + (rec ? ' en' : '');
+  const exPt = document.getElementById('vfcExPt');
+  const exEn = document.getElementById('vfcExEn');
+  exPt.className = 'vfc-ex-pt'; exEn.className = 'vfc-ex-en'; exEn.style.display = 'none';
+  if (hasEx) { exPt.textContent = rec ? c.en_note : c.note; exPt.style.display = 'inline-block'; }
+  else { exPt.style.display = 'none'; if (c.en_note) { exEn.textContent = c.en_note; exEn.style.display = 'inline-block'; exEn.onclick = () => exEn.classList.add('revealed'); } }
+  document.getElementById('vfcHints').textContent = rec ? 'diz o significado · clica para revelar · a frase é separada' : 'diz em voz alta · clica para revelar · a frase é separada';
   document.getElementById('vfcSpeak').classList.remove('playing');
 }
 function vfcReveal() {
-  if(vfcRevealed) return; vfcRevealed=true;
+  if (vfcRevealed) return; vfcRevealed = true;
   document.getElementById('vfcPt').classList.add('revealed');
-  document.getElementById('vfcExPt').classList.add('revealed');
-  document.getElementById('vfcHints').textContent='';
+  document.getElementById('vfcHints').textContent = '';
+  if (vfcDir === 'p') speak(vfcDeck[vfcIdx].pt);
 }
 function vfcSpeakAnswer() { speak(vfcDeck[vfcIdx].pt, document.getElementById('vfcSpeak')); }
 function vfcSpeakEx() {
-  vfcReveal();
-  speak(vfcDeck[vfcIdx].note||vfcDeck[vfcIdx].pt, document.getElementById('vfcExPt'));
+  const c = vfcDeck[vfcIdx], el = document.getElementById('vfcExPt');
+  el.classList.add('revealed');
+  if (vfcDir === 'p') speak(c.note, el);
 }
+function vfcFrontClick() { if (vfcDir === 'r') speak(vfcDeck[vfcIdx].pt); }
+function vfcFxClick() { if (vfcDir === 'r') speak(vfcDeck[vfcIdx].note); }
 function vfcMove(dir) { vfcIdx=(vfcIdx+dir+vfcDeck.length)%vfcDeck.length; vfcRender(); }
 function vfcShuffle() { vfcDeck=[...CARDS].sort(()=>Math.random()-0.5); vfcIdx=0; vfcRender(); }
 function vfcReset() { vfcDeck=[...CARDS]; vfcIdx=0; vfcRender(); }
