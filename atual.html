@@ -202,6 +202,21 @@
 
 <!-- ══ TABELA ══ -->
 <div id="tabela" class="view active">
+  <div class="section-title" style="font-size:1rem">TPC Unidade 3</div>
+  <div class="section-title">Perguntas</div>
+  <table><thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead><tbody>
+    <tr><td class="pt-word green" onclick="speak('quem')">quem</td><td class="en-word">who</td><td class="use-cell"> <em class="ex-link" onclick="speak('Quem é aquela rapariga alta?')" title="ouvir">🔊 Quem é aquela rapariga alta?</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('o que')">o que</td><td class="en-word">what</td><td class="use-cell"> <em class="ex-link" onclick="speak('O que está a dar na televisão?')" title="ouvir">🔊 O que está a dar na televisão?</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('qual')">qual</td><td class="en-word">which; what</td><td class="use-cell"> <em class="ex-link" onclick="speak('Qual é a comida favorita do Rui?')" title="ouvir">🔊 Qual é a comida favorita do Rui?</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('que')">que</td><td class="en-word">what; which (before a noun)</td><td class="use-cell"> <em class="ex-link" onclick="speak('Que horas são?')" title="ouvir">🔊 Que horas são?</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('de quem')">de quem</td><td class="en-word">whose; of whom</td><td class="use-cell"> <em class="ex-link" onclick="speak('De quem é esta mochila?')" title="ouvir">🔊 De quem é esta mochila?</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('quando')">quando</td><td class="en-word">when</td><td class="use-cell"> <em class="ex-link" onclick="speak('Quando começa o filme?')" title="ouvir">🔊 Quando começa o filme?</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('onde')">onde</td><td class="en-word">where</td><td class="use-cell"> <em class="ex-link" onclick="speak('Onde está o teu telemóvel?')" title="ouvir">🔊 Onde está o teu telemóvel?</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('como')">como</td><td class="en-word">how</td><td class="use-cell"> <em class="ex-link" onclick="speak('Como está a tua mãe?')" title="ouvir">🔊 Como está a tua mãe?</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('quanto')">quanto</td><td class="en-word">how much</td><td class="use-cell"> <em class="ex-link" onclick="speak('Quanto custa um saco?')" title="ouvir">🔊 Quanto custa um saco?</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('quantos')">quantos</td><td class="en-word">how many (masc.)</td><td class="use-cell">fem. quantas <em class="ex-link" onclick="speak('Quantos anos tens?')" title="ouvir">🔊 Quantos anos tens?</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('de onde')">de onde</td><td class="en-word">from where</td><td class="use-cell"> <em class="ex-link" onclick="speak('De onde é o Raymond?')" title="ouvir">🔊 De onde é o Raymond?</em></td></tr>
+  </tbody></table>
   <div class="section-title" style="font-size:1rem">Aula 9 out</div>
   <div class="section-title">Passado</div>
   <table><thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead><tbody>
@@ -253,7 +268,7 @@
     <tr><td class="pt-word green" onclick="speak('Não, à tua direita.')">Não, à tua direita.</td><td class="en-word">No, to your right.</td><td class="use-cell"></td></tr>
     <tr><td class="pt-word green" onclick="speak('É para já.')">É para já.</td><td class="en-word">Coming right up.</td><td class="use-cell">what staff say: all good, right away</td></tr>
     <tr><td class="pt-word green" onclick="speak('Pode sentar-se.')">Pode sentar-se.</td><td class="en-word">You can sit down.</td><td class="use-cell">pode is often an invitation or instruction, not a question: look for the question mark</td></tr>
-    <tr><td class="pt-word green" onclick="speak('à parte')">à parte</td><td class="en-word">on the side</td><td class="use-cell"> <em class="ex-link" onclick="speak('Quero o molho à parte.')" title="ouvir">🔊 Quero o molho à parte.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('à parte')">à parte</td><td class="en-word">on the side</td><td class="use-cell"> <em class="ex-link" onclick="speak('Queria o molho à parte.')" title="ouvir">🔊 Queria o molho à parte.</em></td></tr>
   </tbody></table>
   <div class="section-title" style="color:#2a5f9e;border-left-color:#2a5f9e">Planos</div>
   <table><thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead><tbody>
@@ -437,7 +452,7 @@ const CARDS = [
   {"cat": "Aula 9 out · Pedir", "pt": "peço", "en": "I order; I ask for", "ex": "", "note": "", "en_note": "", "track": "w", "y": "verb"},
   {"cat": "Aula 9 out · Pedir", "pt": "Não, à tua direita.", "en": "No, to your right.", "ex": "Não, à tua direita.", "note": "", "en_note": "", "track": "p"},
   {"cat": "Aula 9 out · Pedir", "pt": "Pode sentar-se.", "en": "You can sit down.", "ex": "Pode sentar-se.", "note": "", "en_note": "pode is often an invitation or instruction, not a question: look for the question mark", "track": "p"},
-  {"cat": "Aula 9 out · Pedir", "pt": "à parte", "en": "on the side", "ex": "Quero o molho à parte.", "note": "Quero o molho à parte.", "en_note": "I want the sauce on the side.", "track": "w"},
+  {"cat": "Aula 9 out · Pedir", "pt": "à parte", "en": "on the side", "ex": "Queria o molho à parte.", "note": "Queria o molho à parte.", "en_note": "I would like the sauce on the side.", "track": "w"},
   {"cat": "Aula 9 out · Planos", "pt": "o alarme", "en": "the alarm", "ex": "", "note": "", "en_note": "", "track": "w"},
   {"cat": "Aula 9 out · Planos", "pt": "antes de", "en": "before (+ infinitive)", "ex": "", "note": "", "en_note": "", "track": "w"},
   {"cat": "Aula 9 out · Planos", "pt": "depois de", "en": "after (+ infinitive)", "ex": "", "note": "", "en_note": "", "track": "w"},
@@ -469,7 +484,18 @@ const CARDS = [
   {"cat": "Aula 9 out · Conversa", "pt": "sabes?", "en": "you know? (filler)", "ex": "", "note": "", "en_note": "", "track": "w"},
   {"cat": "Aula 9 out · Conversa", "pt": "há", "en": "there is; there are", "ex": "Há um restaurante italiano.", "note": "Há um restaurante italiano.", "en_note": "There is an Italian restaurant.", "track": "w"},
   {"cat": "Aula 9 out · Conversa", "pt": "fico surpreendido", "en": "I am surprised (masc.)", "ex": "", "note": "", "en_note": "", "track": "w"},
-  {"cat": "Aula 9 out · Conversa", "pt": "para além de", "en": "other than; besides; furthermore", "ex": "", "note": "", "en_note": "", "track": "w"}
+  {"cat": "Aula 9 out · Conversa", "pt": "para além de", "en": "other than; besides; furthermore", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "TPC Unidade 3 · Perguntas", "pt": "quem", "en": "who", "ex": "Quem é aquela rapariga alta?", "note": "Quem é aquela rapariga alta?", "en_note": "Who is that tall girl?", "track": "w", "y": "perg"},
+  {"cat": "TPC Unidade 3 · Perguntas", "pt": "o que", "en": "what", "ex": "O que está a dar na televisão?", "note": "O que está a dar na televisão?", "en_note": "What is on television?", "track": "w", "y": "perg"},
+  {"cat": "TPC Unidade 3 · Perguntas", "pt": "qual", "en": "which; what", "ex": "Qual é a comida favorita do Rui?", "note": "Qual é a comida favorita do Rui?", "en_note": "What is Rui's favourite food?", "track": "w", "y": "perg"},
+  {"cat": "TPC Unidade 3 · Perguntas", "pt": "que", "en": "what; which (before a noun)", "ex": "Que horas são?", "note": "Que horas são?", "en_note": "What time is it?", "track": "w", "y": "perg"},
+  {"cat": "TPC Unidade 3 · Perguntas", "pt": "de quem", "en": "whose; of whom", "ex": "De quem é esta mochila?", "note": "De quem é esta mochila?", "en_note": "Whose backpack is this?", "track": "w", "y": "perg"},
+  {"cat": "TPC Unidade 3 · Perguntas", "pt": "quando", "en": "when", "ex": "Quando começa o filme?", "note": "Quando começa o filme?", "en_note": "When does the film start?", "track": "w", "y": "perg"},
+  {"cat": "TPC Unidade 3 · Perguntas", "pt": "onde", "en": "where", "ex": "Onde está o teu telemóvel?", "note": "Onde está o teu telemóvel?", "en_note": "Where is your phone?", "track": "w", "y": "perg"},
+  {"cat": "TPC Unidade 3 · Perguntas", "pt": "como", "en": "how", "ex": "Como está a tua mãe?", "note": "Como está a tua mãe?", "en_note": "How is your mother?", "track": "w", "y": "perg"},
+  {"cat": "TPC Unidade 3 · Perguntas", "pt": "quanto", "en": "how much", "ex": "Quanto custa um saco?", "note": "Quanto custa um saco?", "en_note": "How much does a bag cost?", "track": "w", "y": "perg"},
+  {"cat": "TPC Unidade 3 · Perguntas", "pt": "quantos", "en": "how many (masc.)", "ex": "Quantos anos tens?", "note": "Quantos anos tens?", "en_note": "How old are you?", "track": "w", "y": "perg"},
+  {"cat": "TPC Unidade 3 · Perguntas", "pt": "de onde", "en": "from where", "ex": "De onde é o Raymond?", "note": "De onde é o Raymond?", "en_note": "Where is Raymond from?", "track": "w", "y": "perg"}
 ];
 
 let vfcDeck=[...CARDS], vfcIdx=0, vfcRevealed=false;
