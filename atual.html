@@ -173,6 +173,10 @@
   .vfc-fx.pt:hover { text-decoration: underline; }
   .vfc-en.pt { font-family: var(--mono); color: var(--green); font-weight: 700; font-size: 1.5rem; cursor: pointer; }
   .vfc-pt.en { font-family: inherit; font-size: 1.25rem; font-weight: 400; }
+  .vfc-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.9rem; }
+  .vfc-chip { font-family: var(--mono); font-size: 0.7rem; background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 0.3rem 0.7rem; border-radius: 99px; cursor: pointer; }
+  .vfc-chip:hover { border-color: var(--green); color: var(--green); }
+  .vfc-chip.on { background: var(--green); border-color: var(--green); color: #fff; }
 </style>
 </head>
 <body>
@@ -202,6 +206,58 @@
 
 <!-- ══ TABELA ══ -->
 <div id="tabela" class="view active">
+  <div class="section-title" style="font-size:1rem">Aula 12 out</div>
+  <div class="section-title">Ir</div>
+  <table><thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead><tbody>
+    <tr><td class="pt-word green" onclick="speak('fui a')">fui a</td><td class="en-word">I went to (day to day)</td><td class="use-cell">ir + a: everyday places you go and come back from. Vou a = I go to; fui a = I went to. <em class="ex-link" onclick="speak('Fui ao ginásio.')" title="ouvir">🔊 Fui ao ginásio.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('vou a')">vou a</td><td class="en-word">I go to; I am going to (day to day)</td><td class="use-cell">same pattern in the present <em class="ex-link" onclick="speak('Vou à farmácia.')" title="ouvir">🔊 Vou à farmácia.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('ao')">ao</td><td class="en-word">to the (masc.)</td><td class="use-cell">a + o <em class="ex-link" onclick="speak('Fui ao ginásio.')" title="ouvir">🔊 Fui ao ginásio.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('à')">à</td><td class="en-word">to the (fem.)</td><td class="use-cell">a + a, written à. The first a means to, the second means the. <em class="ex-link" onclick="speak('Fui à farmácia.')" title="ouvir">🔊 Fui à farmácia.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('vou para')">vou para</td><td class="en-word">I am heading to (destination)</td><td class="use-cell">ir para: a destination, where you are heading. ir a: a quick everyday trip. <em class="ex-link" onclick="speak('Hoje vou para o Estoril.')" title="ouvir">🔊 Hoje vou para o Estoril.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('durante')">durante</td><td class="en-word">during</td><td class="use-cell"> <em class="ex-link" onclick="speak('No sábado, durante o dia, fui ao ginásio.')" title="ouvir">🔊 No sábado, durante o dia, fui ao ginásio.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('nos')">nos</td><td class="en-word">in the (masc. pl.)</td><td class="use-cell">em + os <em class="ex-link" onclick="speak('Trabalhei nos meus negócios.')" title="ouvir">🔊 Trabalhei nos meus negócios.</em></td></tr>
+  </tbody></table>
+  <div class="section-title red">Tempo</div>
+  <table><thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead><tbody>
+    <tr><td class="pt-word green" onclick="speak('passar')">passar</td><td class="en-word">to spend (time, neutral)</td><td class="use-cell">passar tempo: time spent, neither good nor bad <em class="ex-link" onclick="speak('Passei quatro horas no café.')" title="ouvir">🔊 Passei quatro horas no café.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('gastar')">gastar</td><td class="en-word">to spend (negative); to waste</td><td class="use-cell">gastar tempo: time wasted. Also gastar dinheiro, to spend money. <em class="ex-link" onclick="speak('Gastei muito tempo no trânsito.')" title="ouvir">🔊 Gastei muito tempo no trânsito.</em></td></tr>
+  </tbody></table>
+  <div class="section-title" style="color:#c47a00;border-left-color:#c47a00">Perguntas</div>
+  <table><thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead><tbody>
+    <tr><td class="pt-word green" onclick="speak('onde está')">onde está</td><td class="en-word">where is (a thing)</td><td class="use-cell">onde está + object: where something is right now <em class="ex-link" onclick="speak('Onde está a garrafa?')" title="ouvir">🔊 Onde está a garrafa?</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('onde é')">onde é</td><td class="en-word">where is (a place)</td><td class="use-cell">onde é + place: where a place or venue is <em class="ex-link" onclick="speak('Onde é a farmácia?')" title="ouvir">🔊 Onde é a farmácia?</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('de')">de</td><td class="en-word">of; from</td><td class="use-cell">de means both of and from: an important one <em class="ex-link" onclick="speak('Ele é de Frankfurt.')" title="ouvir">🔊 Ele é de Frankfurt.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('como foi')">como foi</td><td class="en-word">how was</td><td class="use-cell"> <em class="ex-link" onclick="speak('Como foi o teu fim de semana?')" title="ouvir">🔊 Como foi o teu fim de semana?</em></td></tr>
+  </tbody></table>
+  <div class="section-title" style="color:#2a5f9e;border-left-color:#2a5f9e">Palavras</div>
+  <table><thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead><tbody>
+    <tr><td class="pt-word green" onclick="speak('cada')">cada</td><td class="en-word">each; every</td><td class="use-cell">cada has no plural and no gender</td></tr>
+    <tr><td class="pt-word green" onclick="speak('ou')">ou</td><td class="en-word">or</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('criar')">criar</td><td class="en-word">to create</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('em vez de')">em vez de</td><td class="en-word">instead of</td><td class="use-cell"> <em class="ex-link" onclick="speak('Ele recomendou este bolo em vez de musse de chocolate.')" title="ouvir">🔊 Ele recomendou este bolo em vez de musse de chocolate.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('outra vez')">outra vez</td><td class="en-word">again; another time</td><td class="use-cell"> <em class="ex-link" onclick="speak('Trabalhei nos meus negócios outra vez.')" title="ouvir">🔊 Trabalhei nos meus negócios outra vez.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('muito pouco')">muito pouco</td><td class="en-word">very little</td><td class="use-cell"> <em class="ex-link" onclick="speak('No domingo, fiz muito pouco.')" title="ouvir">🔊 No domingo, fiz muito pouco.</em></td></tr>
+  </tbody></table>
+  <div class="section-title">Passado</div>
+  <table><thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead><tbody>
+    <tr><td class="pt-word green" onclick="speak('estudei')">estudei</td><td class="en-word">I studied</td><td class="use-cell">you study a language: estudar, not trabalhar <em class="ex-link" onclick="speak('Estudei português.')" title="ouvir">🔊 Estudei português.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('trabalhei')">trabalhei</td><td class="en-word">I worked</td><td class="use-cell"> <em class="ex-link" onclick="speak('Trabalhei nos meus negócios.')" title="ouvir">🔊 Trabalhei nos meus negócios.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('jantei')">jantei</td><td class="en-word">I had dinner</td><td class="use-cell"> <em class="ex-link" onclick="speak('Jantei lulas com manteiga.')" title="ouvir">🔊 Jantei lulas com manteiga.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('passei')">passei</td><td class="en-word">I spent (time)</td><td class="use-cell"> <em class="ex-link" onclick="speak('Passei quatro horas no café.')" title="ouvir">🔊 Passei quatro horas no café.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('fiz')">fiz</td><td class="en-word">I did; I made</td><td class="use-cell"> <em class="ex-link" onclick="speak('No domingo, fiz muito pouco.')" title="ouvir">🔊 No domingo, fiz muito pouco.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('recomendou')">recomendou</td><td class="en-word">he, she recommended</td><td class="use-cell"> <em class="ex-link" onclick="speak('Ele recomendou este bolo.')" title="ouvir">🔊 Ele recomendou este bolo.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('Estudei português e trabalhei nos meus negócios.')">Estudei português e trabalhei nos meus negócios.</td><td class="en-word">I studied Portuguese and worked on my businesses.</td><td class="use-cell">correction from class: not &quot;trabalhei no português&quot;. You study a language (estudar); you work in or on a business (trabalhar em).</td></tr>
+  </tbody></table>
+  <div class="section-title red">Comida</div>
+  <table><thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead><tbody>
+    <tr><td class="pt-word green" onclick="speak('lulas')">lulas</td><td class="en-word">squid</td><td class="use-cell"> <em class="ex-link" onclick="speak('Jantei lulas com manteiga.')" title="ouvir">🔊 Jantei lulas com manteiga.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('entrecosto de borrego')">entrecosto de borrego</td><td class="en-word">lamb ribs</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('batatas fritas')">batatas fritas</td><td class="en-word">french fries; chips</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('caramelo salgado')">caramelo salgado</td><td class="en-word">salted caramel</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('musse de chocolate')">musse de chocolate</td><td class="en-word">chocolate mousse</td><td class="use-cell"></td></tr>
+    <tr><td class="pt-word green" onclick="speak('a sobremesa')">a sobremesa</td><td class="en-word">dessert</td><td class="use-cell"> <em class="ex-link" onclick="speak('E para sobremesa, um bolo de chocolate.')" title="ouvir">🔊 E para sobremesa, um bolo de chocolate.</em></td></tr>
+    <tr><td class="pt-word green" onclick="speak('o fim de semana')">o fim de semana</td><td class="en-word">the weekend</td><td class="use-cell"></td></tr>
+  </tbody></table>
   <div class="section-title" style="font-size:1rem">TPC Unidade 3</div>
   <div class="section-title">Perguntas</div>
   <table><thead><tr><th>Português</th><th>English</th><th>Nota</th></tr></thead><tbody>
@@ -334,6 +390,7 @@
       <button class="vfc-ctrl" onclick="vfcReset()">↺ Reiniciar</button>
     </div>
   </div>
+  <div class="vfc-chips" id="vfcChips"></div>
   <div class="vfc-progress"><div class="vfc-progress-fill" id="vfcFill"></div></div>
   <div class="vfc-card">
     <div class="vfc-hints" id="vfcHints">clique na palavra para revelar · clique no exemplo para ouvir</div>
@@ -495,7 +552,39 @@ const CARDS = [
   {"cat": "TPC Unidade 3 · Perguntas", "pt": "como", "en": "how", "ex": "Como está a tua mãe?", "note": "Como está a tua mãe?", "en_note": "How is your mother?", "track": "w", "y": "perg"},
   {"cat": "TPC Unidade 3 · Perguntas", "pt": "quanto", "en": "how much", "ex": "Quanto custa um saco?", "note": "Quanto custa um saco?", "en_note": "How much does a bag cost?", "track": "w", "y": "perg"},
   {"cat": "TPC Unidade 3 · Perguntas", "pt": "quantos", "en": "how many (masc.)", "ex": "Quantos anos tens?", "note": "Quantos anos tens?", "en_note": "How old are you?", "track": "w", "y": "perg"},
-  {"cat": "TPC Unidade 3 · Perguntas", "pt": "de onde", "en": "from where", "ex": "De onde é o Raymond?", "note": "De onde é o Raymond?", "en_note": "Where is Raymond from?", "track": "w", "y": "perg"}
+  {"cat": "TPC Unidade 3 · Perguntas", "pt": "de onde", "en": "from where", "ex": "De onde é o Raymond?", "note": "De onde é o Raymond?", "en_note": "Where is Raymond from?", "track": "w", "y": "perg"},
+  {"cat": "Aula 12 out · Ir", "pt": "fui a", "en": "I went to (day to day)", "ex": "Fui ao ginásio.", "note": "Fui ao ginásio.", "en_note": "I went to the gym.", "track": "w"},
+  {"cat": "Aula 12 out · Ir", "pt": "vou a", "en": "I go to; I am going to (day to day)", "ex": "Vou à farmácia.", "note": "Vou à farmácia.", "en_note": "I am going to the pharmacy.", "track": "w"},
+  {"cat": "Aula 12 out · Ir", "pt": "ao", "en": "to the (masc.)", "ex": "Fui ao ginásio.", "note": "Fui ao ginásio.", "en_note": "I went to the gym.", "track": "w"},
+  {"cat": "Aula 12 out · Ir", "pt": "à", "en": "to the (fem.)", "ex": "Fui à farmácia.", "note": "Fui à farmácia.", "en_note": "I went to the pharmacy.", "track": "w"},
+  {"cat": "Aula 12 out · Ir", "pt": "vou para", "en": "I am heading to (destination)", "ex": "Hoje vou para o Estoril.", "note": "Hoje vou para o Estoril.", "en_note": "Today I am heading to Estoril.", "track": "w"},
+  {"cat": "Aula 12 out · Ir", "pt": "durante", "en": "during", "ex": "No sábado, durante o dia, fui ao ginásio.", "note": "No sábado, durante o dia, fui ao ginásio.", "en_note": "On Saturday, during the day, I went to the gym.", "track": "w"},
+  {"cat": "Aula 12 out · Ir", "pt": "nos", "en": "in the (masc. pl.)", "ex": "Trabalhei nos meus negócios.", "note": "Trabalhei nos meus negócios.", "en_note": "I worked on my businesses.", "track": "w"},
+  {"cat": "Aula 12 out · Tempo", "pt": "passar", "en": "to spend (time, neutral)", "ex": "Passei quatro horas no café.", "note": "Passei quatro horas no café.", "en_note": "I spent four hours at the café.", "track": "w"},
+  {"cat": "Aula 12 out · Tempo", "pt": "gastar", "en": "to spend (negative); to waste", "ex": "Gastei muito tempo no trânsito.", "note": "Gastei muito tempo no trânsito.", "en_note": "I wasted a lot of time in traffic.", "track": "w"},
+  {"cat": "Aula 12 out · Perguntas", "pt": "onde está", "en": "where is (a thing)", "ex": "Onde está a garrafa?", "note": "Onde está a garrafa?", "en_note": "Where is the bottle?", "track": "w"},
+  {"cat": "Aula 12 out · Perguntas", "pt": "onde é", "en": "where is (a place)", "ex": "Onde é a farmácia?", "note": "Onde é a farmácia?", "en_note": "Where is the pharmacy?", "track": "w"},
+  {"cat": "Aula 12 out · Perguntas", "pt": "de", "en": "of; from", "ex": "Ele é de Frankfurt.", "note": "Ele é de Frankfurt.", "en_note": "He is from Frankfurt.", "track": "w"},
+  {"cat": "Aula 12 out · Perguntas", "pt": "como foi", "en": "how was", "ex": "Como foi o teu fim de semana?", "note": "Como foi o teu fim de semana?", "en_note": "How was your weekend?", "track": "w"},
+  {"cat": "Aula 12 out · Palavras", "pt": "cada", "en": "each; every", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 12 out · Palavras", "pt": "ou", "en": "or", "ex": "", "note": "", "en_note": "", "track": "w"},
+  {"cat": "Aula 12 out · Palavras", "pt": "criar", "en": "to create", "ex": "", "note": "", "en_note": "", "track": "w", "y": "verb"},
+  {"cat": "Aula 12 out · Palavras", "pt": "em vez de", "en": "instead of", "ex": "Ele recomendou este bolo em vez de musse de chocolate.", "note": "Ele recomendou este bolo em vez de musse de chocolate.", "en_note": "He recommended this cake instead of chocolate mousse.", "track": "w"},
+  {"cat": "Aula 12 out · Palavras", "pt": "outra vez", "en": "again; another time", "ex": "Trabalhei nos meus negócios outra vez.", "note": "Trabalhei nos meus negócios outra vez.", "en_note": "I worked on my businesses again.", "track": "w"},
+  {"cat": "Aula 12 out · Palavras", "pt": "muito pouco", "en": "very little", "ex": "No domingo, fiz muito pouco.", "note": "No domingo, fiz muito pouco.", "en_note": "On Sunday, I did very little.", "track": "w"},
+  {"cat": "Aula 12 out · Passado", "pt": "estudei", "en": "I studied", "ex": "Estudei português.", "note": "Estudei português.", "en_note": "I studied Portuguese.", "track": "w", "y": "verb"},
+  {"cat": "Aula 12 out · Passado", "pt": "trabalhei", "en": "I worked", "ex": "Trabalhei nos meus negócios.", "note": "Trabalhei nos meus negócios.", "en_note": "I worked on my businesses.", "track": "w", "y": "verb"},
+  {"cat": "Aula 12 out · Passado", "pt": "jantei", "en": "I had dinner", "ex": "Jantei lulas com manteiga.", "note": "Jantei lulas com manteiga.", "en_note": "I had squid with butter for dinner.", "track": "w", "y": "verb"},
+  {"cat": "Aula 12 out · Passado", "pt": "passei", "en": "I spent (time)", "ex": "Passei quatro horas no café.", "note": "Passei quatro horas no café.", "en_note": "I spent four hours at the café.", "track": "w", "y": "verb"},
+  {"cat": "Aula 12 out · Passado", "pt": "fiz", "en": "I did; I made", "ex": "No domingo, fiz muito pouco.", "note": "No domingo, fiz muito pouco.", "en_note": "On Sunday, I did very little.", "track": "w", "y": "verb"},
+  {"cat": "Aula 12 out · Passado", "pt": "recomendou", "en": "he, she recommended", "ex": "Ele recomendou este bolo.", "note": "Ele recomendou este bolo.", "en_note": "He recommended this cake.", "track": "w", "y": "verb"},
+  {"cat": "Aula 12 out · Comida", "pt": "lulas", "en": "squid", "ex": "Jantei lulas com manteiga.", "note": "Jantei lulas com manteiga.", "en_note": "I had squid with butter for dinner.", "track": "w", "y": "vocab"},
+  {"cat": "Aula 12 out · Comida", "pt": "entrecosto de borrego", "en": "lamb ribs", "ex": "", "note": "", "en_note": "", "track": "w", "y": "vocab"},
+  {"cat": "Aula 12 out · Comida", "pt": "batatas fritas", "en": "french fries; chips", "ex": "", "note": "", "en_note": "", "track": "w", "y": "vocab"},
+  {"cat": "Aula 12 out · Comida", "pt": "caramelo salgado", "en": "salted caramel", "ex": "", "note": "", "en_note": "", "track": "w", "y": "vocab"},
+  {"cat": "Aula 12 out · Comida", "pt": "musse de chocolate", "en": "chocolate mousse", "ex": "", "note": "", "en_note": "", "track": "w", "y": "vocab"},
+  {"cat": "Aula 12 out · Comida", "pt": "a sobremesa", "en": "dessert", "ex": "E para sobremesa, um bolo de chocolate.", "note": "E para sobremesa, um bolo de chocolate.", "en_note": "And for dessert, a chocolate cake.", "track": "w", "y": "vocab"},
+  {"cat": "Aula 12 out · Comida", "pt": "o fim de semana", "en": "the weekend", "ex": "", "note": "", "en_note": "", "track": "w", "y": "vocab"}
 ];
 
 let vfcDeck=[...CARDS], vfcIdx=0, vfcRevealed=false;
@@ -543,8 +632,24 @@ function vfcSpeakEx() {
 function vfcFrontClick() { if (vfcDir === 'r') speak(vfcDeck[vfcIdx].pt); }
 function vfcFxClick() { if (vfcDir === 'r') speak(vfcDeck[vfcIdx].note); }
 function vfcMove(dir) { vfcIdx=(vfcIdx+dir+vfcDeck.length)%vfcDeck.length; vfcRender(); }
-function vfcShuffle() { vfcDeck=[...CARDS].sort(()=>Math.random()-0.5); vfcIdx=0; vfcRender(); }
-function vfcReset() { vfcDeck=[...CARDS]; vfcIdx=0; vfcRender(); }
+function vfcShuffle() { vfcDeck=vfcBase().sort(()=>Math.random()-0.5); vfcIdx=0; vfcRender(); }
+function vfcReset() { vfcDeck=vfcBase(); vfcIdx=0; vfcRender(); }
+// section filter: one chip per section name (Perguntas, Passado, Pedir...), across all classes
+let vfcSection = null;
+const vfcSecOf = c => (c.cat || '').split(' · ').slice(1).join(' · ') || 'Outros';
+function vfcBase() { return CARDS.filter(c => !vfcSection || vfcSecOf(c) === vfcSection); }
+function vfcBuildChips() {
+  const counts = {}; CARDS.forEach(c => { const k = vfcSecOf(c); counts[k] = (counts[k] || 0) + 1; });
+  const box = document.getElementById('vfcChips'); box.innerHTML = '';
+  const mk = (label, key) => {
+    const b = document.createElement('button'); b.className = 'vfc-chip' + (vfcSection === key ? ' on' : ''); b.textContent = label;
+    b.onclick = () => { vfcSection = (vfcSection === key ? null : key); vfcDeck = vfcBase(); vfcIdx = 0; vfcBuildChips(); vfcRender(); };
+    box.appendChild(b);
+  };
+  mk('Todos (' + CARDS.length + ')', null);
+  Object.keys(counts).sort((a, b) => counts[b] - counts[a]).forEach(k => mk(k + ' (' + counts[k] + ')', k));
+}
+vfcBuildChips();
 vfcRender();
 
 const QUIZ_POOL = CARDS.filter(c=>c.track==='w').map(c=>({q:c.pt, a:c.en, ex:c.ex}));
@@ -607,7 +712,26 @@ const DESAFIO_CARDS = [
   {"cat": "Aula 9 out · Planos", "prompt": "Ask \"What time do you usually wake up?\"", "answer": "A que horas acordas normalmente?", "note": ""},
   {"cat": "Aula 9 out · Planos", "prompt": "Say \"I usually wake up at eight. I do not sleep until late.\"", "answer": "Normalmente acordo às oito. Não durmo até tarde.", "note": "durmo: o becomes u"},
   {"cat": "Aula 9 out · Planos", "prompt": "Say \"I only have to go to the gym in the morning.\"", "answer": "Eu só tenho de ir ao ginásio de manhã.", "note": "só = only; tenho de = have to"},
-  {"cat": "Aula 9 out · Planos", "prompt": "Say \"I do not have plans yet.\"", "answer": "Ainda não tenho planos.", "note": "ainda não = not yet"}
+  {"cat": "Aula 9 out · Planos", "prompt": "Say \"I do not have plans yet.\"", "answer": "Ainda não tenho planos.", "note": "ainda não = not yet"},
+  {"cat": "Aula 12 out · Ir", "prompt": "Say \"I went to the gym.\"", "answer": "Fui ao ginásio.", "note": "ir + a: day to day. a + o = ao"},
+  {"cat": "Aula 12 out · Ir", "prompt": "Say \"I went to the pharmacy.\"", "answer": "Fui à farmácia.", "note": "a + a = à"},
+  {"cat": "Aula 12 out · Ir", "prompt": "Say \"Today I am heading to Estoril.\"", "answer": "Hoje vou para o Estoril.", "note": "ir para = heading to a destination"},
+  {"cat": "Aula 12 out · Ir", "prompt": "Say \"On Saturday, during the day, I went to the gym.\"", "answer": "No sábado, durante o dia, fui ao ginásio.", "note": ""},
+  {"cat": "Aula 12 out · Ir", "prompt": "Say \"In the evening I went to have dinner at the restaurant.\"", "answer": "À noite fui jantar ao restaurante.", "note": "fui + a: a quick trip"},
+  {"cat": "Aula 12 out · Perguntas", "prompt": "Say \"Where is the bottle?\" (a thing)", "answer": "Onde está a garrafa?", "note": "onde está + object"},
+  {"cat": "Aula 12 out · Perguntas", "prompt": "Say \"Where is the pharmacy?\" (a place)", "answer": "Onde é a farmácia?", "note": "onde é + place"},
+  {"cat": "Aula 12 out · Perguntas", "prompt": "Ask \"Where is Raymond from?\"", "answer": "De onde é o Raymond?", "note": "de = of; from"},
+  {"cat": "Aula 12 out · Perguntas", "prompt": "Say \"He is from Frankfurt.\"", "answer": "Ele é de Frankfurt.", "note": ""},
+  {"cat": "Aula 12 out · Perguntas", "prompt": "Ask \"How was your weekend?\"", "answer": "Como foi o teu fim de semana?", "note": ""},
+  {"cat": "Aula 12 out · Perguntas", "prompt": "Ask \"What did you have for dinner?\"", "answer": "O que jantaste?", "note": ""},
+  {"cat": "Aula 12 out · Passado", "prompt": "Say \"I studied Portuguese and worked on my businesses.\"", "answer": "Estudei português e trabalhei nos meus negócios.", "note": "estudar a language; not \"trabalhei no português\". correction from class: not \"trabalhei no português\". You study a language (estudar); you work in or on a business (trabalhar em)."},
+  {"cat": "Aula 12 out · Passado", "prompt": "Say \"I had squid with butter for dinner.\"", "answer": "Jantei lulas com manteiga.", "note": ""},
+  {"cat": "Aula 12 out · Passado", "prompt": "Say \"He recommended this cake instead of chocolate mousse.\"", "answer": "Ele recomendou este bolo em vez de musse de chocolate.", "note": "em vez de = instead of"},
+  {"cat": "Aula 12 out · Passado", "prompt": "Say \"On Sunday, I did very little.\"", "answer": "No domingo, fiz muito pouco.", "note": ""},
+  {"cat": "Aula 12 out · Passado", "prompt": "Say \"I worked on my businesses again.\"", "answer": "Trabalhei nos meus negócios outra vez.", "note": "nos = em + os"},
+  {"cat": "Aula 12 out · Tempo", "prompt": "Say \"I spent four hours at the café.\" (neutral)", "answer": "Passei quatro horas no café.", "note": "passar = spend time, neutral"},
+  {"cat": "Aula 12 out · Tempo", "prompt": "Say \"I spent two hours at the beach.\" (neutral)", "answer": "Passei duas horas na praia.", "note": "passar tempo"},
+  {"cat": "Aula 12 out · Tempo", "prompt": "Say \"I wasted a lot of time in traffic.\" (negative)", "answer": "Gastei muito tempo no trânsito.", "note": "gastar tempo = waste time"}
 ];
 
 let dDeck=[], dIdx=0, dCorrect=0, dTotal=0, dStreak=0, dTimer=null, dSecondsLeft=5, dRevealed=false;
