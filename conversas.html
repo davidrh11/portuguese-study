@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="pt" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conversas · Português Europeu</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#f7f5f0; --surface:#fff; --border:#e2ddd3; --text:#2b2b2b; --muted:#8a8578;
+    --green:#006600; --red:#c0392b; --blue:#2a5f9e; --highlight:#eef5ee; --mono:'IBM Plex Mono',monospace;
+  }
+  * { box-sizing:border-box; }
+  body { font-family:'IBM Plex Sans',sans-serif; background:var(--bg); color:var(--text); margin:0; padding:0 16px; line-height:1.5; }
+  .wrap { max-width:640px; margin:0 auto; padding:1.5rem 0 3rem; }
+  header { display:flex; align-items:center; gap:0.8rem; margin-bottom:0.3rem; }
+  header svg { flex:none; }
+  h1 { font-size:1.3rem; margin:0; }
+  .sub { color:var(--muted); font-size:0.8rem; font-family:var(--mono); margin:0 0 1.5rem; }
+
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.4rem; margin-bottom:1rem; }
+  .card h2 { font-size:1rem; margin:0 0 0.6rem; }
+  label.lab { display:block; font-family:var(--mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin:0.9rem 0 0.35rem; }
+  .seg { display:flex; gap:0.5rem; flex-wrap:wrap; }
+  .seg button { flex:1; min-width:120px; font-family:var(--mono); font-size:0.82rem; background:var(--bg); border:1px solid var(--border); color:var(--text); padding:0.7rem 0.6rem; border-radius:7px; cursor:pointer; }
+  .seg button.on { background:var(--green); border-color:var(--green); color:#fff; }
+  .seg button small { display:block; font-size:0.66rem; opacity:0.75; margin-top:0.2rem; font-weight:400; }
+  input[type=password], input[type=text] { width:100%; font-family:var(--mono); font-size:0.9rem; padding:0.7rem 0.8rem; border:1px solid var(--border); border-radius:7px; background:var(--bg); color:var(--text); }
+  .note { font-size:0.78rem; color:var(--muted); margin:0.5rem 0 0; }
+  .btn-go { width:100%; margin-top:1.2rem; font-family:var(--mono); font-size:0.92rem; font-weight:600; background:var(--green); color:#fff; border:none; border-radius:8px; padding:0.9rem; cursor:pointer; }
+  .btn-go:disabled { opacity:0.4; cursor:default; }
+
+  .status { display:flex; align-items:center; gap:0.5rem; font-family:var(--mono); font-size:0.75rem; color:var(--muted); margin-bottom:0.8rem; min-height:1.2rem; }
+  .dot { width:9px; height:9px; border-radius:50%; background:var(--border); flex:none; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+  .dot.speaking { background:var(--green); animation:pulse 1.2s infinite; }
+  .dot.listening { background:var(--blue); animation:pulse 0.8s infinite; }
+  .dot.thinking { background:#d08a00; animation:pulse 1.5s infinite; }
+
+  #transcript { min-height:160px; max-height:46vh; overflow-y:auto; margin-bottom:1rem; }
+  .turn { margin-bottom:0.9rem; }
+  .who { font-family:var(--mono); font-size:0.64rem; text-transform:uppercase; letter-spacing:0.09em; color:var(--muted); margin-bottom:0.15rem; }
+  .bubble { padding:0.55rem 0.8rem; border-radius:8px; display:inline-block; max-width:100%; }
+  .turn.bot .bubble { background:var(--highlight); color:var(--text); }
+  .turn.bot .who { color:var(--green); }
+  .turn.you { text-align:right; }
+  .turn.you .bubble { background:var(--green); color:#fff; }
+  .turn.you .who { color:var(--blue); }
+  .replay { background:none; border:none; cursor:pointer; font-size:0.85rem; margin-left:0.3rem; opacity:0.6; }
+  .replay:hover { opacity:1; }
+  .hint { font-family:var(--mono); font-size:0.74rem; color:var(--muted); font-style:italic; margin:0.1rem 0 0.6rem; }
+
+  .inrow { display:flex; gap:0.5rem; align-items:flex-end; }
+  .inrow input { flex:1; }
+  .mic, .send { font-family:var(--mono); font-size:0.85rem; border:1px solid var(--border); border-radius:7px; padding:0.7rem 0.9rem; cursor:pointer; background:var(--bg); color:var(--text); flex:none; }
+  .send { background:var(--green); color:#fff; border-color:var(--green); font-weight:600; }
+  .mic.rec { background:var(--red); color:#fff; border-color:var(--red); }
+  .barrow { display:flex; gap:0.5rem; margin-top:0.8rem; }
+  .barrow button { flex:1; font-family:var(--mono); font-size:0.78rem; background:var(--bg); border:1px solid var(--border); color:var(--muted); padding:0.55rem; border-radius:7px; cursor:pointer; }
+
+  .recap .line { border-bottom:1px solid var(--border); padding:0.6rem 0; }
+  .recap .line:last-child { border-bottom:none; }
+  .recap .yours { font-family:var(--mono); color:var(--text); }
+  .recap .target { font-size:0.82rem; color:var(--green); }
+  .recap .tip { font-size:0.82rem; color:var(--red); margin-top:0.2rem; }
+  .hidden { display:none; }
+  .err { color:var(--red); font-size:0.8rem; margin-top:0.6rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <svg width="30" height="20" viewBox="0 0 32 22" xmlns="http://www.w3.org/2000/svg">
+    <rect width="12" height="22" fill="#006600"/><rect x="12" width="20" height="22" fill="#FF0000"/>
+    <circle cx="12" cy="11" r="5" fill="#FFD700" stroke="#00008B" stroke-width="0.5"/>
+    <circle cx="12" cy="11" r="3" fill="#00008B"/><circle cx="12" cy="11" r="1.5" fill="#FFD700"/>
+  </svg>
+  <div><h1>Conversas</h1></div>
+</header>
+<p class="sub">A1.1 · conversas curtas · fala e ouve</p>
+
+<!-- ===== SETUP ===== -->
+<div id="setup" class="card">
+  <h2>Na pastelaria</h2>
+  <p class="note">You are the customer. The empregada (server) greets you; order a coffee and a pastry, say for here or to go, and pay. Short turns. Portuguese only.</p>
+
+  <label class="lab">Modo</label>
+  <div class="seg" id="segMode">
+    <button data-v="script" class="on">Guião<small>scripted, fixed lines</small></button>
+    <button data-v="llm">Conversa livre<small>live AI, needs API key</small></button>
+  </div>
+
+  <div id="keyWrap" class="hidden">
+    <label class="lab">Anthropic API key</label>
+    <input type="password" id="apiKey" placeholder="sk-ant-..." autocomplete="off">
+    <p class="note">From console.anthropic.com. Not stored. Billed separately from Claude.ai. Leave scripted mode if you don't have one.</p>
+  </div>
+
+  <button class="btn-go" id="btnStart">Começar</button>
+  <p class="note" id="setupNote">Tip: type your reply, or dictate it with Whispr Flow into the box, then press Enter.</p>
+  <div class="err hidden" id="setupErr"></div>
+</div>
+
+<!-- ===== CONVERSATION ===== -->
+<div id="convo" class="card hidden">
+  <div class="status"><span class="dot" id="dot"></span><span id="statusText">...</span></div>
+  <div id="transcript"></div>
+  <div class="hint hidden" id="liveHint"></div>
+  <div class="inrow">
+    <input type="text" id="userIn" placeholder="Escreve ou dita a tua resposta..." autocomplete="off" autocapitalize="off">
+    <button class="mic" id="micBtn" title="ditar (Chrome)">🎤</button>
+    <button class="send" id="sendBtn">Enviar</button>
+  </div>
+  <div class="barrow">
+    <button id="repeatBtn">🔊 Repetir</button>
+    <button id="endBtn">Terminar</button>
+  </div>
+</div>
+
+<!-- ===== RECAP ===== -->
+<div id="recap" class="card hidden">
+  <h2>Resumo</h2>
+  <div class="recap" id="recapBody"></div>
+  <button class="btn-go" id="againBtn">Outra vez</button>
+</div>
+</div>
+
+<script>
+// ============================================================
+// CONFIG
+// ============================================================
+const TTS_WORKER = 'https://portuguese-tts-speechify.drh-dave.workers.dev';
+const VOICE_ID = null;               // null = worker default (agueda, pt-PT) — same as the guides
+const MODEL = 'claude-sonnet-4-6';   // change here if the API returns a model error
+const MAX_LLM_TURNS = 8;
+
+// ============================================================
+// SCENARIO (scripted engine) — add more scenarios here later
+// ============================================================
+const PASTELARIA = {
+  start: 'saudacao',
+  steps: {
+    saudacao: {
+      say: 'Bom dia! O que deseja?',
+      hint: 'ex: Bom dia. Queria um café, por favor.',
+      match: [{ any:['cafe','galao','galão','meia de leite','pastel','queria','queremos','queria um','um cafe','bica','abatanado','descafeinado','cha','chá'], go:'mais' }],
+      fallback: 'Desculpe? Diga, por exemplo: "Queria um café, por favor."'
+    },
+    mais: {
+      say: 'Mais alguma coisa?',
+      hint: 'ex: Sim, um pastel de nata. / Não, obrigado.',
+      match: [
+        { any:['nao','não','so isso','só isso','e tudo','é tudo','mais nada','obrigado','obrigada','chega'], go:'local' },
+        { any:['sim','tambem','também','e um','e uma','mais um','mais uma','pastel','agua','água','bolo','tosta','sande'], go:'local' }
+      ],
+      fallback: 'Diga "não, obrigado" ou peça mais uma coisa, por exemplo "e um pastel de nata".'
+    },
+    local: {
+      say: 'É para aqui ou para levar?',
+      hint: 'ex: Para aqui, por favor. / Para levar.',
+      match: [{ any:['aqui','levar','viagem'], go:'pagar' }],
+      fallback: 'Diga "para aqui" ou "para levar".'
+    },
+    pagar: {
+      say: 'São dois euros e cinquenta, por favor.',
+      hint: 'ex: Aqui tem. / Posso pagar com cartão?',
+      match: [{ any:['aqui tem','cartao','cartão','dinheiro','multibanco','euros','tem','pagar','troco'], go:'fim' }],
+      fallback: 'Diga "aqui tem" ou "com cartão, por favor".'
+    },
+    fim: { say: 'Obrigado! Bom dia.', end:true }
+  }
+};
+
+// A tight allowed lexicon the live AI must stay inside (A1, recent + common)
+const LEXICON = [
+  'bom dia','boa tarde','olá','por favor','se faz favor','obrigado','obrigada','desculpe','sim','não',
+  'queria','quero','é','são','tem','pode','posso','mais','um','uma','e','ou','para','com','aqui','para levar',
+  'um café','uma bica','um galão','uma meia de leite','um chá','um pastel de nata','um bolo','uma água','uma tosta',
+  'mais alguma coisa','só isso','é tudo','mais nada','para aqui','para levar','a conta','com cartão','dinheiro',
+  'aqui tem','quanto é','quanto custa','euros','bom dia','até logo'
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let mode = 'script';
+let apiKey = '';
+let isSpeaking = false, sessionEnded = false;
+let step = null;               // scripted: current step id
+let stepFails = 0;
+let yourLines = [];            // scripted: {said, target}
+let history = [];              // llm: [{role,content}]
+let llmTurns = 0;
+let recognition = null, isListening = false;
+
+const $ = id => document.getElementById(id);
+
+// ============================================================
+// SETUP UI
+// ============================================================
+$('segMode').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  mode = b.dataset.v;
+  [...$('segMode').children].forEach(x => x.classList.toggle('on', x === b));
+  $('keyWrap').classList.toggle('hidden', mode !== 'llm');
+});
+
+$('btnStart').onclick = () => {
+  $('setupErr').classList.add('hidden');
+  if (mode === 'llm') {
+    apiKey = $('apiKey').value.trim();
+    if (!apiKey) { $('setupErr').textContent = 'Paste an API key or switch to Guião (scripted).'; $('setupErr').classList.remove('hidden'); return; }
+  }
+  $('setup').classList.add('hidden');
+  $('recap').classList.add('hidden');
+  $('convo').classList.remove('hidden');
+  sessionEnded = false; yourLines = []; history = []; llmTurns = 0; stepFails = 0;
+  $('transcript').innerHTML = '';
+  initSTT();
+  if (mode === 'script') startScripted(); else startLLM();
+};
+
+$('againBtn').onclick = () => { $('recap').classList.add('hidden'); $('setup').classList.remove('hidden'); };
+
+// ============================================================
+// TTS  (matches the guides: POST {text}, worker default voice)
+// ============================================================
+async function speak(text, onEnd) {
+  if (!text) { if (onEnd) onEnd(); return; }
+  isSpeaking = true; setStatus('speaking', 'A empregada fala...');
+  try {
+    const body = { text };
+    if (VOICE_ID) body.voice_id = VOICE_ID;
+    const res = await fetch(TTS_WORKER, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+    if (!res.ok) throw new Error('TTS ' + res.status);
+    const url = URL.createObjectURL(await res.blob());
+    const audio = new Audio(url);
+    window._lastAudio = audio;
+    audio.onended = () => { isSpeaking = false; if (onEnd) onEnd(); };
+    audio.onerror = () => { isSpeaking = false; if (onEnd) onEnd(); };
+    audio.play().catch(() => { isSpeaking = false; if (onEnd) onEnd(); });
+  } catch (e) {
+    isSpeaking = false; if (onEnd) onEnd();   // never hang the loop
+  }
+}
+$('repeatBtn').onclick = () => { if (window._lastAudio) { window._lastAudio.currentTime = 0; window._lastAudio.play().catch(()=>{}); } };
+
+// ============================================================
+// TRANSCRIPT
+// ============================================================
+function addTurn(who, text, cls) {
+  const t = document.createElement('div'); t.className = 'turn ' + cls;
+  const w = document.createElement('div'); w.className = 'who'; w.textContent = who;
+  const b = document.createElement('div'); b.className = 'bubble'; b.textContent = text;
+  if (cls === 'bot') {
+    const r = document.createElement('button'); r.className = 'replay'; r.textContent = '🔊';
+    r.onclick = () => speak(text); b.appendChild(r);
+  }
+  t.appendChild(w); t.appendChild(b);
+  $('transcript').appendChild(t);
+  $('transcript').scrollTop = $('transcript').scrollHeight;
+}
+function setStatus(cls, text) { $('dot').className = 'dot ' + (cls||''); $('statusText').textContent = text || ''; }
+function showHint(h) { const el = $('liveHint'); if (h) { el.textContent = h; el.classList.remove('hidden'); } else el.classList.add('hidden'); }
+
+// ============================================================
+// INPUT
+// ============================================================
+function submitUser() {
+  const v = $('userIn').value.trim();
+  if (!v || isSpeaking || sessionEnded) return;
+  $('userIn').value = '';
+  addTurn('Tu', v, 'you');
+  if (mode === 'script') handleScripted(v); else handleLLM(v);
+}
+$('sendBtn').onclick = submitUser;
+$('userIn').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); submitUser(); } });
+$('endBtn').onclick = () => endSession();
+
+// ============================================================
+// SCRIPTED ENGINE
+// ============================================================
+const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+
+function startScripted() {
+  step = PASTELARIA.start; stepFails = 0;
+  sayStep();
+}
+function sayStep() {
+  const s = PASTELARIA.steps[step];
+  addTurn('Empregada', s.say, 'bot');
+  showHint(s.hint || '');
+  speak(s.say, () => {
+    if (s.end) { endSession(); return; }
+    setStatus('listening', 'A tua vez — escreve ou dita');
+    $('userIn').focus();
+  });
+}
+function handleScripted(v) {
+  const s = PASTELARIA.steps[step];
+  const n = norm(v);
+  let go = null;
+  for (const rule of (s.match || [])) {
+    if (rule.any.some(k => n.includes(norm(k)))) { go = rule.go; break; }
+  }
+  yourLines.push({ said:v, target:s.hint ? s.hint.replace(/^ex:\s*/,'') : '', step });
+  if (go) {
+    stepFails = 0; step = go; setStatus('thinking',''); setTimeout(sayStep, 350);
+  } else {
+    stepFails++;
+    if (stepFails >= 2) {   // never stuck: model the line and move on
+      const only = (s.match && s.match[0]) ? s.match[0].go : 'fim';
+      addTurn('Empregada', s.fallback, 'bot');
+      speak(s.fallback, () => { stepFails = 0; step = only; setTimeout(sayStep, 400); });
+    } else {
+      addTurn('Empregada', s.fallback, 'bot');
+      speak(s.fallback, () => { setStatus('listening','A tua vez'); $('userIn').focus(); });
+    }
+  }
+}
+
+// ============================================================
+// LLM ENGINE
+// ============================================================
+function llmSystem() {
+  return [
+    'You are a friendly empregada (server) in a Lisbon pastelaria. The user is an A1 beginner learning European Portuguese and is the customer ordering.',
+    'HARD RULES:',
+    '- Speak ONLY European Portuguese (pt-PT, never Brazilian). Never use English.',
+    '- One short sentence per turn. Maximum 8 words. No lists.',
+    '- Use ONLY simple present tense and these words/phrases, plus names and numbers: ' + LEXICON.join(', ') + '.',
+    '- Do not introduce new vocabulary or idioms. If the user is stuck, simplify and repeat, do not elaborate.',
+    '- Stay strictly inside this transaction: greet, take the order, ask "mais alguma coisa?", ask "para aqui ou para levar?", say the price, take payment, say goodbye.',
+    '- Keep the whole conversation to about 6 exchanges, then close with "Obrigado! Bom dia." and nothing else.',
+    '- Never correct the user mid-conversation. Just continue naturally.',
+    'Begin by greeting the customer.'
+  ].join('\n');
+}
+async function startLLM() {
+  setStatus('thinking', 'A começar...');
+  const opening = 'Bom dia! O que deseja?';
+  history.push({ role:'assistant', content: opening });
+  addTurn('Empregada', opening, 'bot');
+  speak(opening, () => { setStatus('listening','A tua vez — escreve ou dita'); $('userIn').focus(); });
+}
+async function handleLLM(v) {
+  history.push({ role:'user', content:v });
+  yourLines.push({ said:v, target:'' });
+  llmTurns++;
+  setStatus('thinking', 'A pensar...');
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true' },
+      body: JSON.stringify({ model:MODEL, max_tokens:60, system:llmSystem(), messages:history })
+    });
+    if (!res.ok) { const t = await res.text().catch(()=> ''); throw new Error('API ' + res.status + ' ' + t.slice(0,120)); }
+    const data = await res.json();
+    const reply = cleanForSpeech(data.content[0].text);
+    history.push({ role:'assistant', content:reply });
+    addTurn('Empregada', reply, 'bot');
+    const done = llmTurns >= MAX_LLM_TURNS || /bom dia\.?$|até logo/i.test(reply);
+    speak(reply, () => { if (done) endSession(); else { setStatus('listening','A tua vez'); $('userIn').focus(); } });
+  } catch (e) {
+    setStatus('', 'Erro: ' + e.message);
+    addTurn('Sistema', 'Erro ao contactar a API. Verifica a chave e os créditos. ' + e.message, 'bot');
+  }
+}
+function cleanForSpeech(t) {
+  return t.replace(/\*\*/g,'').replace(/\*/g,'').replace(/^[-\d.]+\s/gm,'').replace(/#{1,6}\s/g,'').trim();
+}
+
+// ============================================================
+// STT (optional convenience — Chrome only; Whispr Flow into the box is primary)
+// ============================================================
+function initSTT() {
+  if (recognition) return;
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { $('micBtn').style.display = 'none'; return; }
+  recognition = new SR();
+  recognition.lang = 'pt-PT';
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.onresult = e => {
+    if (e.results[0].isFinal) {
+      $('userIn').value = e.results[0][0].transcript.trim();
+      isListening = false; $('micBtn').classList.remove('rec');
+    }
+  };
+  recognition.onerror = () => { isListening = false; $('micBtn').classList.remove('rec'); };
+  recognition.onend = () => { isListening = false; $('micBtn').classList.remove('rec'); };
+}
+$('micBtn').onclick = () => {
+  if (!recognition || isSpeaking) return;
+  if (isListening) { recognition.stop(); return; }
+  isListening = true; $('micBtn').classList.add('rec');
+  try { recognition.start(); } catch (e) { isListening = false; $('micBtn').classList.remove('rec'); }
+};
+
+// ============================================================
+// END + RECAP
+// ============================================================
+function endSession() {
+  if (sessionEnded) return;
+  sessionEnded = true;
+  try { if (recognition) recognition.stop(); } catch (e) {}
+  setStatus('', '');
+  $('convo').classList.add('hidden');
+  $('recap').classList.remove('hidden');
+  if (mode === 'script') renderScriptedRecap(); else renderLLMRecap();
+}
+
+function renderScriptedRecap() {
+  const body = $('recapBody'); body.innerHTML = '';
+  if (!yourLines.length) { body.innerHTML = '<p class="note">Sem respostas.</p>'; return; }
+  yourLines.forEach(l => {
+    const d = document.createElement('div'); d.className = 'line';
+    let html = '<div class="yours">Tu: ' + esc(l.said) + '</div>';
+    if (l.target) html += '<div class="target">Alvo: ' + esc(l.target) + '</div>';
+    if (/\bquero\b/i.test(l.said)) html += '<div class="tip">Lembra: dizes "queria", não "quero", para pedir.</div>';
+    d.innerHTML = html; body.appendChild(d);
+  });
+}
+async function renderLLMRecap() {
+  const body = $('recapBody');
+  body.innerHTML = '<p class="note">A avaliar...</p>';
+  const transcript = history.map(m => (m.role === 'user' ? 'TU' : 'EMPREGADA') + ': ' + m.content).join('\n');
+  const prompt = 'You are a kind European Portuguese tutor. The student (TU) is A1. Here is a pastelaria roleplay transcript.\n\n' + transcript +
+    '\n\nReturn ONLY valid JSON, no markdown: {"good":["..."],"fix":[{"said":"what they wrote","better":"corrected pt-PT","why":"short English reason"}]}. Max 2 items in good, max 3 in fix. Only flag real errors. Keep pt-PT (European).';
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true' },
+      body: JSON.stringify({ model:MODEL, max_tokens:700, messages:[{ role:'user', content:prompt }] })
+    });
+    const data = await res.json();
+    const j = JSON.parse(data.content[0].text.replace(/```json|```/g,'').trim());
+    body.innerHTML = '';
+    if (j.good && j.good.length) {
+      const g = document.createElement('div'); g.className = 'line';
+      g.innerHTML = '<div class="target">Bem: ' + j.good.map(esc).join(' · ') + '</div>'; body.appendChild(g);
+    }
+    (j.fix || []).forEach(f => {
+      const d = document.createElement('div'); d.className = 'line';
+      d.innerHTML = '<div class="yours">Tu: ' + esc(f.said) + '</div><div class="target">Melhor: ' + esc(f.better) + '</div><div class="tip">' + esc(f.why) + '</div>';
+      body.appendChild(d);
+    });
+    if (!body.children.length) body.innerHTML = '<p class="note">Boa conversa, sem correções.</p>';
+  } catch (e) {
+    body.innerHTML = '<p class="note">Não foi possível avaliar (' + esc(e.message) + '). Aqui está o que disseste:</p>';
+    yourLines.forEach(l => { const d = document.createElement('div'); d.className='line'; d.innerHTML = '<div class="yours">Tu: ' + esc(l.said) + '</div>'; body.appendChild(d); });
+  }
+}
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+</script>
+</body>
+</html>
