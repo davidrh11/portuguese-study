@@ -7,65 +7,58 @@
 <title>Conversas · Português Europeu</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#f7f5f0; --surface:#fff; --border:#e2ddd3; --text:#2b2b2b; --muted:#8a8578;
-    --green:#006600; --red:#c0392b; --blue:#2a5f9e; --highlight:#eef5ee; --mono:'IBM Plex Mono',monospace;
-  }
-  * { box-sizing:border-box; }
-  body { font-family:'IBM Plex Sans',sans-serif; background:var(--bg); color:var(--text); margin:0; padding:0 16px; line-height:1.5; }
-  .wrap { max-width:640px; margin:0 auto; padding:1.5rem 0 3rem; }
-  header { display:flex; align-items:center; gap:0.8rem; margin-bottom:0.3rem; }
-  header svg { flex:none; }
-  h1 { font-size:1.3rem; margin:0; }
-  .sub { color:var(--muted); font-size:0.8rem; font-family:var(--mono); margin:0 0 1.5rem; }
-
-  .card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.4rem; margin-bottom:1rem; }
-  .card h2 { font-size:1rem; margin:0 0 0.6rem; }
-  label.lab { display:block; font-family:var(--mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin:0.9rem 0 0.35rem; }
-  .seg { display:flex; gap:0.5rem; flex-wrap:wrap; }
-  .seg button { flex:1; min-width:120px; font-family:var(--mono); font-size:0.82rem; background:var(--bg); border:1px solid var(--border); color:var(--text); padding:0.7rem 0.6rem; border-radius:7px; cursor:pointer; }
-  .seg button.on { background:var(--green); border-color:var(--green); color:#fff; }
-  .seg button small { display:block; font-size:0.66rem; opacity:0.75; margin-top:0.2rem; font-weight:400; }
-  input[type=password], input[type=text] { width:100%; font-family:var(--mono); font-size:0.9rem; padding:0.7rem 0.8rem; border:1px solid var(--border); border-radius:7px; background:var(--bg); color:var(--text); }
-  .note { font-size:0.78rem; color:var(--muted); margin:0.5rem 0 0; }
-  .btn-go { width:100%; margin-top:1.2rem; font-family:var(--mono); font-size:0.92rem; font-weight:600; background:var(--green); color:#fff; border:none; border-radius:8px; padding:0.9rem; cursor:pointer; }
-  .btn-go:disabled { opacity:0.4; cursor:default; }
-
-  .status { display:flex; align-items:center; gap:0.5rem; font-family:var(--mono); font-size:0.75rem; color:var(--muted); margin-bottom:0.8rem; min-height:1.2rem; }
-  .dot { width:9px; height:9px; border-radius:50%; background:var(--border); flex:none; }
-  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
-  .dot.speaking { background:var(--green); animation:pulse 1.2s infinite; }
-  .dot.listening { background:var(--blue); animation:pulse 0.8s infinite; }
-  .dot.thinking { background:#d08a00; animation:pulse 1.5s infinite; }
-
-  #transcript { min-height:160px; max-height:46vh; overflow-y:auto; margin-bottom:1rem; }
-  .turn { margin-bottom:0.9rem; }
-  .who { font-family:var(--mono); font-size:0.64rem; text-transform:uppercase; letter-spacing:0.09em; color:var(--muted); margin-bottom:0.15rem; }
-  .bubble { padding:0.55rem 0.8rem; border-radius:8px; display:inline-block; max-width:100%; }
-  .turn.bot .bubble { background:var(--highlight); color:var(--text); }
-  .turn.bot .who { color:var(--green); }
-  .turn.you { text-align:right; }
-  .turn.you .bubble { background:var(--green); color:#fff; }
-  .turn.you .who { color:var(--blue); }
-  .replay { background:none; border:none; cursor:pointer; font-size:0.85rem; margin-left:0.3rem; opacity:0.6; }
-  .replay:hover { opacity:1; }
-  .hint { font-family:var(--mono); font-size:0.74rem; color:var(--muted); font-style:italic; margin:0.1rem 0 0.6rem; }
-
-  .inrow { display:flex; gap:0.5rem; align-items:flex-end; }
-  .inrow input { flex:1; }
-  .mic, .send { font-family:var(--mono); font-size:0.85rem; border:1px solid var(--border); border-radius:7px; padding:0.7rem 0.9rem; cursor:pointer; background:var(--bg); color:var(--text); flex:none; }
-  .send { background:var(--green); color:#fff; border-color:var(--green); font-weight:600; }
-  .mic.rec { background:var(--red); color:#fff; border-color:var(--red); }
-  .barrow { display:flex; gap:0.5rem; margin-top:0.8rem; }
-  .barrow button { flex:1; font-family:var(--mono); font-size:0.78rem; background:var(--bg); border:1px solid var(--border); color:var(--muted); padding:0.55rem; border-radius:7px; cursor:pointer; }
-
-  .recap .line { border-bottom:1px solid var(--border); padding:0.6rem 0; }
-  .recap .line:last-child { border-bottom:none; }
-  .recap .yours { font-family:var(--mono); color:var(--text); }
-  .recap .target { font-size:0.82rem; color:var(--green); }
-  .recap .tip { font-size:0.82rem; color:var(--red); margin-top:0.2rem; }
-  .hidden { display:none; }
-  .err { color:var(--red); font-size:0.8rem; margin-top:0.6rem; }
+  :root{--bg:#f7f5f0;--surface:#fff;--border:#e2ddd3;--text:#2b2b2b;--muted:#8a8578;--green:#006600;--red:#c0392b;--blue:#2a5f9e;--highlight:#eef5ee;--mono:'IBM Plex Mono',monospace;}
+  *{box-sizing:border-box;}
+  body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);margin:0;padding:0 16px;line-height:1.5;}
+  .wrap{max-width:640px;margin:0 auto;padding:1.5rem 0 3rem;}
+  header{display:flex;align-items:center;gap:0.8rem;margin-bottom:0.3rem;}
+  h1{font-size:1.3rem;margin:0;}
+  .sub{color:var(--muted);font-size:0.8rem;font-family:var(--mono);margin:0 0 1.5rem;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.4rem;margin-bottom:1rem;}
+  .card h2{font-size:1rem;margin:0 0 0.6rem;}
+  label.lab{display:block;font-family:var(--mono);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin:0.9rem 0 0.35rem;}
+  select{width:100%;font-family:var(--mono);font-size:0.9rem;padding:0.7rem 0.8rem;border:1px solid var(--border);border-radius:7px;background:var(--bg);color:var(--text);}
+  .seg{display:flex;gap:0.5rem;flex-wrap:wrap;}
+  .seg button{flex:1;min-width:120px;font-family:var(--mono);font-size:0.82rem;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:0.7rem 0.6rem;border-radius:7px;cursor:pointer;}
+  .seg button.on{background:var(--green);border-color:var(--green);color:#fff;}
+  .seg button small{display:block;font-size:0.66rem;opacity:0.75;margin-top:0.2rem;font-weight:400;}
+  input[type=password],input[type=text]{width:100%;font-family:var(--mono);font-size:0.9rem;padding:0.7rem 0.8rem;border:1px solid var(--border);border-radius:7px;background:var(--bg);color:var(--text);}
+  .note{font-size:0.78rem;color:var(--muted);margin:0.5rem 0 0;}
+  .btn-go{width:100%;margin-top:1.2rem;font-family:var(--mono);font-size:0.92rem;font-weight:600;background:var(--green);color:#fff;border:none;border-radius:8px;padding:0.9rem;cursor:pointer;}
+  .status{display:flex;align-items:center;gap:0.5rem;font-family:var(--mono);font-size:0.75rem;color:var(--muted);margin-bottom:0.8rem;min-height:1.2rem;}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--border);flex:none;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  .dot.speaking{background:var(--green);animation:pulse 1.2s infinite;}
+  .dot.listening{background:var(--blue);animation:pulse 0.8s infinite;}
+  .dot.thinking{background:#d08a00;animation:pulse 1.5s infinite;}
+  #transcript{min-height:150px;max-height:44vh;overflow-y:auto;margin-bottom:0.8rem;}
+  .turn{margin-bottom:0.9rem;}
+  .who{font-family:var(--mono);font-size:0.64rem;text-transform:uppercase;letter-spacing:0.09em;color:var(--muted);margin-bottom:0.15rem;}
+  .bubble{padding:0.55rem 0.8rem;border-radius:8px;display:inline-block;max-width:100%;}
+  .turn.bot .bubble{background:var(--highlight);}
+  .turn.bot .who{color:var(--green);}
+  .turn.you{text-align:right;}
+  .turn.you .bubble{background:var(--green);color:#fff;}
+  .turn.you .who{color:var(--blue);}
+  .replay{background:none;border:none;cursor:pointer;font-size:0.85rem;margin-left:0.3rem;opacity:0.6;}
+  .replay:hover{opacity:1;}
+  #helpBox{background:#fffdf5;border:1px solid #e0d6b8;border-radius:8px;padding:0.6rem 0.8rem;margin-bottom:0.8rem;font-size:0.84rem;}
+  #helpBox .hb-en{color:var(--muted);}
+  #helpBox .hb-reply{color:var(--green);font-family:var(--mono);margin-top:0.3rem;}
+  .inrow{display:flex;gap:0.4rem;align-items:center;}
+  .inrow input{flex:1;}
+  .mic,.send,.help{font-family:var(--mono);font-size:0.85rem;border:1px solid var(--border);border-radius:7px;padding:0.7rem 0.7rem;cursor:pointer;background:var(--bg);color:var(--text);flex:none;}
+  .send{background:var(--green);color:#fff;border-color:var(--green);font-weight:600;}
+  .mic.rec{background:var(--red);color:#fff;border-color:var(--red);}
+  .barrow{display:flex;gap:0.5rem;margin-top:0.8rem;}
+  .barrow button{flex:1;font-family:var(--mono);font-size:0.78rem;background:var(--bg);border:1px solid var(--border);color:var(--muted);padding:0.55rem;border-radius:7px;cursor:pointer;}
+  .recap .line{border-bottom:1px solid var(--border);padding:0.6rem 0;}
+  .recap .line:last-child{border-bottom:none;}
+  .recap .yours{font-family:var(--mono);color:var(--text);}
+  .recap .target{font-size:0.82rem;color:var(--green);}
+  .recap .tip{font-size:0.82rem;color:var(--red);margin-top:0.2rem;}
+  .hidden{display:none;}
+  .err{color:var(--red);font-size:0.8rem;margin-top:0.6rem;}
 </style>
 </head>
 <body>
@@ -80,36 +73,34 @@
 </header>
 <p class="sub">A1.1 · conversas curtas · fala e ouve</p>
 
-<!-- ===== SETUP ===== -->
 <div id="setup" class="card">
-  <h2>Na pastelaria</h2>
-  <p class="note">You are the customer. The empregada (server) greets you; order a coffee and a pastry, say for here or to go, and pay. Short turns. Portuguese only.</p>
-
+  <h2 id="scenTitle">Na pastelaria</h2>
+  <p class="note" id="scenIntro"></p>
+  <label class="lab">Cenário</label>
+  <select id="scenPick"></select>
   <label class="lab">Modo</label>
   <div class="seg" id="segMode">
-    <button data-v="script" class="on">Guião<small>scripted, fixed lines</small></button>
-    <button data-v="llm">Conversa livre<small>live AI, needs API key</small></button>
+    <button data-v="llm" class="on">Conversa livre<small>live AI, varies each time</small></button>
+    <button data-v="script">Guião<small>fixed lines, no key</small></button>
   </div>
-
-  <div id="keyWrap" class="hidden">
+  <div id="keyWrap">
     <label class="lab">Anthropic API key</label>
     <input type="password" id="apiKey" placeholder="sk-ant-..." autocomplete="off">
-    <p class="note">From console.anthropic.com. Not stored. Billed separately from Claude.ai. Leave scripted mode if you don't have one.</p>
+    <p class="note">From console.anthropic.com. Not stored. Billed separately from Claude.ai.</p>
   </div>
-
   <button class="btn-go" id="btnStart">Começar</button>
-  <p class="note" id="setupNote">Tip: type your reply, or dictate it with Whispr Flow into the box, then press Enter.</p>
+  <p class="note">Type your reply, or dictate it with Whispr Flow, then press Enter. Stuck? Tap "ajuda".</p>
   <div class="err hidden" id="setupErr"></div>
 </div>
 
-<!-- ===== CONVERSATION ===== -->
 <div id="convo" class="card hidden">
   <div class="status"><span class="dot" id="dot"></span><span id="statusText">...</span></div>
   <div id="transcript"></div>
-  <div class="hint hidden" id="liveHint"></div>
+  <div id="helpBox" class="hidden"></div>
   <div class="inrow">
-    <input type="text" id="userIn" placeholder="Escreve ou dita a tua resposta..." autocomplete="off" autocapitalize="off">
+    <input type="text" id="userIn" placeholder="A tua resposta..." autocomplete="off" autocapitalize="off">
     <button class="mic" id="micBtn" title="ditar (Chrome)">🎤</button>
+    <button class="help" id="helpBtn" title="ajuda">ajuda</button>
     <button class="send" id="sendBtn">Enviar</button>
   </div>
   <div class="barrow">
@@ -118,7 +109,6 @@
   </div>
 </div>
 
-<!-- ===== RECAP ===== -->
 <div id="recap" class="card hidden">
   <h2>Resumo</h2>
   <div class="recap" id="recapBody"></div>
@@ -127,332 +117,275 @@
 </div>
 
 <script>
-// ============================================================
-// CONFIG
-// ============================================================
-const TTS_WORKER = 'https://portuguese-tts-speechify.drh-dave.workers.dev';
-const VOICE_ID = null;               // null = worker default (agueda, pt-PT) — same as the guides
-const MODEL = 'claude-sonnet-4-6';   // change here if the API returns a model error
-const MAX_LLM_TURNS = 8;
+const TTS_WORKER='https://portuguese-tts-speechify.drh-dave.workers.dev';
+const VOICE_ID=null;               // null = worker default (Azure Duarte, pt-PT) — same as the guides
+const MODEL='claude-sonnet-4-6';   // change here if the API returns a model error
+const MAX_LLM_TURNS=8;
+
+const RECENT=["a almofada", "a argola de guardanapo", "a cabeça", "a cadeira", "a cadeira de jantar", "a cafeteira", "a cama", "a caminhada", "a casa de banho", "a casa dela", "a cave", "a chávena", "a chávena de café", "a chávena de chá", "a colher", "a colher de sopa", "a concha", "a cozinha", "a cómoda", "a espátula", "a estante", "a faca", "a faca de mesa", "a garagem", "a maior parte", "a mala", "a manteiga", "a massa", "a mesa de cabeceira", "a mesa de centro", "a mesa de jantar", "a neve", "a pimenta", "a pinça", "a poltrona", "a primeira vez", "a quarta", "a que horas", "a que horas abre?", "a que horas fechas?", "a questão é que", "a quinta", "a reunião", "a sala de estar", "a secretária", "a segunda", "a sexta", "a sobremesa", "a televisão", "a terça", "a tigela", "a toalha de mesa", "a torradeira", "abre", "abrir", "abro", "acha", "acordar", "adjectivo + -mente", "adora", "adorar", "adoro", "ainda", "ainda não", "ajudar", "algo", "alguma", "algures", "alguém", "ali", "almoçar", "além disso", "amanhã", "amor", "analisa", "analisar", "analiso", "andar", "anos", "antes", "antes de", "ao", "ao lado de", "ao pé de", "aos", "apanha", "apanhar", "apanho", "apenas", "apesar de", "aprende", "aprender", "aprendo", "aquela", "aquele", "aqui", "as batatas", "as cenouras", "as cortinas", "as framboesas", "assim", "atrasado", "atrás de", "até", "até já.", "até logo.", "até à próxima.", "aí", "batatas fritas", "bebe", "beber", "bebo", "bife à madeira", "boa", "bom tempo", "bonito", "buscar", "cabrito no forno", "cada", "cara", "caramelo salgado", "catorze", "cem", "chegar", "chegar a", "cinco", "cinquenta", "claro", "coisas", "com o, com a", "comer", "começar", "comi", "comigo", "como", "como chego ao rossio?", "como está?", "como foi", "como se diz", "compra", "comprar", "compro", "conhecer", "cozinha", "cozinhar", "cozinho", "cria", "criar", "crio", "cuida de", "cuidar de", "cuido de", "cá", "da", "daqueles", "daqui", "daqui a", "dar", "das", "de", "de certeza", "de férias", "de onde", "de onde vens?", "de onde é?", "de quem", "debaixo de", "decide", "decidir", "decido", "dei", "deixa ver", "dele", "dentro de", "dentro de cinco minutos", "depois", "depois de", "depois de amanhã", "desculpe", "deste, desta", "destes", "deu-me", "deus", "deve", "dez", "dezanove", "dezasseis", "dezassete", "dezoito", "dia", "diga", "diga.", "digo", "dinheiro", "diretamente", "disse", "disso", "divertido", "diz", "dizer", "do", "do escritório", "dois", "dos", "dou", "doze", "duas", "durante", "durmo", "dá", "dê-me", "e", "ei", "em cima de", "em vez de", "embora", "encontrámos", "enquanto", "entre", "entrecosto de borrego", "era", "esperar", "espetadas à madeira", "essa", "esse", "esta", "esta tarde", "estamos", "estar", "este", "este sábado", "estive", "estou", "estou a + infinitivo", "estou de rastos.", "estou sentado", "estuda", "estudar", "estudei", "estudo", "está", "está a chover", "está abafado", "está abafado.", "está calor", "está chuva", "está frio", "está nevoeiro", "está nublado", "está soalheiro", "está sol", "está trovoada", "está vento", "estás no silêncio.", "facilmente", "fala", "falar", "falo", "faz", "fazendo", "fazer", "faço", "fez", "fica", "ficar", "fico", "fico surpreendido", "filho", "finalmente", "fiz", "fizemos", "foi", "fora", "frequentemente", "fui", "fui a", "gastar", "gosta", "gosta de", "gostar", "gostar de", "gosto", "gosto de", "grande", "gravar", "habitualmente", "hoje", "homem", "hora", "há", "há quanto tempo", "há tanto tempo.", "infelizmente", "ir", "isso são outros quinhentos.", "janta", "jantar", "jantei", "janto", "joguei", "já me lembro", "lancha", "lanchar", "lancho", "leio", "lentamente", "ler", "lhe", "lindo", "logo à noite", "lugar", "lulas", "lá", "lê", "mais ou menos", "mais um", "mas", "mau tempo", "melhor", "meu", "meus", "minha", "minhas", "mora", "morar", "moro", "mostra", "mostrar", "mostrei", "mostro", "muitas vezes", "muito pouco", "mulher", "mundo", "musse de chocolate", "mãe", "na", "na boa.", "na farmácia", "na próxima semana", "nada específico", "nao sabia", "naquele, naquela", "nas", "naturalmente", "nem", "nesse, nessa", "ninguém", "no", "no entanto", "no próximo domingo", "no restaurante", "no silêncio", "nome", "normalmente", "nos", "nossa", "nosso", "nove", "noventa", "noventa e nove", "novo", "nunca", "não estão, não.", "não me lembro", "não te preocupes.", "não, à tua direita.", "o alarme", "o anfitrião", "o arraial", "o azeite", "o açúcar", "o bacalhau", "o briol", "o bule", "o candeeiro", "o chão", "o cobertor", "o colega", "o congelador", "o convidado", "o convite", "o copo de vinho", "o copo de água", "o corredor", "o descascador", "o domingo", "o escritório", "o fiambre", "o fim de semana", "o fogão", "o forno", "o frango", "o frigorífico", "o garfo", "o garfo de mesa", "o guardanapo", "o jarro", "o leite", "o liquidificador", "o livro dele", "o lugar à mesa", "o melhor", "o micro-ondas", "o oveiro", "o prato de pão", "o prato de sopa", "o prato raso", "o quarto", "o que", "o que quer beber?", "o que é isto?", "o ralador", "o roupeiro", "o sal", "o sofá", "o sábado", "o sítio", "o sótão", "o tapete", "o triturador", "o troco", "obrigado", "obrigado pelo convite.", "obrigadíssimo.", "oh", "oitenta", "oito", "ok", "olha!", "olá", "onde", "onde está", "onde fica a estação?", "onde mora?", "onde é", "onze", "os ovos", "os óculos", "ou", "outra", "outra vez", "outro", "ouve", "ouvi", "ouvir", "ouço", "paga", "pagar", "pago", "pai", "para a minha casa", "para além de", "para aprender", "para casa", "para mim.", "para o, para a", "para onde", "para onde vai?", "para onde vamos?", "para quantas pessoas?", "parece", "passar", "passei", "patas de galinha", "pedi", "pedir", "peito de frango", "pela", "pelas", "pelo", "pelos", "pensa", "pensar", "pensar em", "penso", "percebe", "perceber", "percebo", "perco", "perde", "perder", "perfeitamente", "pernas de frango", "pessoas", "peço", "pode", "pode sentar-se.", "pode ser.", "podemos", "poder", "poderia", "ponho", "por isso", "porque", "porquê?", "posso", "pouco", "pra", "prazer em vê-lo.", "precisa", "precisar", "precisar de", "preciso", "prefiro", "primeiro", "provavelmente", "pôr", "põe", "qual", "qualquer", "qualquer coisa", "quando", "quando abre o museu?", "quando chegas?", "quando é que chegas?", "quanta água quer?", "quanto", "quanto custa", "quanto custa este vinho?", "quanto custa?", "quanto custam as framboesas?", "quanto é", "quanto é tudo?", "quanto é, por favor?", "quantos", "quantos anos tens?", "quarenta", "quarenta e nove", "quarenta e oito", "quarenta e sete", "quatro", "que", "que dia é hoje?", "que horas são?", "que vinho recomenda?", "quem", "quem fala português?", "quem é aquele?", "quer", "querer", "queria", "quero", "quinze", "quê", "rapidamente", "raramente", "recomendou", "sabe", "saber", "sabes?", "sai", "saio", "sair", "se", "se tu pedes", "sei", "seis", "seja", "sem", "sem problema.", "sempre", "sentar", "ser", "será", "sessenta", "sessenta e quatro", "sete", "setenta", "seu", "seus", "sinto", "sou", "sua", "suas", "só", "talvez", "também", "telefona", "telefonar", "telefono", "tem", "temos", "tenho", "tenho de", "ter", "tinha", "tive", "toda", "todo", "toma", "tomar", "tomo", "tornar", "trabalha", "trabalhar", "trabalhei", "trabalho", "trago", "traz", "trazer", "treze", "trinta", "trinta e oito", "trinta e um", "trinta e uma", "trouxe", "três", "um", "um bocadinho", "um quilo e meio", "uma", "uma coisa engraçada", "vai", "vai-se andando.", "vais ao ginásio?", "vejo", "vem", "venha", "venho", "venho buscar", "ver", "verdade", "vez", "vida", "vim", "vinte", "vinte e dois", "vinte e duas", "vinte e um", "vinte e uma", "vinte minutos de carro", "vir", "vive", "viver", "vivo", "vocês", "vocês são cinco estrelas.", "voltar", "vou", "vou a", "vou para", "vá", "vão", "vê", "zero", "à", "à direita de", "à esquerda de", "à frente de", "à parte", "à tua direita", "à tua esquerda", "às", "às vezes", "é", "é o mais antigo", "é que"];
 
 // ============================================================
-// SCENARIO (scripted engine) — add more scenarios here later
+// SCENARIOS
 // ============================================================
-const PASTELARIA = {
-  start: 'saudacao',
-  steps: {
-    saudacao: {
-      say: 'Bom dia! O que deseja?',
-      hint: 'ex: Bom dia. Queria um café, por favor.',
-      match: [{ any:['cafe','galao','galão','meia de leite','pastel','queria','queremos','queria um','um cafe','bica','abatanado','descafeinado','cha','chá'], go:'mais' }],
-      fallback: 'Desculpe? Diga, por exemplo: "Queria um café, por favor."'
-    },
-    mais: {
-      say: 'Mais alguma coisa?',
-      hint: 'ex: Sim, um pastel de nata. / Não, obrigado.',
-      match: [
-        { any:['nao','não','so isso','só isso','e tudo','é tudo','mais nada','obrigado','obrigada','chega'], go:'local' },
-        { any:['sim','tambem','também','e um','e uma','mais um','mais uma','pastel','agua','água','bolo','tosta','sande'], go:'local' }
-      ],
-      fallback: 'Diga "não, obrigado" ou peça mais uma coisa, por exemplo "e um pastel de nata".'
-    },
-    local: {
-      say: 'É para aqui ou para levar?',
-      hint: 'ex: Para aqui, por favor. / Para levar.',
-      match: [{ any:['aqui','levar','viagem'], go:'pagar' }],
-      fallback: 'Diga "para aqui" ou "para levar".'
-    },
-    pagar: {
-      say: 'São dois euros e cinquenta, por favor.',
-      hint: 'ex: Aqui tem. / Posso pagar com cartão?',
-      match: [{ any:['aqui tem','cartao','cartão','dinheiro','multibanco','euros','tem','pagar','troco'], go:'fim' }],
-      fallback: 'Diga "aqui tem" ou "com cartão, por favor".'
-    },
-    fim: { say: 'Obrigado! Bom dia.', end:true }
+const SCENARIOS={
+  pastelaria:{
+    label:'Na pastelaria', botName:'Empregada',
+    intro:'You are the customer. The server greets you; order a coffee and a pastry, say for here or to go, and pay.',
+    persona:'a warm empregada (server) in a Lisbon pastelaria. The user is the customer.',
+    flow:'greet, take the order, ask "mais alguma coisa?", ask "para aqui ou para levar?", say a price, take payment, say goodbye.',
+    seed:'(O cliente entra na pastelaria.)',
+    core:["bom dia","boa tarde","por favor","se faz favor","obrigado","desculpe","o que deseja","queria","mais alguma coisa","só isso","é tudo","mais nada","um café","uma bica","um galão","uma meia de leite","um chá","um pastel de nata","um bolo","uma água","uma tosta","para aqui","para levar","são","euros","a conta","com cartão","dinheiro","multibanco","aqui tem","quanto é","o troco","até logo"],
+    script:{start:'a',steps:{
+      a:{say:'Bom dia! O que deseja?',hint:'Queria um café, por favor.',match:[{any:['cafe','galao','meia de leite','pastel','queria','bica','cha'],go:'b'}],fallback:'Desculpe? Diga: "Queria um café, por favor."'},
+      b:{say:'Mais alguma coisa?',hint:'Não, obrigado. / Sim, um pastel de nata.',match:[{any:['nao','so isso','e tudo','mais nada','obrigado','sim','mais','pastel','agua','bolo','tosta'],go:'c'}],fallback:'Diga "não, obrigado" ou peça mais uma coisa.'},
+      c:{say:'É para aqui ou para levar?',hint:'Para aqui, por favor. / Para levar.',match:[{any:['aqui','levar'],go:'d'}],fallback:'Diga "para aqui" ou "para levar".'},
+      d:{say:'São dois euros e cinquenta.',hint:'Aqui tem. / Com cartão, por favor.',match:[{any:['aqui tem','cartao','dinheiro','euros','tem','troco'],go:'e'}],fallback:'Diga "aqui tem" ou "com cartão, por favor".'},
+      e:{say:'Obrigado! Bom dia.',end:true}
+    }}
+  },
+  restaurante:{
+    label:'No restaurante', botName:'Empregado',
+    intro:'You are at dinner. The waiter seats you, takes your order and drink, checks on you, and brings the bill.',
+    persona:'a friendly waiter (empregado) in a Lisbon restaurant at dinner. The user is the customer.',
+    flow:'greet and ask how many people, take the food order, ask about drinks, later ask if everything is good, bring the bill, take payment, say goodbye.',
+    seed:'(O cliente chega ao restaurante para jantar.)',
+    core:["boa noite","uma mesa","para quantas pessoas","para dois","a ementa","o que deseja comer","queria","a sopa","o prato do dia","o bife","o peixe","o frango","o bacalhau","e para beber","uma água","um copo de vinho","vinho tinto","está tudo bem","está muito bom","a conta","são","euros","com cartão","aqui tem","à parte","obrigado"],
+    script:{start:'a',steps:{
+      a:{say:'Boa noite! Uma mesa para quantas pessoas?',hint:'Uma mesa para dois, por favor.',match:[{any:['dois','duas','uma','tres','quatro','pessoas','mesa','para'],go:'b'}],fallback:'Diga quantas pessoas: "para dois, por favor".'},
+      b:{say:'O que deseja comer?',hint:'Queria a sopa e o bife, por favor.',match:[{any:['queria','quero','sopa','bife','peixe','frango','bacalhau','prato','comer','ementa'],go:'c'}],fallback:'Faça o pedido: "Queria o bife, por favor".'},
+      c:{say:'E para beber?',hint:'Uma água, por favor. / Um copo de vinho tinto.',match:[{any:['agua','vinho','cerveja','sumo','copo','beber','nada','tinto'],go:'d'}],fallback:'Diga o que quer beber: "uma água, por favor".'},
+      d:{say:'Está tudo bem?',hint:'Sim, está muito bom, obrigado.',match:[{any:['sim','bom','otimo','obrigado','tudo','esta'],go:'e'}],fallback:'Diga "sim, está muito bom".'},
+      e:{say:'Aqui está a conta. São vinte euros.',hint:'Posso pagar com cartão?',match:[{any:['cartao','dinheiro','aqui tem','pagar','euros','troco'],go:'f'}],fallback:'Diga "com cartão, por favor".'},
+      f:{say:'Obrigado! Boa noite.',end:true}
+    }}
+  },
+  mercado:{
+    label:'No mercado', botName:'Vendedor',
+    intro:'You are at a fruit and veg stall. Ask for what you want by weight, add more or not, and pay.',
+    persona:'a cheerful stallholder (vendedor) at a Lisbon fruit and vegetable market. The user is the customer.',
+    flow:'greet, ask what they want, take the order by weight, ask "mais alguma coisa?", say a price, take payment, say goodbye.',
+    seed:'(O cliente chega à banca de fruta no mercado.)',
+    core:["bom dia","o que deseja","queria","um quilo","meio quilo","as maçãs","as laranjas","os tomates","as bananas","as cenouras","as framboesas","a fruta","mais alguma coisa","só isso","é tudo","quanto custa","quanto é","são","euros","aqui tem","com cartão","dinheiro","o troco","obrigado"],
+    script:{start:'a',steps:{
+      a:{say:'Bom dia! O que deseja?',hint:'Queria um quilo de maçãs, por favor.',match:[{any:['queria','quero','quilo','maca','laranja','tomate','banana','cenoura','fruta','meio'],go:'b'}],fallback:'Peça por peso: "Queria um quilo de maçãs".'},
+      b:{say:'Mais alguma coisa?',hint:'Sim, meio quilo de tomates. / Não, é tudo.',match:[{any:['nao','so isso','e tudo','mais nada','obrigado','sim','mais','quilo','meio','tambem'],go:'c'}],fallback:'Diga "não, é tudo" ou peça mais.'},
+      c:{say:'São três euros e cinquenta.',hint:'Aqui tem. / Com cartão, por favor.',match:[{any:['aqui tem','cartao','dinheiro','euros','tem','troco'],go:'d'}],fallback:'Diga "aqui tem" ou "com cartão".'},
+      d:{say:'Obrigado! Bom dia.',end:true}
+    }}
+  },
+  direcoes:{
+    label:'Pedir direções', botName:'Senhor',
+    intro:'You are lost in the street. Ask a local where a place is, whether it is far, and thank them.',
+    persona:'a helpful local on a Lisbon street. The user is a visitor asking for directions.',
+    flow:'offer to help, answer where the place is with simple directions (em frente, à esquerda, à direita, perto, longe), answer if it is far, accept thanks.',
+    seed:'(Um visitante aproxima-se na rua para pedir ajuda.)',
+    core:["desculpe","por favor","onde é","onde fica","a farmácia","a estação","o mercado","a rua","em frente","sempre em frente","à esquerda","à direita","perto","longe","aqui","ali","a pé","minutos","obrigado","de nada","precisa de ajuda"],
+    script:{start:'a',steps:{
+      a:{say:'Olá! Precisa de ajuda?',hint:'Desculpe, onde é a farmácia?',match:[{any:['onde','farmacia','estacao','mercado','rua','fica','metro','cafe'],go:'b'}],fallback:'Pergunte: "Desculpe, onde é a farmácia?"'},
+      b:{say:'É perto. Vá sempre em frente e depois à esquerda.',hint:'É longe? / Obrigado!',match:[{any:['longe','perto','obrigado','quanto','minutos','a pe','esquerda','direita','sim'],go:'c'}],fallback:'Pergunte "é longe?" ou diga "obrigado".'},
+      c:{say:'De nada! Bom dia.',end:true}
+    }}
+  },
+  planos:{
+    label:'Planos de fim de semana', botName:'Amiga',
+    intro:'A friend chats about your weekend. Say what you did (past) and what you will do (future).',
+    persona:'a friendly Portuguese friend chatting casually. The user is their friend.',
+    flow:'ask how the weekend was, react, ask what they will do this weekend, react, suggest meeting for a coffee, accept or not, say goodbye. Use past (fui, fiz) and future (vou).',
+    seed:'(Encontras uma amiga na rua.)',
+    core:["olá","como foi","o teu fim de semana","foi bom","no sábado","no domingo","fui","fiz","fui ao ginásio","jantar","a praia","trabalhei","e tu","o que vais fazer","vou","vou para","vou jantar","que bom","boa ideia","queres ir ao café","amanhã","sim claro","não posso","talvez","até logo"],
+    script:{start:'a',steps:{
+      a:{say:'Olá! Como foi o teu fim de semana?',hint:'Foi bom. No sábado fui ao ginásio.',match:[{any:['foi','fui','fiz','sabado','domingo','ginasio','jantar','bom','praia','trabalhei'],go:'b'}],fallback:'Diga o que fez: "No sábado fui ao ginásio".'},
+      b:{say:'Que bom! E o que vais fazer este fim de semana?',hint:'Vou jantar fora. / Vou para o Estoril.',match:[{any:['vou','vamos','jantar','praia','estoril','ginasio','cozinhar','nada','talvez'],go:'c'}],fallback:'Diga os planos: "Vou jantar fora".'},
+      c:{say:'Boa ideia! Queres ir ao café amanhã?',hint:'Sim, claro! / Não posso, obrigado.',match:[{any:['sim','claro','nao','posso','talvez','obrigado','boa'],go:'d'}],fallback:'Responda "sim, claro" ou "não posso".'},
+      d:{say:'Combinado! Até logo.',end:true}
+    }}
+  },
+  apresentar:{
+    label:'Conhecer alguém', botName:'Pessoa',
+    intro:'You meet someone new. Give your name, where you are from, and what you do.',
+    persona:'a friendly Portuguese person meeting the user for the first time at a social event.',
+    flow:'say hello and ask the name, ask where they are from, ask what they do, react warmly, say goodbye.',
+    seed:'(Conheces uma pessoa nova numa festa.)',
+    core:["olá","boa noite","como se chama","chamo-me","o meu nome é","muito prazer","de onde é","sou de","sou dos estados unidos","sou americano","e você","o que faz","trabalho em","sou reformado","tecnologia","vendas","moro em lisboa","que interessante","foi um prazer","até logo"],
+    script:{start:'a',steps:{
+      a:{say:'Olá! Como se chama?',hint:'Chamo-me Dave. E você?',match:[{any:['chamo','sou','nome','dave','me chamo'],go:'b'}],fallback:'Diga o seu nome: "Chamo-me Dave".'},
+      b:{say:'Muito prazer! De onde é?',hint:'Sou dos Estados Unidos. / Moro em Lisboa.',match:[{any:['sou de','sou dos','estados unidos','lisboa','americano','america','moro'],go:'c'}],fallback:'Diga de onde é: "Sou dos Estados Unidos".'},
+      c:{say:'Que interessante! O que faz?',hint:'Trabalho em tecnologia. / Sou reformado.',match:[{any:['trabalho','sou','faco','reformado','vendas','tecnologia','negocios'],go:'d'}],fallback:'Diga o que faz: "Trabalho em tecnologia".'},
+      d:{say:'Foi um prazer! Até logo.',end:true}
+    }}
   }
 };
+let SCK='pastelaria';           // current scenario key
+let SC=SCENARIOS[SCK];
 
-// A tight allowed lexicon the live AI must stay inside (A1, recent + common)
-const LEXICON = [
-  'bom dia','boa tarde','olá','por favor','se faz favor','obrigado','obrigada','desculpe','sim','não',
-  'queria','quero','é','são','tem','pode','posso','mais','um','uma','e','ou','para','com','aqui','para levar',
-  'um café','uma bica','um galão','uma meia de leite','um chá','um pastel de nata','um bolo','uma água','uma tosta',
-  'mais alguma coisa','só isso','é tudo','mais nada','para aqui','para levar','a conta','com cartão','dinheiro',
-  'aqui tem','quanto é','quanto custa','euros','bom dia','até logo'
-];
+let mode='llm',apiKey='',isSpeaking=false,sessionEnded=false;
+let step=null,stepFails=0,yourLines=[],history=[],llmTurns=0,lastBot='';
+let recognition=null,isListening=false;
+const $=id=>document.getElementById(id);
 
-// ============================================================
-// STATE
-// ============================================================
-let mode = 'script';
-let apiKey = '';
-let isSpeaking = false, sessionEnded = false;
-let step = null;               // scripted: current step id
-let stepFails = 0;
-let yourLines = [];            // scripted: {said, target}
-let history = [];              // llm: [{role,content}]
-let llmTurns = 0;
-let recognition = null, isListening = false;
+// ----- scenario picker -----
+(function(){
+  const sel=$('scenPick');
+  Object.keys(SCENARIOS).forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=SCENARIOS[k].label;sel.appendChild(o);});
+  sel.value=SCK; applyScenario();
+  sel.addEventListener('change',()=>{SCK=sel.value;applyScenario();});
+})();
+function applyScenario(){SC=SCENARIOS[SCK];$('scenTitle').textContent=SC.label;$('scenIntro').textContent=SC.intro+' Short turns, Portuguese only. No target line is shown.';}
 
-const $ = id => document.getElementById(id);
-
-// ============================================================
-// SETUP UI
-// ============================================================
-$('segMode').addEventListener('click', e => {
-  const b = e.target.closest('button'); if (!b) return;
-  mode = b.dataset.v;
-  [...$('segMode').children].forEach(x => x.classList.toggle('on', x === b));
-  $('keyWrap').classList.toggle('hidden', mode !== 'llm');
-});
-
-$('btnStart').onclick = () => {
+$('segMode').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;mode=b.dataset.v;[...$('segMode').children].forEach(x=>x.classList.toggle('on',x===b));$('keyWrap').classList.toggle('hidden',mode!=='llm');});
+$('btnStart').onclick=()=>{
   $('setupErr').classList.add('hidden');
-  if (mode === 'llm') {
-    apiKey = $('apiKey').value.trim();
-    if (!apiKey) { $('setupErr').textContent = 'Paste an API key or switch to Guião (scripted).'; $('setupErr').classList.remove('hidden'); return; }
-  }
-  $('setup').classList.add('hidden');
-  $('recap').classList.add('hidden');
-  $('convo').classList.remove('hidden');
-  sessionEnded = false; yourLines = []; history = []; llmTurns = 0; stepFails = 0;
-  $('transcript').innerHTML = '';
+  if(mode==='llm'){apiKey=$('apiKey').value.trim();if(!apiKey){$('setupErr').textContent='Paste an API key or switch to Guião.';$('setupErr').classList.remove('hidden');return;}}
+  $('setup').classList.add('hidden');$('recap').classList.add('hidden');$('convo').classList.remove('hidden');
+  sessionEnded=false;yourLines=[];history=[];llmTurns=0;stepFails=0;lastBot='';$('transcript').innerHTML='';hideHelp();
   initSTT();
-  if (mode === 'script') startScripted(); else startLLM();
+  if(mode==='script')startScripted();else startLLM();
 };
+$('againBtn').onclick=()=>{$('recap').classList.add('hidden');$('setup').classList.remove('hidden');};
 
-$('againBtn').onclick = () => { $('recap').classList.add('hidden'); $('setup').classList.remove('hidden'); };
-
-// ============================================================
-// TTS  (matches the guides: POST {text}, worker default voice)
-// ============================================================
-async function speak(text, onEnd) {
-  if (!text) { if (onEnd) onEnd(); return; }
-  isSpeaking = true; setStatus('speaking', 'A empregada fala...');
-  try {
-    const body = { text };
-    if (VOICE_ID) body.voice_id = VOICE_ID;
-    const res = await fetch(TTS_WORKER, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
-    if (!res.ok) throw new Error('TTS ' + res.status);
-    const url = URL.createObjectURL(await res.blob());
-    const audio = new Audio(url);
-    window._lastAudio = audio;
-    audio.onended = () => { isSpeaking = false; if (onEnd) onEnd(); };
-    audio.onerror = () => { isSpeaking = false; if (onEnd) onEnd(); };
-    audio.play().catch(() => { isSpeaking = false; if (onEnd) onEnd(); });
-  } catch (e) {
-    isSpeaking = false; if (onEnd) onEnd();   // never hang the loop
-  }
+async function speak(text,onEnd){
+  if(!text){if(onEnd)onEnd();return;}
+  isSpeaking=true;setStatus('speaking','A falar...');
+  try{
+    const body={text};if(VOICE_ID)body.voice_id=VOICE_ID;
+    const res=await fetch(TTS_WORKER,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!res.ok)throw new Error('TTS '+res.status);
+    const url=URL.createObjectURL(await res.blob());const audio=new Audio(url);window._lastAudio=audio;
+    audio.onended=()=>{isSpeaking=false;if(onEnd)onEnd();};
+    audio.onerror=()=>{isSpeaking=false;if(onEnd)onEnd();};
+    audio.play().catch(()=>{isSpeaking=false;if(onEnd)onEnd();});
+  }catch(e){isSpeaking=false;if(onEnd)onEnd();}
 }
-$('repeatBtn').onclick = () => { if (window._lastAudio) { window._lastAudio.currentTime = 0; window._lastAudio.play().catch(()=>{}); } };
+$('repeatBtn').onclick=()=>{if(window._lastAudio){window._lastAudio.currentTime=0;window._lastAudio.play().catch(()=>{});}};
 
-// ============================================================
-// TRANSCRIPT
-// ============================================================
-function addTurn(who, text, cls) {
-  const t = document.createElement('div'); t.className = 'turn ' + cls;
-  const w = document.createElement('div'); w.className = 'who'; w.textContent = who;
-  const b = document.createElement('div'); b.className = 'bubble'; b.textContent = text;
-  if (cls === 'bot') {
-    const r = document.createElement('button'); r.className = 'replay'; r.textContent = '🔊';
-    r.onclick = () => speak(text); b.appendChild(r);
-  }
-  t.appendChild(w); t.appendChild(b);
-  $('transcript').appendChild(t);
-  $('transcript').scrollTop = $('transcript').scrollHeight;
+function addTurn(who,text,cls){
+  const t=document.createElement('div');t.className='turn '+cls;
+  const w=document.createElement('div');w.className='who';w.textContent=who;
+  const b=document.createElement('div');b.className='bubble';b.textContent=text;
+  if(cls==='bot'){const r=document.createElement('button');r.className='replay';r.textContent='🔊';r.onclick=()=>speak(text);b.appendChild(r);lastBot=text;}
+  t.appendChild(w);t.appendChild(b);$('transcript').appendChild(t);$('transcript').scrollTop=$('transcript').scrollHeight;
 }
-function setStatus(cls, text) { $('dot').className = 'dot ' + (cls||''); $('statusText').textContent = text || ''; }
-function showHint(h) { const el = $('liveHint'); if (h) { el.textContent = h; el.classList.remove('hidden'); } else el.classList.add('hidden'); }
+function setStatus(cls,text){$('dot').className='dot '+(cls||'');$('statusText').textContent=text||'';}
+function hideHelp(){$('helpBox').classList.add('hidden');$('helpBox').innerHTML='';}
+function showHelp(en,reply){$('helpBox').innerHTML=(en?'<div class="hb-en">'+esc(en)+'</div>':'')+(reply?'<div class="hb-reply">ex: '+esc(reply)+'</div>':'');$('helpBox').classList.remove('hidden');}
 
-// ============================================================
-// INPUT
-// ============================================================
-function submitUser() {
-  const v = $('userIn').value.trim();
-  if (!v || isSpeaking || sessionEnded) return;
-  $('userIn').value = '';
-  addTurn('Tu', v, 'you');
-  if (mode === 'script') handleScripted(v); else handleLLM(v);
+function submitUser(){
+  const v=$('userIn').value.trim();if(!v||isSpeaking||sessionEnded)return;
+  $('userIn').value='';hideHelp();addTurn('Tu',v,'you');
+  if(mode==='script')handleScripted(v);else handleLLM(v);
 }
-$('sendBtn').onclick = submitUser;
-$('userIn').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); submitUser(); } });
-$('endBtn').onclick = () => endSession();
+$('sendBtn').onclick=submitUser;
+$('userIn').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();submitUser();}});
+$('endBtn').onclick=()=>endSession();
+$('helpBtn').onclick=doHelp;
 
-// ============================================================
-// SCRIPTED ENGINE
-// ============================================================
-const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
-
-function startScripted() {
-  step = PASTELARIA.start; stepFails = 0;
-  sayStep();
-}
-function sayStep() {
-  const s = PASTELARIA.steps[step];
-  addTurn('Empregada', s.say, 'bot');
-  showHint(s.hint || '');
-  speak(s.say, () => {
-    if (s.end) { endSession(); return; }
-    setStatus('listening', 'A tua vez — escreve ou dita');
-    $('userIn').focus();
-  });
-}
-function handleScripted(v) {
-  const s = PASTELARIA.steps[step];
-  const n = norm(v);
-  let go = null;
-  for (const rule of (s.match || [])) {
-    if (rule.any.some(k => n.includes(norm(k)))) { go = rule.go; break; }
-  }
-  yourLines.push({ said:v, target:s.hint ? s.hint.replace(/^ex:\s*/,'') : '', step });
-  if (go) {
-    stepFails = 0; step = go; setStatus('thinking',''); setTimeout(sayStep, 350);
-  } else {
-    stepFails++;
-    if (stepFails >= 2) {   // never stuck: model the line and move on
-      const only = (s.match && s.match[0]) ? s.match[0].go : 'fim';
-      addTurn('Empregada', s.fallback, 'bot');
-      speak(s.fallback, () => { stepFails = 0; step = only; setTimeout(sayStep, 400); });
-    } else {
-      addTurn('Empregada', s.fallback, 'bot');
-      speak(s.fallback, () => { setStatus('listening','A tua vez'); $('userIn').focus(); });
-    }
-  }
+// ===== scripted =====
+const norm=s=>s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+function startScripted(){step=SC.script.start;stepFails=0;sayStep();}
+function sayStep(){const s=SC.script.steps[step];addTurn(SC.botName,s.say,'bot');speak(s.say,()=>{if(s.end){endSession();return;}setStatus('listening','A tua vez');$('userIn').focus();});}
+function handleScripted(v){
+  const s=SC.script.steps[step],n=norm(v);let go=null;
+  for(const r of(s.match||[])){if(r.any.some(k=>n.includes(norm(k)))){go=r.go;break;}}
+  yourLines.push({said:v});
+  if(go){stepFails=0;step=go;setStatus('thinking','');setTimeout(sayStep,350);}
+  else{stepFails++;const only=(s.match&&s.match[0])?s.match[0].go:null;
+    addTurn(SC.botName,s.fallback,'bot');
+    if(stepFails>=2&&only)speak(s.fallback,()=>{stepFails=0;step=only;setTimeout(sayStep,400);});
+    else speak(s.fallback,()=>{setStatus('listening','A tua vez');$('userIn').focus();});}
 }
 
-// ============================================================
-// LLM ENGINE
-// ============================================================
-function llmSystem() {
-  return [
-    'You are a friendly empregada (server) in a Lisbon pastelaria. The user is an A1 beginner learning European Portuguese and is the customer ordering.',
-    'HARD RULES:',
-    '- Speak ONLY European Portuguese (pt-PT, never Brazilian). Never use English.',
-    '- One short sentence per turn. Maximum 8 words. No lists.',
-    '- Use ONLY simple present tense and these words/phrases, plus names and numbers: ' + LEXICON.join(', ') + '.',
-    '- Do not introduce new vocabulary or idioms. If the user is stuck, simplify and repeat, do not elaborate.',
-    '- Stay strictly inside this transaction: greet, take the order, ask "mais alguma coisa?", ask "para aqui ou para levar?", say the price, take payment, say goodbye.',
-    '- Keep the whole conversation to about 6 exchanges, then close with "Obrigado! Bom dia." and nothing else.',
-    '- Never correct the user mid-conversation. Just continue naturally.',
-    'Begin by greeting the customer.'
-  ].join('\n');
+// ===== LLM =====
+function llmSystem(){return [
+  'You are '+SC.persona,
+  'The user is an A1 beginner learning European Portuguese.',
+  'RULES:',
+  '- European Portuguese only (pt-PT, never Brazilian). Never English.',
+  '- One short sentence per turn, maximum 8 words. No lists.',
+  '- Prefer these core words for this scene: '+SC.core.join(', ')+'.',
+  '- You may also use words the student already knows: '+RECENT.join(', ')+'.',
+  '- Do not use words outside those sets, except names and numbers. Forms (plurals, conjugations, contractions) of allowed words are fine.',
+  '- Vary the details each time so the conversation is not identical, but stay in the situation.',
+  '- Flow: '+SC.flow,
+  '- Keep it to about 6 exchanges, then close with a short goodbye (e.g. "Até logo." or "Bom dia.") and nothing after.',
+  '- Never correct the user mid-conversation. Just continue.'
+].join('\n');}
+async function apiCall(messages,system,max){
+  const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify(Object.assign({model:MODEL,max_tokens:max,messages},system?{system}:{}))});
+  if(!res.ok){const t=await res.text().catch(()=> '');throw new Error('API '+res.status+' '+t.slice(0,120));}
+  const d=await res.json();return d.content[0].text;
 }
-async function startLLM() {
-  setStatus('thinking', 'A começar...');
-  const opening = 'Bom dia! O que deseja?';
-  history.push({ role:'assistant', content: opening });
-  addTurn('Empregada', opening, 'bot');
-  speak(opening, () => { setStatus('listening','A tua vez — escreve ou dita'); $('userIn').focus(); });
+async function startLLM(){
+  setStatus('thinking','A começar...');
+  try{
+    const reply=cleanForSpeech(await apiCall([{role:'user',content:SC.seed}],llmSystem(),60));
+    history.push({role:'user',content:SC.seed},{role:'assistant',content:reply});
+    addTurn(SC.botName,reply,'bot');
+    speak(reply,()=>{setStatus('listening','A tua vez');$('userIn').focus();});
+  }catch(e){setStatus('','Erro: '+e.message);addTurn('Sistema','Erro ao contactar a API. Verifica a chave e os créditos. '+e.message,'bot');}
 }
-async function handleLLM(v) {
-  history.push({ role:'user', content:v });
-  yourLines.push({ said:v, target:'' });
-  llmTurns++;
-  setStatus('thinking', 'A pensar...');
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{ 'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true' },
-      body: JSON.stringify({ model:MODEL, max_tokens:60, system:llmSystem(), messages:history })
-    });
-    if (!res.ok) { const t = await res.text().catch(()=> ''); throw new Error('API ' + res.status + ' ' + t.slice(0,120)); }
-    const data = await res.json();
-    const reply = cleanForSpeech(data.content[0].text);
-    history.push({ role:'assistant', content:reply });
-    addTurn('Empregada', reply, 'bot');
-    const done = llmTurns >= MAX_LLM_TURNS || /bom dia\.?$|até logo/i.test(reply);
-    speak(reply, () => { if (done) endSession(); else { setStatus('listening','A tua vez'); $('userIn').focus(); } });
-  } catch (e) {
-    setStatus('', 'Erro: ' + e.message);
-    addTurn('Sistema', 'Erro ao contactar a API. Verifica a chave e os créditos. ' + e.message, 'bot');
-  }
+async function handleLLM(v){
+  history.push({role:'user',content:v});yourLines.push({said:v});llmTurns++;setStatus('thinking','A pensar...');
+  try{
+    const reply=cleanForSpeech(await apiCall(history,llmSystem(),60));
+    history.push({role:'assistant',content:reply});addTurn(SC.botName,reply,'bot');
+    const done=llmTurns>=MAX_LLM_TURNS||/bom dia\.?\s*$|boa noite\.?\s*$|at[ée] logo|at[ée] j[áa]|combinado|de nada\.?\s*$/i.test(reply);
+    speak(reply,()=>{if(done)endSession();else{setStatus('listening','A tua vez');$('userIn').focus();}});
+  }catch(e){setStatus('','Erro: '+e.message);addTurn('Sistema','Erro: '+e.message,'bot');}
 }
-function cleanForSpeech(t) {
-  return t.replace(/\*\*/g,'').replace(/\*/g,'').replace(/^[-\d.]+\s/gm,'').replace(/#{1,6}\s/g,'').trim();
+function cleanForSpeech(t){return t.replace(/\*\*/g,'').replace(/\*/g,'').replace(/^[-\d.]+\s/gm,'').replace(/#{1,6}\s/g,'').trim();}
+
+// ===== ajuda (on demand only) =====
+async function doHelp(){
+  if(mode==='script'){const s=SC.script.steps[step];if(s)showHelp('',s.hint);return;}
+  if(!lastBot){return;}
+  showHelp('...','');setStatus('thinking','ajuda...');
+  try{
+    const raw=await apiCall([{role:'user',content:'In a European Portuguese roleplay ('+SC.label+'), the other person just said: "'+lastBot+'". Reply ONLY with JSON, no markdown: {"en":"what it means in English, under 12 words","reply":"one short European Portuguese reply an A1 learner could say here"}'}],null,150);
+    const j=JSON.parse(raw.replace(/```json|```/g,'').trim());showHelp(j.en,j.reply);
+  }catch(e){showHelp('(ajuda indisponível: '+e.message+')','');}
+  setStatus('listening','A tua vez');
 }
 
-// ============================================================
-// STT (optional convenience — Chrome only; Whispr Flow into the box is primary)
-// ============================================================
-function initSTT() {
-  if (recognition) return;
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { $('micBtn').style.display = 'none'; return; }
-  recognition = new SR();
-  recognition.lang = 'pt-PT';
-  recognition.continuous = false;
-  recognition.interimResults = false;
-  recognition.onresult = e => {
-    if (e.results[0].isFinal) {
-      $('userIn').value = e.results[0][0].transcript.trim();
-      isListening = false; $('micBtn').classList.remove('rec');
-    }
-  };
-  recognition.onerror = () => { isListening = false; $('micBtn').classList.remove('rec'); };
-  recognition.onend = () => { isListening = false; $('micBtn').classList.remove('rec'); };
+// ===== STT (optional; Whispr Flow into the box is primary) =====
+function initSTT(){
+  if(recognition)return;const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){$('micBtn').style.display='none';return;}
+  recognition=new SR();recognition.lang='pt-PT';recognition.continuous=false;recognition.interimResults=false;
+  recognition.onresult=e=>{if(e.results[0].isFinal){$('userIn').value=e.results[0][0].transcript.trim();isListening=false;$('micBtn').classList.remove('rec');}};
+  recognition.onerror=()=>{isListening=false;$('micBtn').classList.remove('rec');};
+  recognition.onend=()=>{isListening=false;$('micBtn').classList.remove('rec');};
 }
-$('micBtn').onclick = () => {
-  if (!recognition || isSpeaking) return;
-  if (isListening) { recognition.stop(); return; }
-  isListening = true; $('micBtn').classList.add('rec');
-  try { recognition.start(); } catch (e) { isListening = false; $('micBtn').classList.remove('rec'); }
-};
+$('micBtn').onclick=()=>{if(!recognition||isSpeaking)return;if(isListening){recognition.stop();return;}isListening=true;$('micBtn').classList.add('rec');try{recognition.start();}catch(e){isListening=false;$('micBtn').classList.remove('rec');}};
 
-// ============================================================
-// END + RECAP
-// ============================================================
-function endSession() {
-  if (sessionEnded) return;
-  sessionEnded = true;
-  try { if (recognition) recognition.stop(); } catch (e) {}
-  setStatus('', '');
-  $('convo').classList.add('hidden');
-  $('recap').classList.remove('hidden');
-  if (mode === 'script') renderScriptedRecap(); else renderLLMRecap();
+// ===== end + recap =====
+function endSession(){
+  if(sessionEnded)return;sessionEnded=true;try{if(recognition)recognition.stop();}catch(e){}
+  setStatus('','');$('convo').classList.add('hidden');$('recap').classList.remove('hidden');
+  if(mode==='script')renderScriptedRecap();else renderLLMRecap();
 }
-
-function renderScriptedRecap() {
-  const body = $('recapBody'); body.innerHTML = '';
-  if (!yourLines.length) { body.innerHTML = '<p class="note">Sem respostas.</p>'; return; }
-  yourLines.forEach(l => {
-    const d = document.createElement('div'); d.className = 'line';
-    let html = '<div class="yours">Tu: ' + esc(l.said) + '</div>';
-    if (l.target) html += '<div class="target">Alvo: ' + esc(l.target) + '</div>';
-    if (/\bquero\b/i.test(l.said)) html += '<div class="tip">Lembra: dizes "queria", não "quero", para pedir.</div>';
-    d.innerHTML = html; body.appendChild(d);
-  });
+function renderScriptedRecap(){
+  const body=$('recapBody');body.innerHTML='';
+  if(!yourLines.length){body.innerHTML='<p class="note">Sem respostas.</p>';return;}
+  yourLines.forEach(l=>{const d=document.createElement('div');d.className='line';
+    let h='<div class="yours">Tu: '+esc(l.said)+'</div>';
+    if(/\bquero\b/i.test(l.said))h+='<div class="tip">Lembra: dizes "queria", não "quero", para pedir.</div>';
+    d.innerHTML=h;body.appendChild(d);});
 }
-async function renderLLMRecap() {
-  const body = $('recapBody');
-  body.innerHTML = '<p class="note">A avaliar...</p>';
-  const transcript = history.map(m => (m.role === 'user' ? 'TU' : 'EMPREGADA') + ': ' + m.content).join('\n');
-  const prompt = 'You are a kind European Portuguese tutor. The student (TU) is A1. Here is a pastelaria roleplay transcript.\n\n' + transcript +
-    '\n\nReturn ONLY valid JSON, no markdown: {"good":["..."],"fix":[{"said":"what they wrote","better":"corrected pt-PT","why":"short English reason"}]}. Max 2 items in good, max 3 in fix. Only flag real errors. Keep pt-PT (European).';
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{ 'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true' },
-      body: JSON.stringify({ model:MODEL, max_tokens:700, messages:[{ role:'user', content:prompt }] })
-    });
-    const data = await res.json();
-    const j = JSON.parse(data.content[0].text.replace(/```json|```/g,'').trim());
-    body.innerHTML = '';
-    if (j.good && j.good.length) {
-      const g = document.createElement('div'); g.className = 'line';
-      g.innerHTML = '<div class="target">Bem: ' + j.good.map(esc).join(' · ') + '</div>'; body.appendChild(g);
-    }
-    (j.fix || []).forEach(f => {
-      const d = document.createElement('div'); d.className = 'line';
-      d.innerHTML = '<div class="yours">Tu: ' + esc(f.said) + '</div><div class="target">Melhor: ' + esc(f.better) + '</div><div class="tip">' + esc(f.why) + '</div>';
-      body.appendChild(d);
-    });
-    if (!body.children.length) body.innerHTML = '<p class="note">Boa conversa, sem correções.</p>';
-  } catch (e) {
-    body.innerHTML = '<p class="note">Não foi possível avaliar (' + esc(e.message) + '). Aqui está o que disseste:</p>';
-    yourLines.forEach(l => { const d = document.createElement('div'); d.className='line'; d.innerHTML = '<div class="yours">Tu: ' + esc(l.said) + '</div>'; body.appendChild(d); });
-  }
+async function renderLLMRecap(){
+  const body=$('recapBody');body.innerHTML='<p class="note">A avaliar...</p>';
+  const transcript=history.filter(m=>m.content!==SC.seed).map(m=>(m.role==='user'?'TU':SC.botName.toUpperCase())+': '+m.content).join('\n');
+  const prompt='You are a kind European Portuguese tutor. The student (TU) is A1. Roleplay ('+SC.label+') transcript:\n\n'+transcript+'\n\nReturn ONLY valid JSON, no markdown: {"good":["..."],"fix":[{"said":"what they wrote","better":"corrected pt-PT","why":"short English reason"}]}. Max 2 in good, max 3 in fix. Only real errors. European Portuguese.';
+  try{
+    const raw=await apiCall([{role:'user',content:prompt}],null,700);
+    const j=JSON.parse(raw.replace(/```json|```/g,'').trim());body.innerHTML='';
+    if(j.good&&j.good.length){const g=document.createElement('div');g.className='line';g.innerHTML='<div class="target">Bem: '+j.good.map(esc).join(' · ')+'</div>';body.appendChild(g);}
+    (j.fix||[]).forEach(f=>{const d=document.createElement('div');d.className='line';d.innerHTML='<div class="yours">Tu: '+esc(f.said)+'</div><div class="target">Melhor: '+esc(f.better)+'</div><div class="tip">'+esc(f.why)+'</div>';body.appendChild(d);});
+    if(!body.children.length)body.innerHTML='<p class="note">Boa conversa, sem correções.</p>';
+  }catch(e){body.innerHTML='<p class="note">Não foi possível avaliar ('+esc(e.message)+'). O que disseste:</p>';yourLines.forEach(l=>{const d=document.createElement('div');d.className='line';d.innerHTML='<div class="yours">Tu: '+esc(l.said)+'</div>';body.appendChild(d);});}
 }
-function esc(s) { return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 </script>
 </body>
 </html>
