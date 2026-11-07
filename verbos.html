@@ -1069,13 +1069,12 @@ function vfcRender() {
 function vfcReveal() {
   if(vfcRevealed) return; vfcRevealed=true;
   document.getElementById('vfcPt').classList.add('revealed');
-  document.getElementById('vfcExAnswer').classList.add('revealed');
   document.getElementById('vfcHints').textContent='';
   // In EN→PT mode speak the PT answer on reveal
   if(vfcMode==='en') speak(vfcDeck[vfcIdx].pt);
 }
 function vfcSpeakAnswer() { speak(vfcDeck[vfcIdx].pt); }
-function vfcSpeakEx() { vfcReveal(); speak(vfcDeck[vfcIdx].note||vfcDeck[vfcIdx].pt); }
+function vfcSpeakEx() { document.getElementById('vfcExAnswer').classList.add('revealed'); speak(vfcDeck[vfcIdx].note||vfcDeck[vfcIdx].pt); }
 function vfcMove(dir) { vfcIdx=(vfcIdx+dir+vfcDeck.length)%vfcDeck.length; vfcRender(); }
 function vfcRandom() { if(vfcDeck.length<2){vfcRender();return;} let n; do{n=Math.floor(Math.random()*vfcDeck.length);}while(n===vfcIdx); vfcIdx=n; vfcRender(); }
 function vfcShuffle() { vfcDeck=[...vfcDeck].sort(()=>Math.random()-0.5); vfcIdx=0; vfcRender(); }
