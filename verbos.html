@@ -119,10 +119,9 @@
   .vfc-pt.revealed { filter: blur(0); background: transparent; }
   .vfc-speak { background: var(--bg); border: 1px solid var(--border); color: var(--green); padding: 0.35rem 1.2rem; border-radius: 99px; cursor: pointer; transition: all 0.2s; font-size: 1rem; margin-bottom: 1rem; }
   .vfc-speak:hover { background: var(--green); color: #fff; border-color: var(--green); }
-  .vfc-ex-pt { font-style: italic; font-size: 0.82rem; color: var(--text); filter: blur(5px); transition: filter 0.3s; cursor: pointer; margin-bottom: 0.2rem; background: var(--border); border-radius: 3px; padding: 0.05rem 0.3rem; display: inline-block; }
-  .vfc-ex-pt.revealed { filter: blur(0); background: transparent; }
-  .vfc-ex-en { font-size: 0.75rem; color: var(--muted); filter: blur(5px); transition: filter 0.3s; background: var(--border); border-radius: 3px; padding: 0.05rem 0.3rem; display: inline-block; margin-bottom: 1rem; cursor: pointer; }
-  .vfc-ex-en.revealed { filter: blur(0); background: transparent; }
+  .vfc-ex-prompt { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.25rem; }
+  .vfc-ex-answer { font-style: italic; font-size: 0.9rem; color: var(--text); filter: blur(5px); transition: filter 0.3s; cursor: pointer; margin-bottom: 1rem; background: var(--border); border-radius: 3px; padding: 0.05rem 0.3rem; display: inline-block; }
+  .vfc-ex-answer.revealed { filter: blur(0); background: transparent; }
   .vfc-nav { display: flex; gap: 1rem; margin-top: auto; }
   .vfc-nav-btn { font-family: var(--mono); font-size: 0.82rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 0.55rem 1.25rem; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
   .vfc-nav-btn:hover { border-color: var(--green); color: var(--green); }
@@ -326,10 +325,11 @@
     <div class="vfc-divider"></div>
     <div class="vfc-pt" id="vfcPt" onclick="vfcReveal()"></div>
     <button class="vfc-speak" onclick="vfcSpeakAnswer()">🔊</button>
-    <div class="vfc-ex-pt" id="vfcExPt" onclick="vfcSpeakEx()"></div>
-    <div class="vfc-ex-en" id="vfcExEn"></div>
+    <div class="vfc-ex-prompt" id="vfcExPrompt"></div>
+    <div class="vfc-ex-answer" id="vfcExAnswer" onclick="vfcSpeakEx()"></div>
     <div class="vfc-nav">
       <button class="vfc-nav-btn" onclick="vfcMove(-1)">← Anterior</button>
+      <button class="vfc-nav-btn" onclick="vfcRandom()">🎲 Aleatório</button>
       <button class="vfc-nav-btn" onclick="vfcMove(1)">Próximo →</button>
     </div>
   </div>
@@ -1043,8 +1043,8 @@ function vfcRender() {
 
   const enEl=document.getElementById('vfcEn');
   const ptEl=document.getElementById('vfcPt');
-  const exPt=document.getElementById('vfcExPt');
-  const exEn=document.getElementById('vfcExEn');
+  const exPrompt=document.getElementById('vfcExPrompt');
+  const exAnswer=document.getElementById('vfcExAnswer');
 
   document.getElementById('vfcHintLine').textContent = '';
 
@@ -1061,15 +1061,15 @@ function vfcRender() {
     document.getElementById('vfcHints').textContent = 'traduz para inglês · clica para revelar';
   }
 
-  exPt.textContent = c.note || ''; exPt.className = 'vfc-ex-pt';
-  exEn.textContent = c.en_note || ''; exEn.className = 'vfc-ex-en';
-  exEn.onclick = () => exEn.classList.add('revealed');
+  // example follows the mode: EN→PT shows the English example as the prompt, PT example hidden; PT→EN the reverse
+  exPrompt.textContent = (vfcMode==='en' ? (c.en_note||'') : (c.note||''));
+  exAnswer.textContent = (vfcMode==='en' ? (c.note||'') : (c.en_note||'')); exAnswer.className = 'vfc-ex-answer';
 }
 
 function vfcReveal() {
   if(vfcRevealed) return; vfcRevealed=true;
   document.getElementById('vfcPt').classList.add('revealed');
-  document.getElementById('vfcExPt').classList.add('revealed');
+  document.getElementById('vfcExAnswer').classList.add('revealed');
   document.getElementById('vfcHints').textContent='';
   // In EN→PT mode speak the PT answer on reveal
   if(vfcMode==='en') speak(vfcDeck[vfcIdx].pt);
@@ -1077,6 +1077,7 @@ function vfcReveal() {
 function vfcSpeakAnswer() { speak(vfcDeck[vfcIdx].pt); }
 function vfcSpeakEx() { vfcReveal(); speak(vfcDeck[vfcIdx].note||vfcDeck[vfcIdx].pt); }
 function vfcMove(dir) { vfcIdx=(vfcIdx+dir+vfcDeck.length)%vfcDeck.length; vfcRender(); }
+function vfcRandom() { if(vfcDeck.length<2){vfcRender();return;} let n; do{n=Math.floor(Math.random()*vfcDeck.length);}while(n===vfcIdx); vfcIdx=n; vfcRender(); }
 function vfcShuffle() { vfcDeck=[...vfcDeck].sort(()=>Math.random()-0.5); vfcIdx=0; vfcRender(); }
 function vfcReset() { vfcFilter(vfcCurrentFilter, document.getElementById('filter-all')); }
 
