@@ -220,7 +220,7 @@ let SC=SCENARIOS[SCK];
 
 let mode='llm',apiKey='',isSpeaking=false,sessionEnded=false;
 let step=null,stepFails=0,yourLines=[],history=[],llmTurns=0,lastBot='';
-let recognition=null,isListening=false;
+let recognition=null,isListening=false,micOn=false,micWantStop=false,micFinal='';
 const $=id=>document.getElementById(id);
 
 // ----- scenario picker -----
@@ -236,6 +236,7 @@ $('segMode').addEventListener('click',e=>{const b=e.target.closest('button');if(
 $('btnStart').onclick=()=>{
   $('setupErr').classList.add('hidden');
   if(mode==='llm'){apiKey=$('apiKey').value.trim();if(!apiKey){$('setupErr').textContent='Paste an API key or switch to Guião.';$('setupErr').classList.remove('hidden');return;}}
+  SC=SCENARIOS[SCK]||SCENARIOS.pastelaria;   // guard against any init race
   $('setup').classList.add('hidden');$('recap').classList.add('hidden');$('convo').classList.remove('hidden');
   sessionEnded=false;yourLines=[];history=[];llmTurns=0;stepFails=0;lastBot='';$('transcript').innerHTML='';hideHelp();
   initSTT();
@@ -271,7 +272,8 @@ function showHelp(en,reply){$('helpBox').innerHTML=(en?'<div class="hb-en">'+esc
 
 function submitUser(){
   const v=$('userIn').value.trim();if(!v||isSpeaking||sessionEnded)return;
-  $('userIn').value='';hideHelp();addTurn('Tu',v,'you');
+  if(micOn)stopMic();
+  $('userIn').value='';micFinal='';hideHelp();addTurn('Tu',v,'you');
   if(mode==='script')handleScripted(v);else handleLLM(v);
 }
 $('sendBtn').onclick=submitUser;
@@ -352,16 +354,41 @@ async function doHelp(){
 function initSTT(){
   if(recognition)return;const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR){$('micBtn').style.display='none';return;}
-  recognition=new SR();recognition.lang='pt-PT';recognition.continuous=false;recognition.interimResults=false;
-  recognition.onresult=e=>{if(e.results[0].isFinal){$('userIn').value=e.results[0][0].transcript.trim();isListening=false;$('micBtn').classList.remove('rec');}};
-  recognition.onerror=()=>{isListening=false;$('micBtn').classList.remove('rec');};
-  recognition.onend=()=>{isListening=false;$('micBtn').classList.remove('rec');};
+  recognition=new SR();recognition.lang='pt-PT';
+  recognition.continuous=true;        // keep listening across pauses
+  recognition.interimResults=true;    // show words as they come
+  recognition.onresult=e=>{
+    let interim='';
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      const seg=e.results[i][0].transcript;
+      if(e.results[i].isFinal) micFinal=(micFinal+' '+seg).replace(/\s+/g,' ').trim();
+      else interim+=seg;
+    }
+    $('userIn').value=(micFinal+' '+interim).trim();
+  };
+  recognition.onerror=ev=>{ if(ev.error==='not-allowed'||ev.error==='service-not-allowed'){ stopMic(); } };
+  recognition.onend=()=>{
+    // Chrome ends on its own silence timeout; if the user hasn't stopped, resume so pauses don't end the turn
+    if(micOn&&!micWantStop&&!isSpeaking){ try{recognition.start();}catch(e){} return; }
+    micOn=false;isListening=false;$('micBtn').classList.remove('rec');
+  };
 }
-$('micBtn').onclick=()=>{if(!recognition||isSpeaking)return;if(isListening){recognition.stop();return;}isListening=true;$('micBtn').classList.add('rec');try{recognition.start();}catch(e){isListening=false;$('micBtn').classList.remove('rec');}};
+function startMic(){
+  if(!recognition||isSpeaking||micOn)return;
+  micWantStop=false;micOn=true;isListening=true;
+  micFinal=$('userIn').value.trim();   // keep whatever is already typed, append to it
+  $('micBtn').classList.add('rec');
+  try{recognition.start();}catch(e){micOn=false;isListening=false;$('micBtn').classList.remove('rec');}
+}
+function stopMic(){
+  micWantStop=true;micOn=false;isListening=false;$('micBtn').classList.remove('rec');
+  try{if(recognition)recognition.stop();}catch(e){}
+}
+$('micBtn').onclick=()=>{ if(micOn)stopMic(); else startMic(); };
 
 // ===== end + recap =====
 function endSession(){
-  if(sessionEnded)return;sessionEnded=true;try{if(recognition)recognition.stop();}catch(e){}
+  if(sessionEnded)return;sessionEnded=true;micWantStop=true;micOn=false;try{if(recognition)recognition.stop();}catch(e){}
   setStatus('','');$('convo').classList.add('hidden');$('recap').classList.remove('hidden');
   if(mode==='script')renderScriptedRecap();else renderLLMRecap();
 }
